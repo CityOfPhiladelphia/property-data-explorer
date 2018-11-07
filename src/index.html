@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PVC-PVD Example App | phila.gov</title>
+    <link rel="canonical" href="">
+    <meta name="description" content="">
+    <link rel="shortcut icon" type="image/x-icon" href="https://standards.phila.gov/img/favicon.png">
+
+    <!--
+      open graph/twitter card. this makes links to atlas.phila.gov look nice on
+      social media.
+    -->
+    <meta name="twitter:card" content="summary">
+    <meta property="og:title" content="PVC-PVD Example App | phila.gov">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://atlas.phila.gov/images/screenshot.png">
+    <meta property="og:url" content="https://atlas.phila.gov/">
+    <meta property="og:description" content="Explore the City's property data in one place, including deeds, zoning, permits, and more.">
+    <meta property="og:site_name" content="phila.gov">
+  </head>
+
+  <body>
+
+    <div class="grid-y medium-grid-frame" id="application">
+      <div id="vue-app"></div>
+    </div>
+
+    <!-- Sentry -->
+    <!-- TODO bundle sentry? -->
+    <!-- <script src="//cdn.ravenjs.com/3.19.1/raven.min.js" crossorigin="anonymous"></script>
+    <script>Raven.config('https://0e97477faf4b4693a88eb87604a42b27@sentry.io/211586').install()</script> -->
+
+    <script src="vendor.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
