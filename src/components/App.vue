@@ -19,14 +19,14 @@
     <div id="components-root">
 
 
-      <div class="floating">
+      <div class="flexing">
 
         <map-panel/>
 
 
       </div>
 
-      <div class="floating">
+      <div class="flexing bottom">
 
           <horizontal-table
             v-if="this.$store.state.geocode.status && this.$store.state.geocode.status !== 'error'"
@@ -156,23 +156,24 @@
   height: 100%
 }
 
-
 #components-root {
   display: flex;
   flex-direction:column;
-  padding: 20px;
   height: 90%;
   overflow-y: auto;
   position: relative;
 }
 
-.floating {
+.flexing {
   border: 1px solid #ff0000;
   display: flex;
   flex: 1;
   flex-direction: column;
-  /* overflow-y: scroll; */
   position: relative;
+}
+
+.bottom {
+  overflow-y: auto;
 }
 
 .component-label {
