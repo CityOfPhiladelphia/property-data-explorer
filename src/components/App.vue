@@ -28,78 +28,36 @@
 
       <div class="floating">
 
-        <div class="margin-sides-20 component-label">horizontal-table:</div>
-
-        <horizontal-table
-          class="margin-20 medium-10"
-          :slots="{
-            title: 'Permits',
-            items: function(state) {
-              var data = state.sources['liPermits'].data.rows;
-              var rows = data.map(function(row){
-                var itemRow = row;
-                return itemRow;
-              });
-              return rows;
-            },
-          }"
-          :options="{
-            id: 'liPermits',
-            dataSources: ['liPermits'],
-            limit: 5,
-            fields: [
-              {
-                label: 'Date',
-                value: function(state, item){
-                  return item.permitissuedate
-                },
-                nullValue: 'no date available',
-                transforms: [
-                  'date'
-                ]
-              },
-              {
-                label: 'ID',
-                value: function(state, item){
-                  return `<a target='_blank' href='http://li.phila.gov/#details?entity=permits&eid=`+item.permitnumber+`&key=`+item.addresskey+`&address=`+item.address+`'>`+item.permitnumber+` <i class='fa fa-external-link'></i></a>`
+          <horizontal-table
+            v-if="this.$store.state.geocode.status"
+            class="margin-20"
+            :slots="{
+              items: function(state) {
+                var data = state.geocode.related;
+                /* data != null ? data.push(state.geocode) : data = state.geocode; */
+                if (data) {
+                  data.push([state.geocode]);
+                } else {
+                  data = [state.geocode];
                 }
+                return data;
               },
-              {
-                label: 'Description',
-                value: function(state, item){
-                  return item.permitdescription
-                }
+            }"
+            :options="this.ownerOptions"
+          />
+          <horizontal-table
+            v-if="this.$store.state.ownerSearch.status"
+            class="margin-20"
+            :slots="{
+              items: function(state) {
+                var data = state.ownerSearch.data;
+                return data;
               },
-              {
-                label: 'Status',
-                value: function(state, item){
-                  return item.status
-                }
-              },
-            ],
-            sort: {
-              getValue: function(item) {
-                return item.permitissuedate;
-              },
-              order: 'desc'
-            },
-            externalLink: {
-              action: function(count) {
-                return 'See ' + count + ' older permits at L&I Property History';
-                },
-              name: 'L&I Property History',
-              href: function(state) {
-                var address = state.geocode.data.properties.street_address;
-                var addressEncoded = encodeURIComponent(address);
-                return 'http://li.phila.gov/#summary?address=' + addressEncoded;
-              }
-            }
-          }"
-        />
+            }"
+            :options="this.ownerOptions"
+          />
 
       </div>
-
-
 
     </div>
   </div>
@@ -107,9 +65,6 @@
 
 <script>
   import axios from 'axios';
-  // import 'leaflet/dist/leaflet.css';
-  // import 'leaflet-easybutton/src/easy-button.css';
-
   import MapPanel from './MapPanel.vue';
   import philaVueComps from '@cityofphiladelphia/phila-vue-comps';
   const VerticalTable = philaVueComps.VerticalTable;
@@ -133,7 +88,65 @@
       CollectionSummary,
       ExternalLink,
     },
+    computed: {
+      ownerOptions() {
+        const options = {
+          id: 'ownerProperties',
+          /* dataSources: ['liPermits'], */
+          /* limit: 5, */
+          fields: [
+            {
+              label: 'Owner',
+              value: function(state, item){
+                return item.properties.opa_owners.toString();
+              },
+              /* nullValue: 'no date available', */
+            },
+            {
+              label: 'Street Address',
+              value: function(state, item, controller) {
+                const test = controller.test
+                /* controller.test(); */
+                return `<a target='_blank' href='https://atlas.phila.gov/#/`+item.properties.street_address+`/property'>`+item.properties.street_address+` <i class='fa fa-external-link'></i></a>`
+                // return '<a href=# onclick="'+test+'()">'+item.properties.street_address+' <i class="fa fa-external-link"></i></a>'
+              }
+            },
+            {
+              label: 'Description',
+              value: function(state, item){
+                /* return item.permitdescription */
+              }
+            },
+            {
+              label: 'Status',
+              value: function(state, item){
+                /* return item.status */
+              }
+            },
+          ],
+          /* sort: {
+            getValue: function(item) {
+              return item.permitissuedate;
+            },
+            order: 'desc'
+          }, */
+          /* externalLink: {
+            action: function(count) {
+              return 'See ' + count + ' older permits at L&I Property History';
+              },
+            name: 'L&I Property History',
+            href: function(state) {
+              var address = state.geocode.data.properties.street_address;
+              var addressEncoded = encodeURIComponent(address);
+              return 'http://li.phila.gov/#summary?address=' + addressEncoded;
+            }
+          } */
+        }
+        return options;
+      }
+    },
   };
+
 
 </script>
 
@@ -143,12 +156,14 @@
   height: 100%
 }
 
+
 #components-root {
   display: flex;
   flex-direction:column;
   padding: 20px;
   height: 90%;
   overflow-y: auto;
+  position: relative;
 }
 
 .floating {
@@ -156,7 +171,8 @@
   display: flex;
   flex: 1;
   flex-direction: column;
-  overflow-y: scroll;
+  /* overflow-y: scroll; */
+  position: relative;
 }
 
 .component-label {

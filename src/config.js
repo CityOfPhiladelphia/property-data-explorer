@@ -14,6 +14,16 @@ let config = {
     measurementAllowed: false,
     popoutAble: true,
   },
+  ownerSearch: {
+    url: function (input) {
+      var inputEncoded = encodeURIComponent(input);
+      return '//api.phila.gov/ais/v1/owner/' + inputEncoded;
+    },
+    params: {
+      gatekeeperKey: '82fe014b6575b8c38b44235580bc8b11',
+      include_units: true,
+    },
+  },
   pictometry: {
     enabled: true,
   },
