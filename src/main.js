@@ -20,6 +20,8 @@ import '@fortawesome/fontawesome-pro/js/all';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import '../node_modules/phila-standards/dist/css/phila-app.min.css';
 import helpers from './util/helpers';
+import 'leaflet/dist/leaflet.css';
+import 'leaflet-easybutton/src/easy-button.css';
 import './styles.css';
 
 import philaVueMapping from '@cityofphiladelphia/phila-vue-mapping';

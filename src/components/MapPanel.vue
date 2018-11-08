@@ -314,6 +314,7 @@
       <div v-once>
         <address-input :position="this.addressInputPosition"
                        :placeholder="this.addressInputPlaceholder"
+                       widthFromConfig="350"
         />
       </div>
       <address-candidate-list v-if="this.addressAutocompleteEnabled"
@@ -881,26 +882,35 @@
 </script>
 
 <style scoped>
+
+
+  #map-panel-container {
+    position: relative;
+    height: 100%;
+    width: 100%;
+  }
+
+
   .mb-panel-map {
     /*this allows the loading mask to fill the div*/
     position: relative;
   }
 
-  .mb-map-with-widget {
+  /* .mb-map-with-widget {
     height: 50%;
-  }
+  } */
 
   .widget-slot {
+    position: relative;
     display: inline-block;
     float: left;
   }
 
   .mb-map-loading-mask {
-    /*display: inline;*/
-    position: absolute;
     top: 0;
+    position: relative;
     height: 100%;
-    width: 100%;
+    width: inherit;
     background: rgba(0, 0 ,0 , 0.25);
     z-index: 1000;
     text-align: center;
@@ -908,19 +918,21 @@
   }
 
   .mb-map-loading-mask-inner {
-    position: absolute;
+    position: relative;
+    height: inherit;
+    width: inherit;
     top: 40%;
     left: 40%;
   }
 
   /*small retina*/
-  /*@media
+  @media
   (-webkit-min-device-pixel-ratio: 2),
   (min-resolution: 192dpi),
   (max-width: 39.9375em) {
     .mb-search-control-input {
       max-width: 250px;
     }
-  }*/
+  }
 
 </style>
