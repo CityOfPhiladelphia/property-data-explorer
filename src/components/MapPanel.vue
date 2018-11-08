@@ -262,25 +262,6 @@
         <basemap-select-control :position="this.basemapSelectControlPosition" />
       </div>
 
-      <div v-once>
-        <pictometry-button v-if="this.shouldShowPictometryButton"
-                           v-once
-                           :position="'topright'"
-                           :link="'pictometry'"
-                           :imgSrc="'images/pictometry.png'"
-        />
-      </div>
-
-      <div v-once>
-        <cyclomedia-button v-if="this.shouldShowCyclomediaButton"
-                           v-once
-                           :position="'topright'"
-                           :link="'cyclomedia'"
-                           :imgSrc="'images/cyclomedia.png'"
-                           @click="handleCyclomediaButtonClick"
-        />
-      </div>
-
       <div v-once
            v-if="this.measureControlEnabled"
       >
@@ -855,34 +836,41 @@
       handleMapMove(e) {
         const map = this.$store.state.map.map;
 
-        const pictometryConfig = this.$config.pictometry || {};
+        // const pictometryConfig = this.$config.pictometry || {};
 
         const center = map.getCenter();
         const { lat, lng } = center;
         const coords = [lng, lat];
 
-        if (pictometryConfig.enabled) {
-          // update state for pictometry
-          this.$store.commit('setPictometryMapCenter', coords);
-
-          const zoom = map.getZoom();
-          this.$store.commit('setPictometryMapZoom', zoom);
-        }
-
-        const cyclomediaConfig = this.$config.cyclomedia || {};
-
-        if (cyclomediaConfig.enabled) {
-          // update cyclo recordings
-          this.updateCyclomediaRecordings();
-          this.$store.commit('setCyclomediaLatLngFromMap', [lat, lng]);
-        }
+        // if (pictometryConfig.enabled) {
+        //   // update state for pictometry
+        //   this.$store.commit('setPictometryMapCenter', coords);
+        //
+        //   const zoom = map.getZoom();
+        //   this.$store.commit('setPictometryMapZoom', zoom);
+        // }
+        //
+        // const cyclomediaConfig = this.$config.cyclomedia || {};
+        //
+        // if (cyclomediaConfig.enabled) {
+        //   // update cyclo recordings
+        //   this.updateCyclomediaRecordings();
+        //   this.$store.commit('setCyclomediaLatLngFromMap', [lat, lng]);
+        // }
       },
     }, // end of methods
   }; //end of export
 </script>
 
-<style scoped>
+<style>
 
+  input:focus, select:focus, textarea:focus, button:focus {
+   outline: none;
+  }
+
+  button {
+   padding: inherit !important;
+  }
 
   #map-panel-container {
     position: relative;
@@ -890,15 +878,14 @@
     width: 100%;
   }
 
-
   .mb-panel-map {
     /*this allows the loading mask to fill the div*/
     position: relative;
   }
 
-  /* .mb-map-with-widget {
-    height: 50%;
-  } */
+  .mb-map-with-widget {
+      height: 50%;
+    }
 
   .widget-slot {
     position: relative;
@@ -907,10 +894,10 @@
   }
 
   .mb-map-loading-mask {
+    position: absolute;
     top: 0;
-    position: relative;
     height: 100%;
-    width: inherit;
+    width: 100%;
     background: rgba(0, 0 ,0 , 0.25);
     z-index: 1000;
     text-align: center;
@@ -918,9 +905,7 @@
   }
 
   .mb-map-loading-mask-inner {
-    position: relative;
-    height: inherit;
-    width: inherit;
+    position: absolute;
     top: 40%;
     left: 40%;
   }
