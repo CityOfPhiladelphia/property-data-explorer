@@ -9,7 +9,7 @@
           <div class="app-divide"></div>
           <div class="page-title-container">
             <a href="#/">
-              <h1 class="page-title">PVC-PVD Example App</h1>
+              <h1 class="page-title">Property Reboot</h1>
             </a>
           </div>
         </div>
@@ -29,16 +29,16 @@
       <div class="floating">
 
           <horizontal-table
-            v-if="this.$store.state.geocode.status"
+            v-if="this.$store.state.geocode.status && this.$store.state.geocode.status !== 'error'"
             class="margin-20"
             :slots="{
               items: function(state) {
                 var data = state.geocode.related;
                 /* data != null ? data.push(state.geocode) : data = state.geocode; */
                 if (data) {
-                  data.push([state.geocode]);
+                  data.push(state.geocode.data);
                 } else {
-                  data = [state.geocode];
+                  data = state.geocode.data;
                 }
                 return data;
               },
