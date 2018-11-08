@@ -1,5 +1,5 @@
 /*
-                                          __                         ___.                  __   
+                                          __                         ___.                  __
 _____________  ____ ______   ____________/  |_ ___.__. _______   ____\_ |__   ____   _____/  |_
 \____ \_  __ \/  _ \\____ \_/ __ \_  __ \   __<   |  | \_  __ \_/ __ \| __ \ /  _ \ /  _ \   __\
 |  |_> >  | \(  <_> )  |_> >  ___/|  | \/|  |  \___  |  |  | \/\  ___/| \_\ (  <_> |  <_> )  |
@@ -22,6 +22,7 @@ import '../node_modules/phila-standards/dist/css/phila-app.min.css';
 import helpers from './util/helpers';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-easybutton/src/easy-button.css';
+import 'leaflet-measure/dist/leaflet-measure.css';
 import './styles.css';
 
 import philaVueMapping from '@cityofphiladelphia/phila-vue-mapping';
