@@ -19,7 +19,7 @@
     <div id="components-root">
 
 
-      <div class="flexing">
+      <div class="flexing top">
 
         <map-panel/>
 
@@ -30,7 +30,8 @@
 
           <horizontal-table
             v-if="this.$store.state.geocode.status && this.$store.state.geocode.status !== 'error'"
-            class="margin-20"
+              padding-top="0"
+
             :slots="{
               items: function(state) {
                 var data = state.geocode.related;
@@ -47,7 +48,7 @@
           />
           <horizontal-table
             v-if="this.$store.state.ownerSearch.status"
-            class="margin-20"
+
             :slots="{
               items: function(state) {
                 var data = state.ownerSearch.data;
@@ -150,7 +151,7 @@
 
 </script>
 
-<style scoped>
+<style>
 
 #app-root {
   height: 100%
@@ -174,10 +175,15 @@
 
 .bottom {
   overflow-y: auto;
+  flex: 2;
 }
 
 .component-label {
   font-size: 20px;
+}
+
+.ib {
+  display: inline-block;
 }
 
 .margin-sides-20 {
@@ -196,12 +202,17 @@
   margin-bottom: 60px !important;
 }
 
-.ib {
-  display: inline-block;
+.pvc-horizontal-table-controls {
+  margin-bottom: 0 !important;
 }
 
+.pvc-horizontal-table-body {
+  padding-top: 0 !important;
+  margin-top: 0 !important;
+}
 
-
-
+.top {
+  flex: 3;
+}
 
 </style>
