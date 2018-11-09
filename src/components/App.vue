@@ -18,45 +18,45 @@
 
     <div id="components-root">
 
-
-      <div class="flexing top">
+      <div :class="'flexing ' + this.mapClass">
 
         <map-panel/>
 
 
       </div>
 
-      <div class="flexing bottom">
+      <div :class="'flexing ' + this.tableClass">
 
-          <horizontal-table
-            v-if="this.$store.state.geocode.status && this.$store.state.geocode.status !== 'error'"
-              padding-top="0"
+        <full-screen-topics-toggle-tab-vertical/>
+        <horizontal-table
+          v-if="this.$store.state.geocode.status && this.$store.state.geocode.status !== 'error'"
+            padding-top="0"
 
-            :slots="{
-              items: function(state) {
-                var data = state.geocode.related;
-                /* data != null ? data.push(state.geocode) : data = state.geocode; */
-                if (data) {
-                  data.push(state.geocode.data);
-                } else {
-                  data = state.geocode.data;
-                }
-                return data;
-              },
-            }"
-            :options="this.ownerOptions"
-          />
-          <horizontal-table
-            v-if="this.$store.state.ownerSearch.status"
+          :slots="{
+            items: function(state) {
+              var data = state.geocode.related;
+              /* data != null ? data.push(state.geocode) : data = state.geocode; */
+              if (data) {
+                data.push(state.geocode.data);
+              } else {
+                data = state.geocode.data;
+              }
+              return data;
+            },
+          }"
+          :options="this.ownerOptions"
+        />
+        <horizontal-table
+          v-if="this.$store.state.ownerSearch.status"
 
-            :slots="{
-              items: function(state) {
-                var data = state.ownerSearch.data;
-                return data;
-              },
-            }"
-            :options="this.ownerOptions"
-          />
+          :slots="{
+            items: function(state) {
+              var data = state.ownerSearch.data;
+              return data;
+            },
+          }"
+          :options="this.ownerOptions"
+        />
 
       </div>
 
@@ -76,6 +76,7 @@
   const BadgeCustom = philaVueComps.BadgeCustom;
   const CollectionSummary = philaVueComps.CollectionSummary;
   const ExternalLink = philaVueComps.ExternalLink;
+  const FullScreenTopicsToggleTabVertical = philaVueComps.FullScreenTopicsToggleTabVertical;
 
   export default {
     components: {
@@ -88,21 +89,63 @@
       BadgeCustom,
       CollectionSummary,
       ExternalLink,
+      FullScreenTopicsToggleTabVertical,
+    },
+    data() {
+      return {
+        'top': 3,
+        'bottom': 2,
+      }
+    },
+    mounted(){
+      this.$store.commit('setActiveParcelLayer', 'pwd');
     },
     computed: {
+      fullScreenMapEnabled() {
+        return this.$store.state.fullScreenMapEnabled;
+      },
+      fullScreenTopicsEnabled() {
+        return this.$store.state.fullScreenTopicsEnabled;
+      },
+      mapClass() {
+        // const testMapFull = this.fullScreenMapEnabled ? 'top-full':'top-half';
+        // const testMapNone = this.fullScreenTopicsEnabled ? 'top-none':'top-half';
+        if (this.fullScreenMapEnabled) {
+          return 'top-full';
+          // return testMapFull;
+        } else if (this.fullScreenTopicsEnabled) {
+          return 'top-none';
+          // return testMapNone;
+        } else {
+          return 'top-half';
+        }
+        // console.log('testMapFull:', testMapFull, 'testMapNone:', testMapNone);
+        // return test
+        // if(this.fullScreenMapEnabled){
+        //   return 'top-full'
+        // }
+      },
+      tableClass() {
+        // return this.fullScreenMapEnabled ? 'bottom-none':'bottom-half';
+        if (this.fullScreenMapEnabled) {
+          return 'bottom-none';
+          // return testMapFull;
+        } else if (this.fullScreenTopicsEnabled) {
+          return 'bottom-full';
+          // return testMapNone;
+        } else {
+          return 'bottom-half';
+        }
+        // if(this.fullScreenMapEnabled){
+        //   return 'top-full'
+        // }
+      },
       ownerOptions() {
         const options = {
           id: 'ownerProperties',
           /* dataSources: ['liPermits'], */
           /* limit: 5, */
           fields: [
-            {
-              label: 'Owner',
-              value: function(state, item){
-                return item.properties.opa_owners.toString();
-              },
-              /* nullValue: 'no date available', */
-            },
             {
               label: 'Street Address',
               value: function(state, item, controller) {
@@ -113,9 +156,17 @@
               }
             },
             {
-              label: 'Description',
+              label: 'Owner',
+              value: function(state, item){
+                return item.properties.opa_owners.toString();
+              },
+              /* nullValue: 'no date available', */
+            },
+            {
+              label: 'OPA Account',
               value: function(state, item){
                 /* return item.permitdescription */
+                return item.properties.opa_account_num
               }
             },
             {
@@ -125,23 +176,6 @@
               }
             },
           ],
-          /* sort: {
-            getValue: function(item) {
-              return item.permitissuedate;
-            },
-            order: 'desc'
-          }, */
-          /* externalLink: {
-            action: function(count) {
-              return 'See ' + count + ' older permits at L&I Property History';
-              },
-            name: 'L&I Property History',
-            href: function(state) {
-              var address = state.geocode.data.properties.street_address;
-              var addressEncoded = encodeURIComponent(address);
-              return 'http://li.phila.gov/#summary?address=' + addressEncoded;
-            }
-          } */
         }
         return options;
       }
@@ -173,9 +207,18 @@
   position: relative;
 }
 
-.bottom {
+.bottom-full {
+  overflow-y: auto;
+  flex: 1;
+}
+
+.bottom-half {
   overflow-y: auto;
   flex: 2;
+}
+.bottom-none {
+  overflow-y: auto;
+  flex: 0;
 }
 
 .component-label {
@@ -211,8 +254,16 @@
   margin-top: 0 !important;
 }
 
-.top {
+.top-half {
   flex: 3;
+}
+
+.top-full {
+  flex: 1;
+}
+
+.top-none {
+  flex: 0;
 }
 
 </style>

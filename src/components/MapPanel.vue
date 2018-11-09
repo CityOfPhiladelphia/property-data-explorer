@@ -2,7 +2,7 @@
   <div id="map-panel-container"
        :class="this.mapPanelContainerClass"
   >
-    <full-screen-map-toggle-tab v-once />
+    <full-screen-map-toggle-tab-vertical v-once />
     <map_ :class="{ 'mb-map-with-widget': this.$store.state.cyclomedia.active || this.$store.state.pictometry.active }"
           id="map-tag"
           :center="this.$store.state.map.center"
@@ -346,6 +346,7 @@
   const BasemapToggleControl = philaVueMapping.BasemapToggleControl;
   const BasemapSelectControl = philaVueMapping.BasemapSelectControl;
   const FullScreenMapToggleTab = philaVueMapping.FullScreenMapToggleTab;
+  const FullScreenMapToggleTabVertical = philaVueMapping.FullScreenMapToggleTabVertical;
   const LocationControl = philaVueMapping.LocationControl;
   const CyclomediaButton = philaVueMapping.CyclomediaButton;
   const PictometryButton = philaVueMapping.PictometryButton;
@@ -381,6 +382,7 @@
       BasemapToggleControl,
       BasemapSelectControl,
       FullScreenMapToggleTab,
+      FullScreenMapToggleTabVertical,
       LocationControl,
       PictometryButton,
       CyclomediaButton,
@@ -864,13 +866,13 @@
 
 <style>
 
-  input:focus, select:focus, textarea:focus, button:focus {
-   outline: none;
-  }
+input:focus, select:focus, textarea:focus, button:focus {
+ outline: none;
+}
 
-  button {
-   padding: inherit !important;
-  }
+button {
+ padding: inherit !important;
+}
 
   #map-panel-container {
     position: relative;
