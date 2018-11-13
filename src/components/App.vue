@@ -19,14 +19,9 @@
     <div id="components-root">
 
       <div :class="'flexing ' + this.mapClass">
-
         <map-panel/>
-
-
       </div>
-
       <div :class="'flexing ' + this.tableClass">
-
         <full-screen-topics-toggle-tab-vertical/>
         <horizontal-table
           v-if="this.$store.state.geocode.status && this.$store.state.geocode.status !== 'error'"
@@ -108,37 +103,14 @@
         return this.$store.state.fullScreenTopicsEnabled;
       },
       mapClass() {
-        // const testMapFull = this.fullScreenMapEnabled ? 'top-full':'top-half';
-        // const testMapNone = this.fullScreenTopicsEnabled ? 'top-none':'top-half';
-        if (this.fullScreenMapEnabled) {
-          return 'top-full';
-          // return testMapFull;
-        } else if (this.fullScreenTopicsEnabled) {
-          return 'top-none';
-          // return testMapNone;
-        } else {
-          return 'top-half';
-        }
-        // console.log('testMapFull:', testMapFull, 'testMapNone:', testMapNone);
-        // return test
-        // if(this.fullScreenMapEnabled){
-        //   return 'top-full'
-        // }
+        return this.fullScreenMapEnabled ? 'top-full':
+               this.fullScreenTopicsEnabled ? 'top-none':
+               'top-half';
       },
       tableClass() {
-        // return this.fullScreenMapEnabled ? 'bottom-none':'bottom-half';
-        if (this.fullScreenMapEnabled) {
-          return 'bottom-none';
-          // return testMapFull;
-        } else if (this.fullScreenTopicsEnabled) {
-          return 'bottom-full';
-          // return testMapNone;
-        } else {
-          return 'bottom-half';
-        }
-        // if(this.fullScreenMapEnabled){
-        //   return 'top-full'
-        // }
+        return this.fullScreenMapEnabled ? 'bottom-none':
+               this.fullScreenTopicsEnabled? 'bottom-full':
+               'bottom-half';
       },
       ownerOptions() {
         const options = {
@@ -149,8 +121,6 @@
             {
               label: 'Street Address',
               value: function(state, item, controller) {
-                const test = controller.test
-                /* controller.test(); */
                 return `<a target='_blank' href='https://atlas.phila.gov/#/`+item.properties.street_address+`/property'>`+item.properties.street_address+` <i class='fa fa-external-link'></i></a>`
                 // return '<a href=# onclick="'+test+'()">'+item.properties.street_address+' <i class="fa fa-external-link"></i></a>'
               }

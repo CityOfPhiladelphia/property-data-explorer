@@ -314,8 +314,6 @@
                                    @l-click="handleCyclomediaRecordingClick"
       />
     </map_>
-    <slot class='widget-slot' name="cycloWidget" />
-    <slot class='widget-slot' name="pictWidget" />
   </div>
 </template>
 
