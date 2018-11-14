@@ -170,7 +170,6 @@
 }
 
 .flexing {
-  border: 1px solid #ff0000;
   display: flex;
   flex: 1;
   flex-direction: column;
