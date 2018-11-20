@@ -115,15 +115,24 @@
       ownerOptions() {
         const options = {
           id: 'ownerProperties',
-          /* dataSources: ['liPermits'], */
+          dataSources: ['opa'],
           /* limit: 5, */
           fields: [
             {
               label: 'Street Address',
               value: function(state, item, controller) {
-                return `<a target='_blank' href='https://atlas.phila.gov/#/`+item.properties.street_address+`/property'>`+item.properties.street_address+` <i class='fa fa-external-link'></i></a>`
+                return item.properties.street_address
                 // return '<a href=# onclick="'+test+'()">'+item.properties.street_address+' <i class="fa fa-external-link"></i></a>'
-              }
+              },
+              popoverLink: true,
+              popOverPreText: function() {
+                console.log("popOver Pre Text");
+                return"open"
+              },
+              popOverPostText: function() {
+                console.log("popOver Post Text");
+                return"false"
+              },
             },
             {
               label: 'Owner',

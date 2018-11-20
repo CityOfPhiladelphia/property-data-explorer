@@ -3,8 +3,7 @@
        :class="this.mapPanelContainerClass"
   >
     <full-screen-map-toggle-tab-vertical v-once />
-    <map_ :class="{ 'mb-map-with-widget': this.$store.state.cyclomedia.active || this.$store.state.pictometry.active }"
-          id="map-tag"
+    <map_ id="map-tag"
           :center="this.$store.state.map.center"
           :zoom="this.$store.state.map.zoom"
           @l-click="handleMapClick"
@@ -13,7 +12,6 @@
           :min-zoom="this.$config.map.minZoom"
           :max-zoom="this.$config.map.maxZoom"
     >
-    <!-- :class="{ 'mb-map-with-widget': this.$store.state.cyclomedia.active || this.$store.state.pictometry.active }" -->
       <!-- loading mask -->
       <div v-show="isGeocoding" class="mb-map-loading-mask">
         <div class="mb-map-loading-mask-inner">
@@ -48,15 +46,6 @@
                           :opacity="tiledLayer.opacity"
       />
 
-      <esri-dynamic-map-layer v-for="(dynamicLayer, key) in this.$config.map.dynamicMapLayers"
-                              v-if="activeDynamicMaps.includes(key)"
-                              :key="key"
-                              :url="dynamicLayer.url"
-                              :attribution="dynamicLayer.attribution"
-                              :transparent="true"
-                              :opacity="dynamicLayer.opacity"
-      />
-
       <!-- dorParcels, pwdParcels, vacantLand, vacantBuilding -->
       <esri-feature-layer v-for="(featureLayer, key) in this.$config.map.featureLayers"
                           v-if="shouldShowFeatureLayer(key, featureLayer.minZoom)"
@@ -76,28 +65,6 @@
                           :interactive="featureLayer.interactive"
       />
 
-      <!-- regmaps -->
-      <esri-dynamic-map-layer v-for="(item, key) in this.imageOverlayItems"
-                              v-if="shouldShowImageOverlay(item.properties.RECMAP)"
-                              :key="key"
-                              :url="'//gis.phila.gov/arcgis/rest/services/Atlas/RegMaps/MapServer'"
-                              :layers="[0]"
-                              :layerDefs="'0:NAME=\'g' + item.properties.RECMAP.toLowerCase() + '.tif\''"
-                              :transparent="true"
-                              :opacity="0.5"
-      />
-      <!-- :url="'//gis.phila.gov/arcgis/rest/services/DOR_ParcelExplorer/rtt_basemap/MapServer/'" -->
-      <!-- :url="this.imageOverlayInfo.url"
-      :opacity="this.imageOverlayInfo.opacity" -->
-
-      <!-- address marker -->
-      <!-- REVIEW why does this need a key? it's not a list... -->
-      <!-- <vector-marker v-if="identifyFeature === 'address-marker' && geocodeGeom"
-                    :latlng="[...geocodeGeom.coordinates].reverse()"
-                    :key="streetAddress"
-      /> -->
-
-      <!-- NEW METHOD: try rendering markers generically based on marker type -->
       <!-- vector markers -->
       <vector-marker v-for="(marker, index) in markersForAddress"
                      :latlng="marker.latlng"
@@ -114,21 +81,6 @@
                      :icon="marker.icon"
       />
 
-      <!-- marker using a png and ablility to rotate it -->
-      <png-marker v-if="this.cyclomediaActive"
-                  :icon="'images/camera.png'"
-                  :latlng="cycloLatlng"
-                  :rotationAngle="cycloRotationAngle"
-      />
-
-      <!-- marker using custom code extending icons - https://github.com/iatkin/leaflet-svgicon -->
-      <svg-view-cone-marker v-if="this.cyclomediaActive"
-                            :latlng="cycloLatlng"
-                            :rotationAngle="cycloRotationAngle"
-                            :hFov="cycloHFov"
-      />
-
-
       <!-- non-reactive geojson parcels -->
       <geojson v-for="geojsonFeature in geojsonParcels"
                v-if="shouldShowGeojson(geojsonFeature.key)"
@@ -144,97 +96,6 @@
                  tableId: geojsonFeature.tableId
                }"
        />
-
-      <!-- non-reactive geojson features for topics -->
-      <geojson v-for="geojsonFeature in geojsonForTopic"
-               v-if="shouldShowGeojson(geojsonFeature.key)"
-               :geojson="geojsonFeature.geojson"
-               :fillColor="geojsonFeature.fillColor"
-               :color="geojsonFeature.color"
-               :weight="geojsonFeature.weight"
-               :opacity="geojsonFeature.opacity"
-               :fillOpacity="geojsonFeature.fillOpacity"
-               :key="geojsonFeature.key"
-               :data="{
-                 featureId: geojsonFeature.featureId,
-                 tableId: geojsonFeature.tableId
-               }"
-       />
-
-       <!-- reactive geojson features -->
-       <!-- <geojson v-for="geojsonFeature in reactiveGeojsonFeatures"
-                v-if="shouldShowGeojson(geojsonFeature.key)"
-                @l-mouseover="handleMarkerMouseover"
-                @l-click="handleMarkerClick"
-                @l-mouseout="handleMarkerMouseout"
-                :geojson="geojsonFeature.geojson"
-                :fillColor="geojsonFeature.fillColor"
-                :color="geojsonFeature.color"
-                :weight="geojsonFeature.weight"
-                :opacity="geojsonFeature.opacity"
-                :fillOpacity="geojsonFeature.fillOpacity"
-                :key="geojsonFeature.key"
-                :data="{
-                  featureId: geojsonFeature.featureId,
-                  tableId: geojsonFeature.tableId
-                }"
-        /> -->
-
-       <!-- location marker -->
-       <!-- <circle-marker v-if="this.$store.state.map.location.lat != null"
-                      :latlng="this.locationMarker.latlng"
-                      :radius="this.locationMarker.radius"
-                      :fillColor="this.locationMarker.fillColor"
-                      :color="this.locationMarker.color"
-                      :weight="this.locationMarker.weight"
-                      :opacity="this.locationMarker.opacity"
-                      :fillOpacity="this.locationMarker.fillOpacity"
-                      :key="Math.random()"
-       /> -->
-
-       <!-- TODO give these a real key -->
-      <!-- <circle-marker v-for="circleMarker in circleMarkers"
-                     @l-mouseover="handleMarkerMouseover"
-                     @l-click="handleMarkerClick"
-                     @l-mouseout="handleMarkerMouseout"
-                     :latlng="circleMarker.latlng"
-                     :radius="circleMarker.radius"
-                     :fillColor="circleMarker.fillColor"
-                   	 :color="circleMarker.color"
-                   	 :weight="circleMarker.weight"
-                   	 :opacity="circleMarker.opacity"
-                   	 :fillOpacity="circleMarker.fillOpacity"
-                     :key="Math.random()"
-                     :data="{
-                       featureId: circleMarker.featureId,
-                       tableId: circleMarker.tableId
-                     }"
-      /> -->
-
-      <!-- <div-icon-marker v-for="tableMarker in tableMarkers"
-                     @l-mouseover="handleMarkerMouseover"
-                     @l-click="handleMarkerClick"
-                     @l-mouseout="handleMarkerMouseout"
-                     :latlng="tableMarker.latlng"
-                   	 :markerColor="tableMarker.color"
-                     :key="Math.random()"
-                     :data="{
-                       featureId: tableMarker.featureId,
-                       tableId: tableMarker.tableId
-                     }"
-                     :icon="{
-                       'icon': tableMarker.fa,
-                       'prefix': tableMarker.prefix,
-                       'size': tableMarker.size
-                     }"
-      /> -->
-
-       <!-- <vector-marker v-for="marker in threeOneOneMarkers"
-                      v-if="activeTopicConfig.key === 'threeOneOne'"
-                      :latlng="[marker.geometry.coordinates[1], marker.geometry.coordinates[0]]"
-                      :key="marker.id"
-                      :markerColor="'#b2ffb2'"
-       /> -->
 
       <!-- CONTROLS: -->
       <!-- basemap control -->
@@ -302,29 +163,18 @@
                               :position="this.addressInputPosition"
       />
 
-
-      <cyclomedia-recording-circle v-for="recording in cyclomediaRecordings"
-                                   v-if="cyclomediaActive"
-                                   :key="recording.imageId"
-                                   :imageId="recording.imageId"
-                                   :latlng="[recording.lat, recording.lng]"
-                                   :size="1.2"
-                                   :color="'#3388ff'"
-                                   :weight="1"
-                                   @l-click="handleCyclomediaRecordingClick"
-      />
     </map_>
+    <property-card-modal></property-card-modal>
   </div>
 </template>
 
 <script>
   import * as L from 'leaflet';
   import philaVueMapping from '@cityofphiladelphia/phila-vue-mapping';
+  import PropertyCardModal from './PropertyCardModal.vue';
 
   // mixins
   import markersMixin from './markers-mixin';
-  const cyclomediaMixin = philaVueMapping.CyclomediaMixin;
-  const pictometryMixin = philaVueMapping.PictometryMixin;
 
   // vue doesn't like it when you import this as Map (reserved-ish word)
   const Map_ = philaVueMapping.Map_;
@@ -334,7 +184,6 @@
   const AddressCandidateList = philaVueMapping.AddressCandidateList;
   const EsriTiledMapLayer = philaVueMapping.EsriTiledMapLayer;
   const EsriTiledOverlay = philaVueMapping.EsriTiledOverlay;
-  const EsriDynamicMapLayer = philaVueMapping.EsriDynamicMapLayer;
   const EsriFeatureLayer = philaVueMapping.EsriFeatureLayer;
   const Geojson = philaVueMapping.Geojson;
   const CircleMarker = philaVueMapping.CircleMarker;
@@ -343,13 +192,8 @@
   const PngMarker = philaVueMapping.PngMarker;
   const BasemapToggleControl = philaVueMapping.BasemapToggleControl;
   const BasemapSelectControl = philaVueMapping.BasemapSelectControl;
-  const FullScreenMapToggleTab = philaVueMapping.FullScreenMapToggleTab;
   const FullScreenMapToggleTabVertical = philaVueMapping.FullScreenMapToggleTabVertical;
   const LocationControl = philaVueMapping.LocationControl;
-  const CyclomediaButton = philaVueMapping.CyclomediaButton;
-  const PictometryButton = philaVueMapping.PictometryButton;
-  const CyclomediaRecordingCircle = philaVueMapping.CyclomediaRecordingCircle;
-  const CyclomediaRecordingsClient = philaVueMapping.CyclomediaRecordingsClient;
   const SvgViewConeMarker = philaVueMapping.SvgViewConeMarker;
   const MeasureControl = philaVueMapping.MeasureControl;
   const LegendControl = philaVueMapping.LegendControl;
@@ -359,8 +203,6 @@
   export default {
     mixins: [
       markersMixin,
-      cyclomediaMixin,
-      pictometryMixin,
     ],
     components: {
       Map_,
@@ -370,7 +212,6 @@
       AddressCandidateList,
       EsriTiledMapLayer,
       EsriTiledOverlay,
-      EsriDynamicMapLayer,
       EsriFeatureLayer,
       Geojson,
       CircleMarker,
@@ -379,26 +220,21 @@
       PngMarker,
       BasemapToggleControl,
       BasemapSelectControl,
-      FullScreenMapToggleTab,
       FullScreenMapToggleTabVertical,
       LocationControl,
-      PictometryButton,
-      CyclomediaButton,
-      CyclomediaRecordingCircle,
       SvgViewConeMarker,
       MeasureControl,
       LegendControl,
       BasemapTooltip,
       ControlCorner,
+      PropertyCardModal
     },
     // data: {
     data() {
       const data = {
         zoomToShape: {
           geojsonParcels: [],
-          geojsonForTopic: [],
           markersForAddress: [],
-          markersForTopic: [],
         },
       };
       return data;
@@ -409,26 +245,9 @@
       if (defaultAddress) {
         this.$controller.goToDefaultAddress(defaultAddress);
       }
-
-      const cyclomediaConfig = this.$config.cyclomedia || {};
-      if (cyclomediaConfig.enabled) {
-      // create cyclomedia recordings client
-        this.$cyclomediaRecordingsClient = new CyclomediaRecordingsClient(
-          this.$config.cyclomedia.recordingsUrl,
-          this.$config.cyclomedia.username,
-          this.$config.cyclomedia.password,
-          4326
-        );
-      }
     },
     computed: {
-      // shouldShowAddressInput() {
-      //   if (this.$config.addressInputLocation == 'map') {
-      //     return true;
-      //   } else {
-      //     return false;
-      //   }
-      // },
+
       addressAutocompleteEnabled() {
         // TODO tidy up the code
         if (this.$config.addressInput) {
@@ -475,44 +294,18 @@
       fullScreenMapEnabled() {
         return this.$store.state.fullScreenMapEnabled;
       },
-      fullScreenTopicsEnabled() {
-        return this.$store.state.fullScreenTopicsEnabled;
-      },
       mapPanelContainerClass() {
         // return 'medium-12 small-order-1 small-24 medium-order-2 mb-panel mb-panel-map'
         if (this.fullScreenMapEnabled) {
           return 'medium-24 small-order-1 small-24 medium-order-2 mb-panel mb-panel-map'
         } else if (this.fullScreenMapOnly) {
           return 'medium-1 small-order-1 small-1 medium-order-2 mb-panel mb-panel-map'
-        } else if (this.fullScreenTopicsEnabled) {
-          return 'medium-1 small-order-1 small-24 medium-order-2 mb-panel mb-panel-map'
         } else {
           return 'medium-12 small-order-1 small-24 medium-order-2 mb-panel mb-panel-map'
         }
       },
-      cycloLatlng() {
-        if (this.$store.state.cyclomedia.orientation.xyz !== null) {
-          const xyz = this.$store.state.cyclomedia.orientation.xyz;
-          return [xyz[1], xyz[0]];
-        } else {
-          const center = this.$config.map.center;
-          return center;
-        }
-      },
-      cycloRotationAngle() {
-        return this.$store.state.cyclomedia.orientation.yaw * (180/3.14159265359);
-      },
-      cycloHFov() {
-        return this.$store.state.cyclomedia.orientation.hFov;
-      },
       isMobileOrTablet() {
         return this.$store.state.isMobileOrTablet;
-      },
-      shouldShowCyclomediaButton() {
-        return this.$config.cyclomedia.enabled && !this.isMobileOrTablet;
-      },
-      shouldShowPictometryButton() {
-        return this.$config.pictometry.enabled && !this.isMobileOrTablet;
       },
       geolocationEnabled() {
         if (this.$config.geolocation) {
@@ -527,25 +320,6 @@
       },
       legendControls() {
         return this.$config.legendControls || {};
-      },
-      imageOverlay() {
-        return this.$store.state.map.imageOverlay;
-      },
-      imageOverlayItems() {
-        // console.log('calculating imageOverlayItem');
-        if (this.activeTopicConfig.imageOverlayGroup) {
-          const overlayGroup = this.activeTopicConfig.imageOverlayGroup;
-          const state = this.$store.state;
-          const overlay = this.$config.imageOverlayGroups[overlayGroup].items(state);
-          // console.log('returning imageOverlayItem', overlay);
-          return overlay;
-        } else {
-          return [];
-        }
-      },
-      imageOverlayInfo() {
-        // console.log('config:', this.$config);
-        return this.$config.map.dynamicMapLayers.regmaps;
       },
       activeBasemap() {
         const shouldShowImagery = this.$store.state.map.shouldShowImagery;
@@ -567,13 +341,6 @@
           return [];
         } else {
           return this.activeTopicConfig.tiledOverlays;
-        }
-      },
-      activeDynamicMaps() {
-        if (!this.activeTopicConfig || !this.activeTopicConfig.dynamicMapLayers) {
-          return [];
-        } else {
-          return this.activeTopicConfig.dynamicMapLayers;
         }
       },
       activeFeatureLayers() {
@@ -652,13 +419,6 @@
       streetAddress() {
         return this.geocodeResult.properties.street_address;
       },
-      picOrCycloActive() {
-        if (this.cyclomediaActive || this.pictometryActive) {
-          return true;
-        } else {
-          return false;
-        }
-      },
       mapBounds() {
         // TODO calculate map bounds based on leaflet markers above
       },
@@ -670,35 +430,6 @@
       },
     },
     watch: {
-      picOrCycloActive(value) {
-        this.$nextTick(() => {
-          this.$store.state.map.map.invalidateSize();
-        })
-      },
-      // circleMarkers(nextCircleMarkers) {
-      //   let czts = this.activeTopicConfig.zoomToShape;
-      //   let dzts = this.$data.zoomToShape;
-      //   if (!czts || !czts.includes('circleMarkers')) {
-      //     dzts.circleMarkers = [];
-      //     return;
-      //   } else {
-      //     dzts.circleMarkers = nextCircleMarkers;
-      //     console.log('exiting circleMarkers');
-      //     this.checkBoundsChanges();
-      //   }
-      // },
-      // geojsonForTopic(nextGeojson) {
-      //   let czts = this.activeTopicConfig.zoomToShape;
-      //   let dzts = this.$data.zoomToShape;
-      //   if (!czts || !czts.includes('geojsonForTopic')) {
-      //     dzts.geojsonForTopic = [];
-      //     return;
-      //   } else {
-      //     dzts.geojsonForTopic = nextGeojson;
-      //     // console.log('exiting geojsonForTopic');
-      //     this.checkBoundsChanges();
-      //   }
-      // },
 
       geojsonParcels(nextGeojson) {
         let czts = this.activeTopicConfig.zoomToShape;
@@ -724,29 +455,6 @@
           // console.log('exiting markersForAddress')
           this.checkBoundsChanges();
         }
-      },
-
-      // watches computed markersForTopic, adds info to data zoomToShape.markersForTopic
-      // it does not update zoomToShape unless there is a change
-      // because the markers computed recalculates extremely often, this is needed
-      markersForTopic(nextMarkers) {
-        let czts = this.activeTopicConfig.zoomToShape;
-        let dzts = this.$data.zoomToShape;
-        if (!czts || !czts.includes('markersForTopic')) {
-        // if (!czts.includes('markersForTopic')) {
-          dzts.markersForTopic = [];
-          return;
-        } else {
-          dzts.markersForTopic = nextMarkers;
-          // console.log('exiting markersForTopic');
-          this.checkBoundsChanges();
-        }
-      },
-
-      fullScreenTopicsEnabled() {
-        this.$nextTick(() => {
-          this.$store.state.map.map.invalidateSize();
-        })
       },
     },
     methods: {
@@ -783,18 +491,8 @@
               featureArray.push(L.geoJSON(geojsonFeature.geojson))
             }
           }
-          if (czts.includes('geojsonForTopic')) {
-            for (let geojsonFeature of this.geojsonForTopic) {
-              featureArray.push(L.geoJSON(geojsonFeature.geojson))
-            }
-          }
           if (czts.includes('markersForAddress')) {
             for (let marker of this.markersForAddress) {
-              featureArray.push(L.marker(marker.latlng))
-            }
-          }
-          if (czts.includes('markersForTopic')) {
-            for (let marker of this.markersForTopic) {
               featureArray.push(L.marker(marker.latlng))
             }
           }
@@ -818,9 +516,6 @@
           return key === this.activeDorParcel;
         }
       },
-      shouldShowImageOverlay(key) {
-        return key === this.imageOverlay;
-      },
       shouldShowFeatureLayer(key) {
         if (this.activeFeatureLayers.includes(key)) {
           return true;
@@ -835,28 +530,10 @@
 
       handleMapMove(e) {
         const map = this.$store.state.map.map;
-
-        // const pictometryConfig = this.$config.pictometry || {};
-
         const center = map.getCenter();
         const { lat, lng } = center;
         const coords = [lng, lat];
 
-        // if (pictometryConfig.enabled) {
-        //   // update state for pictometry
-        //   this.$store.commit('setPictometryMapCenter', coords);
-        //
-        //   const zoom = map.getZoom();
-        //   this.$store.commit('setPictometryMapZoom', zoom);
-        // }
-        //
-        // const cyclomediaConfig = this.$config.cyclomedia || {};
-        //
-        // if (cyclomediaConfig.enabled) {
-        //   // update cyclo recordings
-        //   this.updateCyclomediaRecordings();
-        //   this.$store.commit('setCyclomediaLatLngFromMap', [lat, lng]);
-        // }
       },
     }, // end of methods
   }; //end of export

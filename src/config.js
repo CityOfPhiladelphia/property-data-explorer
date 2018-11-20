@@ -28,6 +28,7 @@ let config = {
     enabled: true,
   },
   map,
+  // modals: [''],
   parcels: {
     pwd: {
       multipleAllowed: false,
@@ -40,6 +41,16 @@ let config = {
     },
   },
   dataSources: {
+    ownerOPA: {
+      options: {
+        params: {
+          q: function (opa_account_array){
+            return "SELECT * FROM \"phl-gsg\".opa_properties_public WHERE parcel_number = ANY('{" + opa_account_array + "}'::text[])"
+          }
+        }
+      }
+
+    },
     opa: {
       type: 'http-get',
       url: 'https://data.phila.gov/resource/w7rb-qrn8.json',

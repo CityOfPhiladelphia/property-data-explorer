@@ -41,7 +41,7 @@ function createStore(config) {
       propertyBalance: 0,
     },
     modals: {
-      keys: config.modals,
+      // keys: config.modals,
       open: '',
     },
     map: {}
