@@ -28,10 +28,10 @@ function createStore(config) {
     addressEntered: null,
     parcels,
     sources,
-    // horizontalTables: {
-    //   // table id => filtered rows
-    //   filteredData: createFilteredData(config),
-    // },
+    horizontalTables: {
+      // table id => filtered rows
+      filteredData: {},
+    },
     // horizontalTableGroups: createHorizontalTableGroups(config),
     activeFeature: {
       featureId: null,
@@ -56,9 +56,6 @@ function createStore(config) {
       setAddressEntered(state, payload) {
         state.addressEntered = payload;
       },
-
-
-
       setIsMobileOrTablet(state, payload) {
         state.isMobileOrTablet = payload;
       },
@@ -81,7 +78,6 @@ function createStore(config) {
       setWatchPositionOn(state, payload) {
         state.map.watchPositionOn = payload;
       },
-
       setHorizontalTableGroupActiveTable(state, payload) {
         // console.log('setHorizontalTableGroupActiveTable, payload:', payload);
         state.horizontalTableGroups[payload.tableGroupId].activeTableId = payload.activeTableId;
@@ -92,10 +88,8 @@ function createStore(config) {
 
         // check for not-null table id
         if (!tableId) return;
-
         state.horizontalTables.filteredData[tableId] = data;
       },
-
       setMapFilters(state, payload) {
         state.map.filters = payload;
       },
@@ -103,8 +97,6 @@ function createStore(config) {
       setMap(state, payload) {
         state.map.map = payload.map;
       },
-
-
       setMapBounds(state, payload) {
         // const { northEast, southWest } = payload || {};
         // state.map.bounds.northEast = northEast;
@@ -121,14 +113,12 @@ function createStore(config) {
         state.parcels[parcelLayer].activeAddress = activeAddress;
         state.parcels[parcelLayer].activeMapreg = activeMapreg;
       },
-
       setActiveFeature(state, payload) {
         // console.log('store setActiveFeature is running');
         const { featureId, tableId } = payload || {};
         const nextActiveFeature = { featureId, tableId };
         state.activeFeature = nextActiveFeature;
       },
-
       setImageOverlay(state, payload) {
         state.map.imageOverlay = payload;
       },
@@ -162,7 +152,6 @@ function createStore(config) {
   mergeStore = mergeDeep(mergeStore, pvmStore);
   mergeStore = mergeDeep(mergeStore, mb);
 
-  console.log('mergeStore:', mergeStore);
 
   // TODO standardize how payloads are passed around/handled
   return new Vuex.Store({

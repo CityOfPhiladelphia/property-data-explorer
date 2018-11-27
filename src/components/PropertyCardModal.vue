@@ -1,7 +1,9 @@
 <template>
   <!-- <section :class="['openmaps-about' ,'openmaps-modal', {'openmaps-modal--open': modals.about.open}]" -->
   <section :class="['openmaps-about' ,'openmaps-modal']"
-           v-show="modals.open === 'true'">
+            v-if="this.$store.state.activeFeature.featureId"
+  >
+           <!-- v-if="modals.open === 'true'" -->
     <div @click="closeModal" class="openmaps-modal-close">
       <span class="button-state state-unnamed-state unnamed-state-active">
         <font-awesome-icon icon="times" class="fa-lg" aria-hidden="true" />
@@ -10,7 +12,11 @@
     <div class="openmaps-modal-content">
 
       <vertical-table
-        :slots="this.ownerOptions"
+        :slots="{
+                  items: function() {
+                    return 'test message';
+                  },
+                }"
         :options="this.ownerOptions"
       />
 
@@ -29,11 +35,16 @@ export default {
   },
   name: 'Property-Card-Modal',
   computed: {
+    activeFeature() {
+      console.log("Active Feature.....");
+      return this.$store.state.activeFeature;
+    },
     shouldBeOpen() {
-      this.modals.open = 'true'
+      this.modals.open = ''
       return this.modals.open
     },
     modals() {
+
       return this.$store.state.modals;
     },
     ownerOptions() {
@@ -45,14 +56,12 @@ export default {
           {
             label: 'Street Address',
             value: function() {
-              return 'test message'
               // return state.sources.opa.data.state_code
             }
           },
           {
             label: 'Owner',
             value: function(){
-              return 'test message'
               // return state.sources.opa.data.owner_1
             },
           },
@@ -62,11 +71,11 @@ export default {
     },
   },
   methods: {
-    closeModal () {
-      this.$store.state.modals = 'false;'
-      // this.$store.commit('setDidToggleModal', { name: 'help', open: false });
+    closeModal (state) {
+      this.$store.state.modals.open = "";
+      this.$store.state.activeFeature.featureId = null;
     },
-  }
+  },
 }
 </script>
 

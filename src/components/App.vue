@@ -29,9 +29,8 @@
 
           :slots="{
             items: function(state) {
-              var data = state.geocode.related;
-              /* data != null ? data.push(state.geocode) : data = state.geocode; */
-              if (data) {
+              let data = state.geocode.related;
+              if (state.geocode.related) {
                 data.push(state.geocode.data);
               } else {
                 data = state.geocode.data;
@@ -39,10 +38,10 @@
               return data;
             },
           }"
-          :options="this.ownerOptions"
+          :options="this.geocodeOptions"
         />
         <horizontal-table
-          v-if="this.$store.state.ownerSearch.status"
+          v-if="this.$store.state.ownerSearch.status !== 'error' && this.$store.state.ownerSearch.status"
 
           :slots="{
             items: function(state) {
@@ -112,11 +111,13 @@
                this.fullScreenTopicsEnabled? 'bottom-full':
                'bottom-half';
       },
-      ownerOptions() {
+      geocodeOptions() {
         const options = {
           id: 'ownerProperties',
+          tableid: 'aaa',
           dataSources: ['opa'],
-          /* limit: 5, */
+          mapOverlay: {},
+          mouseOverDisabled: true,
           fields: [
             {
               label: 'Street Address',
@@ -157,7 +158,55 @@
           ],
         }
         return options;
-      }
+      },
+      ownerOptions() {
+        const options = {
+          id: 'ownerProperties',
+          tableid: 'bbb',
+          dataSources: ['opa'],
+          mapOverlay: {},
+          mouseOverDisabled: true,
+          fields: [
+            {
+              label: 'Street Address',
+              value: function(state, item, controller) {
+                return item.properties.street_address
+                // return '<a href=# onclick="'+test+'()">'+item.properties.street_address+' <i class="fa fa-external-link"></i></a>'
+              },
+              popoverLink: true,
+              popOverPreText: function() {
+                console.log("popOver Pre Text");
+                return"open"
+              },
+              popOverPostText: function() {
+                console.log("popOver Post Text");
+                return"false"
+              },
+            },
+            {
+              label: 'Owner',
+              value: function(state, item){
+                return item.properties.opa_owners.toString();
+              },
+              /* nullValue: 'no date available', */
+            },
+            {
+              label: 'OPA Account',
+              value: function(state, item){
+                /* return item.permitdescription */
+                return item.properties.opa_account_num
+              }
+            },
+            {
+              label: 'Status',
+              value: function(state, item){
+                /* return item.status */
+              }
+            },
+          ],
+        }
+        return options;
+      },
     },
   };
 

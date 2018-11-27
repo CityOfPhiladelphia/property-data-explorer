@@ -35,53 +35,6 @@ const baseConfigUrl = config.baseConfig;
 
 var BASE_CONFIG_URL = 'https://cdn.jsdelivr.net/gh/ajrothwell/mapboard-base-config@74cf4692237e16757681f6860b936efd734c27d8/config.js';
 
-function assignTableIds(comps) {
-  for (let comp of comps) {
-    const options = comp.options || {};
-    const innerComps = options.components || options.tables;
-
-    // if this is a "group" component, recurse
-    if (innerComps) {
-      assignTableIds(innerComps);
-      // return;
-    }
-
-    // skip comps that aren't horizontal tables
-    if (comp.type !== 'horizontal-table') {
-      continue;
-    }
-
-     const id = generateUniqueId();
-     comp._id = id;
-     // the id also needs to get passed to the horizontal table component, so
-     // use the options object.
-     comp.options.tableId = id;
-  }
-}
-
-function assignHorizontalTableGroupIds(comps) {
-  for (let comp of comps) {
-    const options = comp.options || {};
-    const innerComps = options.tables;
-
-    // if this is a "group" component, recurse
-    if (!innerComps) {
-      continue;
-    }
-
-    // skip comps that aren't horizontal table groups
-    if (comp.type !== 'horizontal-table-group') {
-      continue;
-    }
-
-     const id = generateUniqueId();
-     comp._id = id;
-     // the id also needs to get passed to the horizontal table component, so
-     // use the options object.
-     comp.options.horizontalTableGroupId = id;
-  }
-}
-
 function initVue(config) {
   const store = createStore(config);
 
