@@ -41,16 +41,15 @@ let config = {
     },
   },
   dataSources: {
-    ownerOPA: {
-      options: {
-        params: {
-          q: function (opa_account_array){
-            return "SELECT * FROM \"phl-gsg\".opa_properties_public WHERE parcel_number = ANY('{" + opa_account_array + "}'::text[])"
-          }
-        }
-      }
-
-    },
+    // ownerOPA: {
+    //   options: {
+    //     params: {
+    //       q: function (opa_account_array){
+    //         return "SELECT * FROM \"phl-gsg\".opa_properties_public WHERE parcel_number = ANY('{" + opa_account_array + "}'::text[])"
+    //       }
+    //     }
+    //   }
+    // },
     opa: {
       type: 'http-get',
       url: 'https://data.phila.gov/resource/w7rb-qrn8.json',
@@ -63,15 +62,15 @@ let config = {
         }
       }
     },
-    liPermits: {
-      type: 'http-get',
-      url: 'https://phl.carto.com/api/v2/sql',
-      options: {
-        params: {
-          q: function(feature){ return "select * from li_permits where address = '" + feature.properties.street_address + "' or addresskey = '" + feature.properties.li_address_key.toString() + "'"},
-        }
-      }
-    },
+    // liPermits: {
+    //   type: 'http-get',
+    //   url: 'https://phl.carto.com/api/v2/sql',
+    //   options: {
+    //     params: {
+    //       q: function(feature){ return "select * from li_permits where address = '" + feature.properties.street_address + "' or addresskey = '" + feature.properties.li_address_key.toString() + "'"},
+    //     }
+    //   }
+    // },
   }
 }
 
