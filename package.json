@@ -1,8 +1,8 @@
 {
-  "name": "pvc-pvd-example-app",
+  "name": "property-bulk",
   "version": "1.0.0",
   "main": "",
-  "repository": "https://github.com/CityOfPhiladelphia/pvc-pvd-example-app.git",
+  "repository": "https://github.com/CityOfPhiladelphia/property-bulk.git",
   "author": "andy.rothwell <rothwell.andy@gmail.com>",
   "license": "MIT",
   "scripts": {
@@ -10,8 +10,8 @@
     "dev": "cross-env NODE_ENV=development webpack-dev-server"
   },
   "dependencies": {
-    "@cityofphiladelphia/phila-vue-comps": "https://github.com/CityOfPhiladelphia/phila-vue-comps#61b22b123531366ebade4b52ccdb8112dd4b0610",
-    "@cityofphiladelphia/phila-vue-datafetch": "https://github.com/CityOfPhiladelphia/phila-vue-datafetch#cca5e197371ac5ebddbec974757758c6b40f19d2",
+    "@cityofphiladelphia/phila-vue-comps": "https://github.com/CityOfPhiladelphia/phila-vue-comps#73bb3f4e7ab0272f30285bff11245700adee157b",
+    "@cityofphiladelphia/phila-vue-datafetch": "https://github.com/CityOfPhiladelphia/phila-vue-datafetch#5d48f89b486fbe62495c5bac1217aa0300f58eb4",
     "@cityofphiladelphia/phila-vue-mapping": "https://github.com/CityOfPhiladelphia/phila-vue-mapping#5f23ad94fb7aec9857ddce382b7bb5018eead944",
     "@fortawesome/fontawesome-pro": "^5.5.0",
     "@fortawesome/fontawesome-svg-core": "^1.2.5",
