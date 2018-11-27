@@ -25,24 +25,14 @@
         <full-screen-topics-toggle-tab-vertical/>
         <horizontal-table
           v-if="this.$store.state.geocode.status && this.$store.state.geocode.status !== 'error'"
-            padding-top="0"
-
+          padding-top="0"
           :slots="{
-            items: function(state) {
-              let data = state.geocode.related;
-              if (state.geocode.related) {
-                data.push(state.geocode.data);
-              } else {
-                data = state.geocode.data;
-              }
-              return data;
-            },
+            items: geocodeItems
           }"
           :options="this.geocodeOptions"
         />
         <horizontal-table
           v-if="this.$store.state.ownerSearch.status !== 'error' && this.$store.state.ownerSearch.status"
-
           :slots="{
             items: function(state) {
               var data = state.ownerSearch.data;
@@ -95,6 +85,21 @@
       this.$store.commit('setActiveParcelLayer', 'pwd');
     },
     computed: {
+      geocode() {
+        return this.$store.state.geocode;
+      },
+      geocodeItems() {
+        let data = [];
+        if (this.geocode.data) {
+          data.push(this.geocode.data);
+        }
+        if (this.geocode.related) {
+          for (let related of this.geocode.related) {
+            data.push(related);
+          }
+        }
+        return data;
+      },
       fullScreenMapEnabled() {
         return this.$store.state.fullScreenMapEnabled;
       },
