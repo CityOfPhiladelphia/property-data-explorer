@@ -130,15 +130,6 @@
                 return item.properties.street_address
                 // return '<a href=# onclick="'+test+'()">'+item.properties.street_address+' <i class="fa fa-external-link"></i></a>'
               },
-              popoverLink: true,
-              popOverPreText: function() {
-                console.log("popOver Pre Text");
-                return"open"
-              },
-              popOverPostText: function() {
-                console.log("popOver Post Text");
-                return"false"
-              },
             },
             {
               label: 'Owner',
@@ -174,18 +165,8 @@
           fields: [
             {
               label: 'Street Address',
-              value: function(state, item, controller) {
+              value: function(state, item) {
                 return item.properties.street_address
-                // return '<a href=# onclick="'+test+'()">'+item.properties.street_address+' <i class="fa fa-external-link"></i></a>'
-              },
-              popoverLink: true,
-              popOverPreText: function() {
-                console.log("popOver Pre Text");
-                return"open"
-              },
-              popOverPostText: function() {
-                console.log("popOver Post Text");
-                return"false"
               },
             },
             {
@@ -193,19 +174,16 @@
               value: function(state, item){
                 return item.properties.opa_owners.toString();
               },
-              /* nullValue: 'no date available', */
             },
             {
               label: 'OPA Account',
               value: function(state, item){
-                /* return item.permitdescription */
                 return item.properties.opa_account_num
               }
             },
             {
               label: 'Status',
               value: function(state, item){
-                /* return item.status */
               }
             },
           ],

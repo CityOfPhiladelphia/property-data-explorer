@@ -1,9 +1,7 @@
 <template>
-  <!-- <section :class="['openmaps-about' ,'openmaps-modal', {'openmaps-modal--open': modals.about.open}]" -->
   <section :class="['openmaps-about' ,'openmaps-modal']"
             v-if="this.$store.state.activeFeature.featureId"
   >
-           <!-- v-if="modals.open === 'true'" -->
     <div @click="closeModal" class="openmaps-modal-close">
       <span class="button-state state-unnamed-state unnamed-state-active">
         <font-awesome-icon icon="times" class="fa-lg" aria-hidden="true" />
@@ -12,14 +10,9 @@
     <div class="openmaps-modal-content">
 
       <vertical-table
-        :slots="{
-                  items: function() {
-                    return 'test message';
-                  },
-                }"
+        :slots="this.ownerOptions"
         :options="this.ownerOptions"
       />
-
 
     </div>
   </section>
@@ -36,34 +29,31 @@ export default {
   name: 'Property-Card-Modal',
   computed: {
     activeFeature() {
-      console.log("Active Feature.....");
+      // console.log("Active Feature.....");
       return this.$store.state.activeFeature;
-    },
-    shouldBeOpen() {
-      this.modals.open = ''
-      return this.modals.open
-    },
-    modals() {
-
-      return this.$store.state.modals;
     },
     ownerOptions() {
       const options = {
         id: 'ownerProperties',
-        dataSources: ['opa'],
-        title: "",
+        title: "Property Details",
         fields: [
           {
-            label: 'Street Address',
-            value: function() {
-              // return state.sources.opa.data.state_code
-            }
+            label: 'Owner',
+            value: function(state){
+              return state.geocode.data.properties.opa_owners.toString();
+            },
           },
           {
-            label: 'Owner',
-            value: function(){
-              // return state.sources.opa.data.owner_1
+            label: 'Street Address',
+            value: function(state) {
+              return state.geocode.data.properties.street_address
             },
+          },
+          {
+            label: 'OPA Account',
+            value: function(state) {
+              return state.geocode.data.properties.opa_account_num
+            }
           },
         ],
       }
@@ -72,7 +62,6 @@ export default {
   },
   methods: {
     closeModal (state) {
-      this.$store.state.modals.open = "";
       this.$store.state.activeFeature.featureId = null;
     },
   },
@@ -80,7 +69,6 @@ export default {
 </script>
 
 <style scoped>
-/* <style lang="scss" scoped> */
 
 .icon-div {
   margin: 10px;
@@ -129,6 +117,5 @@ export default {
   height: 30px;
   width: 30px;
 }
-
 
 </style>
