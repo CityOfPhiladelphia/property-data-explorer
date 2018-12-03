@@ -123,11 +123,17 @@
         <basemap-select-control :position="this.basemapSelectControlPosition" />
       </div>
 
-      <div v-once
+      <div v-if="draw-control">
+        <draw-control :position="'bottomleft'"
+                      :draw="this.drawProps"
+        />
+      </div>
+
+      <!-- <div v-once
            v-if="this.measureControlEnabled"
       >
         <measure-control :position="'bottomleft'" />
-      </div>
+      </div> -->
 
       <div v-once>
         <legend-control v-for="legendControl in Object.keys(legendControls)"
@@ -198,6 +204,7 @@
   const MeasureControl = philaVueMapping.MeasureControl;
   const LegendControl = philaVueMapping.LegendControl;
   const BasemapTooltip = philaVueMapping.BasemapTooltip;
+  const DrawControl = philaVueMapping.DrawControl;
   const ControlCorner = philaVueMapping.ControlCorner;
 
   export default {
@@ -227,7 +234,8 @@
       LegendControl,
       BasemapTooltip,
       ControlCorner,
-      PropertyCardModal
+      PropertyCardModal,
+      DrawControl
     },
     // data: {
     data() {
@@ -246,7 +254,21 @@
         this.$controller.goToDefaultAddress(defaultAddress);
       }
     },
+
     computed: {
+
+      drawProps() {
+
+        const draw = {
+          polyline: false,
+          polygon: false,
+          circle: false,
+          marker: false,
+          rectangle: true,
+        };
+
+        return draw
+      },
 
       addressAutocompleteEnabled() {
         // TODO tidy up the code

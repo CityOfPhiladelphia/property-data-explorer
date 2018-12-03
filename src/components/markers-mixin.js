@@ -1,5 +1,6 @@
-// import VectorIcon from 'leaflet-vector-icon';
+import VectorIcon from 'leaflet-vector-icon';
 import { divIcon } from 'leaflet';
+import { Marker } from 'leaflet';
 
 export default {
   watch: {

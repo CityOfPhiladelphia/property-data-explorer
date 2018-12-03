@@ -5,5 +5,6 @@ export default {
   imagery: {
     enabled: true
   },
+  drawControl: true,
   initialImagery: 'imagery2018',
 }
