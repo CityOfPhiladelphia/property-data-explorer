@@ -123,9 +123,10 @@
         <basemap-select-control :position="this.basemapSelectControlPosition" />
       </div>
 
-      <div v-if="draw-control">
+      <div v-once>
         <draw-control :position="'bottomleft'"
-                      :draw="this.drawProps"
+                      :control="true"
+                      @l-click=""
         />
       </div>
 
@@ -260,7 +261,7 @@
       drawProps() {
 
         const draw = {
-          polyline: false,
+          polyline: true,
           polygon: false,
           circle: false,
           marker: false,
