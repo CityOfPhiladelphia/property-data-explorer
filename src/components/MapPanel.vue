@@ -126,7 +126,6 @@
       <div v-once>
         <draw-control :position="'bottomleft'"
                       :control="true"
-                      @l-click=""
         />
       </div>
 
@@ -548,7 +547,9 @@
       handleMapClick(e) {
         // console.log('MapPanel.vue handleMapClick e:', e);
         // latLng = L.latLng(e.lat, e.lng)
-        this.$controller.handleMapClick(e);
+        if(this.$store.state.drawStart = null) {
+          this.$controller.handleMapClick(e);
+        }
       },
 
       handleMapMove(e) {
