@@ -12,7 +12,7 @@
   "dependencies": {
     "@cityofphiladelphia/phila-vue-comps": "https://github.com/CityOfPhiladelphia/phila-vue-comps#73bb3f4e7ab0272f30285bff11245700adee157b",
     "@cityofphiladelphia/phila-vue-datafetch": "https://github.com/CityOfPhiladelphia/phila-vue-datafetch#5d48f89b486fbe62495c5bac1217aa0300f58eb4",
-    "@cityofphiladelphia/phila-vue-mapping": "https://github.com/CityOfPhiladelphia/phila-vue-mapping#5f23ad94fb7aec9857ddce382b7bb5018eead944",
+    "@cityofphiladelphia/phila-vue-mapping": "https://github.com/CityOfPhiladelphia/phila-vue-mapping#59902bd9489f943230f19ab78b1b6fb5df348ab8",
     "@fortawesome/fontawesome-pro": "^5.5.0",
     "@fortawesome/fontawesome-svg-core": "^1.2.5",
     "@fortawesome/vue-fontawesome": "^0.1.2",
