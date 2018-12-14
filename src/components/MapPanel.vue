@@ -545,9 +545,7 @@
         return false;
       },
       handleMapClick(e) {
-        // console.log('MapPanel.vue handleMapClick e:', e);
-        // latLng = L.latLng(e.lat, e.lng)
-        if(this.$store.state.drawStart = null) {
+        if(this.$store.state.drawStart === null) {
           this.$controller.handleMapClick(e);
         }
       },
