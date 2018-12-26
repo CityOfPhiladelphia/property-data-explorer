@@ -81,9 +81,6 @@
         'bottom': 2,
       }
     },
-    mounted(){
-      this.$store.commit('setActiveParcelLayer', 'pwd');
-    },
     computed: {
       geocode() {
         return this.$store.state.geocode;
@@ -159,7 +156,7 @@
         const options = {
           id: 'ownerProperties',
           tableid: 'bbb',
-          dataSources: ['opa'],
+          // dataSources: ['opa'],
           mapOverlay: {},
           mouseOverDisabled: true,
           fields: [
