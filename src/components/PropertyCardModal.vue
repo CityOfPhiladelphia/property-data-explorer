@@ -40,20 +40,41 @@ export default {
           {
             label: 'Owner',
             value: function(state){
-              return state.geocode.data.properties.opa_owners.toString();
+              if (state.geocode.status === "success"){
+                return state.geocode.data.properties.opa_owners.toString();
+              } else {
+                let result = state.ownerSearch.data.filter(object => {
+                  return object._featureId === state.activeFeature.featureId
+                });
+                return result[0].properties.opa_owners.toString()
+              }
             },
           },
           {
             label: 'Street Address',
             value: function(state) {
-              return state.geocode.data.properties.street_address
+              if (state.geocode.status === "success"){
+                return state.geocode.data.properties.street_address;
+              } else {
+                let result = state.ownerSearch.data.filter(object => {
+                  return object._featureId === state.activeFeature.featureId
+                });
+                return result[0].properties.street_address
+              }
             },
           },
           {
             label: 'OPA Account',
             value: function(state) {
-              return state.geocode.data.properties.opa_account_num
-            }
+              if (state.geocode.status === "success"){
+                return state.geocode.data.properties.opa_account_num;
+              } else {
+                let result = state.ownerSearch.data.filter(object => {
+                  return object._featureId === state.activeFeature.featureId
+                });
+                return result[0].properties.opa_account_num
+              }
+            },
           },
         ],
       }
