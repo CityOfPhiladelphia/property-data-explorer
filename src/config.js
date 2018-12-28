@@ -52,13 +52,41 @@ let config = {
     // },
     opa: {
       type: 'http-get',
-      url: 'https://data.phila.gov/resource/w7rb-qrn8.json',
+      url: 'https://phl.carto.com/api/v2/sql',
+      // url: 'https://data.phila.gov/resource/w7rb-qrn8.json',
+      targets: {
+        runOnce: true,
+        get: function(state) {
+          console.log('opa get is running');
+          if (state.lastSearchMethod === 'owner search') {
+            console.log('lastSearchMethod = owner search');
+            return state.ownerSearch.data
+          } else {
+            let opa = []
+            opa.push(state.geocode.data);
+            for (let relate of state.geocode.related) {
+              opa.push(relate);
+            }
+            return opa;
+          }
+        },
+        getTargetId: function(target) {
+          // console.log('in getTargetId, target:', target);
+          return target.properties.opa_account_num;
+          // return target._featureId;
+        }
+      },
       options: {
         params: {
-          parcel_number: function(feature) { return feature.properties.opa_account_num; }
+          // parcel_number: function(feature) {
+          q: function(feature) {
+            // console.log('feature:', feature);
+            // return 'select * from opa_properties_public where parcel_number IN (' + feature.properties.opa_account_num + ')';
+            return "SELECT parcel_number, market_value, sale_date, sale_price FROM opa_properties_public WHERE parcel_number IN (" + feature + ")";
+          }
         },
         success: function(data) {
-          return data[0];
+          return data.rows;
         }
       }
     },
