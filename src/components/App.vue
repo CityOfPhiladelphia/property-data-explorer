@@ -81,6 +81,10 @@
         'bottom': 2,
       }
     },
+
+    watch: {
+      '$store.state.drawShape': function(){this.$controller.geocodeDrawnShape()}
+    },
     computed: {
       geocode() {
         return this.$store.state.geocode;
