@@ -336,10 +336,6 @@
           return false;
         }
       },
-      activeDorParcel() {
-        // return this.$store.state.activeDorParcel;
-        return this.$store.state.parcels.dor.activeParcel;
-      },
       legendControls() {
         return this.$config.legendControls || {};
       },
@@ -422,9 +418,6 @@
       },
       activeParcelLayer() {
         return this.activeTopicConfig.parcels;
-      },
-      dorParcels() {
-        return this.$store.state.parcels.dor.data;
       },
       pwdParcel() {
         return this.$store.state.parcels.pwd;
@@ -549,13 +542,11 @@
           this.$controller.handleMapClick(e);
         }
       },
-
       handleMapMove(e) {
         const map = this.$store.state.map.map;
         const center = map.getCenter();
         const { lat, lng } = center;
         const coords = [lng, lat];
-
       },
     }, // end of methods
   }; //end of export
