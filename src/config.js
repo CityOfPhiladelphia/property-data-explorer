@@ -14,6 +14,22 @@ let config = {
     measurementAllowed: false,
     popoutAble: true,
   },
+  shapeSearch: {
+    url: function () {
+      return 'https://phl.carto.com/api/v2/sql';
+    },
+    type: 'http-get',
+    options: {
+      // params: {
+      //   q: function(feature){ return "select * from li_permits where address = '" + feature.properties.street_address + "' or addresskey = '" + feature.properties.li_address_key.toString() + "'"},
+      // }
+      params: {
+        q: function(){
+          "select * from opa_properties_public where parcel_number IN('662055200')"
+        }
+      }
+    }
+  },
   ownerSearch: {
     url: function (input) {
       var inputEncoded = encodeURIComponent(input);
@@ -57,9 +73,9 @@ let config = {
       targets: {
         runOnce: true,
         get: function(state) {
-          console.log('opa get is running');
+          // console.log('opa get is running');
           if (state.lastSearchMethod === 'owner search') {
-            console.log('lastSearchMethod = owner search');
+            // console.log('lastSearchMethod = owner search');
             return state.ownerSearch.data
           } else {
             let opa = []
