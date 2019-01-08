@@ -43,10 +43,10 @@
         />
         <horizontal-table
           v-if="this.$store.state.lastSearchMethod === 'shape search'
-                && this.$store.state.ownerSearch.data.rows !== null"
+                && this.$store.state.shapeSearch.data.rows !== null"
           :slots="{
             items: function(state) {
-              var data = state.ownerSearch.data.rows;
+              var data = state.shapeSearch.data.rows;
               return data;
             },
           }"
