@@ -22,8 +22,9 @@ let config = {
     // }
     options: {
       params: {
-        q: function(){
-          return "select * from opa_properties_public where parcel_number IN('662055200')"
+        q: function(input){
+          var inputEncoded = Object.keys(input).map(k => "'" + input[k] + "'").join(",");
+          return "select * from opa_properties_public where parcel_number IN("+ inputEncoded +")"
         }
       },
     }
