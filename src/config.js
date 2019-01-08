@@ -15,19 +15,17 @@ let config = {
     popoutAble: true,
   },
   shapeSearch: {
-    url: function () {
-      return 'https://phl.carto.com/api/v2/sql';
-    },
-    type: 'http-get',
+
+    url: 'https://phl.carto.com/api/v2/sql',
+    // params: {
+    //   q: function(feature){ return "select * from li_permits where address = '" + feature.properties.street_address + "' or addresskey = '" + feature.properties.li_address_key.toString() + "'"},
+    // }
     options: {
-      // params: {
-      //   q: function(feature){ return "select * from li_permits where address = '" + feature.properties.street_address + "' or addresskey = '" + feature.properties.li_address_key.toString() + "'"},
-      // }
       params: {
         q: function(){
-          "select * from opa_properties_public where parcel_number IN('662055200')"
+          return "select * from opa_properties_public where parcel_number IN('662055200')"
         }
-      }
+      },
     }
   },
   ownerSearch: {
