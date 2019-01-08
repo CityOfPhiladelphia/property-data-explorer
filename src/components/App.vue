@@ -24,7 +24,7 @@
       <div :class="'flexing ' + this.tableClass">
         <full-screen-topics-toggle-tab-vertical/>
         <horizontal-table
-          v-if="this.$store.state.geocode.status && this.$store.state.geocode.status !== 'error'"
+          v-if="this.$store.state.lastSearchMethod === 'geocode'"
           padding-top="0"
           :slots="{
             items: geocodeItems
@@ -32,7 +32,7 @@
           :options="this.geocodeOptions"
         />
         <horizontal-table
-          v-if="this.$store.state.ownerSearch.status !== 'error' && this.$store.state.ownerSearch.status"
+          v-if="this.$store.state.lastSearchMethod === 'owner search'"
           :slots="{
             items: function(state) {
               var data = state.ownerSearch.data;
@@ -40,6 +40,17 @@
             },
           }"
           :options="this.ownerOptions"
+        />
+        <horizontal-table
+          v-if="this.$store.state.lastSearchMethod === 'shape search'
+                && this.$store.state.ownerSearch.data.rows !== null"
+          :slots="{
+            items: function(state) {
+              var data = state.ownerSearch.data.rows;
+              return data;
+            },
+          }"
+          :options="this.shapeOptions"
         />
 
       </div>
@@ -180,6 +191,41 @@
               label: 'OPA Account',
               value: function(state, item){
                 return item.properties.opa_account_num
+              }
+            },
+            {
+              label: 'Status',
+              value: function(state, item){
+              }
+            },
+          ],
+        }
+        return options;
+      },
+      shapeOptions() {
+        const options = {
+          id: 'ownerProperties',
+          tableid: 'ccc',
+          // dataSources: ['opa'],
+          mapOverlay: {},
+          mouseOverDisabled: true,
+          fields: [
+            {
+              label: 'Street Address',
+              value: function(state, item) {
+                return item.location
+              },
+            },
+            {
+              label: 'Owner',
+              value: function(state, item){
+                return item.owner_1.toString();
+              },
+            },
+            {
+              label: 'OPA Account',
+              value: function(state, item){
+                return item.parcel_number
               }
             },
             {
