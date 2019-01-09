@@ -75,7 +75,11 @@ let config = {
           // console.log('opa get is running');
           if (state.lastSearchMethod === 'owner search') {
             // console.log('lastSearchMethod = owner search');
+            console.log("TODO: Add shapeSearch method")
             return state.ownerSearch.data
+          // } else if (state.lastSearchMethod === 'shape search') {
+          //   console.log('lastSearchMethod = shape search');
+          //   return state.shapeSearch.data.rows
           } else {
             let opa = []
             opa.push(state.geocode.data);
@@ -87,9 +91,17 @@ let config = {
         },
         getTargetId: function(target) {
           // console.log('in getTargetId, target:', target);
-          return target.properties.opa_account_num;
           // return target._featureId;
+          console.log("TODO: Add shapeSearch method")
+          return target.properties.opa_account_num;
+          // if (state.lastSearchMethod === 'shape search') {
+          //   return this.target.parcel_number;
+          // } else {
+          //   console.log("getTargetId", this.state.lastSearchMethod);
+          //   return target.properties.opa_account_num;
+          // }
         }
+
       },
       options: {
         params: {
