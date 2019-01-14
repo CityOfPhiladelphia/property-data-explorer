@@ -17,9 +17,6 @@ let config = {
   shapeSearch: {
 
     url: 'https://phl.carto.com/api/v2/sql',
-    // params: {
-    //   q: function(feature){ return "select * from li_permits where address = '" + feature.properties.street_address + "' or addresskey = '" + feature.properties.li_address_key.toString() + "'"},
-    // }
     options: {
       params: {
         q: function(input){
@@ -43,7 +40,6 @@ let config = {
     enabled: true,
   },
   map,
-  // modals: [''],
   parcels: {
     pwd: {
       multipleAllowed: false,
@@ -56,30 +52,17 @@ let config = {
     },
   },
   dataSources: {
-    // ownerOPA: {
-    //   options: {
-    //     params: {
-    //       q: function (opa_account_array){
-    //         return "SELECT * FROM \"phl-gsg\".opa_properties_public WHERE parcel_number = ANY('{" + opa_account_array + "}'::text[])"
-    //       }
-    //     }
-    //   }
-    // },
     opa: {
       type: 'http-get',
       url: 'https://phl.carto.com/api/v2/sql',
-      // url: 'https://data.phila.gov/resource/w7rb-qrn8.json',
       targets: {
         runOnce: true,
         get: function(state) {
           // console.log('opa get is running');
           if (state.lastSearchMethod === 'owner search') {
-            // console.log('lastSearchMethod = owner search');
-            console.log("TODO: Add shapeSearch method")
             return state.ownerSearch.data
-          // } else if (state.lastSearchMethod === 'shape search') {
-          //   console.log('lastSearchMethod = shape search');
-          //   return state.shapeSearch.data.rows
+          } else if (state.lastSearchMethod === 'shape search') {
+            return state.shapeSearch.data.rows
           } else {
             let opa = []
             opa.push(state.geocode.data);
@@ -90,16 +73,11 @@ let config = {
           }
         },
         getTargetId: function(target) {
-          // console.log('in getTargetId, target:', target);
-          // return target._featureId;
-          console.log("TODO: Add shapeSearch method")
-          return target.properties.opa_account_num;
-          // if (state.lastSearchMethod === 'shape search') {
-          //   return this.target.parcel_number;
-          // } else {
-          //   console.log("getTargetId", this.state.lastSearchMethod);
-          //   return target.properties.opa_account_num;
-          // }
+          if(target.properties){
+            return target.properties.opa_account_num;
+          } else {
+            return target.parcel_number
+          }
         }
 
       },
@@ -107,8 +85,6 @@ let config = {
         params: {
           // parcel_number: function(feature) {
           q: function(feature) {
-            // console.log('feature:', feature);
-            // return 'select * from opa_properties_public where parcel_number IN (' + feature.properties.opa_account_num + ')';
             return "SELECT parcel_number, market_value, sale_date, sale_price FROM opa_properties_public WHERE parcel_number IN (" + feature + ")";
           }
         },
@@ -117,15 +93,6 @@ let config = {
         }
       }
     },
-    // liPermits: {
-    //   type: 'http-get',
-    //   url: 'https://phl.carto.com/api/v2/sql',
-    //   options: {
-    //     params: {
-    //       q: function(feature){ return "select * from li_permits where address = '" + feature.properties.street_address + "' or addresskey = '" + feature.properties.li_address_key.toString() + "'"},
-    //     }
-    //   }
-    // },
   }
 }
 
