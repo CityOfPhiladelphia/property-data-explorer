@@ -63,6 +63,7 @@
   import axios from 'axios';
   import MapPanel from './MapPanel.vue';
   import philaVueComps from '@cityofphiladelphia/phila-vue-comps';
+  import moment from 'moment';
   const VerticalTable = philaVueComps.VerticalTable;
   const HorizontalTable = philaVueComps.HorizontalTable;
   const AddressInput = philaVueComps.AddressInput;
@@ -144,24 +145,40 @@
               },
             },
             {
+              label: 'Market Value',
+              value: function(state, item){
+                return state.sources.opa.targets[item.properties.opa_account_num].data.market_value
+                      .toLocaleString('en-US', {
+                          style: "currency",
+                          currency:"USD",
+                          minimumFractionDigits: 0
+                      });
+              },
+            },
+            {
+              label: 'Date of Last Sale',
+              value: function(state, item) {
+                return moment(state.sources.opa.targets[item.properties.opa_account_num].data.sale_date)
+                      .format('MM/DD/YYYY')
+              },
+            },
+            {
+              label: 'Price of Last Sale',
+              value: function(state, item) {
+                return state.sources.opa.targets[item.properties.opa_account_num].data.sale_price
+                      .toLocaleString('en-US',{
+                            style: "currency",
+                            currency:"USD",
+                            minimumFractionDigits: 0
+                      });
+              },
+            },
+            {
               label: 'Owner',
               value: function(state, item){
                 return item.properties.opa_owners.toString();
               },
               /* nullValue: 'no date available', */
-            },
-            {
-              label: 'OPA Account',
-              value: function(state, item){
-                /* return item.permitdescription */
-                return item.properties.opa_account_num
-              }
-            },
-            {
-              label: 'Status',
-              value: function(state, item){
-                /* return item.status */
-              }
             },
           ],
         }
@@ -171,7 +188,7 @@
         const options = {
           id: 'ownerProperties',
           tableid: 'bbb',
-          // dataSources: ['opa'],
+          dataSources: ['opa'],
           mapOverlay: {},
           mouseOverDisabled: true,
           fields: [
@@ -182,23 +199,42 @@
               },
             },
             {
+              label: 'Market Value',
+              value: function(state, item){
+                return state.sources.opa.targets[item.properties.opa_account_num.toString()].data.market_value
+                      .toLocaleString('en-US',{
+                        style: "currency",
+                        currency:"USD",
+                        minimumFractionDigits: 0
+                      });
+              },
+            },
+            {
+              label: 'Date of Last Sale',
+              value: function(state, item) {
+                return moment(state.sources.opa.targets[item.properties.opa_account_num].data.sale_date.toString())
+                      .format('MM/DD/YYYY')
+              },
+            },
+            {
+              label: 'Price of Last Sale',
+              value: function(state, item) {
+                return state.sources.opa.targets[item.properties.opa_account_num.toString()].data.sale_price
+                      .toLocaleString('en-US',{
+                        style: "currency",
+                        currency:"USD",
+                        minimumFractionDigits: 0
+                      });
+              },
+            },
+            {
               label: 'Owner',
               value: function(state, item){
                 return item.properties.opa_owners.toString();
               },
             },
-            {
-              label: 'OPA Account',
-              value: function(state, item){
-                return item.properties.opa_account_num
-              }
-            },
-            {
-              label: 'Status',
-              value: function(state, item){
-              }
-            },
           ],
+
         }
         return options;
       },
@@ -217,21 +253,36 @@
               },
             },
             {
+              label: 'Market Value',
+              value: function(state, item){
+                return item.market_value.toLocaleString('en-US',{
+                      style: "currency",
+                      currency:"USD",
+                      minimumFractionDigits: 0
+                });
+              },
+            },
+            {
+              label: 'Date of Last Sale',
+              value: function(state, item) {
+                return moment(item.sale_date).format('MM/DD/YYYY')
+              },
+            },
+            {
+              label: 'Price of Last Sale',
+              value: function(state, item) {
+                return item.sale_price.toLocaleString('en-US',{
+                      style: "currency",
+                      currency:"USD",
+                      minimumFractionDigits: 0
+                });
+              },
+            },
+            {
               label: 'Owner',
               value: function(state, item){
                 return item.owner_1.toString();
               },
-            },
-            {
-              label: 'OPA Account',
-              value: function(state, item){
-                return item.parcel_number
-              }
-            },
-            {
-              label: 'Status',
-              value: function(state, item){
-              }
             },
           ],
         }
