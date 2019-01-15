@@ -21,6 +21,8 @@
 <script>
 import philaVueComps from '@cityofphiladelphia/phila-vue-comps';
 const VerticalTable = philaVueComps.VerticalTable;
+import transforms from '../general/transforms';
+const titleCase = transforms.titleCase.transform;
 
 export default {
   components: {
@@ -41,12 +43,17 @@ export default {
             label: 'Owner',
             value: function(state){
               if (state.geocode.status === "success"){
-                return state.geocode.data.properties.opa_owners.toString();
-              } else {
+                return titleCase(state.geocode.data.properties.opa_owners.toString());
+              } else if (state.ownerSearch.status === "success") {
                 let result = state.ownerSearch.data.filter(object => {
                   return object._featureId === state.activeFeature.featureId
                 });
-                return result[0].properties.opa_owners.toString()
+                return titleCase(result[0].properties.opa_owners.toString())
+              } else {
+                let result = state.shapeSearch.data.rows.filter(object => {
+                  return object._featureId === state.activeFeature.featureId
+                });
+                return titleCase(result[0].owner_1)
               }
             },
           },
@@ -54,12 +61,17 @@ export default {
             label: 'Street Address',
             value: function(state) {
               if (state.geocode.status === "success"){
-                return state.geocode.data.properties.street_address;
-              } else {
+                return titleCase(state.geocode.data.properties.street_address);
+              } else if (state.ownerSearch.status === "success") {
                 let result = state.ownerSearch.data.filter(object => {
                   return object._featureId === state.activeFeature.featureId
                 });
-                return result[0].properties.street_address
+                return titleCase(result[0].properties.street_address)
+              } else {
+                let result = state.shapeSearch.data.rows.filter(object => {
+                  return object._featureId === state.activeFeature.featureId
+                });
+                return titleCase(result[0].location)
               }
             },
           },
@@ -68,11 +80,16 @@ export default {
             value: function(state) {
               if (state.geocode.status === "success"){
                 return state.geocode.data.properties.opa_account_num;
-              } else {
+              } else if (state.ownerSearch.status === "success") {
                 let result = state.ownerSearch.data.filter(object => {
                   return object._featureId === state.activeFeature.featureId
                 });
                 return result[0].properties.opa_account_num
+              } else {
+                let result = state.shapeSearch.data.rows.filter(object => {
+                  return object._featureId === state.activeFeature.featureId
+                });
+                return result[0].parcel_number
               }
             },
           },

@@ -64,6 +64,8 @@
   import MapPanel from './MapPanel.vue';
   import philaVueComps from '@cityofphiladelphia/phila-vue-comps';
   import moment from 'moment';
+  import transforms from '../general/transforms';
+  const titleCase = transforms.titleCase.transform;
   const VerticalTable = philaVueComps.VerticalTable;
   const HorizontalTable = philaVueComps.HorizontalTable;
   const AddressInput = philaVueComps.AddressInput;
@@ -140,7 +142,7 @@
             {
               label: 'Street Address',
               value: function(state, item, controller) {
-                return item.properties.street_address
+                return titleCase(item.properties.opa_address)
                 // return '<a href=# onclick="'+test+'()">'+item.properties.street_address+' <i class="fa fa-external-link"></i></a>'
               },
             },
@@ -176,7 +178,7 @@
             {
               label: 'Owner',
               value: function(state, item){
-                return item.properties.opa_owners.toString();
+                return titleCase(item.properties.opa_owners.toString());
               },
               /* nullValue: 'no date available', */
             },
@@ -195,7 +197,7 @@
             {
               label: 'Street Address',
               value: function(state, item) {
-                return item.properties.street_address
+                return titleCase(item.properties.opa_address)
               },
             },
             {
@@ -230,7 +232,7 @@
             {
               label: 'Owner',
               value: function(state, item){
-                return item.properties.opa_owners.toString();
+                return titleCase(item.properties.opa_owners.toString());
               },
             },
           ],
@@ -249,7 +251,7 @@
             {
               label: 'Street Address',
               value: function(state, item) {
-                return item.location
+                return titleCase(item.location)
               },
             },
             {
@@ -281,7 +283,7 @@
             {
               label: 'Owner',
               value: function(state, item){
-                return item.owner_1.toString();
+                return titleCase(item.owner_1.toString());
               },
             },
           ],
