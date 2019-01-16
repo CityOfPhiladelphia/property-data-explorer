@@ -97,7 +97,10 @@
     },
 
     watch: {
-      '$store.state.drawShape': function(){this.$controller.geocodeDrawnShape()}
+      '$store.state.drawShape': function(){
+        if(this.$store.state.drawShape !== null){
+          this.$controller.geocodeDrawnShape()}
+        }
     },
     computed: {
       geocode() {
@@ -178,7 +181,7 @@
             {
               label: 'Owner',
               value: function(state, item){
-                return titleCase(item.properties.opa_owners.toString());
+                return item.properties.opa_owners.toString();
               },
               /* nullValue: 'no date available', */
             },
@@ -232,7 +235,7 @@
             {
               label: 'Owner',
               value: function(state, item){
-                return titleCase(item.properties.opa_owners.toString());
+                return item.properties.opa_owners.toString();
               },
             },
           ],
@@ -283,7 +286,7 @@
             {
               label: 'Owner',
               value: function(state, item){
-                return titleCase(item.owner_1.toString());
+                return item.owner_1.toString();
               },
             },
           ],
