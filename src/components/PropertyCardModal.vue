@@ -9,9 +9,35 @@
     </div>
     <div class="openmaps-modal-content">
 
+      <div class="address-header cell small-24 medium-24">
+        <div :class="'address-container columns small-24 medium-12 large-12'"
+        >
+
+          <div v-if="!this.address"
+               class="default-address-text"
+               :style="this.defaultAddressTextPlaceholderStyle"
+          >
+            {{ this.$config.defaultAddressTextPlaceholder.text }}
+          </div>
+          <h1 class="address-header-line-1">
+
+            <font-awesome-icon icon="map-marker-alt"/>
+            {{ address }}
+          </h1>
+          <div class="address-header-line-2">
+            PHILADELPHIA, PA
+          </div>
+        </div>
+      </div>
+
+      <callout
+      :slots="this.callout"
+      :options="this.callout"
+      />
+
       <vertical-table
-        :slots="this.ownerOptions"
-        :options="this.ownerOptions"
+        :slots="this.vtableOptions"
+        :options="this.vtableOptions"
       />
 
     </div>
@@ -21,11 +47,13 @@
 <script>
 import philaVueComps from '@cityofphiladelphia/phila-vue-comps';
 const VerticalTable = philaVueComps.VerticalTable;
+const Callout = philaVueComps.Callout;
 import transforms from '../general/transforms';
 const titleCase = transforms.titleCase.transform;
 
 export default {
   components: {
+    Callout,
     VerticalTable,
   },
   name: 'Property-Card-Modal',
@@ -34,9 +62,69 @@ export default {
       // console.log("Active Feature.....");
       return this.$store.state.activeFeature;
     },
-    ownerOptions() {
+    // this returns the address shown in the address header
+    address() {
+
+      const state = this.$store.state
+      let address =  function() {
+        if (state.geocode.status === "success"){
+          return titleCase(state.geocode.data.properties.street_address);
+        } else if (state.ownerSearch.status === "success") {
+          let result = state.ownerSearch.data.filter(object => {
+            return object._featureId === state.activeFeature.featureId
+          });
+          return titleCase(result[0].properties.street_address)
+        } else {
+          let result = state.shapeSearch.data.rows.filter(object => {
+            return object._featureId === state.activeFeature.featureId
+          });
+          return titleCase(result[0].location)
+        }
+      }
+
+      return address();
+    },
+    zipCode() {
+      // const geocode = this.geocode;
+      // if (!geocode) return null;
+      // const zipCode = geocode.properties.zip_code;
+      // const zip4 = geocode.properties.zip_4;
+      // const parts = [zipCode];
+      // if (zip4) parts.push(zip4);
+      // return parts.join('-');
+
+      const state = this.$store.state
+      let address =  function() {
+        if (state.geocode.status === "success"){
+          return titleCase(state.geocode.data.properties.street_address);
+        } else if (state.ownerSearch.status === "success") {
+          let result = state.ownerSearch.data.filter(object => {
+            return object._featureId === state.activeFeature.featureId
+          });
+          return titleCase(result[0].properties.street_address)
+        } else {
+          let result = state.shapeSearch.data.rows.filter(object => {
+            return object._featureId === state.activeFeature.featureId
+          });
+          return titleCase(result[0].location)
+        }
+      }
+
+      return address;
+
+
+    },
+    callout() {
       const options = {
-        id: 'ownerProperties',
+        text: '\
+        Property assessment and sale information for this address. Source: Office of Property Assessments (OPA). OPA was formerly a part of the Bureau of Revision of Taxes (BRT) and some City records may still use that name.\
+        ',
+      }
+      return options;
+    },
+    vtableOptions() {
+      const options = {
+        id: 'modalProperties',
         title: "Property Details",
         fields: [
           {
@@ -107,6 +195,55 @@ export default {
 </script>
 
 <style scoped>
+
+  .address-container {
+    height: 100%;
+    align-items: flex-start;
+    padding-left: 20px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+
+  .address-header {
+    background: #daedfe;
+    color: #0f4d90;
+
+    /*this keeps the box shadow over the scrollable part of the panel*/
+    position: relative;
+    z-index: 1;
+
+    -webkit-box-shadow: 0px 5px 7px -2px rgba(0,0,0,0.18);
+    -moz-box-shadow: 0px 5px 7px -2px rgba(0,0,0,0.18);
+    box-shadow: 0px 5px 7px -2px rgba(0,0,0,0.18);
+    display: inline-block;
+  }
+
+  .address-header-line-1 {
+    margin-bottom: 0;
+    margin-top: 0;
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
+    padding-right: 8px !important;
+    padding-left: 8px !important;
+  }
+
+  .address-header-line-2 {
+    padding: 0px;
+  }
+
+  .address-header-line-3 {
+    padding: 0px;
+  }
+
+  .default-address-text {
+    font-size: 30px;
+    line-height: 26px;
+    font-family: 'Montserrat', 'Tahoma', sans-serif;
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
+    padding-right: 8px !important;
+    padding-left: 8px !important;
+  }
 
 .icon-div {
   margin: 10px;

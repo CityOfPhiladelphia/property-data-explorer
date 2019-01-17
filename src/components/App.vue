@@ -15,6 +15,7 @@
         </div>
       </div>
     </header>
+    <property-card-modal></property-card-modal>
 
     <div id="components-root">
 
@@ -64,6 +65,7 @@
   import MapPanel from './MapPanel.vue';
   import philaVueComps from '@cityofphiladelphia/phila-vue-comps';
   import moment from 'moment';
+    import PropertyCardModal from './PropertyCardModal.vue';
   import transforms from '../general/transforms';
   const titleCase = transforms.titleCase.transform;
   const VerticalTable = philaVueComps.VerticalTable;
@@ -88,6 +90,7 @@
       CollectionSummary,
       ExternalLink,
       FullScreenTopicsToggleTabVertical,
+      PropertyCardModal,
     },
     data() {
       return {
@@ -340,6 +343,10 @@
 
 .ib {
   display: inline-block;
+}
+
+.leaflet-top, .leaflet-bottom {
+  z-index: 999 !important;
 }
 
 .margin-sides-20 {

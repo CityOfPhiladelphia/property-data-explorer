@@ -170,14 +170,12 @@
       />
 
     </map_>
-    <property-card-modal></property-card-modal>
   </div>
 </template>
 
 <script>
   import * as L from 'leaflet';
   import philaVueMapping from '@cityofphiladelphia/phila-vue-mapping';
-  import PropertyCardModal from './PropertyCardModal.vue';
 
   // mixins
   import markersMixin from './markers-mixin';
@@ -234,7 +232,6 @@
       LegendControl,
       BasemapTooltip,
       ControlCorner,
-      PropertyCardModal,
       DrawControl
     },
     // data: {
@@ -589,7 +586,7 @@ button {
     height: 100%;
     width: 100%;
     background: rgba(0, 0 ,0 , 0.25);
-    z-index: 1000;
+    z-index: 999;
     text-align: center;
     vertical-align: middle;
   }
