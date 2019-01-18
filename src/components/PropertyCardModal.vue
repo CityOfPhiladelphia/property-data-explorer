@@ -40,6 +40,11 @@
         :options="this.vtableOptions"
       />
 
+      <vertical-table
+        :slots="this.pDetailOptions"
+        :options="this.pDetailOptions"
+      />
+
     </div>
   </section>
 </template>
@@ -50,6 +55,7 @@ const VerticalTable = philaVueComps.VerticalTable;
 const Callout = philaVueComps.Callout;
 import transforms from '../general/transforms';
 const titleCase = transforms.titleCase.transform;
+import moment from 'moment';
 
 export default {
   components: {
@@ -68,7 +74,7 @@ export default {
       const state = this.$store.state
       let address =  function() {
         if (state.geocode.status === "success"){
-          return titleCase(state.geocode.data.properties.street_address);
+          return titleCase(state.geocode.data.properties.street_address)
         } else if (state.ownerSearch.status === "success") {
           let result = state.ownerSearch.data.filter(object => {
             return object._featureId === state.activeFeature.featureId
@@ -122,49 +128,76 @@ export default {
       }
       return options;
     },
+    pDetailOptions() {
+      const options = {
+        id: 'modalProperties',
+        title: "Sale Details",
+        fields: [
+          {
+            label: 'Sale Price',
+            value: function(state) {
+              if (state.geocode.status === "success"){
+                return state.sources.opa.targets[state.geocode.data.properties.opa_account_num].data.sale_price
+                      .toLocaleString('en-US', {
+                        style: "currency",
+                        currency:"USD",
+                        minimumFractionDigits: 0
+                      })
+              } else if (state.ownerSearch.status === "success") {
+                let key = state.ownerSearch.data.filter(object => {
+                  return object._featureId === state.activeFeature.featureId
+                } );
+                return state.sources.opa.targets[key[0].properties.opa_account_num].data.sale_price
+                      .toLocaleString('en-US', {
+                        style: "currency",
+                        currency:"USD",
+                        minimumFractionDigits: 0
+                      })
+              } else {
+                let result = state.shapeSearch.data.rows.filter(object => {
+                  return object._featureId === state.activeFeature.featureId
+                });
+                return result[0].sale_price
+                      .toLocaleString('en-US', {
+                        style: "currency",
+                        currency:"USD",
+                        minimumFractionDigits: 0
+                      })
+              }
+            },
+          },
+          {
+            label: 'Sale Date',
+            value: function(state) {
+              if (state.geocode.status === "success"){
+                return moment(state.sources.opa.targets[state.geocode.data.properties.opa_account_num].data.sale_date)
+                      .format('MM/DD/YYYY')
+              } else if (state.ownerSearch.status === "success") {
+                let key = state.ownerSearch.data.filter(object => {
+                  return object._featureId === state.activeFeature.featureId
+                } );
+                return moment(state.sources.opa.targets[key[0].properties.opa_account_num].data.sale_date)
+                      .format('MM/DD/YYYY')
+              } else {
+                let result = state.shapeSearch.data.rows.filter(object => {
+                  return object._featureId === state.activeFeature.featureId
+                });
+                return moment(result[0].sale_price)
+                      .format('MM/DD/YYYY')
+              }
+            },
+          },
+        ],
+      }
+      return options;
+    },
     vtableOptions() {
       const options = {
         id: 'modalProperties',
         title: "Property Details",
         fields: [
           {
-            label: 'Owner',
-            value: function(state){
-              if (state.geocode.status === "success"){
-                return titleCase(state.geocode.data.properties.opa_owners.toString());
-              } else if (state.ownerSearch.status === "success") {
-                let result = state.ownerSearch.data.filter(object => {
-                  return object._featureId === state.activeFeature.featureId
-                });
-                return titleCase(result[0].properties.opa_owners.toString())
-              } else {
-                let result = state.shapeSearch.data.rows.filter(object => {
-                  return object._featureId === state.activeFeature.featureId
-                });
-                return titleCase(result[0].owner_1)
-              }
-            },
-          },
-          {
-            label: 'Street Address',
-            value: function(state) {
-              if (state.geocode.status === "success"){
-                return titleCase(state.geocode.data.properties.street_address);
-              } else if (state.ownerSearch.status === "success") {
-                let result = state.ownerSearch.data.filter(object => {
-                  return object._featureId === state.activeFeature.featureId
-                });
-                return titleCase(result[0].properties.street_address)
-              } else {
-                let result = state.shapeSearch.data.rows.filter(object => {
-                  return object._featureId === state.activeFeature.featureId
-                });
-                return titleCase(result[0].location)
-              }
-            },
-          },
-          {
-            label: 'OPA Account',
+            label: 'OPA Account #',
             value: function(state) {
               if (state.geocode.status === "success"){
                 return state.geocode.data.properties.opa_account_num;
@@ -178,6 +211,46 @@ export default {
                   return object._featureId === state.activeFeature.featureId
                 });
                 return result[0].parcel_number
+              }
+            },
+          },
+          {
+            label: 'Owners',
+            value: function(state){
+              if (state.geocode.status === "success"){
+                return titleCase(state.geocode.data.properties.opa_owners.toString());
+              } else if (state.ownerSearch.status === "success") {
+                let result = state.ownerSearch.data.filter(object => {
+                  return object._featureId === state.activeFeature.featureId
+                });
+                return titleCase(result[0].properties.opa_owners.toString())
+              } else {
+                let result = state.shapeSearch.data.rows.filter(object => {
+                  return object._featureId === state.activeFeature.featureId
+                });
+                let owners = result[0].owner_2.length > 1 ?
+                             titleCase(result[0].owner_1) + ", " + titleCase(result[0].owner_2):
+                             titleCase(result[0].owner_1)
+
+                return owners
+              }
+            },
+          },
+          {
+            label: 'OPA Address',
+            value: function(state) {
+              if (state.geocode.status === "success"){
+                return titleCase(state.geocode.data.properties.street_address);
+              } else if (state.ownerSearch.status === "success") {
+                let result = state.ownerSearch.data.filter(object => {
+                  return object._featureId === state.activeFeature.featureId
+                });
+                return titleCase(result[0].properties.street_address)
+              } else {
+                let result = state.shapeSearch.data.rows.filter(object => {
+                  return object._featureId === state.activeFeature.featureId
+                });
+                return titleCase(result[0].location)
               }
             },
           },

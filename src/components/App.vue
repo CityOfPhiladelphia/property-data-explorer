@@ -65,7 +65,7 @@
   import MapPanel from './MapPanel.vue';
   import philaVueComps from '@cityofphiladelphia/phila-vue-comps';
   import moment from 'moment';
-    import PropertyCardModal from './PropertyCardModal.vue';
+  import PropertyCardModal from './PropertyCardModal.vue';
   import transforms from '../general/transforms';
   const titleCase = transforms.titleCase.transform;
   const VerticalTable = philaVueComps.VerticalTable;
@@ -289,7 +289,11 @@
             {
               label: 'Owner',
               value: function(state, item){
-                return item.owner_1.toString();
+                let owners = item.owner_2.length > 1 ?
+                             titleCase(item.owner_1) + ", " + titleCase(item.owner_2):
+                             titleCase(item.owner_1)
+
+                return owners
               },
             },
           ],
