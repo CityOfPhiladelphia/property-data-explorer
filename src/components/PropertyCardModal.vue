@@ -41,6 +41,10 @@
       />
 
       <vertical-table
+        :slots="this.pSaleOptions"
+        :options="this.pSaleOptions"
+      />
+      <vertical-table
         :slots="this.pDetailOptions"
         :options="this.pDetailOptions"
       />
@@ -131,13 +135,58 @@ export default {
     pDetailOptions() {
       const options = {
         id: 'modalProperties',
+        title: "Property Details",
+        fields: [
+          {
+            label: 'OPA Account #',
+            value: function(state) {
+              if (state.geocode.status === "success"){
+                return state.geocode.data.properties.opa_account_num;
+              } else if (state.ownerSearch.status === "success") {
+                let result = state.ownerSearch.data.filter(object => {
+                  return object._featureId === state.activeFeature.featureId
+                });
+                return result[0].properties.opa_account_num
+              } else {
+                let result = state.shapeSearch.data.rows.filter(object => {
+                  return object._featureId === state.activeFeature.featureId
+                });
+                return result[0].parcel_number
+              }
+            },
+          },
+          {
+            label: 'Homestead Exemption',
+            value: function(state) {
+              if (state.geocode.status === "success"){
+                return state.geocode.data.properties.opa_account_num;
+              } else if (state.ownerSearch.status === "success") {
+                let result = state.ownerSearch.data.filter(object => {
+                  return object._featureId === state.activeFeature.featureId
+                });
+                return result[0].properties.opa_account_num
+              } else {
+                let result = state.shapeSearch.data.rows.filter(object => {
+                  return object._featureId === state.activeFeature.featureId
+                });
+                return result[0].parcel_number
+              }
+            },
+          },
+        ],
+      }
+      return options;
+    },
+    pSaleOptions() {
+      const options = {
+        id: 'modalProperties',
         title: "Sale Details",
         fields: [
           {
             label: 'Sale Price',
             value: function(state) {
               if (state.geocode.status === "success"){
-                return state.sources.opa.targets[state.geocode.data.properties.opa_account_num].data.sale_price
+                return state.sources.opa_assessment.targets[state.geocode.data.properties.opa_account_num].data.sale_price
                       .toLocaleString('en-US', {
                         style: "currency",
                         currency:"USD",
@@ -147,7 +196,7 @@ export default {
                 let key = state.ownerSearch.data.filter(object => {
                   return object._featureId === state.activeFeature.featureId
                 } );
-                return state.sources.opa.targets[key[0].properties.opa_account_num].data.sale_price
+                return state.sources.opa_assessment.targets[key[0].properties.opa_account_num].data.sale_price
                       .toLocaleString('en-US', {
                         style: "currency",
                         currency:"USD",
@@ -170,13 +219,13 @@ export default {
             label: 'Sale Date',
             value: function(state) {
               if (state.geocode.status === "success"){
-                return moment(state.sources.opa.targets[state.geocode.data.properties.opa_account_num].data.sale_date)
+                return moment(state.sources.opa_assessment.targets[state.geocode.data.properties.opa_account_num].data.sale_date)
                       .format('MM/DD/YYYY')
               } else if (state.ownerSearch.status === "success") {
                 let key = state.ownerSearch.data.filter(object => {
                   return object._featureId === state.activeFeature.featureId
                 } );
-                return moment(state.sources.opa.targets[key[0].properties.opa_account_num].data.sale_date)
+                return moment(state.sources.opa_assessment.targets[key[0].properties.opa_account_num].data.sale_date)
                       .format('MM/DD/YYYY')
               } else {
                 let result = state.shapeSearch.data.rows.filter(object => {
@@ -194,7 +243,6 @@ export default {
     vtableOptions() {
       const options = {
         id: 'modalProperties',
-        title: "Property Details",
         fields: [
           {
             label: 'OPA Account #',

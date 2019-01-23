@@ -141,7 +141,7 @@
         const options = {
           id: 'ownerProperties',
           tableid: 'aaa',
-          dataSources: ['opa'],
+          dataSources: ['opa_assessment'],
           mapOverlay: {},
           mouseOverDisabled: true,
           fields: [
@@ -155,7 +155,7 @@
             {
               label: 'Market Value',
               value: function(state, item){
-                return state.sources.opa.targets[item.properties.opa_account_num].data.market_value
+                return state.sources.opa_assessment.targets[item.properties.opa_account_num].data.market_value
                       .toLocaleString('en-US', {
                           style: "currency",
                           currency:"USD",
@@ -166,14 +166,14 @@
             {
               label: 'Date of Last Sale',
               value: function(state, item) {
-                return moment(state.sources.opa.targets[item.properties.opa_account_num].data.sale_date)
+                return moment(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date)
                       .format('MM/DD/YYYY')
               },
             },
             {
               label: 'Price of Last Sale',
               value: function(state, item) {
-                return state.sources.opa.targets[item.properties.opa_account_num].data.sale_price
+                return state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_price
                       .toLocaleString('en-US',{
                             style: "currency",
                             currency:"USD",
@@ -196,7 +196,7 @@
         const options = {
           id: 'ownerProperties',
           tableid: 'bbb',
-          dataSources: ['opa'],
+          dataSources: ['opa_assessment'],
           mapOverlay: {},
           mouseOverDisabled: true,
           fields: [
@@ -209,7 +209,7 @@
             {
               label: 'Market Value',
               value: function(state, item){
-                return state.sources.opa.targets[item.properties.opa_account_num.toString()].data.market_value
+                return state.sources.opa_assessment.targets[item.properties.opa_account_num.toString()].data.market_value
                       .toLocaleString('en-US',{
                         style: "currency",
                         currency:"USD",
@@ -220,14 +220,14 @@
             {
               label: 'Date of Last Sale',
               value: function(state, item) {
-                return moment(state.sources.opa.targets[item.properties.opa_account_num].data.sale_date.toString())
+                return moment(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date.toString())
                       .format('MM/DD/YYYY')
               },
             },
             {
               label: 'Price of Last Sale',
               value: function(state, item) {
-                return state.sources.opa.targets[item.properties.opa_account_num.toString()].data.sale_price
+                return state.sources.opa_assessment.targets[item.properties.opa_account_num.toString()].data.sale_price
                       .toLocaleString('en-US',{
                         style: "currency",
                         currency:"USD",
