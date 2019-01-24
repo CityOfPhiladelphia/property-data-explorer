@@ -58,7 +58,6 @@ let config = {
       targets: {
         runOnce: true,
         get: function(state) {
-          console.log('opa get is running');
           if (state.lastSearchMethod === 'owner search') {
             return state.ownerSearch.data
           } else if (state.lastSearchMethod === 'shape search') {
@@ -74,10 +73,8 @@ let config = {
         },
         getTargetId: function(target) {
           if(target.properties){
-            console.log("getTargetId", target);
             return target.properties.opa_account_num;
           } else {
-            console.log("getTargetId", target.parcel_number);
             return target.parcel_number
           }
         }
@@ -85,7 +82,6 @@ let config = {
       options: {
         params: {
           q: function(input){
-            console.log("PARAMS INPUT", input);
             // var inputEncoded = Object.keys(input).map(k => "'" + input[k] + "'").join(",");
             return "select * from opa_properties_public where parcel_number IN("+ input +")"
           }

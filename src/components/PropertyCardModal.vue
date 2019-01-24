@@ -159,17 +159,151 @@ export default {
             label: 'Homestead Exemption',
             value: function(state) {
               if (state.geocode.status === "success"){
-                return state.geocode.data.properties.opa_account_num;
+                let obj_id = state.geocode.data.properties.opa_account_num;
+                return state.sources.opa_public.targets[obj_id].data.homestead_exemption
+                      .toLocaleString('en-US', {
+                        style: "currency",
+                        currency:"USD",
+                        minimumFractionDigits: 0
+                      })
               } else if (state.ownerSearch.status === "success") {
                 let result = state.ownerSearch.data.filter(object => {
                   return object._featureId === state.activeFeature.featureId
                 });
-                return result[0].properties.opa_account_num
+                let obj_id = result[0].properties.opa_account_num
+                return state.sources.opa_public.targets[obj_id].data.homestead_exemption
+                      .toLocaleString('en-US', {
+                        style: "currency",
+                        currency:"USD",
+                        minimumFractionDigits: 0
+                      })
+
               } else {
                 let result = state.shapeSearch.data.rows.filter(object => {
                   return object._featureId === state.activeFeature.featureId
                 });
-                return result[0].parcel_number
+                let obj_id = result[0].parcel_number
+                return state.sources.opa_public.targets[obj_id].data.homestead_exemption
+                      .toLocaleString('en-US', {
+                        style: "currency",
+                        currency:"USD",
+                        minimumFractionDigits: 0
+                      })
+              }
+            },
+          },
+          {
+            label: 'Building Description',
+            value: function(state) {
+              if (state.geocode.status === "success"){
+                let obj_id = state.geocode.data.properties.opa_account_num;
+                return state.sources.opa_public.targets[obj_id].data.building_code_description
+              } else if (state.ownerSearch.status === "success") {
+                let result = state.ownerSearch.data.filter(object => {
+                  return object._featureId === state.activeFeature.featureId
+                });
+                let obj_id = result[0].properties.opa_account_num
+                return state.sources.opa_public.targets[obj_id].data.building_code_description
+
+              } else {
+                let result = state.shapeSearch.data.rows.filter(object => {
+                  return object._featureId === state.activeFeature.featureId
+                });
+                let obj_id = result[0].parcel_number
+                return state.sources.opa_public.targets[obj_id].data.building_code_description
+              }
+            },
+          },
+          {
+            label: 'Building Condition',
+            value: function(state) {
+                const cond_code = function(exterior) {
+                  const condition = exterior  == 0 ? 'Not Applicable' :
+                                    exterior  == 2 ? 'Newer Construction / Rehabbed' :
+                                    exterior  == 3 ? 'Above Average' :
+                                    exterior  == 4 ? 'Average' :
+                                    exterior  == 5 ? 'Below Average' :
+                                    exterior  == 6 ? 'Vacant' :
+                                    exterior  == 7 ? 'Sealed / Structurally Compromised, Open to the Weather' :
+                                    'Not available';
+                  return condition
+                }
+              if (state.geocode.status === "success"){
+                let obj_id = state.geocode.data.properties.opa_account_num;
+                return cond_code(state.sources.opa_public.targets[obj_id].data.exterior_condition)
+              } else if (state.ownerSearch.status === "success") {
+                let result = state.ownerSearch.data.filter(object => {
+                  return object._featureId === state.activeFeature.featureId
+                });
+                let obj_id = result[0].properties.opa_account_num
+                return cond_code(state.sources.opa_public.targets[obj_id].data.exterior_condition)
+
+              } else {
+                let result = state.shapeSearch.data.rows.filter(object => {
+                  return object._featureId === state.activeFeature.featureId
+                });
+                let obj_id = result[0].parcel_number
+                return cond_code(state.sources.opa_public.targets[obj_id].data.exterior_condition)
+              }
+            },
+          },
+          {
+            label: 'Land Area (SqFt)',
+            value: function(state) {
+              if (state.geocode.status === "success"){
+                let obj_id = state.geocode.data.properties.opa_account_num;
+                return state.sources.opa_public.targets[obj_id].data.total_area
+                      .toLocaleString('en-US', {
+                        minimumFractionDigits: 0
+                      })
+              } else if (state.ownerSearch.status === "success") {
+                let result = state.ownerSearch.data.filter(object => {
+                  return object._featureId === state.activeFeature.featureId
+                });
+                let obj_id = result[0].properties.opa_account_num
+                return state.sources.opa_public.targets[obj_id].data.total_area
+                      .toLocaleString('en-US', {
+                        minimumFractionDigits: 0
+                      })
+              } else {
+                let result = state.shapeSearch.data.rows.filter(object => {
+                  return object._featureId === state.activeFeature.featureId
+                });
+                let obj_id = result[0].parcel_number
+                return state.sources.opa_public.targets[obj_id].data.total_area
+                      .toLocaleString('en-US', {
+                        minimumFractionDigits: 0
+                      })
+              }
+            },
+          },
+          {
+            label: 'Improvement Area (SqFt)',
+            value: function(state) {
+              if (state.geocode.status === "success"){
+                let obj_id = state.geocode.data.properties.opa_account_num;
+                return state.sources.opa_public.targets[obj_id].data.total_livable_area
+                      .toLocaleString('en-US', {
+                        minimumFractionDigits: 0
+                      })
+              } else if (state.ownerSearch.status === "success") {
+                let result = state.ownerSearch.data.filter(object => {
+                  return object._featureId === state.activeFeature.featureId
+                });
+                let obj_id = result[0].properties.opa_account_num
+                return state.sources.opa_public.targets[obj_id].data.total_livable_area
+                      .toLocaleString('en-US', {
+                        minimumFractionDigits: 0
+                      })
+              } else {
+                let result = state.shapeSearch.data.rows.filter(object => {
+                  return object._featureId === state.activeFeature.featureId
+                });
+                let obj_id = result[0].parcel_number
+                return state.sources.opa_public.targets[obj_id].data.total_livable_area
+                      .toLocaleString('en-US', {
+                        minimumFractionDigits: 0
+                      })
               }
             },
           },

@@ -80,9 +80,6 @@
 
   export default {
     components: {
-      MapPanel,
-      VerticalTable,
-      HorizontalTable,
       AddressInput,
       Callout,
       Badge,
@@ -90,7 +87,10 @@
       CollectionSummary,
       ExternalLink,
       FullScreenTopicsToggleTabVertical,
+      HorizontalTable,
+      MapPanel,
       PropertyCardModal,
+      VerticalTable,
     },
     data() {
       return {
