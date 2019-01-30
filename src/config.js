@@ -36,6 +36,18 @@ let config = {
       include_units: true,
     },
   },
+  activeSearch: {
+      type: 'http-get',
+      url: 'https://phl.carto.com/api/v2/sql',
+        options: {
+          params: {
+              q: function(feature){ return "select * from assessments where parcel_number = '" + feature + "'"},
+          },
+          success: function(data) {
+            return data;
+          }
+        }
+    },
   pictometry: {
     enabled: true,
   },

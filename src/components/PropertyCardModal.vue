@@ -40,6 +40,15 @@
         :options="this.vtableOptions"
       />
 
+      <horizontal-table
+        v-if="this.$store.state.activeSearch.data"
+        :slots="{
+          title: 'Valuation History',
+          items: this.$store.state.activeSearch.data.rows
+        }"
+        :options="this.activeOptions"
+      />
+
       <vertical-table
         :slots="this.pSaleOptions"
         :options="this.pSaleOptions"
@@ -57,6 +66,7 @@
 import philaVueComps from '@cityofphiladelphia/phila-vue-comps';
 const VerticalTable = philaVueComps.VerticalTable;
 const Callout = philaVueComps.Callout;
+const HorizontalTable = philaVueComps.HorizontalTable;
 import transforms from '../general/transforms';
 const titleCase = transforms.titleCase.transform;
 import moment from 'moment';
@@ -65,6 +75,7 @@ export default {
   components: {
     Callout,
     VerticalTable,
+    HorizontalTable,
   },
   name: 'Property-Card-Modal',
   computed: {
@@ -374,6 +385,67 @@ export default {
       }
       return options;
     },
+    activeOptions() {
+      const options = {
+        id: 'ownerProperties',
+        tableid: 'ddd',
+        // dataSources: ['opa'],
+        mapOverlay: {},
+        mouseOverDisabled: true,
+        fields: [
+          {
+            label: 'Year',
+            value: function(state, item){
+              return item.year
+            }
+          },
+          {
+            label: 'Market Value',
+            value: function(state, item){
+              return item.market_value
+            },
+            transforms: ['currency'],
+          },
+          {
+            label: 'Taxable Land',
+            value: function(state, item){
+              return item.taxable_land
+            },
+            transforms: ['currency'],
+          },
+          {
+            label: 'Taxable Improvement',
+            value: function(state, item){
+              return item.taxable_building
+            },
+            transforms: ['currency'],
+          },
+          {
+            label: 'Exempt Land',
+            value: function(state, item){
+              return item.exempt_land
+            },
+            transforms: ['currency'],
+          },
+          {
+            label: 'Exempt Improvement',
+            value: function(state, item){
+              return item.exempt_building
+            },
+            transforms: ['currency']
+          },
+        ],
+        sort: {
+          // this should return the val to sort on
+          getValue: function(item) {
+            return item.year;
+          },
+          // asc or desc
+          order: 'desc'
+        },
+      }
+      return options;
+    },
     vtableOptions() {
       const options = {
         id: 'modalProperties',
@@ -437,6 +509,14 @@ export default {
             },
           },
         ],
+        externalLink: {
+          action: function() {
+            return 'View the Real Estate Tax Balance';
+          },
+          href: function() {
+            return '//legacy.phila.gov/revenue/realestatetax/';
+          }
+        },
       }
       return options;
     },

@@ -98,11 +98,13 @@
         'bottom': 2,
       }
     },
-
     watch: {
       '$store.state.drawShape': function(){
         if(this.$store.state.drawShape !== null){
           this.$controller.geocodeDrawnShape()}
+        },
+      '$store.state.activeFeature': function(){
+        this.$controller.activeFeatureChange();
         }
     },
     computed: {
