@@ -63,7 +63,7 @@
 </template>
 
 <script>
-import philaVueComps from '@cityofphiladelphia/phila-vue-comps';
+import * as philaVueComps from '@cityofphiladelphia/phila-vue-comps';
 const VerticalTable = philaVueComps.VerticalTable;
 const Callout = philaVueComps.Callout;
 const HorizontalTable = philaVueComps.HorizontalTable;

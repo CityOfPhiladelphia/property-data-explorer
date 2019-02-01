@@ -63,7 +63,8 @@
 <script>
   import axios from 'axios';
   import MapPanel from './MapPanel.vue';
-  import philaVueComps from '@cityofphiladelphia/phila-vue-comps';
+  import * as philaVueComps from '@cityofphiladelphia/phila-vue-comps';
+  console.log('philaVueComps:', philaVueComps);
   import moment from 'moment';
   import PropertyCardModal from './PropertyCardModal.vue';
   import transforms from '../general/transforms';
