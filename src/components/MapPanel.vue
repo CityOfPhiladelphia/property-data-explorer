@@ -175,7 +175,7 @@
 
 <script>
   import * as L from 'leaflet';
-  import philaVueMapping from '@cityofphiladelphia/phila-vue-mapping';
+  import * as philaVueMapping from '@cityofphiladelphia/phila-vue-mapping';
 
   // mixins
   import markersMixin from './markers-mixin';

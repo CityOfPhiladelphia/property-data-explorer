@@ -16,8 +16,14 @@ import App from './components/App.vue';
 import mergeDeep from './util/merge-deep';
 import config from './config.js';
 
-import '@fortawesome/fontawesome-pro/js/all';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faCaretDown } from '@fortawesome/pro-solid-svg-icons/faCaretDown';
+import { faCaretUp } from '@fortawesome/pro-solid-svg-icons/faCaretUp';
+import { faMapMarkerAlt } from '@fortawesome/pro-solid-svg-icons/faMapMarkerAlt';
+library.add(faCaretDown, faCaretUp, faMapMarkerAlt);
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+
 import '../node_modules/phila-standards/dist/css/phila-app.min.css';
 import helpers from './util/helpers';
 import 'leaflet/dist/leaflet.css';
