@@ -3,7 +3,7 @@ import helpers from './util/helpers';
 import map from './general/map';
 
 let config = {
-  baseConfig: 'https://cdn.rawgit.com/ajrothwell/atlas_base_config/d95ed79d/config.js',
+  baseConfig: '//raw.githubusercontent.com/stevetotheizz0/atlas_base_config/master/config.js',
   gatekeeperKey: '82fe014b6575b8c38b44235580bc8b11',
   router: {
     enabled: true
@@ -34,6 +34,8 @@ let config = {
     params: {
       gatekeeperKey: '82fe014b6575b8c38b44235580bc8b11',
       include_units: true,
+      opa_only: true,
+      page: 1,
     },
   },
   activeSearch: {
