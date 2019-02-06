@@ -13,5 +13,5 @@ deploy:
     bucket: 'property-bulk'
     on:
       branch: master
-    local_dir: dir
+    local_dir: public
     skip_cleanup: true
