@@ -45,6 +45,7 @@ function initVue(config) {
   const store = createStore(config);
 
   // make config accessible from each component via this.$config
+  console.log("configMixin: ", config)
   Vue.use(configMixin, config);
 
   // mix in controller

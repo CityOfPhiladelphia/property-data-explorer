@@ -33,7 +33,7 @@ export default {
     // returns map markers as simple object with a geometry property, key,
     // and optional properties for symbology
     markersForAddress() {
-      // console.log('markers-mixin.js markersForAddress computed is running');
+      console.log('markers-mixin.js markersForAddress computed is running');
       const markers = [];
       // geocoded address marker
       const geocodeGeom = this.geocodeGeom;
@@ -51,11 +51,12 @@ export default {
         const addressMarker = {latlng, key, color, markerType, icon};
         markers.push(addressMarker);
       }
+      console.log(markers)
       return markers;
     },
 
     markersForTopic() {
-      // console.log('markers-mixin.js markersForTopic computed is running');
+      console.log('markers-mixin.js markersForTopic computed is running');
       const markers = [];
 
       // marker for topic from config
@@ -64,20 +65,7 @@ export default {
         const state = this.$store.state;
         const topicData = topicMarkers.data(state);
         if (topicData !== null) {
-          // if (Array.isArray(topicData)) {
-          //   for (let marker of topicData) {
-          //     console.log('topicData marker:', marker);
-          //     // }
-          //     // if (path !== null && path !== undefined) {
-          //     const latlng = [marker.lat, marker.lng];
-          //     const key = marker.key;
-          //     const color = marker.color || 'green';
-          //     const markerType = 'overlay';
-          //     const icon = marker.icon;
-          //     const markerObject = {latlng, key, color, markerType, icon};
-          //     markers.push(markerObject);
-          //   }
-          // } else {
+
             const latlng = [topicData[topicMarkers.lat], topicData[topicMarkers.lng]];
             const key = topicData[topicMarkers.key];
             const color = topicMarkers.color || 'green';
@@ -99,7 +87,7 @@ export default {
       // get visible tables based on active topic
       const tableIds = this.$store.getters.visibleTableIds;
 
-      // console.log('computed circleMarkers is rerunning, filteredData:', filteredData, 'tableIds:', tableIds);
+      console.log('computed circleMarkers is rerunning, filteredData:', filteredData, 'tableIds:', tableIds);
 
       for (let tableId of tableIds) {
         const tableConfig = this.getConfigForTable(tableId) || {};
@@ -156,7 +144,7 @@ export default {
       // get visible tables based on active topic
       const tableIds = this.$store.getters.visibleTableIds;
 
-      // console.log('computed tableIdMarkers is rerunning, filteredData:', filteredData, 'tableIds:', tableIds);
+      console.log('computed tableIdMarkers is rerunning, filteredData:', filteredData, 'tableIds:', tableIds);
 
       for (let tableId of tableIds) {
         const tableConfig = this.getConfigForTable(tableId) || {};
@@ -306,6 +294,7 @@ export default {
     },
 
     leafletMarkers() {
+      console.log("leafletMarkers is running")
       const markers = [];
 
       markers.push.apply(markers, this.markers);
