@@ -33,7 +33,7 @@ export default {
     // returns map markers as simple object with a geometry property, key,
     // and optional properties for symbology
     markersForAddress() {
-      console.log('markers-mixin.js markersForAddress computed is running');
+      // console.log('markers-mixin.js markersForAddress computed is running');
       const markers = [];
       // geocoded address marker
       const geocodeGeom = this.geocodeGeom;
@@ -51,12 +51,10 @@ export default {
         const addressMarker = {latlng, key, color, markerType, icon};
         markers.push(addressMarker);
       }
-      console.log(markers)
       return markers;
     },
 
     markersForTopic() {
-      console.log('markers-mixin.js markersForTopic computed is running');
       const markers = [];
 
       // marker for topic from config

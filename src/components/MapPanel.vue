@@ -410,7 +410,6 @@
             return topic.key === key;
           })[0];
         }
-        console.log("activeTopicConfig ending:", this.$config)
         return config || {};
       },
       activeParcelLayer() {
@@ -457,17 +456,13 @@
       },
 
       markersForAddress(nextMarkers) {
-        console.log("markersForAddress starting", nextMarkers)
-        console.log(this.activeTopicConfig)
         let czts = this.activeTopicConfig.zoomToShape;
-        console.log(czts)
         let dzts = this.$data.zoomToShape;
         if (!czts || !czts.includes('markersForAddress')) {
           dzts.markersForAddress = [];
           return;
         } else {
           dzts.markersForAddress = nextMarkers;
-          console.log('exiting markersForAddress')
           this.checkBoundsChanges();
         }
       },
@@ -479,7 +474,6 @@
           return;
         }
         let dzts = this.$data.zoomToShape;
-        console.log('dzts:', dzts, 'czts:', czts);
         let tf = [];
         for (let shape of czts) {
           if (dzts[shape] !== false && dzts[shape].length > 0) {
@@ -488,7 +482,6 @@
             tf.push(false);
           }
         }
-        console.log('MapPanel.vue checkBoundsChanges, tf:', tf);
         if (tf.includes(false)) {
           return;
         } else {
@@ -497,7 +490,6 @@
       },
 
       setMapToBounds() {
-        console.log('setMapToBounds is running');
         let featureArray = []
         let czts = this.activeTopicConfig.zoomToShape;
         if (czts) {
