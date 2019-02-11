@@ -54,6 +54,28 @@ export default {
       return markers;
     },
 
+    // returns geojson parcels to be rendered on the map along with
+    // necessary props.
+    geojsonParcels() {
+      console.log('markers-mixin.js geojsonParcels computed is running');
+      let features = [];
+      if(this.pwdParcel){
+        console.log('this.pwdParcel', this.pwdParcel);
+        let props = {};
+        props.geojson = this.pwdParcel;
+        props.color = 'blue';
+        props.fillColor = 'blue';
+        props.weight = 2;
+        props.opacity = 1;
+        props.fillOpacity = 0.3;
+        this.pwdParcel.length > 1 ? props.key = this.pwdParcel.map(item => item.properties.BRT_ID):
+                                     props.key = this.pwdParcel.properties.BRT_ID
+        features.push(props);
+      }
+      console.log("features", features)
+      return features;
+    },
+
     markersForTopic() {
       const markers = [];
 
@@ -191,46 +213,6 @@ export default {
       return tableMarkers;
     },
 
-    // returns geojson parcels to be rendered on the map along with
-    // necessary props.
-    geojsonParcels() {
-      // console.log('markers-mixin.js geojsonParcels computed is running');
-      const features = [];
-
-      const identifyFeature = this.identifyFeature;
-      const activeParcelLayer = this.activeParcelLayer;
-
-      // TODO - get pwd parcel and dor parcel into the config file
-      // pwd parcel
-      if (identifyFeature === 'pwd-parcel' && activeParcelLayer === 'pwd' && this.pwdParcel) {
-        let props = {};
-        props.geojson = this.pwdParcel;
-        props.color = 'blue';
-        props.fillColor = 'blue';
-        props.weight = 2;
-        props.opacity = 1;
-        props.fillOpacity = 0.3;
-        props.key = props.geojson.properties.PARCELID;
-        features.push(props);
-
-      // dor parcel
-      } else if (identifyFeature === 'dor-parcel' && activeParcelLayer === 'dor') {
-        const color = 'blue';
-        const dorParcelFeatures = this.dorParcels.map(dorParcel => {
-          let props = {};
-          props.geojson = dorParcel;
-          props.color = 'blue';
-          props.fillColor = 'blue';
-          props.weight = 2;
-          props.opacity = 1;
-          props.fillOpacity = 0.3;
-          props.key = dorParcel.properties.OBJECTID;
-          return props;
-        });
-        features.push.apply(features, dorParcelFeatures);
-      }
-      return features;
-    },
 
     // returns other geojson from config
     geojsonForTopic() {

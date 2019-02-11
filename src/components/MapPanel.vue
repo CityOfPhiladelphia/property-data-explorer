@@ -83,18 +83,13 @@
 
       <!-- non-reactive geojson parcels -->
       <geojson v-for="geojsonFeature in geojsonParcels"
-               v-if="shouldShowGeojson(geojsonFeature.key)"
                :geojson="geojsonFeature.geojson"
                :fillColor="geojsonFeature.fillColor"
                :color="geojsonFeature.color"
                :weight="geojsonFeature.weight"
                :opacity="geojsonFeature.opacity"
                :fillOpacity="geojsonFeature.fillOpacity"
-               :key="geojsonFeature.key"
-               :data="{
-                 featureId: geojsonFeature.featureId,
-                 tableId: geojsonFeature.tableId
-               }"
+               :key="geojsonFeature.key.toString()"
        />
 
       <!-- CONTROLS: -->

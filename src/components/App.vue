@@ -18,7 +18,6 @@
     <property-card-modal></property-card-modal>
 
     <div id="components-root">
-
       <div :class="'flexing ' + this.mapClass">
         <map-panel/>
       </div>
@@ -53,9 +52,7 @@
           }"
           :options="this.shapeOptions"
         />
-
       </div>
-
     </div>
   </div>
 </template>
