@@ -68,8 +68,12 @@ export default {
         props.weight = 2;
         props.opacity = 1;
         props.fillOpacity = 0.3;
-        this.pwdParcel.length > 1 ? props.key = this.pwdParcel.map(item => item.properties.BRT_ID):
-                                     props.key = this.pwdParcel.properties.BRT_ID
+        props.key = this.pwdParcel.length > 1 ? this.pwdParcel.map(item => item.properties.BRT_ID):
+                    this.pwdParcel.length > 0 ? this.pwdParcel[0].properties.BRT_ID :
+                    this.pwdParcel.properties.BRT_ID ? (this.pwdParcel.properties.BRT_ID):
+                    "";
+
+        props.key != "undefined" ? props.key.toString: "" ;
         features.push(props);
       }
       console.log("features", features)

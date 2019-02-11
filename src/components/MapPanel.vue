@@ -89,7 +89,7 @@
                :weight="geojsonFeature.weight"
                :opacity="geojsonFeature.opacity"
                :fillOpacity="geojsonFeature.fillOpacity"
-               :key="geojsonFeature.key.toString()"
+               :key="geojsonFeature.key"
        />
 
       <!-- CONTROLS: -->
