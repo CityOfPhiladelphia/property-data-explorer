@@ -56,7 +56,7 @@ let config = {
   map,
   parcels: {
     pwd: {
-      multipleAllowed: false,
+      multipleAllowed: true,
       geocodeFailAttemptParcel: null,
       clearStateOnError: false,
       wipeOutOtherParcelsOnReverseGeocodeOnly: true,

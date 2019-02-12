@@ -96,13 +96,20 @@
       }
     },
     watch: {
-      '$store.state.drawShape': function(){
-        if(this.$store.state.drawShape !== null){
-          this.$controller.geocodeDrawnShape()}
-        },
-      '$store.state.activeFeature': function(){
-        this.$controller.activeFeatureChange();
+      '$store.state.drawShape': function() {
+        if(this.$store.state.drawShape !== null) {
+          this.$controller.geocodeDrawnShape();
         }
+      },
+      '$store.state.activeFeature': function() {
+        this.$controller.activeFeatureChange();
+      },
+      '$store.state.ownerSearch.status': function() {
+        console.log(this.$store.state.ownerSearch.status)
+        if(this.$store.state.ownerSearch.status === 'success') {
+          this.$controller.geocodeOwnerSearch()
+        }
+      },
     },
     computed: {
       geocode() {

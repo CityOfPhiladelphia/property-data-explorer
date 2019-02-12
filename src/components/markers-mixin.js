@@ -57,10 +57,8 @@ export default {
     // returns geojson parcels to be rendered on the map along with
     // necessary props.
     geojsonParcels() {
-      console.log('markers-mixin.js geojsonParcels computed is running');
       let features = [];
       if(this.pwdParcel){
-        console.log('this.pwdParcel', this.pwdParcel);
         let props = {};
         props.geojson = this.pwdParcel;
         props.color = 'blue';
@@ -72,11 +70,9 @@ export default {
                     this.pwdParcel.length > 0 ? this.pwdParcel[0].properties.BRT_ID :
                     this.pwdParcel.properties.BRT_ID ? (this.pwdParcel.properties.BRT_ID):
                     "";
-
-        props.key != "undefined" ? props.key.toString: "" ;
+        props.key !== undefined ? props.key.toString: "" ;
         features.push(props);
       }
-      console.log("features", features)
       return features;
     },
 
@@ -111,7 +107,7 @@ export default {
       // get visible tables based on active topic
       const tableIds = this.$store.getters.visibleTableIds;
 
-      console.log('computed circleMarkers is rerunning, filteredData:', filteredData, 'tableIds:', tableIds);
+      // console.log('computed circleMarkers is rerunning, filteredData:', filteredData, 'tableIds:', tableIds);
 
       for (let tableId of tableIds) {
         const tableConfig = this.getConfigForTable(tableId) || {};
