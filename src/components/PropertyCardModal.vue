@@ -58,22 +58,32 @@
         :options="this.pDetailOptions"
       />
 
+      <badge-custom
+        :slots="{
+          title: 'Base District'
+        }"
+        :options="this.zoningBadgeOptions"
+      />
+
     </div>
   </section>
 </template>
 
 <script>
 import * as philaVueComps from '@cityofphiladelphia/phila-vue-comps';
-const VerticalTable = philaVueComps.VerticalTable;
+const BadgeCustom = philaVueComps.BadgeCustom;
 const Callout = philaVueComps.Callout;
 const HorizontalTable = philaVueComps.HorizontalTable;
+const VerticalTable = philaVueComps.VerticalTable;
+import helpers from '../util/helpers';
+import moment from 'moment';
 import transforms from '../general/transforms';
 const titleCase = transforms.titleCase.transform;
-import moment from 'moment';
 
 export default {
   components: {
     Callout,
+    BadgeCustom,
     VerticalTable,
     HorizontalTable,
   },
@@ -142,6 +152,60 @@ export default {
         ',
       }
       return options;
+    },
+    zoningBadgeOptions(){
+      const options = {
+        titleBackground: '#58c04d',
+        components: [
+          {
+            type: 'horizontal-table',
+            options: {
+              shouldShowFilters: false,
+              shouldShowHeaders: false,
+              id: 'baseZoning',
+              fields: [
+                {
+                  label: 'Code',
+                  value: function(state, item){
+                    return item.data.zoning
+                  },
+                  transforms: [
+                    'nowrap',
+                    'bold'
+                  ]
+                },
+                {
+                  label: 'Description',
+                  value: function (state, item) {
+                    return helpers.ZONING_CODE_MAP[item.data.zoning.trim()];
+                  },
+                },
+              ], // end fields
+            },
+            slots: {
+              items(state, item) {
+                let id = [];
+                if (state.geocode.status === "success"){
+                  id =  state.geocode.data.properties.opa_account_num;
+                } else if (state.ownerSearch.status === "success") {
+                  let result = state.ownerSearch.data.filter(
+                    object => { return object._featureId === state.activeFeature.featureId }
+                  );
+                  id =  result[0].properties.opa_account_num
+                } else {
+                  let result = state.shapeSearch.data.rows.filter(
+                    object => { return object._featureId === state.activeFeature.featureId }
+                  );
+                  id = result[0].parcel_number
+                }
+                const target = new Array(state.sources.opa_public.targets[id]) || {};
+                return target.map( item => Object.assign({}, { random: Math.random(), }, item) )
+              },
+            }
+          }
+        ]
+      }
+      return options
     },
     pDetailOptions() {
       const options = {
@@ -519,7 +583,7 @@ export default {
         },
       }
       return options;
-    },
+    }
   },
   methods: {
     closeModal (state) {
