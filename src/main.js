@@ -12,7 +12,6 @@ import Vue from 'vue';
 import axios from 'axios';
 import createStore from './store';
 import configMixin from './util/config-mixin';
-import App from './components/App.vue';
 import mergeDeep from './util/merge-deep';
 import config from './config.js';
 
@@ -24,12 +23,6 @@ import { faMapMarkerAlt } from '@fortawesome/pro-solid-svg-icons/faMapMarkerAlt'
 library.add(faCaretDown, faCaretUp, faMapMarkerAlt);
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
-import '../node_modules/phila-standards/dist/css/phila-app.min.css';
-import helpers from './util/helpers';
-import 'leaflet/dist/leaflet.css';
-import 'leaflet-easybutton/src/easy-button.css';
-import 'leaflet-measure/dist/leaflet-measure.css';
-import './styles.css';
 
 import philaVueMapping from '@cityofphiladelphia/phila-vue-mapping';
 import philaVueComps from '@cityofphiladelphia/phila-vue-comps';
@@ -39,6 +32,15 @@ const controllerMixin = philaVueDatafetch.controllerMixin;
 const clientConfig = config;
 const baseConfigUrl = config.baseConfig;
 
+// import '../node_modules/phila-standards/dist/css/phila-app.min.css';
+import helpers from './util/helpers';
+import 'phila-standards/dist/css/phila-app.min.css';
+import 'leaflet/dist/leaflet.css';
+import 'leaflet-easybutton/src/easy-button.css';
+import 'leaflet-measure/dist/leaflet-measure.css';
+import './styles.css';
+
+import App from './components/App.vue';
 var BASE_CONFIG_URL = 'https://cdn.jsdelivr.net/gh/ajrothwell/mapboard-base-config@74cf4692237e16757681f6860b936efd734c27d8/config.js';
 
 function initVue(config) {

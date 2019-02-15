@@ -594,7 +594,52 @@ export default {
 }
 </script>
 
+
+<style >
+
+@media print {
+
+
+  .openmaps-modal {
+    display: inline;
+    background: white;
+  }
+
+  #components-root {
+    visibility: hidden;
+  }
+
+  .grid-y.medium-grid-frame#application {
+    overflow: visible !important;
+  }
+
+}
+
+</style>
 <style scoped>
+
+
+@media print {
+
+  * {
+    -webkit-transition: none !important;
+    transition: none !important;
+    background: white !important;
+  }
+
+
+  .openmaps-modal {
+    display: block !important;
+    background: white !important;
+    overflow: visible !important;
+  }
+
+  #components-root {
+    display:none;
+  }
+
+}
+
 
   .address-container {
     height: 100%;
@@ -664,7 +709,7 @@ export default {
   width: 97%;
   height: 80%;
   padding: 20px;
-  overflow: hidden;
+  overflow-y: auto;
   position: absolute;
   top: 70px;
   left: 10px;
@@ -681,7 +726,6 @@ export default {
   width: 95%;
   height: 85%;
   margin: 20px auto;
-  overflow-y: auto;
 }
 
 .openmaps-modal-close{
