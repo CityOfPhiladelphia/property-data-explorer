@@ -177,7 +177,8 @@ export default {
                 {
                   label: 'Description',
                   value: function (state, item) {
-                    return helpers.ZONING_CODE_MAP[item.data.zoning.trim()];
+                    const code = item.data.zoning ;
+                    return helpers.ZONING_CODE_MAP['"'+code.toUpperCase()+'"'];
                   },
                 },
               ], // end fields
@@ -191,7 +192,7 @@ export default {
                   let result = state.ownerSearch.data.filter(
                     object => { return object._featureId === state.activeFeature.featureId }
                   );
-                  id =  result[0].properties.opa_account_num
+                  id =  result[0].properties
                 } else {
                   let result = state.shapeSearch.data.rows.filter(
                     object => { return object._featureId === state.activeFeature.featureId }
