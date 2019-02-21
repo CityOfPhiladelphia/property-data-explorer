@@ -2,10 +2,20 @@
   <section :class="['openmaps-about' ,'openmaps-modal']"
             v-if="this.$store.state.activeFeature.featureId"
   >
-    <div @click="closeModal" class="openmaps-modal-close">
+    <div @click="closeModal" class="openmaps-modal-close hide-print">
       <span class="button-state state-unnamed-state unnamed-state-active">
         <font-awesome-icon icon="times" class="fa-lg" aria-hidden="true" />
       </span>
+    </div>
+    <div class="columns small-24 medium-6 flex-div div-padding-and-margin hide-print">
+      <a id="plans-button"
+         href="#"
+         class="button"
+         @click.prevent="print"
+      >
+        Print
+      </a>
+      <!-- <p class="p-margin">Print a payment coupon.</p> -->
     </div>
     <div class="openmaps-modal-content">
 
@@ -40,6 +50,18 @@
         :options="this.vtableOptions"
       />
 
+      <badge-custom
+        :slots="{
+          title: 'Base District'
+        }"
+        :options="this.zoningBadgeOptions"
+      />
+
+      <vertical-table
+        :slots="this.pSaleOptions"
+        :options="this.pSaleOptions"
+      />
+
       <horizontal-table
         v-if="this.$store.state.activeSearch.data"
         :slots="{
@@ -50,19 +72,8 @@
       />
 
       <vertical-table
-        :slots="this.pSaleOptions"
-        :options="this.pSaleOptions"
-      />
-      <vertical-table
         :slots="this.pDetailOptions"
         :options="this.pDetailOptions"
-      />
-
-      <badge-custom
-        :slots="{
-          title: 'Base District'
-        }"
-        :options="this.zoningBadgeOptions"
       />
 
     </div>
@@ -167,7 +178,7 @@ export default {
                 {
                   label: 'Code',
                   value: function(state, item){
-                    return item.data.zoning
+                    return item.data.zoning.trim()
                   },
                   transforms: [
                     'nowrap',
@@ -178,7 +189,7 @@ export default {
                   label: 'Description',
                   value: function (state, item) {
                     const code = item.data.zoning ;
-                    return helpers.ZONING_CODE_MAP['"'+code.toUpperCase()+'"'];
+                    return helpers.ZONING_CODE_MAP[code.trim()];
                   },
                 },
               ], // end fields
@@ -590,6 +601,9 @@ export default {
     closeModal (state) {
       this.$store.state.activeFeature.featureId = null;
     },
+    print() {
+      window.print()
+    },
   },
 }
 </script>
@@ -599,13 +613,27 @@ export default {
 
 @media print {
 
-
-  .openmaps-modal {
-    display: inline;
-    background: white;
+  * {
+    background: none !important;
   }
 
-  #components-root {
+  a {
+    color: #0f4d90 !important;
+    font-weight: 300 !important;
+  }
+
+  h4 {
+    font-weight: 525;
+  }
+
+  .address-header[data-v-14c63728] {
+    background: #DAEDFC !important;
+    -webkit-print-color-adjust: exact;
+    color: #0f4d90 !important;
+    -webkit-print-color-adjust: exact;
+  }
+
+  .external-link svg {
     visibility: hidden;
   }
 
@@ -613,25 +641,72 @@ export default {
     overflow: visible !important;
   }
 
+  .hide-print, header {
+    display: none !important;
+    visibility: hidden !important;
+  }
+
+  .mb-badge {
+    width: 325px !important;
+  }
+
+  .mb-badge-header[data-v-7ccdb9d8] {
+    font-size: 13pt;
+  }
+
+  .openmaps-modal {
+    display: inline;
+    background: white;
+  }
+
+  .pvc-horizontal-table table tr:nth-child(odd) td {
+    background: #eee !important;
+    -webkit-print-color-adjust: exact;
+  }
+
+  .pvc-horizontal-table-body, .table-container {
+    page-break-inside: avoid !important;
+  }
+
+  .table-container[data-v-42075018] {
+    padding-top: 1rem !important;
+    padding-bottom: 1rem !important;
+    margin-bottom: 10px !important;
+  }
+
+  .table-container table {
+    margin: 1em 0;
+    border: 0.3px #ddd solid;
+    -webkit-print-color-adjust: exact;
+    border-collapse: unset;
+  }
+
+  #components-root, header {
+    visibility: hidden;
+  }
+
 }
 
 </style>
 <style scoped>
 
+@page { size:8.5in 11in; margin: 2cm }
 
 @media print {
 
-  * {
-    -webkit-transition: none !important;
-    transition: none !important;
-    background: white !important;
+  table {
+    border-spacing: 0px;
+    page-break-inside: avoid !important;
   }
 
+  thead, th, tr {
+    border: 0.3px solid black;
+    border-collapse: unset !important;
+  }
 
   .openmaps-modal {
-    display: block !important;
-    background: white !important;
     overflow: visible !important;
+    top: 0 !important;
   }
 
   #components-root {
@@ -641,67 +716,68 @@ export default {
 }
 
 
-  .address-container {
-    height: 100%;
-    align-items: flex-start;
-    padding-left: 20px;
-    padding-top: 20px;
-    padding-bottom: 20px;
-  }
+.address-container {
+  height: 100%;
+  align-items: flex-start;
+  padding-left: 20px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
 
-  .address-header {
-    background: #daedfe;
-    color: #0f4d90;
+.address-header {
+  background: #daedfe;
+  color: #0f4d90;
+  /*this keeps the box shadow over the scrollable part of the panel*/
+  position: relative;
+  z-index: 1;
 
-    /*this keeps the box shadow over the scrollable part of the panel*/
-    position: relative;
-    z-index: 1;
+  -webkit-box-shadow: 0px 5px 7px -2px rgba(0,0,0,0.18);
+  -moz-box-shadow: 0px 5px 7px -2px rgba(0,0,0,0.18);
+  box-shadow: 0px 5px 7px -2px rgba(0,0,0,0.18);
+  display: inline-block;
+}
 
-    -webkit-box-shadow: 0px 5px 7px -2px rgba(0,0,0,0.18);
-    -moz-box-shadow: 0px 5px 7px -2px rgba(0,0,0,0.18);
-    box-shadow: 0px 5px 7px -2px rgba(0,0,0,0.18);
-    display: inline-block;
-  }
+.address-header-line-1 {
+  margin-bottom: 0;
+  margin-top: 0;
+  padding-top: 0px !important;
+  padding-bottom: 0px !important;
+  padding-right: 8px !important;
+  padding-left: 8px !important;
+}
 
-  .address-header-line-1 {
-    margin-bottom: 0;
-    margin-top: 0;
-    padding-top: 0px !important;
-    padding-bottom: 0px !important;
-    padding-right: 8px !important;
-    padding-left: 8px !important;
-  }
+.address-header-line-2 {
+  padding: 0px;
+}
 
-  .address-header-line-2 {
-    padding: 0px;
-  }
+.address-header-line-3 {
+  padding: 0px;
+}
 
-  .address-header-line-3 {
-    padding: 0px;
-  }
+.default-address-text {
+  font-size: 30px;
+  line-height: 26px;
+  font-family: 'Montserrat', 'Tahoma', sans-serif;
+  padding-top: 0px !important;
+  padding-bottom: 0px !important;
+  padding-right: 8px !important;
+  padding-left: 8px !important;
+}
 
-  .default-address-text {
-    font-size: 30px;
-    line-height: 26px;
-    font-family: 'Montserrat', 'Tahoma', sans-serif;
-    padding-top: 0px !important;
-    padding-bottom: 0px !important;
-    padding-right: 8px !important;
-    padding-left: 8px !important;
-  }
+.div-padding-and-margin {
+  padding-top: 15px;
+  margin-bottom: 10px;
+}
+
+.flex-div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
 
 .icon-div {
   margin: 10px;
-}
-
-.text-div {
-
-}
-
-.street-view-image {
-  height: 40px;
-  width: 73px;
-  color: blue;
 }
 
 .openmaps-modal {
@@ -717,11 +793,6 @@ export default {
   z-index:1000;
 }
 
-.openmaps-modal.openmaps-modal--open{
-  z-index:1000;
-  opacity: 1;
-}
-
 .openmaps-modal-content{
   width: 95%;
   height: 85%;
@@ -735,6 +806,17 @@ export default {
   background: white;
   height: 30px;
   width: 30px;
+}
+
+.openmaps-modal.openmaps-modal--open{
+  z-index:1000;
+  opacity: 1;
+}
+
+.street-view-image {
+  height: 40px;
+  width: 73px;
+  color: blue;
 }
 
 </style>
