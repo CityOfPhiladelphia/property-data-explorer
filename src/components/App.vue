@@ -150,6 +150,7 @@
           dataSources: ['opa_assessment'],
           mapOverlay: {},
           mouseOverDisabled: true,
+          downloadButton: true,
           fields: [
             {
               label: 'Street Address',
@@ -205,6 +206,7 @@
           dataSources: ['opa_assessment'],
           mapOverlay: {},
           mouseOverDisabled: true,
+          downloadButton: true,
           fields: [
             {
               label: 'Street Address',
@@ -259,6 +261,7 @@
           // dataSources: ['opa'],
           mapOverlay: {},
           mouseOverDisabled: true,
+          downloadButton: true,
           fields: [
             {
               label: 'Street Address',
@@ -400,6 +403,19 @@ th {
   position: sticky;
   top: 0;
   z-index: 2;
+}
+
+.pvc-download-data-button {
+  position: fixed;
+  z-index: 999;
+  top: 55%;
+  right: 70px;
+}
+
+@media screen and (max-width: 750px) {
+  .pvc-download-data-button {
+    visibility: hidden;
+  }
 }
 
 </style>
