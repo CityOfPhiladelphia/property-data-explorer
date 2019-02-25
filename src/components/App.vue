@@ -9,7 +9,7 @@
           <div class="app-divide"></div>
           <div class="page-title-container">
             <a href="#/">
-              <h1 class="page-title">Property Reboot</h1>
+              <h1 class="page-title">Property Data Explorer</h1>
             </a>
           </div>
         </div>
@@ -299,8 +299,8 @@
               label: 'Owner',
               value: function(state, item){
                 let owners = item.owner_2.length > 1 ?
-                             titleCase(item.owner_1) + ", " + titleCase(item.owner_2):
-                             titleCase(item.owner_1)
+                             titleCase(item.owner_1.trim()) + ", " + titleCase(item.owner_2.trim()):
+                             titleCase(item.owner_1.trim())
 
                 return owners
               },
