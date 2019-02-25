@@ -10,8 +10,8 @@
     "dev": "cross-env NODE_ENV=development webpack-dev-server"
   },
   "dependencies": {
-    "@cityofphiladelphia/phila-vue-comps": "^1.0.15",
-    "@cityofphiladelphia/phila-vue-datafetch": "https://github.com/CityOfPhiladelphia/phila-vue-datafetch#acbcfeaaa9b0cd92fa13196404c4d51354e63247",
+    "@cityofphiladelphia/phila-vue-comps": "https://github.com/CityOfPhiladelphia/phila-vue-comps#872201c2cba6f6ab496a1862ea3b49838d2e4e31",
+    "@cityofphiladelphia/phila-vue-datafetch": "https://github.com/CityOfPhiladelphia/phila-vue-datafetch#de792eeaaa2cdb77d7dfb3e8ef991414ab91c095",
     "@cityofphiladelphia/phila-vue-mapping": "https://github.com/CityOfPhiladelphia/phila-vue-mapping#19a864f01e9dc50c26b6737d82860a7fc0b6156e",
     "accounting": "^0.4.1",
     "axios": "^0.18.0",
