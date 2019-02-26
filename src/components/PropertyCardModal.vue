@@ -203,7 +203,8 @@ export default {
                   let result = state.ownerSearch.data.filter(
                     object => { return object._featureId === state.activeFeature.featureId }
                   );
-                  id =  result[0].properties
+                  console.log(result)
+                  id =  result[0].properties.opa_account_num
                 } else {
                   let result = state.shapeSearch.data.rows.filter(
                     object => { return object._featureId === state.activeFeature.featureId }
