@@ -369,6 +369,7 @@
 .bottom-none {
   overflow-y: auto;
   flex: 0;
+  display: none;
 }
 
 .component-label {
