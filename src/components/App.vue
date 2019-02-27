@@ -151,6 +151,8 @@
           mapOverlay: {},
           mouseOverDisabled: true,
           downloadButton: true,
+          expandDataDownload: true,
+          expandedData: this.expandedData,
           fields: [
             {
               label: 'Street Address',
@@ -207,6 +209,8 @@
           mapOverlay: {},
           mouseOverDisabled: true,
           downloadButton: true,
+          expandDataDownload: true,
+          expandedData: this.expandedData,
           fields: [
             {
               label: 'Street Address',
@@ -250,7 +254,6 @@
               },
             },
           ],
-
         }
         return options;
       },
@@ -262,6 +265,8 @@
           mapOverlay: {},
           mouseOverDisabled: true,
           downloadButton: true,
+          expandDataDownload: true,
+          expandedData: this.expandedData,
           fields: [
             {
               label: 'Street Address',
@@ -310,6 +315,22 @@
         return options;
       },
     },
+    methods: {
+      expandedData() {
+        const expandedData = {
+          fields: [
+            {
+              label: 'Street Address',
+              value: function(state, item) {
+                return titleCase(item.location)
+              },
+            },
+          ],
+        };
+        console.log("expandedData is working");
+        return expandedData;
+      },
+    }
   };
 
 
