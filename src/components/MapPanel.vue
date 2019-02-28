@@ -118,11 +118,6 @@
         <basemap-select-control :position="this.basemapSelectControlPosition" />
       </div>
 
-      <div v-once>
-        <draw-control :position="'bottomleft'"
-                      :control="true"
-        />
-      </div>
 
       <!-- <div v-once
            v-if="this.measureControlEnabled"
@@ -153,12 +148,18 @@
                      :hSide="'almostright'"
       >
       </scale-control> -->
-
-      <div v-once>
-        <address-input :position="this.addressInputPosition"
-                       :placeholder="this.addressInputPlaceholder"
-                       widthFromConfig="350"
-        />
+      <div>
+        <div v-once>
+          <address-input :position="this.addressInputPosition"
+                         :placeholder="this.addressInputPlaceholder"
+                         widthFromConfig="350"
+          />
+          <div v-once class="draw-control">
+            <draw-control :position="this.addressInputPosition"
+            :control="true"
+            />
+          </div>
+        </div>
       </div>
       <address-candidate-list v-if="this.addressAutocompleteEnabled"
                               :position="this.addressInputPosition"
@@ -554,6 +555,21 @@ button {
     height: 100%;
     width: 100%;
     overflow: hidden;
+  }
+
+  .leaflet-control {
+    clear: unset;
+    display: inline-block;
+    float: right
+  }
+
+  .leaflet-draw-section {
+    margin-top: 10px;
+  }
+
+  .pvm-search-control-container {
+    display: inline-block;
+    float: left;
   }
 
   .mb-panel-map {
