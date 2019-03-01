@@ -557,7 +557,7 @@ button {
     overflow: hidden;
   }
 
-  .leaflet-control {
+  .leaflet-draw.leaflet-control {
     clear: unset;
     display: inline-block;
     float: right
