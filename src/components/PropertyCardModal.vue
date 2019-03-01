@@ -2,10 +2,12 @@
   <section :class="['openmaps-about' ,'openmaps-modal']"
             v-if="this.$store.state.activeFeature.featureId"
   >
-    <header>
+    <header class="modal">
       <div class="row expanded">
         <div class="columns">
-          <img src="https://standards.phila.gov/img/logo/city-of-philadelphia-blue-text.png" alt="City of Philadelphia">
+          <div class="print-logo">
+            <img src="https://standards.phila.gov/img/logo/city-of-philadelphia-blue-text.png" alt="City of Philadelphia">
+          </div>
           <div class="page-title-container">
             <h1 class="page-title">Property Data Explorer</h1>
           </div>
@@ -704,9 +706,14 @@ export default {
 
 @media print {
 
-  header {
+  @page {
+    size:8.5in 11in;
+    margin-top: 2cm
+  }
+
+  header.modal {
     visibility: visible !important;
-    margin: 30px 20px 5px 20px;
+    margin: 5px 20px 40px 20px;
     background: #2176d2;
     display: block !important;
   }
@@ -727,6 +734,8 @@ export default {
   .openmaps-modal {
     overflow: visible !important;
     top: 0 !important;
+    padding: 0 !important;
+    height: 100%;
   }
 
 }
@@ -834,10 +843,15 @@ header {
 }
 
 .page-title {
-  font-size: 3.14286rem !important;
+  font-size: 28px !important;
   color: rgb(15, 77, 144) !important;
   align-items: baseline;
   margin-bottom: 0;
+}
+
+.print-logo {
+  display: inline-block;
+  width: 40%;
 }
 
 .page-title-container {
