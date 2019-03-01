@@ -1,6 +1,6 @@
 <template>
   <div id="app-root">
-    <header class="site-header app group">
+    <header class="site-header app group hide-print">
       <div class="row expanded">
         <div class="columns">
           <a href="//beta.phila.gov" class="logo">
@@ -437,6 +437,12 @@ th {
 @media screen and (max-width: 750px) {
   .pvc-download-data-button {
     visibility: hidden;
+  }
+}
+
+@media print, screen and (min-width: 65.625em) {
+  .large-12 {
+    width: 100%;
   }
 }
 

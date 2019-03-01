@@ -564,8 +564,8 @@ button {
   }
 
   .leaflet-draw-toolbar.leaflet-bar.leaflet-draw-toolbar-top {
-    width: 50px;
-    height: 50px;
+    width: 49px;
+    height: 49px;
   }
 
   .leaflet-draw-section {
@@ -580,6 +580,10 @@ button {
   .leaflet-touch .leaflet-draw-toolbar .leaflet-draw-draw-polygon {
     background-position: -65px -9px;
     background-size: 540px 60px;
+  }
+
+  .leaflet-touch .leaflet-draw-actions {
+    left: 60px;
   }
 
   .pvm-search-control-container {
