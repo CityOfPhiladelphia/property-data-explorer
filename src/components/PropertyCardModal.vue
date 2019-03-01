@@ -2,6 +2,16 @@
   <section :class="['openmaps-about' ,'openmaps-modal']"
             v-if="this.$store.state.activeFeature.featureId"
   >
+    <header>
+      <div class="row expanded">
+        <div class="columns">
+          <img src="https://standards.phila.gov/img/logo/city-of-philadelphia-blue-text.png" alt="City of Philadelphia">
+          <div class="page-title-container">
+            <h1 class="page-title">Property Data Explorer</h1>
+          </div>
+        </div>
+      </div>
+    </header>
     <div @click="closeModal" class="openmaps-modal-close hide-print">
       <span class="button-state state-unnamed-state unnamed-state-active">
         <font-awesome-icon icon="times" class="fa-lg" aria-hidden="true" />
@@ -627,6 +637,10 @@ export default {
     font-weight: 525;
   }
 
+  #components-root {
+    visibility: hidden;
+  }
+
   .address-header[data-v-14c63728] {
     background: #DAEDFC !important;
     -webkit-print-color-adjust: exact;
@@ -642,7 +656,7 @@ export default {
     overflow: visible !important;
   }
 
-  .hide-print, header {
+  .hide-print {
     display: none !important;
     visibility: hidden !important;
   }
@@ -682,18 +696,20 @@ export default {
     border-collapse: unset;
   }
 
-  #components-root, header {
-    visibility: hidden;
-  }
-
 }
 
 </style>
 <style scoped>
 
-@page { size:8.5in 11in; margin: 2cm }
 
 @media print {
+
+  header {
+    visibility: visible !important;
+    margin: 30px 20px 5px 20px;
+    background: #2176d2;
+    display: block !important;
+  }
 
   table {
     border-spacing: 0px;
@@ -705,17 +721,20 @@ export default {
     border-collapse: unset !important;
   }
 
+  #components-root {
+    display:none;
+  }
   .openmaps-modal {
     overflow: visible !important;
     top: 0 !important;
   }
 
-  #components-root {
-    display:none;
-  }
-
 }
 
+header {
+  visibility: hidden ;
+  display: none;
+}
 
 .address-container {
   height: 100%;
@@ -812,6 +831,21 @@ export default {
 .openmaps-modal.openmaps-modal--open{
   z-index:1000;
   opacity: 1;
+}
+
+.page-title {
+  font-size: 3.14286rem !important;
+  color: rgb(15, 77, 144) !important;
+  align-items: baseline;
+  margin-bottom: 0;
+}
+
+.page-title-container {
+  display: inline-block;
+  padding-left: 10px;
+  border-left: 3px solid rgb(15, 77, 144);
+  vertical-align: bottom;
+  margin-left: 10px;
 }
 
 .street-view-image {
