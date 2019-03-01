@@ -563,8 +563,23 @@ button {
     float: right
   }
 
+  .leaflet-draw-toolbar.leaflet-bar.leaflet-draw-toolbar-top {
+    width: 50px;
+    height: 50px;
+  }
+
   .leaflet-draw-section {
-    margin-top: 10px;
+    margin-top: 2px;
+  }
+
+  .leaflet-touch .leaflet-bar a {
+    width: 45px;
+    height: 45px;
+  }
+
+  .leaflet-touch .leaflet-draw-toolbar .leaflet-draw-draw-polygon {
+    background-position: -65px -9px;
+    background-size: 540px 60px;
   }
 
   .pvm-search-control-container {
