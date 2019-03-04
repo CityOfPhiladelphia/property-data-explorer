@@ -101,9 +101,9 @@
           this.$controller.geocodeDrawnShape();
         }
       },
-      // '$store.state.activeFeature': function() {
-      //   this.$controller.activeFeatureChange();
-      // },
+      '$store.state.activeModal': function() {
+        this.$controller.activeFeatureChange();
+      },
       '$store.state.ownerSearch.status': function() {
         console.log(this.$store.state.ownerSearch.status)
         if(this.$store.state.ownerSearch.status === 'success') {
