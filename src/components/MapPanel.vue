@@ -572,9 +572,9 @@ button {
     margin-top: 2px;
   }
 
-  .leaflet-touch .leaflet-bar a {
-    width: 45px;
-    height: 45px;
+  .leaflet-draw-draw-polygon {
+    width: 45px !important;
+    height: 45px !important;
   }
 
   .leaflet-touch .leaflet-draw-toolbar .leaflet-draw-draw-polygon {
