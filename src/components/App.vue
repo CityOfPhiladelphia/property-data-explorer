@@ -101,9 +101,9 @@
           this.$controller.geocodeDrawnShape();
         }
       },
-      '$store.state.activeFeature': function() {
-        this.$controller.activeFeatureChange();
-      },
+      // '$store.state.activeFeature': function() {
+      //   this.$controller.activeFeatureChange();
+      // },
       '$store.state.ownerSearch.status': function() {
         console.log(this.$store.state.ownerSearch.status)
         if(this.$store.state.ownerSearch.status === 'success') {
@@ -149,7 +149,7 @@
           tableid: 'aaa',
           dataSources: ['opa_assessment'],
           mapOverlay: {},
-          mouseOverDisabled: true,
+          clickEnabled: true,
           downloadButton: true,
           expandDataDownload: true,
           expandedData: this.expandedData,
@@ -207,7 +207,7 @@
           tableid: 'bbb',
           dataSources: ['opa_assessment'],
           mapOverlay: {},
-          mouseOverDisabled: true,
+          clickEnabled: true,
           downloadButton: true,
           expandDataDownload: true,
           expandedData: this.expandedData,
@@ -263,7 +263,7 @@
           tableid: 'ccc',
           // dataSources: ['opa'],
           mapOverlay: {},
-          mouseOverDisabled: true,
+          clickEnabled: true,
           downloadButton: true,
           expandDataDownload: true,
           expandedData: this.expandedData,

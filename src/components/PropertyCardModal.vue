@@ -1,6 +1,6 @@
 <template>
   <section :class="['openmaps-about' ,'openmaps-modal']"
-            v-if="this.$store.state.activeFeature.featureId"
+            v-if="this.$store.state.activeModal.featureId"
   >
     <header class="modal">
       <div class="row expanded">
@@ -112,9 +112,9 @@ export default {
   },
   name: 'Property-Card-Modal',
   computed: {
-    activeFeature() {
+    activeModal() {
       // console.log("Active Feature.....");
-      return this.$store.state.activeFeature;
+      return this.$store.state.activeModal;
     },
     // this returns the address shown in the address header
     address() {
@@ -125,12 +125,12 @@ export default {
           return titleCase(state.geocode.data.properties.street_address)
         } else if (state.ownerSearch.status === "success") {
           let result = state.ownerSearch.data.filter(object => {
-            return object._featureId === state.activeFeature.featureId
+            return object._featureId === state.activeModal.featureId
           });
           return titleCase(result[0].properties.street_address)
         } else {
           let result = state.shapeSearch.data.rows.filter(object => {
-            return object._featureId === state.activeFeature.featureId
+            return object._featureId === state.activeModal.featureId
           });
           return titleCase(result[0].location)
         }
@@ -153,12 +153,12 @@ export default {
           return titleCase(state.geocode.data.properties.street_address);
         } else if (state.ownerSearch.status === "success") {
           let result = state.ownerSearch.data.filter(object => {
-            return object._featureId === state.activeFeature.featureId
+            return object._featureId === state.activeModal.featureId
           });
           return titleCase(result[0].properties.street_address)
         } else {
           let result = state.shapeSearch.data.rows.filter(object => {
-            return object._featureId === state.activeFeature.featureId
+            return object._featureId === state.activeModal.featureId
           });
           return titleCase(result[0].location)
         }
@@ -186,6 +186,7 @@ export default {
               shouldShowFilters: false,
               shouldShowHeaders: false,
               id: 'baseZoning',
+              tableid: 'mmm',
               fields: [
                 {
                   label: 'Code',
@@ -213,13 +214,13 @@ export default {
                   id =  state.geocode.data.properties.opa_account_num;
                 } else if (state.ownerSearch.status === "success") {
                   let result = state.ownerSearch.data.filter(
-                    object => { return object._featureId === state.activeFeature.featureId }
+                    object => { return object._featureId === state.activeModal.featureId }
                   );
                   console.log(result)
                   id =  result[0].properties.opa_account_num
                 } else {
                   let result = state.shapeSearch.data.rows.filter(
-                    object => { return object._featureId === state.activeFeature.featureId }
+                    object => { return object._featureId === state.activeModal.featureId }
                   );
                   id = result[0].parcel_number
                 }
@@ -244,12 +245,12 @@ export default {
                 return state.geocode.data.properties.opa_account_num;
               } else if (state.ownerSearch.status === "success") {
                 let result = state.ownerSearch.data.filter(object => {
-                  return object._featureId === state.activeFeature.featureId
+                  return object._featureId === state.activeModal.featureId
                 });
                 return result[0].properties.opa_account_num
               } else {
                 let result = state.shapeSearch.data.rows.filter(object => {
-                  return object._featureId === state.activeFeature.featureId
+                  return object._featureId === state.activeModal.featureId
                 });
                 return result[0].parcel_number
               }
@@ -268,7 +269,7 @@ export default {
                       })
               } else if (state.ownerSearch.status === "success") {
                 let result = state.ownerSearch.data.filter(object => {
-                  return object._featureId === state.activeFeature.featureId
+                  return object._featureId === state.activeModal.featureId
                 });
                 let obj_id = result[0].properties.opa_account_num
                 return state.sources.opa_public.targets[obj_id].data.homestead_exemption
@@ -280,7 +281,7 @@ export default {
 
               } else {
                 let result = state.shapeSearch.data.rows.filter(object => {
-                  return object._featureId === state.activeFeature.featureId
+                  return object._featureId === state.activeModal.featureId
                 });
                 let obj_id = result[0].parcel_number
                 return state.sources.opa_public.targets[obj_id].data.homestead_exemption
@@ -300,14 +301,14 @@ export default {
                 return state.sources.opa_public.targets[obj_id].data.building_code_description
               } else if (state.ownerSearch.status === "success") {
                 let result = state.ownerSearch.data.filter(object => {
-                  return object._featureId === state.activeFeature.featureId
+                  return object._featureId === state.activeModal.featureId
                 });
                 let obj_id = result[0].properties.opa_account_num
                 return state.sources.opa_public.targets[obj_id].data.building_code_description
 
               } else {
                 let result = state.shapeSearch.data.rows.filter(object => {
-                  return object._featureId === state.activeFeature.featureId
+                  return object._featureId === state.activeModal.featureId
                 });
                 let obj_id = result[0].parcel_number
                 return state.sources.opa_public.targets[obj_id].data.building_code_description
@@ -333,14 +334,14 @@ export default {
                 return cond_code(state.sources.opa_public.targets[obj_id].data.exterior_condition)
               } else if (state.ownerSearch.status === "success") {
                 let result = state.ownerSearch.data.filter(object => {
-                  return object._featureId === state.activeFeature.featureId
+                  return object._featureId === state.activeModal.featureId
                 });
                 let obj_id = result[0].properties.opa_account_num
                 return cond_code(state.sources.opa_public.targets[obj_id].data.exterior_condition)
 
               } else {
                 let result = state.shapeSearch.data.rows.filter(object => {
-                  return object._featureId === state.activeFeature.featureId
+                  return object._featureId === state.activeModal.featureId
                 });
                 let obj_id = result[0].parcel_number
                 return cond_code(state.sources.opa_public.targets[obj_id].data.exterior_condition)
@@ -358,7 +359,7 @@ export default {
                       })
               } else if (state.ownerSearch.status === "success") {
                 let result = state.ownerSearch.data.filter(object => {
-                  return object._featureId === state.activeFeature.featureId
+                  return object._featureId === state.activeModal.featureId
                 });
                 let obj_id = result[0].properties.opa_account_num
                 return state.sources.opa_public.targets[obj_id].data.total_area
@@ -367,7 +368,7 @@ export default {
                       })
               } else {
                 let result = state.shapeSearch.data.rows.filter(object => {
-                  return object._featureId === state.activeFeature.featureId
+                  return object._featureId === state.activeModal.featureId
                 });
                 let obj_id = result[0].parcel_number
                 return state.sources.opa_public.targets[obj_id].data.total_area
@@ -388,7 +389,7 @@ export default {
                       })
               } else if (state.ownerSearch.status === "success") {
                 let result = state.ownerSearch.data.filter(object => {
-                  return object._featureId === state.activeFeature.featureId
+                  return object._featureId === state.activeModal.featureId
                 });
                 let obj_id = result[0].properties.opa_account_num
                 return state.sources.opa_public.targets[obj_id].data.total_livable_area
@@ -397,7 +398,7 @@ export default {
                       })
               } else {
                 let result = state.shapeSearch.data.rows.filter(object => {
-                  return object._featureId === state.activeFeature.featureId
+                  return object._featureId === state.activeModal.featureId
                 });
                 let obj_id = result[0].parcel_number
                 return state.sources.opa_public.targets[obj_id].data.total_livable_area
@@ -428,7 +429,7 @@ export default {
                       })
               } else if (state.ownerSearch.status === "success") {
                 let key = state.ownerSearch.data.filter(object => {
-                  return object._featureId === state.activeFeature.featureId
+                  return object._featureId === state.activeModal.featureId
                 } );
                 return state.sources.opa_assessment.targets[key[0].properties.opa_account_num].data.sale_price
                       .toLocaleString('en-US', {
@@ -438,7 +439,7 @@ export default {
                       })
               } else {
                 let result = state.shapeSearch.data.rows.filter(object => {
-                  return object._featureId === state.activeFeature.featureId
+                  return object._featureId === state.activeModal.featureId
                 });
                 return result[0].sale_price
                       .toLocaleString('en-US', {
@@ -457,13 +458,13 @@ export default {
                       .format('MM/DD/YYYY')
               } else if (state.ownerSearch.status === "success") {
                 let key = state.ownerSearch.data.filter(object => {
-                  return object._featureId === state.activeFeature.featureId
+                  return object._featureId === state.activeModal.featureId
                 } );
                 return moment(state.sources.opa_assessment.targets[key[0].properties.opa_account_num].data.sale_date)
                       .format('MM/DD/YYYY')
               } else {
                 let result = state.shapeSearch.data.rows.filter(object => {
-                  return object._featureId === state.activeFeature.featureId
+                  return object._featureId === state.activeModal.featureId
                 });
                 return moment(result[0].sale_price)
                       .format('MM/DD/YYYY')
@@ -546,12 +547,12 @@ export default {
                 return state.geocode.data.properties.opa_account_num;
               } else if (state.ownerSearch.status === "success") {
                 let result = state.ownerSearch.data.filter(object => {
-                  return object._featureId === state.activeFeature.featureId
+                  return object._featureId === state.activeModal.featureId
                 });
                 return result[0].properties.opa_account_num
               } else {
                 let result = state.shapeSearch.data.rows.filter(object => {
-                  return object._featureId === state.activeFeature.featureId
+                  return object._featureId === state.activeModal.featureId
                 });
                 return result[0].parcel_number
               }
@@ -564,12 +565,12 @@ export default {
                 return titleCase(state.geocode.data.properties.opa_owners.toString());
               } else if (state.ownerSearch.status === "success") {
                 let result = state.ownerSearch.data.filter(object => {
-                  return object._featureId === state.activeFeature.featureId
+                  return object._featureId === state.activeModal.featureId
                 });
                 return titleCase(result[0].properties.opa_owners.toString())
               } else {
                 let result = state.shapeSearch.data.rows.filter(object => {
-                  return object._featureId === state.activeFeature.featureId
+                  return object._featureId === state.activeModal.featureId
                 });
                 let owners = result[0].owner_2.length > 1 ?
                              titleCase(result[0].owner_1) + ", " + titleCase(result[0].owner_2):
@@ -586,12 +587,12 @@ export default {
                 return titleCase(state.geocode.data.properties.street_address);
               } else if (state.ownerSearch.status === "success") {
                 let result = state.ownerSearch.data.filter(object => {
-                  return object._featureId === state.activeFeature.featureId
+                  return object._featureId === state.activeModal.featureId
                 });
                 return titleCase(result[0].properties.street_address)
               } else {
                 let result = state.shapeSearch.data.rows.filter(object => {
-                  return object._featureId === state.activeFeature.featureId
+                  return object._featureId === state.activeModal.featureId
                 });
                 return titleCase(result[0].location)
               }
@@ -612,7 +613,8 @@ export default {
   },
   methods: {
     closeModal (state) {
-      this.$store.state.activeFeature.featureId = null;
+      this.$store.state.activeModal.featureId = null;
+      this.$store.commit('setActiveFeature', null);
     },
     print() {
       window.print()
