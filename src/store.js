@@ -52,6 +52,27 @@ function createStore(config) {
 
   const mb = {
     state: initialState,
+    getters: {
+      // visibleTableIds(state) {
+      //   // get active topic
+      //
+      //   console.log("visibleTableIds is starting");
+      //
+      //   // get active topic
+      //   const activeTopic = state.activeTopic;
+      //   const searchMethod = state.lastSearchMethod
+      //
+      //   console.log( "this.geocodeOptions.tableid", $store.geocodeOptions, "state.lastSearchMethod", state.lastSearchMethod);
+      //
+      //   const tableid = searchMethod === "geocode" ? typeof this.geocodeOptions !== "undefined" ? this.geocodeOptions.tableid : null :
+      //                   searchMethod === "shape search" ? this.shapeOptions.tableid :
+      //                   searchMethod === "owner search" ? this.ownerOptions.tableid : null
+      //
+      //
+      //
+      //
+      // }
+    },
     mutations: {
       setCandidates(state, payload) {
         state.candidates = payload;

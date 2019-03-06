@@ -81,16 +81,18 @@
                      :icon="marker.icon"
       />
 
-      <!-- non-reactive geojson parcels -->
+      <!-- reactive geojson parcels -->
       <geojson v-for="geojsonFeature in geojsonParcels"
-               :geojson="geojsonFeature.geojson"
-               :fillColor="geojsonFeature.fillColor"
-               :color="geojsonFeature.color"
-               :weight="geojsonFeature.weight"
-               :opacity="geojsonFeature.opacity"
-               :fillOpacity="geojsonFeature.fillOpacity"
-               :key="geojsonFeature.key"
+               :geojson="geojsonFeature"
+               :fillColor="geojsonFeature.properties.fillColor"
+               :color="geojsonFeature.properties.color"
+               :weight="geojsonFeature.properties.weight"
+               :opacity="geojsonFeature.properties.opacity"
+               :fillOpacity="geojsonFeature.properties.fillOpacity"
+               :key="geojsonFeature.properties.BRT_ID"
        />
+
+
 
       <!-- CONTROLS: -->
       <!-- basemap control -->

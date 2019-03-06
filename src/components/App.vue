@@ -198,6 +198,26 @@
               /* nullValue: 'no date available', */
             },
           ],
+          mapOverlay: {
+            marker: 'geojson',
+            style: {
+              // radius: 6,
+              fillColor: '#2176d2',
+              // fillColor: '#ff3f3f',
+              color: '#2176d2',
+              weight: 2,
+              opacity: 1,
+              fillOpacity: 0.3
+            },
+            hoverStyle: {
+              // radius: 6,
+              fillColor: 'yellow',
+              color: 'yellow',
+              weight: 2,
+              opacity: 1,
+              fillOpacity: 0.3
+            }
+          },
         }
         return options;
       },
@@ -254,6 +274,26 @@
               },
             },
           ],
+          mapOverlay: {
+            marker: 'geojson',
+            style: {
+              // radius: 6,
+              fillColor: '#2176d2',
+              // fillColor: '#ff3f3f',
+              color: '#2176d2',
+              weight: 2,
+              opacity: 1,
+              fillOpacity: 0.3
+            },
+            hoverStyle: {
+              // radius: 6,
+              fillColor: 'yellow',
+              color: 'yellow',
+              weight: 2,
+              opacity: 1,
+              fillOpacity: 0.3
+            }
+          },
         }
         return options;
       },
@@ -311,6 +351,26 @@
               },
             },
           ],
+          mapOverlay: {
+            marker: 'geojson',
+            style: {
+              // radius: 6,
+              fillColor: '#2176d2',
+              // fillColor: '#ff3f3f',
+              color: '#2176d2',
+              weight: 2,
+              opacity: 1,
+              fillOpacity: 0.3
+            },
+            hoverStyle: {
+              // radius: 6,
+              fillColor: 'yellow',
+              color: 'yellow',
+              weight: 2,
+              opacity: 1,
+              fillOpacity: 0.3
+            }
+          },
         }
         return options;
       },

@@ -5,12 +5,13 @@ import { Marker } from 'leaflet';
 export default {
   watch: {
     activeFeature(nextActiveFeature, prevActiveFeature) {
+      console.log('WATCH active feature', prevActiveFeature, '=>', nextActiveFeature);
       const layerMap = this.$store.state.map.map._layers;
       const layers = Object.values(layerMap);
-      if (prevActiveFeature && prevActiveFeature.tableId && prevActiveFeature.featureId) {
+      if (prevActiveFeature && prevActiveFeature.featureId) {
         this.identifyMarker(prevActiveFeature, layers);
       }
-      if (nextActiveFeature && nextActiveFeature.tableId && nextActiveFeature.featureId) {
+      if (nextActiveFeature && nextActiveFeature.featureId) {
         this.identifyMarker(nextActiveFeature, layers);
       }
     },
@@ -57,22 +58,24 @@ export default {
     // returns geojson parcels to be rendered on the map along with
     // necessary props.
     geojsonParcels() {
-      let features = [];
+      let features;
       if(this.pwdParcel){
         let props = {};
-        props.geojson = this.pwdParcel;
+        // console.log("this.pwdParcel: ", this.pwdParcel)
+        features = this.pwdParcel;
         props.color = 'blue';
         props.fillColor = 'blue';
         props.weight = 2;
         props.opacity = 1;
         props.fillOpacity = 0.3;
-        props.key = this.pwdParcel.length > 1 ? this.pwdParcel.map(item => item.properties.BRT_ID):
-                    this.pwdParcel.length > 0 ? this.pwdParcel[0].properties.BRT_ID :
-                    this.pwdParcel.properties.BRT_ID ? (this.pwdParcel.properties.BRT_ID):
-                    "";
-        props.key !== undefined ? props.key.toString: "" ;
-        features.push(props);
+        if(features.length > 1) {
+          features.forEach( feature => Object.assign(feature.properties, props));
+        } else {
+          Object.assign(features.properties, props);
+          features = [features]
+        }
       }
+      console.log("features: ", features)
       return features;
     },
 
@@ -238,39 +241,47 @@ export default {
     reactiveGeojsonFeatures() {
       const features = [];
 
-      const filteredData = this.$store.state.horizontalTables.filteredData;
-      // get visible tables based on active topic
-      const tableIds = this.$store.getters.visibleTableIds;
+      // const filteredData = this.$store.state.horizontalTables.filteredData;
+      // // get visible tables based on active topic
+      // const tableIds = this.$store.getters.visibleTableIds;
+      //
+      // for (let tableId of tableIds) {
+      //   const tableConfig = this.getConfigForTable(tableId) || {};
+      //   const mapOverlay = (tableConfig.options || {}).mapOverlay;
+      //
+      //   if (!mapOverlay || mapOverlay.marker !== 'geojson') {
+      //     continue;
+      //   }
+      //
+      //   const items = filteredData[tableId];
+      //
+      //   if (items.length < 1) {
+      //     continue;
+      //   }
+      //
+      //   const style = mapOverlay.style;
+      //   items.push(tableId);
+      //
+      //   // go through rows
 
-      for (let tableId of tableIds) {
-        const tableConfig = this.getConfigForTable(tableId) || {};
-        const mapOverlay = (tableConfig.options || {}).mapOverlay;
+      let style;
 
-        if (!mapOverlay || mapOverlay.marker !== 'geojson') {
-          continue;
-        }
+      if (this.$store.state.shapeSearch.data !== null) {
 
-        const items = filteredData[tableId];
+        let item = this.$store.state.shapeSearch.data.rows;
 
-        if (items.length < 1) {
-          continue;
-        }
+        let props = Object.assign({}, style);
 
-        const style = mapOverlay.style;
-        items.push(tableId);
-
-        // go through rows
-        for (let item of items) {
-          let props = Object.assign({}, style);
-
-          props.geojson = item.geometry;
-          props.key = item.id;
-          props.featureId = item._featureId || null;
-          props.tableId = items[items.length-1];
-          features.push(props);
-        }
+        // props.geojson = item.geometry;
+        // props.key = item.id;
+        props.featureId = item._featureId || null;
+        props.tableId = "aaa";
+        // props.tableId = items[items.length-1];
+        features.push(props);
+        // }
       }
       return features;
+
     },
 
     leafletMarkers() {
@@ -360,16 +371,21 @@ export default {
       // }
     },
     identifyMarker(feature, layers) {
-      console.log('identifyMarker is running, feature:', feature);
-      const tableId = feature.tableId
+      console.log('identifyMarker is running, feature:', feature, "layers: ", layers);
+      // const tableId = feature.tableId
       const featureId = feature.featureId;
+      console.log("featureId: ", featureId);
       const matchingLayer = layers.filter(layer => {
         const options = layer.options || {};
+        console.log("options: ", options)
         const data = options.data;
+        console.log("data: ", data)
         if (!data) return;
         const layerFeatureId = data.featureId;
-        const layerTableId = data.tableId;
-        return layerFeatureId === featureId && layerTableId === tableId;
+        console.log("layerFeatureId: ", layerFeatureId)
+        // const layerTableId = data.tableId;
+        // return layerFeatureId === featureId && layerTableId === tableId;
+        return layerFeatureId === featureId;
       })[0];
       console.log('identifyMarker, matchingLayer:', matchingLayer);
       if (matchingLayer.options.icon) {
