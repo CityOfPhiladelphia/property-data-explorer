@@ -275,7 +275,6 @@ export default {
         // props.geojson = item.geometry;
         // props.key = item.id;
         props.featureId = item._featureId || null;
-        props.tableId = "aaa";
         // props.tableId = items[items.length-1];
         features.push(props);
         // }
@@ -372,8 +371,24 @@ export default {
     },
     identifyMarker(feature, layers) {
       console.log('identifyMarker is running, feature:', feature, "layers: ", layers);
-      // const tableId = feature.tableId
-      const featureId = feature.featureId;
+
+      let featureId
+
+      if (this.$store.state.geocode.status === "success"){
+        featureId = this.$store.state.geocode.data.properties.opa_account_num
+      } else if (this.$store.state.ownerSearch.status === "success") {
+        let result = this.$store.state.ownerSearch.data.filter(object => {
+          return object._featureId === feature.featureId
+        });
+        featureId = result[0].properties.opa_account_num
+      } else {
+        let result = this.$store.state.shapeSearch.data.rows.filter(object => {
+          return object._featureId === feature.featureId
+        });
+        featureId = result[0].parcel_number
+      }
+
+
       console.log("featureId: ", featureId);
       const matchingLayer = layers.filter(layer => {
         const options = layer.options || {};
@@ -381,25 +396,25 @@ export default {
         const data = options.data;
         console.log("data: ", data)
         if (!data) return;
-        const layerFeatureId = data.featureId;
+        const layerFeatureId = data.BRT_ID;
         console.log("layerFeatureId: ", layerFeatureId)
         // const layerTableId = data.tableId;
         // return layerFeatureId === featureId && layerTableId === tableId;
         return layerFeatureId === featureId;
       })[0];
       console.log('identifyMarker, matchingLayer:', matchingLayer);
-      if (matchingLayer.options.icon) {
-        this.updateVectorMarkerColor(matchingLayer);
-      } else {
-        this.updateMarkerFillColor(matchingLayer);
-      }
+      // if (matchingLayer.options.icon) {
+      //   this.updateVectorMarkerColor(matchingLayer);
+      // } else {
+      //   this.updateMarkerFillColor(matchingLayer);
+      // }
     },
 
     updateMarkerFillColor(marker) {
       // console.log('updateMarkerFillColor, marker:', marker);
       // get next fill color
-      const { featureId, tableId } = marker.options.data;
-      const nextFillColor = this.fillColorForCircleMarker(featureId, tableId);
+      const featureId = marker.options.data.BRT_ID;
+      const nextFillColor = this.fillColorForCircleMarker(featureId);
 
       // highlight. we're doing this here (non-reactively) because binding the
       // fill color property was not performing well enough.
@@ -408,17 +423,21 @@ export default {
       marker.setStyle(nextStyle);
     },
 
-    fillColorForCircleMarker(markerId, tableId) {
+    fillColorForCircleMarker(markerId) {
+      // console.log('markerId: ', markerId);
       // get map overlay style and hover style for table
-      const tableConfig = this.getConfigForTable(tableId);
+      // const tableConfig = this.getConfigForTable(tableId);
+
+      console.log(this)
+
+
       const mapOverlay = tableConfig.options.mapOverlay;
       const { style, hoverStyle } = mapOverlay;
 
       // compare id to active feature id
       const activeFeature = this.activeFeature;
       const useHoverStyle = (
-        markerId === activeFeature.featureId &&
-        tableId === activeFeature.tableId
+        markerId === activeFeature.featureId
       );
       const curStyle = useHoverStyle ? hoverStyle : style;
 
@@ -428,8 +447,8 @@ export default {
     updateVectorMarkerColor(marker) {
       console.log('updateMarkerFillColor, marker:', marker);
       // get next fill color
-      const { featureId, tableId } = marker.options.data;
-      const nextStyle = this.styleForMarker(featureId, tableId);
+      const { featureId } = marker.options.data;
+      const nextStyle = this.styleForMarker(featureId );
       console.log('nextStyle:', nextStyle);
       let icon;
       if (marker.options.icon) {
