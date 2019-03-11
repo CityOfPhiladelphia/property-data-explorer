@@ -388,33 +388,35 @@ export default {
         featureId = result[0].parcel_number
       }
 
-
-      console.log("featureId: ", featureId);
+      let layerFeatureId;
       const matchingLayer = layers.filter(layer => {
         const options = layer.options || {};
         console.log("options: ", options)
         const data = options.data;
         console.log("data: ", data)
         if (!data) return;
-        const layerFeatureId = data.BRT_ID;
+        layerFeatureId = data.BRT_ID;
         console.log("layerFeatureId: ", layerFeatureId)
         // const layerTableId = data.tableId;
         // return layerFeatureId === featureId && layerTableId === tableId;
-        return layerFeatureId === featureId;
+        return (layerFeatureId === featureId), layerFeatureId ;
       })[0];
       console.log('identifyMarker, matchingLayer:', matchingLayer);
-      // if (matchingLayer.options.icon) {
-      //   this.updateVectorMarkerColor(matchingLayer);
-      // } else {
-      //   this.updateMarkerFillColor(matchingLayer);
-      // }
+      if (matchingLayer.options.icon) {
+        this.updateVectorMarkerColor(matchingLayer);
+      } else {
+        console.log("featureId: ", featureId);
+        this.updateMarkerFillColor(matchingLayer, layerFeatureId);
+      }
     },
 
-    updateMarkerFillColor(marker) {
-      // console.log('updateMarkerFillColor, marker:', marker);
+    updateMarkerFillColor(marker, layerFeatureId) {
+      console.log('updateMarkerFillColor, marker:', marker);
       // get next fill color
       const featureId = marker.options.data.BRT_ID;
-      const nextFillColor = this.fillColorForCircleMarker(featureId);
+      const nextFillColor = this.fillColorForCircleMarker(featureId, layerFeatureId);
+
+      console.log('nextFillColor:', nextFillColor);
 
       // highlight. we're doing this here (non-reactively) because binding the
       // fill color property was not performing well enough.
@@ -423,24 +425,22 @@ export default {
       marker.setStyle(nextStyle);
     },
 
-    fillColorForCircleMarker(markerId) {
-      // console.log('markerId: ', markerId);
+    fillColorForCircleMarker(markerId, layerFeatureId) {
+      console.log('markerId: ', markerId);
       // get map overlay style and hover style for table
       // const tableConfig = this.getConfigForTable(tableId);
 
-      console.log(this)
-
-
-      const mapOverlay = tableConfig.options.mapOverlay;
+      const mapOverlay = this.$config.mapOverlay;
+      console.log("mapOverlay: ", mapOverlay)
       const { style, hoverStyle } = mapOverlay;
 
       // compare id to active feature id
       const activeFeature = this.activeFeature;
+      console.log('markerId: ', markerId, 'layerFeatureId: ', layerFeatureId)
       const useHoverStyle = (
-        markerId === activeFeature.featureId
+        markerId === layerFeatureId
       );
       const curStyle = useHoverStyle ? hoverStyle : style;
-
       return curStyle.fillColor;
     },
 
@@ -459,7 +459,6 @@ export default {
         })
       }
       console.log('updateMarkerFillColor icon created:', icon);
-
       // highlight. we're doing this here (non-reactively) because binding the
       // fill color property was not performing well enough.
       marker.setIcon(icon);
