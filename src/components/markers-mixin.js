@@ -3,17 +3,51 @@ import { divIcon } from 'leaflet';
 import { Marker } from 'leaflet';
 
 export default {
+
   watch: {
     activeFeature(nextActiveFeature, prevActiveFeature) {
       console.log('WATCH active feature', prevActiveFeature, '=>', nextActiveFeature);
+
       const layerMap = this.$store.state.map.map._layers;
       const layers = Object.values(layerMap);
+
+      let updateFeaturePrev,
+          updateFeatureNext,
+          featureIdPrev,
+          featureIdNext,
+          matchingLayerNext,
+          matchingLayerPrev;
+
       if (prevActiveFeature && prevActiveFeature.featureId) {
-        this.identifyMarker(prevActiveFeature, layers);
+        updateFeaturePrev = prevActiveFeature;
+        console.log("prevActiveFeature running", prevActiveFeature)
+        featureIdPrev = this.identifyMarker(prevActiveFeature);
+        matchingLayerPrev = layers.filter(layer => {
+          const options = layer.options || {};
+          const data = options.data;
+          if (!data) return;
+          const layerFeatureId = data.BRT_ID;
+          return layerFeatureId === featureIdPrev;
+        })[0];
+        this.updateMarkerFillColor(matchingLayerPrev);
       }
+
       if (nextActiveFeature && nextActiveFeature.featureId) {
-        this.identifyMarker(nextActiveFeature, layers);
+        updateFeatureNext = nextActiveFeature;
+        console.log("nextActiveFeature running", nextActiveFeature)
+        featureIdNext = this.identifyMarker(updateFeatureNext);
+        matchingLayerNext = layers.filter(layer => {
+          const options = layer.options || {};
+          const data = options.data;
+          if (!data) return;
+          const layerFeatureId = data.BRT_ID;
+          return layerFeatureId === featureIdNext;
+        })[0];
+        console.log("matchingLayerNext: ", matchingLayerNext)
+        this.updateMarkerFillColor(matchingLayerNext);
+        this.bringMarkerToFront(matchingLayerNext);
       }
+
     },
   },
   computed: {
@@ -75,7 +109,7 @@ export default {
           features = [features]
         }
       }
-      console.log("features: ", features)
+      // console.log("features: ", features)
       return features;
     },
 
@@ -294,6 +328,27 @@ export default {
     },
   },
   methods: {
+    identifyMarker(feature) {
+      let featureId;
+      if (this.$store.state.geocode.status === "success") {
+        featureId = this.$store.state.geocode.data._featureId = feature.featureId ?
+        this.$store.state.geocode.data.properties.opa_account_num : null
+      } else if (this.$store.state.ownerSearch.status === "success" ) {
+        let result = this.$store.state.ownerSearch.data.filter(object => {
+          return object._featureId === feature.featureId
+        });
+        featureId = result[0].properties.opa_account_num
+      } else if (this.$store.state.shapeSearch.status === "success") {
+        let result = this.$store.state.shapeSearch.data.rows.filter(object => {
+          return object._featureId === feature.featureId
+        });
+        console.log(result)
+        featureId = result[0].parcel_number
+      } else {
+        featureId = null
+      }
+      return featureId
+    },
     getTableFromComps(comps, tableId) {
       const matchingComps = comps.filter(comp => {
         return (
@@ -369,54 +424,13 @@ export default {
         this.$store.commit('setActiveFeature', null);
       // }
     },
-    identifyMarker(feature, layers) {
-      console.log('identifyMarker is running, feature:', feature, "layers: ", layers);
-
-      let featureId
-
-      if (this.$store.state.geocode.status === "success"){
-        featureId = this.$store.state.geocode.data.properties.opa_account_num
-      } else if (this.$store.state.ownerSearch.status === "success") {
-        let result = this.$store.state.ownerSearch.data.filter(object => {
-          return object._featureId === feature.featureId
-        });
-        featureId = result[0].properties.opa_account_num
-      } else {
-        let result = this.$store.state.shapeSearch.data.rows.filter(object => {
-          return object._featureId === feature.featureId
-        });
-        featureId = result[0].parcel_number
-      }
-
-      let layerFeatureId;
-      const matchingLayer = layers.filter(layer => {
-        const options = layer.options || {};
-        console.log("options: ", options)
-        const data = options.data;
-        console.log("data: ", data)
-        if (!data) return;
-        layerFeatureId = data.BRT_ID;
-        console.log("layerFeatureId: ", layerFeatureId)
-        // const layerTableId = data.tableId;
-        // return layerFeatureId === featureId && layerTableId === tableId;
-        return (layerFeatureId === featureId), layerFeatureId ;
-      })[0];
-      console.log('identifyMarker, matchingLayer:', matchingLayer);
-      if (matchingLayer.options.icon) {
-        this.updateVectorMarkerColor(matchingLayer);
-      } else {
-        console.log("featureId: ", featureId);
-        this.updateMarkerFillColor(matchingLayer, layerFeatureId);
-      }
-    },
-
-    updateMarkerFillColor(marker, layerFeatureId) {
+    updateMarkerFillColor(marker) {
       console.log('updateMarkerFillColor, marker:', marker);
       // get next fill color
       const featureId = marker.options.data.BRT_ID;
-      const nextFillColor = this.fillColorForCircleMarker(featureId, layerFeatureId);
-
-      console.log('nextFillColor:', nextFillColor);
+      console.log("featureId: ", featureId)
+      console.log("activeFeature: ", this.$store.state.activeFeature)
+      const nextFillColor = this.fillColorForOverlayMarker(featureId);
 
       // highlight. we're doing this here (non-reactively) because binding the
       // fill color property was not performing well enough.
@@ -424,57 +438,15 @@ export default {
       nextStyle.fillColor = nextFillColor;
       marker.setStyle(nextStyle);
     },
-
-    fillColorForCircleMarker(markerId, layerFeatureId) {
-      console.log('markerId: ', markerId);
+    styleForMarker(markerId) {
       // get map overlay style and hover style for table
-      // const tableConfig = this.getConfigForTable(tableId);
-
       const mapOverlay = this.$config.mapOverlay;
-      console.log("mapOverlay: ", mapOverlay)
-      const { style, hoverStyle } = mapOverlay;
-
-      // compare id to active feature id
-      const activeFeature = this.activeFeature;
-      console.log('markerId: ', markerId, 'layerFeatureId: ', layerFeatureId)
-      const useHoverStyle = (
-        markerId === layerFeatureId
-      );
-      const curStyle = useHoverStyle ? hoverStyle : style;
-      return curStyle.fillColor;
-    },
-
-    updateVectorMarkerColor(marker) {
-      console.log('updateMarkerFillColor, marker:', marker);
-      // get next fill color
-      const { featureId } = marker.options.data;
-      const nextStyle = this.styleForMarker(featureId );
-      console.log('nextStyle:', nextStyle);
-      let icon;
-      if (marker.options.icon) {
-        icon = new divIcon({
-          html: '<i class="'+ nextStyle.prefix + ' fa-' + nextStyle.fa + ' fa-' + nextStyle.size + 'x" style="color: ' + nextStyle.fillColor + '"></i>',
-          iconSize: [20, 20],
-          className: 'myDivIcon'
-        })
-      }
-      console.log('updateMarkerFillColor icon created:', icon);
-      // highlight. we're doing this here (non-reactively) because binding the
-      // fill color property was not performing well enough.
-      marker.setIcon(icon);
-    },
-
-    styleForMarker(markerId, tableId) {
-      // get map overlay style and hover style for table
-      const tableConfig = this.getConfigForTable(tableId);
-      const mapOverlay = tableConfig.options.mapOverlay;
       const { style, hoverStyle } = mapOverlay;
 
       // compare id to active feature id
       const activeFeature = this.activeFeature;
       const useHoverStyle = (
-        markerId === activeFeature.featureId &&
-        tableId === activeFeature.tableId
+        markerId === activeFeature.featureId
       );
       const curStyle = useHoverStyle ? hoverStyle : style;
 

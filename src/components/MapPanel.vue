@@ -467,6 +467,23 @@
       },
     },
     methods: {
+      fillColorForOverlayMarker(markerId) {
+        // get map overlay style and hover style for table
+        console.log(markerId)
+        const mapOverlay = this.$config.mapOverlay;
+        const { style, hoverStyle } = mapOverlay;
+
+        // compare id to active feature id
+        const activeFeature = this.$store.state.activeFeature;
+        const useHoverStyle = (
+          markerId === activeFeature.featureId
+        );
+        console.log("markerId: ", markerId, "activeFeature.featureId", this.$store.state, "useHoverStyle: ", useHoverStyle  )
+        const curStyle = useHoverStyle ? hoverStyle : style;
+
+        return curStyle.fillColor;
+      },
+
       checkBoundsChanges() {
         let czts = this.activeTopicConfig.zoomToShape;
         if (!czts) {
