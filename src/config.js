@@ -58,9 +58,9 @@ let config = {
     marker: 'geojson',
     style: {
       // radius: 6,
-      fillColor: '#2176d2',
+      fillColor: 'blue',
       // fillColor: '#ff3f3f',
-      color: '#2176d2',
+      color: '#blue',
       weight: 2,
       opacity: 1,
       fillOpacity: 0.3
