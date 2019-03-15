@@ -83,6 +83,8 @@
 
       <!-- reactive geojson parcels -->
       <geojson v-for="geojsonFeature in geojsonParcels"
+               @l-mouseover="handleMarkerMouseover"
+               @l-mouseout="handleMarkerMouseout"
                :geojson="geojsonFeature"
                :fillColor="geojsonFeature.properties.fillColor"
                :color="geojsonFeature.properties.color"
@@ -467,18 +469,19 @@
       },
     },
     methods: {
-      fillColorForOverlayMarker(markerId) {
+      fillColorForOverlayMarker(markerId, activeFeature) {
         // get map overlay style and hover style for table
         console.log(markerId)
+        console.log(activeFeature)
         const mapOverlay = this.$config.mapOverlay;
         const { style, hoverStyle } = mapOverlay;
 
         // compare id to active feature id
-        const activeFeature = this.$store.state.activeFeature;
+        // console.log("this.identifyMarker(activeFeatureId): ", this.identifyMarker(activeFeature))
         const useHoverStyle = (
-          markerId === activeFeature.featureId
+          activeFeature.featureId ? markerId === this.identifyMarker(activeFeature) : null
         );
-        console.log("markerId: ", markerId, "activeFeature.featureId", this.$store.state, "useHoverStyle: ", useHoverStyle  )
+        console.log("markerId: ", markerId, "activeFeature.featureId", activeFeature, "useHoverStyle: ", useHoverStyle  )
         const curStyle = useHoverStyle ? hoverStyle : style;
 
         return curStyle.fillColor;

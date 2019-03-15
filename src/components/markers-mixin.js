@@ -20,7 +20,6 @@ export default {
 
       if (prevActiveFeature && prevActiveFeature.featureId) {
         updateFeaturePrev = prevActiveFeature;
-        console.log("prevActiveFeature running", prevActiveFeature)
         featureIdPrev = this.identifyMarker(prevActiveFeature);
         matchingLayerPrev = layers.filter(layer => {
           const options = layer.options || {};
@@ -34,7 +33,6 @@ export default {
 
       if (nextActiveFeature && nextActiveFeature.featureId) {
         updateFeatureNext = nextActiveFeature;
-        console.log("nextActiveFeature running", nextActiveFeature)
         featureIdNext = this.identifyMarker(updateFeatureNext);
         matchingLayerNext = layers.filter(layer => {
           const options = layer.options || {};
@@ -43,7 +41,6 @@ export default {
           const layerFeatureId = data.BRT_ID;
           return layerFeatureId === featureIdNext;
         })[0];
-        console.log("matchingLayerNext: ", matchingLayerNext)
         this.updateMarkerFillColor(matchingLayerNext);
         this.bringMarkerToFront(matchingLayerNext);
       }
@@ -329,25 +326,50 @@ export default {
   },
   methods: {
     identifyMarker(feature) {
+      console.log("identify marker starting: ", feature)
       let featureId;
       if (this.$store.state.geocode.status === "success") {
         featureId = this.$store.state.geocode.data._featureId = feature.featureId ?
         this.$store.state.geocode.data.properties.opa_account_num : null
       } else if (this.$store.state.ownerSearch.status === "success" ) {
-        let result = this.$store.state.ownerSearch.data.filter(object => {
+        let result = this.$store.state.ownerSearch.data.filter( function(object) {
           return object._featureId === feature.featureId
         });
+        console.log("result: ", result)
         featureId = result[0].properties.opa_account_num
       } else if (this.$store.state.shapeSearch.status === "success") {
-        let result = this.$store.state.shapeSearch.data.rows.filter(object => {
+        let result = this.$store.state.shapeSearch.data.rows.filter( function(object) {
           return object._featureId === feature.featureId
         });
-        console.log(result)
+        console.log("result: ", result)
         featureId = result[0].parcel_number
       } else {
         featureId = null
       }
       return featureId
+    },
+    identifyRow(featureId) {
+      console.log("identify Row is starting: ", featureId)
+      let rowId;
+      if (this.$store.state.geocode.status === "success") {
+        let opa_account_num = this.$store.state.geocode.data.properties.opa_account_num;
+        rowId = opa_account_num = featureId ? this.$store.state.geocode.data._featureId : null;
+      } else if (this.$store.state.ownerSearch.status === "success" ) {
+          let result = this.$store.state.ownerSearch.data.filter( function(object) {
+          return object.properties.opa_account_num === featureId
+        });
+        console.log(result)
+        rowId = result[0]._featureId
+      } else if (this.$store.state.shapeSearch.status === "success") {
+        let result = this.$store.state.shapeSearch.data.rows.filter( function(object){
+          return object.parcel_number === featureId
+        });
+        console.log(result)
+        rowId = result[0]._featureId
+      } else {
+        rowId = null
+      }
+      return rowId
     },
     getTableFromComps(comps, tableId) {
       const matchingComps = comps.filter(comp => {
@@ -401,19 +423,10 @@ export default {
         // console.log('handleMarkerMouseover actions are running');
         const { target } = e;
         console.log('target:', target);
-        // console.log('target:', target, 'featureId:', featureId, 'tableId:', tableId);
-        const { featureId, tableId } = target.options.data;
-        this.$store.commit('setActiveFeature', { featureId, tableId });
-      }
-    },
-    handleMarkerClick(e) {
-      // console.log('handleMarkerClick is starting');
-      if (this.isMobileOrTablet) {
-        // console.log('handleMarkerClick actions are running');
-        const { target } = e;
-        const { featureId, tableId } = target.options.data;
-        // console.log('target:', target, 'featureId:', featureId, 'tableId:', tableId);
-        this.$store.commit('setActiveFeature', { featureId, tableId });
+
+        const featureId  = this.identifyRow(target.options.data.BRT_ID);
+        console.log('featureId:', featureId);
+        this.$store.commit('setActiveFeature',  {featureId} );
       }
     },
     handleMarkerMouseout(e) {
@@ -430,7 +443,8 @@ export default {
       const featureId = marker.options.data.BRT_ID;
       console.log("featureId: ", featureId)
       console.log("activeFeature: ", this.$store.state.activeFeature)
-      const nextFillColor = this.fillColorForOverlayMarker(featureId);
+      const activeFeature = this.$store.state.activeFeature
+      const nextFillColor = this.fillColorForOverlayMarker(featureId, activeFeature);
 
       // highlight. we're doing this here (non-reactively) because binding the
       // fill color property was not performing well enough.
