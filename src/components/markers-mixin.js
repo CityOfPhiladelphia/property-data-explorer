@@ -92,21 +92,24 @@ export default {
       let features;
       if(this.pwdParcel){
         let props = {};
-        // console.log("this.pwdParcel: ", this.pwdParcel)
+        console.log("this.pwdParcel: ", this.pwdParcel)
         features = this.pwdParcel;
         props.color = 'blue';
         props.fillColor = 'blue';
         props.weight = 2;
         props.opacity = 1;
         props.fillOpacity = 0.3;
+        console.log("features.length:", features.length)
         if(features.length > 1) {
+          console.log("features:", features)
           features.forEach( feature => Object.assign(feature.properties, props));
         } else {
-          Object.assign(features.properties, props);
-          features = [features]
+          console.log("features:", features)
+          Object.assign(features[0].properties, props);
+          features = [features[0]]
         }
       }
-      // console.log("features: ", features)
+      console.log("features: ", features)
       return features;
     },
 
