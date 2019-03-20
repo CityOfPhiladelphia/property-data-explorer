@@ -150,7 +150,12 @@
           dataSources: ['opa_assessment'],
           mapOverlay: {},
           clickEnabled: true,
-          downloadButton: true,
+          export: {
+            formatButtons: {
+              csv: "Download CSV",
+              pdf: "Mailing Labels"
+            }
+          },
           expandDataDownload: true,
           expandedData: this.expandedData,
           fields: [
@@ -208,7 +213,12 @@
           dataSources: ['opa_assessment'],
           mapOverlay: {},
           clickEnabled: true,
-          downloadButton: true,
+          export: {
+            formatButtons: {
+              csv: "Download CSV",
+              pdf: "Mailing Labels"
+            }
+          },
           expandDataDownload: true,
           expandedData: this.expandedData,
           fields: [
@@ -264,9 +274,15 @@
           // dataSources: ['opa'],
           mapOverlay: {},
           clickEnabled: true,
-          downloadButton: true,
+          // downloadButton: true,
           expandDataDownload: true,
           expandedData: this.expandedData,
+          export: {
+            formatButtons: {
+              csv: "Download CSV",
+              pdf: "Mailing Labels"
+            }
+          },
           fields: [
             {
               label: 'Street Address',
@@ -427,15 +443,22 @@ th {
   z-index: 2;
 }
 
-.pvc-download-data-button {
+.pvc-download-data-button, .pvc-export-data-button {
   position: fixed;
+  clear:both;
   z-index: 999;
-  top: 55%;
+  top: 85px;
   right: 70px;
 }
 
+.pdf{
+  right: 225px;
+}
+
+
+
 @media screen and (max-width: 750px) {
-  .pvc-download-data-button {
+  .pvc-download-data-button, .pvc-export-data-button {
     visibility: hidden;
   }
 }

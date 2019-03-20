@@ -65,6 +65,20 @@
                           :interactive="featureLayer.interactive"
       />
 
+      <!-- reactive geojson parcels -->
+      <geojson v-for="geojsonFeature in geojsonParcels"
+      @l-mouseover="handleMarkerMouseover"
+      @l-mouseout="handleMarkerMouseout"
+      :geojson="geojsonFeature"
+      :fillColor="geojsonFeature.properties.fillColor"
+      :color="geojsonFeature.properties.color"
+      :weight="geojsonFeature.properties.weight"
+      :opacity="geojsonFeature.properties.opacity"
+      :fillOpacity="geojsonFeature.properties.fillOpacity"
+      :data="geojsonFeature.properties"
+      :key="geojsonFeature.properties.BRT_ID"
+      />
+
       <!-- vector markers -->
       <vector-marker v-for="(marker, index) in markersForAddress"
                      :latlng="marker.latlng"
@@ -81,19 +95,6 @@
                      :icon="marker.icon"
       />
 
-      <!-- reactive geojson parcels -->
-      <geojson v-for="geojsonFeature in geojsonParcels"
-               @l-mouseover="handleMarkerMouseover"
-               @l-mouseout="handleMarkerMouseout"
-               :geojson="geojsonFeature"
-               :fillColor="geojsonFeature.properties.fillColor"
-               :color="geojsonFeature.properties.color"
-               :weight="geojsonFeature.properties.weight"
-               :opacity="geojsonFeature.properties.opacity"
-               :fillOpacity="geojsonFeature.properties.fillOpacity"
-               :data="geojsonFeature.properties"
-               :key="geojsonFeature.properties.BRT_ID"
-       />
 
 
 
