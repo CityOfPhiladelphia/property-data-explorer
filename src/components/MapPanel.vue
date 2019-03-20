@@ -471,8 +471,6 @@
     methods: {
       fillColorForOverlayMarker(markerId, activeFeature) {
         // get map overlay style and hover style for table
-        console.log(markerId)
-        console.log(activeFeature)
         const mapOverlay = this.$config.mapOverlay;
         const { style, hoverStyle } = mapOverlay;
 
@@ -481,7 +479,6 @@
         const useHoverStyle = (
           activeFeature.featureId ? markerId === this.identifyMarker(activeFeature) : null
         );
-        console.log("markerId: ", markerId, "activeFeature.featureId", activeFeature, "useHoverStyle: ", useHoverStyle  )
         const curStyle = useHoverStyle ? hoverStyle : style;
 
         return curStyle.fillColor;

@@ -6,7 +6,7 @@ export default {
 
   watch: {
     activeFeature(nextActiveFeature, prevActiveFeature) {
-      console.log('WATCH active feature', prevActiveFeature, '=>', nextActiveFeature);
+      // console.log('WATCH active feature', prevActiveFeature, '=>', nextActiveFeature);
 
       const layerMap = this.$store.state.map.map._layers;
       const layers = Object.values(layerMap);
@@ -329,7 +329,7 @@ export default {
   },
   methods: {
     identifyMarker(feature) {
-      console.log("identify marker starting: ", feature)
+      // console.log("identify marker starting: ", feature)
       let featureId;
       if (this.$store.state.geocode.status === "success") {
         featureId = this.$store.state.geocode.data._featureId = feature.featureId ?
@@ -338,13 +338,11 @@ export default {
         let result = this.$store.state.ownerSearch.data.filter( function(object) {
           return object._featureId === feature.featureId
         });
-        console.log("result: ", result)
         featureId = result[0].properties.opa_account_num
       } else if (this.$store.state.shapeSearch.status === "success") {
         let result = this.$store.state.shapeSearch.data.rows.filter( function(object) {
           return object._featureId === feature.featureId
         });
-        console.log("result: ", result)
         featureId = result[0].parcel_number
       } else {
         featureId = null
@@ -352,7 +350,6 @@ export default {
       return featureId
     },
     identifyRow(featureId) {
-      console.log("identify Row is starting: ", featureId)
       let rowId;
       if (this.$store.state.geocode.status === "success") {
         let opa_account_num = this.$store.state.geocode.data.properties.opa_account_num;
@@ -361,13 +358,11 @@ export default {
           let result = this.$store.state.ownerSearch.data.filter( function(object) {
           return object.properties.opa_account_num === featureId
         });
-        console.log(result)
         rowId = result[0]._featureId
       } else if (this.$store.state.shapeSearch.status === "success") {
         let result = this.$store.state.shapeSearch.data.rows.filter( function(object){
           return object.parcel_number === featureId
         });
-        console.log(result)
         rowId = result[0]._featureId
       } else {
         rowId = null
@@ -421,19 +416,17 @@ export default {
       group.appendChild(el);
     },
     handleMarkerMouseover(e) {
-      console.log('handleMarkerMouseover is starting');
+      // console.log('handleMarkerMouseover is starting');
       if (!this.isMobileOrTablet) {
         // console.log('handleMarkerMouseover actions are running');
         const { target } = e;
-        console.log('target:', target);
-
+        // console.log('target:', target);
         const featureId  = this.identifyRow(target.options.data.BRT_ID);
-        console.log('featureId:', featureId);
         this.$store.commit('setActiveFeature',  {featureId} );
       }
     },
     handleMarkerMouseout(e) {
-      console.log('handleMarkerMouseout is starting');
+      // console.log('handleMarkerMouseout is starting');
       // if (!this.isMobileOrTablet) {
         // console.log('handleMarkerMouseout actions are running');
         const { target } = e;
@@ -441,11 +434,8 @@ export default {
       // }
     },
     updateMarkerFillColor(marker) {
-      console.log('updateMarkerFillColor, marker:', marker);
       // get next fill color
       const featureId = marker.options.data.BRT_ID;
-      console.log("featureId: ", featureId)
-      console.log("activeFeature: ", this.$store.state.activeFeature)
       const activeFeature = this.$store.state.activeFeature
       const nextFillColor = this.fillColorForOverlayMarker(featureId, activeFeature);
 
