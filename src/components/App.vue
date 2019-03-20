@@ -153,7 +153,7 @@
           export: {
             formatButtons: {
               csv: "Download CSV",
-              pdf: "Mailing Labels"
+              mailing: "Mailing Labels"
             }
           },
           expandDataDownload: true,
@@ -216,7 +216,7 @@
           export: {
             formatButtons: {
               csv: "Download CSV",
-              pdf: "Mailing Labels"
+              mailing: "Mailing Labels"
             }
           },
           expandDataDownload: true,
@@ -280,7 +280,7 @@
           export: {
             formatButtons: {
               csv: "Download CSV",
-              pdf: "Mailing Labels"
+              mailing: "Mailing Labels"
             }
           },
           fields: [
@@ -451,7 +451,7 @@ th {
   right: 70px;
 }
 
-.pdf{
+.mailing {
   right: 225px;
 }
 
