@@ -150,6 +150,8 @@
           dataSources: ['opa_assessment'],
           mapOverlay: {},
           clickEnabled: true,
+          expandDataDownload: true,
+          expandedData: this.expandedData,
           export: {
             formatButtons: {
               csv: "Download CSV",
