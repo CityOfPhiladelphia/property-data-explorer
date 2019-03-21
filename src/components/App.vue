@@ -151,6 +151,7 @@
           mapOverlay: {},
           clickEnabled: true,
           expandDataDownload: true,
+          mailingFields: this.mailingFields,
           expandedData: this.expandedData,
           export: {
             formatButtons: {
@@ -158,7 +159,6 @@
               mailing: "Mailing Labels"
             }
           },
-          expandDataDownload: true,
           expandedData: this.expandedData,
           fields: [
             {
@@ -222,6 +222,7 @@
             }
           },
           expandDataDownload: true,
+          mailingFields: this.mailingFields,
           expandedData: this.expandedData,
           fields: [
             {
@@ -278,6 +279,7 @@
           clickEnabled: true,
           // downloadButton: true,
           expandDataDownload: true,
+          mailingFields: this.mailingFields,
           expandedData: this.expandedData,
           export: {
             formatButtons: {
@@ -335,7 +337,7 @@
     },
     methods: {
       expandedData() {
-        const expandedData = {
+        return  {
           fields: [
             {
               label: 'Street Address',
@@ -345,8 +347,40 @@
             },
           ],
         };
-        console.log("expandedData is working");
-        return expandedData;
+      },
+      mailingFields(state, item) {
+        return  {
+          fields: [
+            {
+              label: 'Owner',
+              value: function(item){
+                let owners = item.owner_2.length > 1 ?
+                             titleCase(item.owner_1.trim()) + ", " + titleCase(item.owner_2.trim()):
+                             titleCase(item.owner_1.trim())
+
+                return owners
+              },
+            },
+            {
+              label: 'Street Address',
+              value: function(item) {
+                return titleCase(item.properties.opa_address)
+              },
+            },
+            {
+              label: 'Zip Code',
+              value: function(item) {
+                return titleCase(item.location)
+              },
+            },
+            {
+              label: 'Street Address',
+              value: function(state, item) {
+                return titleCase(item.location)
+              },
+            },
+          ],
+        };
       },
     }
   };
