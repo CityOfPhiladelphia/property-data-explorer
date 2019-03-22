@@ -151,6 +151,7 @@
           mapOverlay: {},
           clickEnabled: true,
           expandDataDownload: true,
+          mailingFields: this.mailingFields,
           expandedData: this.expandedData,
           export: {
             formatButtons: {
@@ -158,7 +159,6 @@
               mailing: "Mailing Labels"
             }
           },
-          expandDataDownload: true,
           expandedData: this.expandedData,
           fields: [
             {
@@ -200,7 +200,7 @@
             {
               label: 'Owner',
               value: function(state, item){
-                return item.properties.opa_owners.toString();
+                return item.properties.opa_owners.join(', ');
               },
               /* nullValue: 'no date available', */
             },
@@ -222,6 +222,7 @@
             }
           },
           expandDataDownload: true,
+          mailingFields: this.mailingFields,
           expandedData: this.expandedData,
           fields: [
             {
@@ -262,7 +263,7 @@
             {
               label: 'Owner',
               value: function(state, item){
-                return item.properties.opa_owners.toString();
+                return item.properties.opa_owners.join(', ');
               },
             },
           ],
@@ -278,6 +279,7 @@
           clickEnabled: true,
           // downloadButton: true,
           expandDataDownload: true,
+          mailingFields: this.mailingFields,
           expandedData: this.expandedData,
           export: {
             formatButtons: {
@@ -335,7 +337,7 @@
     },
     methods: {
       expandedData() {
-        const expandedData = {
+        return  {
           fields: [
             {
               label: 'Street Address',
@@ -345,8 +347,46 @@
             },
           ],
         };
-        console.log("expandedData is working");
-        return expandedData;
+      },
+      mailingFields(state, item, thisDef) {
+        const thisOptions = this.geocodeOptions;
+        const thisState = this.$store.state;
+        const valueOptions = this.$store.state.lastSearchMethod === "shape search" ? this.shapeOptions :
+                             this.$store.state.lastSearchMethod === "owner search" ? this.ownerOptions :
+                             this.geocodeOptions
+        return  {
+          fields: [
+            {
+              label: 'Street Address',
+              value: function(state, item) {
+                // return titleCase(item.location)
+                console.log("Options: ", valueOptions)
+                // return item.properties.opa_account_num
+              },
+            },
+            {
+              label: 'Street Address',
+              value: function(state, item) {
+                // return titleCase(item.location)
+                // return item.properties.opa_account_num
+              },
+            },
+            {
+              label: 'Zip Code',
+              value: function(state, item) {
+                // return titleCase(item.location)
+                // return item.properties.opa_account_num
+              },
+            },
+            {
+              label: 'Street Address',
+              value: function(state, item) {
+                // return titleCase(item.location)
+                // return item.properties.opa_account_num
+              },
+            },
+          ],
+        };
       },
     }
   };
