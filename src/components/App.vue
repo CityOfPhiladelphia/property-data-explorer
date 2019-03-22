@@ -163,7 +163,7 @@
           fields: [
             {
               label: 'Street Address',
-              value: function(state, item, controller) {
+              value: function(state, item) {
                 return titleCase(item.properties.opa_address)
                 // return '<a href=# onclick="'+test+'()">'+item.properties.street_address+' <i class="fa fa-external-link"></i></a>'
               },
@@ -349,41 +349,41 @@
         };
       },
       mailingFields(state, item, thisDef) {
-        const thisOptions = this.geocodeOptions;
-        const thisState = this.$store.state;
         const valueOptions = this.$store.state.lastSearchMethod === "shape search" ? this.shapeOptions :
                              this.$store.state.lastSearchMethod === "owner search" ? this.ownerOptions :
                              this.geocodeOptions
         return  {
           fields: [
             {
-              label: 'Street Address',
+              label: 'Owner',
               value: function(state, item) {
-                // return titleCase(item.location)
-                console.log("Options: ", valueOptions)
-                // return item.properties.opa_account_num
+                return valueOptions.fields.filter(item => item.label === 'Owner')[0].value(state, item)
               },
             },
             {
               label: 'Street Address',
               value: function(state, item) {
-                // return titleCase(item.location)
-                // return item.properties.opa_account_num
+                return valueOptions.fields.filter(item => item.label === 'Street Address')[0].value(state, item)
               },
             },
             {
               label: 'Zip Code',
               value: function(state, item) {
+                return item.properties ? item.properties.zip_code + "-" + item.properties.zip_4 :
+                                         item.zip_code.substring(0,5) + "-" + item.zip_code.substring(5,9)
+              }
                 // return titleCase(item.location)
                 // return item.properties.opa_account_num
-              },
+              // value: function(state, item) {
+                // return titleCase(item.location)
+                // return item.properties.opa_account_num
+              // },
             },
             {
-              label: 'Street Address',
-              value: function(state, item) {
-                // return titleCase(item.location)
-                // return item.properties.opa_account_num
-              },
+              label: 'City',
+              value: function() {
+                return 'Philadelphia, PA'
+              }
             },
           ],
         };
