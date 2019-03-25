@@ -200,7 +200,7 @@
             {
               label: 'Owner',
               value: function(state, item){
-                return item.properties.opa_owners.join(', ');
+                return titleCase(item.properties.opa_owners.join(', '));
               },
               /* nullValue: 'no date available', */
             },
@@ -263,7 +263,7 @@
             {
               label: 'Owner',
               value: function(state, item){
-                return item.properties.opa_owners.join(', ');
+                return titleCase(item.properties.opa_owners.join(', '));
               },
             },
           ],
