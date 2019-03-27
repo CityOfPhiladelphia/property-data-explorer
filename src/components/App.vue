@@ -105,7 +105,6 @@
         this.$controller.activeFeatureChange();
       },
       '$store.state.ownerSearch.status': function() {
-        console.log(this.$store.state.ownerSearch.status)
         if(this.$store.state.ownerSearch.status === 'success') {
           this.$controller.geocodeOwnerSearch()
         }
@@ -357,7 +356,15 @@
             {
               label: 'Owner',
               value: function(state, item) {
-                return valueOptions.fields.filter(item => item.label === 'Owner')[0].value(state, item)
+                let owner;
+                state.lastSearchMethod === "shape search" ?
+                                                  owner = item.owner_2.length > 1 ?
+                                                          titleCase(item.owner_1.trim()) + "\n" + titleCase(item.owner_2.trim()):
+                                                          titleCase(item.owner_1.trim()) :
+                state.lastSearchMethod === "owner search" ?
+                                                  owner = item.properties.opa_owners.map( a => titleCase(a)).join('\n') :
+                                                  owner = titleCase(item.properties.opa_owners.join(' \n '))
+                return owner
               },
             },
             {
@@ -369,8 +376,8 @@
             {
               label: 'Zip Code',
               value: function(state, item) {
-                return item.properties ? item.properties.zip_code + "-" + item.properties.zip_4 :
-                                         item.zip_code.substring(0,5) + "-" + item.zip_code.substring(5,9)
+                let zip = item.properties ? item.properties.zip_code : item.zip_code.substring(0,5)
+                return 'Philadelphia, PA' + zip
               }
                 // return titleCase(item.location)
                 // return item.properties.opa_account_num
@@ -378,12 +385,6 @@
                 // return titleCase(item.location)
                 // return item.properties.opa_account_num
               // },
-            },
-            {
-              label: 'City',
-              value: function() {
-                return 'Philadelphia, PA'
-              }
             },
           ],
         };
