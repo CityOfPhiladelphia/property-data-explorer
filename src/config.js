@@ -43,10 +43,18 @@ let config = {
       url: 'https://phl.carto.com/api/v2/sql',
         options: {
           params: {
-              q: function(feature){ return "select * from assessments where parcel_number = '" + feature + "'"},
+            q: function(input){
+              console.log(input)
+              if (typeof input === 'string') {
+                return "select * from assessments where parcel_number IN('"+ input +"')"
+              } else {
+                var inputEncoded = "'" + input.join("','") + "'";
+                return "select * from assessments where parcel_number IN("+ inputEncoded +")"
+              }
+            }
           },
           success: function(data) {
-            return data;
+            return data.rows;
           }
         }
     },
