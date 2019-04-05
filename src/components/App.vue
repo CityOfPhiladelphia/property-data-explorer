@@ -64,6 +64,7 @@
   import moment from 'moment';
   import PropertyCardModal from './PropertyCardModal.vue';
   import transforms from '../general/transforms';
+  import helpers from '../util/helpers';
   const titleCase = transforms.titleCase.transform;
   const VerticalTable = philaVueComps.VerticalTable;
   const HorizontalTable = philaVueComps.HorizontalTable;
@@ -151,6 +152,7 @@
           clickEnabled: true,
           expandDataDownload: true,
           mailingFields: this.mailingFields,
+          tableSort: this.tableSort,
           expandedData: this.expandedData,
           export: {
             formatButtons: {
@@ -158,7 +160,6 @@
               mailing: "Mailing Labels"
             }
           },
-          expandedData: this.expandedData,
           fields: [
             {
               label: 'Street Address',
@@ -222,6 +223,7 @@
           },
           expandDataDownload: true,
           mailingFields: this.mailingFields,
+          tableSort: this.tableSort,
           expandedData: this.expandedData,
           fields: [
             {
@@ -279,6 +281,7 @@
           // downloadButton: true,
           expandDataDownload: true,
           mailingFields: this.mailingFields,
+          tableSort: this.tableSort,
           expandedData: this.expandedData,
           export: {
             formatButtons: {
@@ -335,17 +338,213 @@
       },
     },
     methods: {
+      tableSort(fields){
+
+        Array.prototype.move = function (from, to) {
+          this.splice(to, 0, this.splice(from, 1)[0]);
+        };
+
+        // list needs to be in reverse order
+        let tableReorder = [
+          "Zoning Description",
+          "Zoning Code",
+          "Building Description",
+          "Building Condition",
+          "Land Area (SqFt)",
+          "Improvement Area (SqFt)",
+          "Homestead Exemption",
+          "Price of Last Sale",
+          "Date of Last Sale",
+          "Market Value",
+          "State",
+          "City",
+          "Zip Code",
+          "Street Address",
+          "Owner",
+          "OPA Account #",
+        ];
+
+        for ( let sortLabel of tableReorder) {
+          fields.move(fields.map(e => e.label).indexOf(sortLabel), 0)
+        }
+
+        return fields
+
+      },
       expandedData() {
-        return  {
-          fields: [
+        let modalComputed = PropertyCardModal.computed
+
+        // console.log(modalComputed)
+        return [
             {
-              label: 'Street Address',
+              label: 'Zip Code',
               value: function(state, item) {
-                return titleCase(item.location)
+                let zip = item.properties ? item.properties.zip_code : item.zip_code.substring(0,5)
+                return zip
+              }
+            },
+            {
+              label: 'City',
+              value: function() {return "Philadelphia"}
+            },
+            {
+              label: 'State',
+              value: function() {return "PA"}
+            },
+            {
+              label: 'Improvement Area (SqFt)',
+              value: function(state, item) {
+                if (state.geocode.status === "success"){
+                  let obj_id = item.properties.opa_account_num;
+                  return state.sources.opa_public.targets[obj_id].data.total_livable_area
+                        .toLocaleString('en-US', {
+                          minimumFractionDigits: 0
+                        })
+                } else if (state.ownerSearch.status === "success") {
+                  let obj_id = item.properties.opa_account_num;
+                  return state.sources.opa_public.targets[obj_id].data.total_livable_area
+                        .toLocaleString('en-US', {
+                          minimumFractionDigits: 0
+                        })
+                } else {
+                  let obj_id = item.parcel_number;
+                  return state.sources.opa_public.targets[obj_id].data.total_livable_area
+                        .toLocaleString('en-US', {
+                          minimumFractionDigits: 0
+                        })
+                }
+              }
+            },
+            {
+              label: 'Land Area (SqFt)',
+              value: function(state, item) {
+                if (state.geocode.status === "success"){
+                  let obj_id = item.properties.opa_account_num;
+                  return state.sources.opa_public.targets[obj_id].data.total_area
+                        .toLocaleString('en-US', {
+                          minimumFractionDigits: 0
+                        })
+                } else if (state.ownerSearch.status === "success") {
+                  let obj_id = item.properties.opa_account_num;
+                  return state.sources.opa_public.targets[obj_id].data.total_area
+                        .toLocaleString('en-US', {
+                          minimumFractionDigits: 0
+                        })
+                } else {
+                  let obj_id = item.parcel_number;
+                  return state.sources.opa_public.targets[obj_id].data.total_area
+                        .toLocaleString('en-US', {
+                          minimumFractionDigits: 0
+                        })
+                }
               },
             },
-          ],
-        };
+            {
+              label: 'Building Condition',
+              value: function(state, item) {
+                  const cond_code = function(exterior) {
+                    const condition = exterior  == 0 ? 'Not Applicable' :
+                                      exterior  == 2 ? 'Newer Construction / Rehabbed' :
+                                      exterior  == 3 ? 'Above Average' :
+                                      exterior  == 4 ? 'Average' :
+                                      exterior  == 5 ? 'Below Average' :
+                                      exterior  == 6 ? 'Vacant' :
+                                      exterior  == 7 ? 'Sealed / Structurally Compromised, Open to the Weather' :
+                                      'Not available';
+                    return condition
+                  }
+                if (state.geocode.status === "success"){
+                  let obj_id = item.properties.opa_account_num;
+                  return cond_code(state.sources.opa_public.targets[obj_id].data.exterior_condition)
+                } else if (state.ownerSearch.status === "success") {
+                  let obj_id = item.properties.opa_account_num;
+                  return cond_code(state.sources.opa_public.targets[obj_id].data.exterior_condition)
+                } else {
+                  let obj_id = item.parcel_number;
+                  return cond_code(state.sources.opa_public.targets[obj_id].data.exterior_condition)
+                }
+              },
+            },
+            {
+              label: 'Building Description',
+              value: function(state, item) {
+                if (state.geocode.status === "success"){
+                  let obj_id = item.properties.opa_account_num;
+                  return state.sources.opa_public.targets[obj_id].data.building_code_description
+                } else if (state.ownerSearch.status === "success") {
+                  let obj_id = item.properties.opa_account_num
+                  return state.sources.opa_public.targets[obj_id].data.building_code_description
+                } else {
+                  let obj_id = item.parcel_number
+                  return state.sources.opa_public.targets[obj_id].data.building_code_description
+                }
+              },
+            },
+            {
+              label: 'Homestead Exemption',
+              value: function(state, item) {
+                if (state.geocode.status === "success"){
+                  let obj_id = item.properties.opa_account_num;
+                  return state.sources.opa_public.targets[obj_id].data.homestead_exemption
+                        .toLocaleString('en-US', {
+                          style: "currency",
+                          currency:"USD",
+                          minimumFractionDigits: 0
+                        })
+                } else if (state.ownerSearch.status === "success") {
+                  let obj_id = item.properties.opa_account_num
+                  return state.sources.opa_public.targets[obj_id].data.homestead_exemption
+                        .toLocaleString('en-US', {
+                          style: "currency",
+                          currency:"USD",
+                          minimumFractionDigits: 0
+                        })
+
+                } else {
+                  let obj_id = item.parcel_number
+                  return state.sources.opa_public.targets[obj_id].data.homestead_exemption
+                        .toLocaleString('en-US', {
+                          style: "currency",
+                          currency:"USD",
+                          minimumFractionDigits: 0
+                        })
+                }
+              },
+            },
+            {
+              label: 'OPA Account #',
+              value: function(state, item) {
+                if (state.geocode.status === "success"){
+                  return item.properties.opa_account_num;
+                } else if (state.ownerSearch.status === "success") {
+                  return item.properties.opa_account_num
+                } else {
+                  return item.parcel_number
+                }
+              },
+            },
+            {
+              label: 'Zoning Code',
+              value: function(state, item){
+                let id = [];
+                state.geocode.status === "success"?  id =  item.properties.opa_account_num :
+                state.ownerSearch.status === "success" ? id =  item.properties.opa_account_num :
+                id = item.parcel_number
+                return state.sources.opa_public.targets[id].data.zoning.trim()
+              },
+            },
+            {
+              label: 'Zoning Description',
+              value: function (state, item) {
+                let id = [];
+                state.geocode.status === "success"?  id =  item.properties.opa_account_num :
+                state.ownerSearch.status === "success" ? id =  item.properties.opa_account_num :
+                id = item.parcel_number
+                const code = state.sources.opa_public.targets[id].data.zoning ;
+                return helpers.ZONING_CODE_MAP[code.trim()];
+              },
+            },
+          ]
       },
       mailingFields(state, item, thisDef) {
         const valueOptions = this.$store.state.lastSearchMethod === "shape search" ? this.shapeOptions :
