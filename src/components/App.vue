@@ -77,6 +77,11 @@
   const CollectionSummary = philaVueComps.CollectionSummary;
   const ExternalLink = philaVueComps.ExternalLink;
   const FullScreenTopicsToggleTabVertical = philaVueComps.FullScreenTopicsToggleTabVertical;
+  const formatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 0
+  })
 
   export default {
     components: {
@@ -164,6 +169,14 @@
           },
           customClass: {
             table: 'sortable',
+            th: function(field) {
+              console.log(field)
+              let classType = field === 'Price of Last Sale' ? 'sorttable_numeric':
+                              field === 'Market Value' ? 'sorttable_numeric':
+                              field === 'Date of Last Sale' ? 'sorttable_ddmmyyyy': ''
+              return classType
+
+            }
           },
           fields: [
             {
@@ -176,12 +189,7 @@
             {
               label: 'Market Value',
               value: function(state, item){
-                return state.sources.opa_assessment.targets[item.properties.opa_account_num].data.market_value
-                      .toLocaleString('en-US', {
-                          style: "currency",
-                          currency:"USD",
-                          minimumFractionDigits: 0
-                      });
+                return formatter.format(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.market_value)
               },
             },
             {
@@ -194,12 +202,7 @@
             {
               label: 'Price of Last Sale',
               value: function(state, item) {
-                return state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_price
-                      .toLocaleString('en-US',{
-                            style: "currency",
-                            currency:"USD",
-                            minimumFractionDigits: 0
-                      });
+                return formatter.format(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_price)
               },
             },
             {
@@ -232,6 +235,14 @@
           expandedData: this.expandedData,
           customClass: {
             table: 'sortable',
+            th: function(field) {
+              console.log(field)
+              let classType = field === 'Price of Last Sale' ? 'sorttable_numeric':
+                              field === 'Market Value' ? 'sorttable_numeric':
+                              field === 'Date of Last Sale' ? 'sorttable_ddmmyyyy': ''
+              return classType
+
+            }
           },
           fields: [
             {
@@ -243,12 +254,7 @@
             {
               label: 'Market Value',
               value: function(state, item){
-                return state.sources.opa_assessment.targets[item.properties.opa_account_num.toString()].data.market_value
-                      .toLocaleString('en-US',{
-                        style: "currency",
-                        currency:"USD",
-                        minimumFractionDigits: 0
-                      });
+                return formatter.format(state.sources.opa_assessment.targets[item.properties.opa_account_num.toString()].data.market_value)
               },
             },
             {
@@ -261,12 +267,7 @@
             {
               label: 'Price of Last Sale',
               value: function(state, item) {
-                return state.sources.opa_assessment.targets[item.properties.opa_account_num.toString()].data.sale_price
-                      .toLocaleString('en-US',{
-                        style: "currency",
-                        currency:"USD",
-                        minimumFractionDigits: 0
-                      });
+                return formatter.format(state.sources.opa_assessment.targets[item.properties.opa_account_num.toString()].data.sale_price)
               },
             },
             {
@@ -299,6 +300,14 @@
           },
           customClass: {
             table: 'sortable',
+            th: function(field) {
+              console.log(field)
+              let classType = field === 'Price of Last Sale' ? 'sorttable_numeric':
+                              field === 'Market Value' ? 'sorttable_numeric':
+
+              return classType
+
+            }
           },
           fields: [
             {
@@ -310,11 +319,7 @@
             {
               label: 'Market Value',
               value: function(state, item){
-                return item.market_value.toLocaleString('en-US',{
-                      style: "currency",
-                      currency:"USD",
-                      minimumFractionDigits: 0
-                });
+                return formatter.format(item.market_value)
               },
             },
             {
@@ -326,11 +331,7 @@
             {
               label: 'Price of Last Sale',
               value: function(state, item) {
-                return item.sale_price.toLocaleString('en-US',{
-                      style: "currency",
-                      currency:"USD",
-                      minimumFractionDigits: 0
-                });
+                return formatter.format(item.sale_price)
               },
             },
             {
