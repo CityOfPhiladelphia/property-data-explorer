@@ -58,6 +58,8 @@
 </template>
 
 <script>
+
+  require("sorttable")
   import axios from 'axios';
   import MapPanel from './MapPanel.vue';
   import * as philaVueComps from '@cityofphiladelphia/phila-vue-comps';
@@ -160,6 +162,9 @@
               mailing: "Mailing Labels"
             }
           },
+          customClass: {
+            table: 'sortable',
+          },
           fields: [
             {
               label: 'Street Address',
@@ -225,6 +230,9 @@
           mailingFields: this.mailingFields,
           tableSort: this.tableSort,
           expandedData: this.expandedData,
+          customClass: {
+            table: 'sortable',
+          },
           fields: [
             {
               label: 'Street Address',
@@ -288,6 +296,9 @@
               csv: "Download CSV",
               mailing: "Mailing Labels"
             }
+          },
+          customClass: {
+            table: 'sortable',
           },
           fields: [
             {
