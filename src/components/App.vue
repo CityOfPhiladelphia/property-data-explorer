@@ -170,7 +170,6 @@
           customClass: {
             table: 'sortable',
             th: function(field) {
-              console.log(field)
               let classType = field === 'Price of Last Sale' ? 'sorttable_numeric':
                               field === 'Market Value' ? 'sorttable_numeric':
                               field === 'Date of Last Sale' ? 'sorttable_ddmm': ''
