@@ -58,6 +58,23 @@ let config = {
           }
         }
     },
+  activeSearch2: {
+      type: 'http-get',
+      url: 'https://phl.carto.com/api/v2/sql',
+        options: {
+          params: {
+            q: function(input){
+              console.log(input)
+              if (typeof input === 'string') {
+                return "select * from RTT_SUMMARY where opa_account_num = "+ input +" AND document_type LIKE ('%DEED%')"
+              }
+            }
+          },
+          success: function(data) {
+            return data.rows;
+          }
+        }
+    },
   pictometry: {
     enabled: true,
   },
