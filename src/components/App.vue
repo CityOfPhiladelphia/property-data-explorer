@@ -173,7 +173,7 @@
               console.log(field)
               let classType = field === 'Price of Last Sale' ? 'sorttable_numeric':
                               field === 'Market Value' ? 'sorttable_numeric':
-                              field === 'Date of Last Sale' ? 'sorttable_ddmmyyyy': ''
+                              field === 'Date of Last Sale' ? 'sorttable_ddmm': ''
               return classType
 
             }
@@ -198,6 +198,9 @@
                 return moment(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date)
                       .format('MM/DD/YYYY')
               },
+              customkey: function(state, item) {
+                return Date.parse(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date)
+              }
             },
             {
               label: 'Price of Last Sale',
@@ -263,6 +266,9 @@
                 return moment(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date.toString())
                       .format('MM/DD/YYYY')
               },
+              customkey: function(state, item) {
+                return Date.parse(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date.toString())
+              }
             },
             {
               label: 'Price of Last Sale',
@@ -303,7 +309,7 @@
             th: function(field) {
               console.log(field)
               let classType = field === 'Price of Last Sale' ? 'sorttable_numeric':
-                              field === 'Market Value' ? 'sorttable_numeric':
+                              field === 'Market Value' ? 'sorttable_numeric': ''
 
               return classType
 
@@ -327,6 +333,9 @@
               value: function(state, item) {
                 return moment(item.sale_date).format('MM/DD/YYYY')
               },
+              customkey: function(state, item) {
+                return Date.parse(item.sale_date)
+              }
             },
             {
               label: 'Price of Last Sale',
