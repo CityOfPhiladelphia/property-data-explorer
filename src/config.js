@@ -39,12 +39,12 @@ let config = {
     },
   },
   activeSearch: {
+    assessmentHistory: {
       type: 'http-get',
       url: 'https://phl.carto.com/api/v2/sql',
         options: {
           params: {
             q: function(input){
-              console.log(input)
               if (typeof input === 'string') {
                 return "select * from assessments where parcel_number IN('"+ input +"')"
               } else {
@@ -58,23 +58,26 @@ let config = {
           }
         }
     },
-  activeSearch2: {
+    salesHistory: {
       type: 'http-get',
       url: 'https://phl.carto.com/api/v2/sql',
-        options: {
-          params: {
-            q: function(input){
-              console.log(input)
-              if (typeof input === 'string') {
-                return "select * from RTT_SUMMARY where opa_account_num = "+ input +" AND document_type LIKE ('%DEED%')"
-              }
+      options: {
+        params: {
+          q: function(input){
+            if (typeof input === 'string') {
+              return "select * from RTT_SUMMARY where opa_account_num = '"+ input +"' AND document_type = 'DEED'"
+            } else {
+              var inputEncoded = "'" + input.join("','") + "'";
+              return "select * from RTT_SUMMARY where opa_account_num IN("+ inputEncoded +") AND document_type = 'DEED'"
             }
-          },
-          success: function(data) {
-            return data.rows;
           }
+        },
+        success: function(data) {
+          return data.rows;
         }
-    },
+      }
+    }
+  },
   pictometry: {
     enabled: true,
   },

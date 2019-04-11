@@ -13,6 +13,7 @@ Vue.use(Vuex);
 
 function createStore(config) {
 
+  const activeSearch = pvdStore.createActivesearch(config);
   const sources = pvdStore.createSources(config);
   const parcels = pvdStore.createParcels(config);
 
@@ -28,6 +29,7 @@ function createStore(config) {
     addressEntered: null,
     parcels,
     sources,
+    activeSearch,
     horizontalTables: {
       // table id => filtered rows
       filteredData: {},

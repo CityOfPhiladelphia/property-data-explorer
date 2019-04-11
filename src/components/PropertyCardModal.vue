@@ -75,10 +75,10 @@
       />
 
       <horizontal-table
-        v-if="this.$store.state.activeSearch.data"
+        v-if="this.$store.state.activeSearch.assessmentHistory.data"
         :slots="{
           title: 'Valuation History',
-          items: this.$store.state.activeSearch.data.rows
+          items: this.$store.state.activeSearch.assessmentHistory.data
         }"
         :options="this.activeOptions"
       />
@@ -87,6 +87,15 @@
         :slots="this.pDetailOptions"
         :options="this.pDetailOptions"
       />
+
+      <horizontal-table
+      v-if="this.$store.state.activeSearch.salesHistory.data"
+      :slots="{
+        title: 'Sales History',
+        items: this.$store.state.activeSearch.salesHistory.data
+        }"
+        :options="this.activeSalesOptions"
+        />
 
     </div>
   </section>
@@ -523,6 +532,57 @@ export default {
               return item.exempt_building
             },
             transforms: ['currency']
+          },
+        ],
+        sort: {
+          // this should return the val to sort on
+          getValue: function(item) {
+            return item.year;
+          },
+          // asc or desc
+          order: 'desc'
+        },
+      }
+      return options;
+    },
+    activeSalesOptions() {
+      const options = {
+        id: 'salesHistory',
+        tableid: 'ddd',
+        // dataSources: ['opa'],
+        mapOverlay: {},
+        mouseOverDisabled: true,
+        fields: [
+          {
+            label: 'Date',
+            value: function(state, item){
+              return moment(item.document_date).format('MM/DD/YYYY')
+            }
+          },
+          {
+            label: 'Adjusted Total',
+            value: function(state, item){
+              return item.adjusted_total_consideration
+            },
+            transforms: ['currency'],
+          },
+          {
+            label: 'Grantees',
+            value: function(state, item){
+              return item.grantees
+            },
+          },
+          {
+            label: 'Grantors',
+            value: function(state, item){
+              return item.grantors
+            },
+          },
+          {
+            label: 'Document Id',
+            value: function(state, item){
+              return item.document_id
+            },
           },
         ],
         sort: {
