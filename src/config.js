@@ -21,7 +21,7 @@ let config = {
       params: {
         q: function(input){
           var inputEncoded = Object.keys(input).map(k => "'" + input[k] + "'").join(",");
-          return "select * from opa_properties_public where parcel_number IN("+ inputEncoded +")"
+          return "select * from opa_properties_public where parcel_number IN("+ inputEncoded +") AND unit = ''"
         }
       },
     }
@@ -33,7 +33,7 @@ let config = {
     },
     params: {
       gatekeeperKey: '82fe014b6575b8c38b44235580bc8b11',
-      include_units: true,
+      include_units: false,
       opa_only: true,
       page: 1,
     },
