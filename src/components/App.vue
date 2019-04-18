@@ -125,7 +125,6 @@
       geocodeItems() {
         let data = [];
         if (this.geocode.data) {
-          console.log(this.geocode.data)
           data.push(this.geocode.data);
         }
         if (this.geocode.related) {
@@ -193,7 +192,6 @@
             {
               label: 'Market Value',
               value: function(state, item){
-                console.log(state, item)
                 if(state.sources.opa_assessment.targets[item.properties.opa_account_num]){
                   return formatter.format(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.market_value)
                 } else {
