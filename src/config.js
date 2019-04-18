@@ -15,7 +15,6 @@ let config = {
     popoutAble: true,
   },
   shapeSearch: {
-
     url: 'https://phl.carto.com/api/v2/sql',
     options: {
       params: {

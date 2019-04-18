@@ -125,6 +125,7 @@
       geocodeItems() {
         let data = [];
         if (this.geocode.data) {
+          console.log(this.geocode.data)
           data.push(this.geocode.data);
         }
         if (this.geocode.related) {
@@ -154,7 +155,7 @@
         const options = {
           id: 'ownerProperties',
           tableid: 'aaa',
-          dataSources: ['opa_assessment'],
+          // dataSources: ['opa_assessment'],
           mapOverlay: {},
           clickEnabled: true,
           expandDataDownload: true,
@@ -181,30 +182,51 @@
             {
               label: 'Street Address',
               value: function(state, item) {
-                return titleCase(item.properties.opa_address)
-                // return '<a href=# onclick="'+test+'()">'+item.properties.street_address+' <i class="fa fa-external-link"></i></a>'
+                if(item.properties.opa_address != "" ) {
+                  return titleCase(item.properties.opa_address)
+                  // return '<a href=# onclick="'+test+'()">'+item.properties.street_address+' <i class="fa fa-external-link"></i></a>'
+                } else {
+                  return titleCase(item.properties.street_address)
+                }
               },
             },
             {
               label: 'Market Value',
               value: function(state, item){
-                return formatter.format(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.market_value)
+                console.log(state, item)
+                if(state.sources.opa_assessment.targets[item.properties.opa_account_num]){
+                  return formatter.format(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.market_value)
+                } else {
+                  return ""
+                }
               },
             },
             {
               label: 'Date of Last Sale',
               value: function(state, item) {
-                return moment(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date)
-                      .format('MM/DD/YYYY')
+                if(state.sources.opa_assessment.targets[item.properties.opa_account_num]){
+                  return moment(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date)
+                  .format('MM/DD/YYYY')
+                } else {
+                  return ""
+                }
               },
               customkey: function(state, item) {
-                return Date.parse(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date)
+                if(state.sources.opa_assessment.targets[item.properties.opa_account_num]) {
+                  return Date.parse(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date)
+                } else {
+                  return 0
+                }
               }
             },
             {
               label: 'Price of Last Sale',
               value: function(state, item) {
-                return formatter.format(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_price)
+                if(state.sources.opa_assessment.targets[item.properties.opa_account_num]){
+                  return formatter.format(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_price)
+                } else {
+                  return ""
+                }
               },
             },
             {
@@ -222,7 +244,7 @@
         const options = {
           id: 'ownerProperties',
           tableid: 'bbb',
-          dataSources: ['opa_assessment'],
+          // dataSources: ['opa_assessment'],
           mapOverlay: {},
           clickEnabled: true,
           export: {
@@ -255,6 +277,7 @@
             {
               label: 'Market Value',
               value: function(state, item){
+                if(state.sources.opa_assessment.targets){}
                 return formatter.format(state.sources.opa_assessment.targets[item.properties.opa_account_num.toString()].data.market_value)
               },
             },
@@ -305,7 +328,6 @@
           customClass: {
             table: 'sortable',
             th: function(field) {
-              console.log(field)
               let classType = field === 'Price of Last Sale' ? 'sorttable_numeric':
                               field === 'Market Value' ? 'sorttable_numeric': ''
 
