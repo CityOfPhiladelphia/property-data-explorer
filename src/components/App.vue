@@ -364,7 +364,7 @@
             {
               label: 'Owner',
               value: function(state, item){
-                let owners = item.owner_2.length > 1 ?
+                let owners = item.owner_2 != null ?
                              titleCase(item.owner_1.trim()) + ", " + titleCase(item.owner_2.trim()):
                              titleCase(item.owner_1.trim())
 
@@ -596,7 +596,7 @@
               value: function(state, item) {
                 let owner;
                 state.lastSearchMethod === "shape search" ?
-                                                  owner = item.owner_2.length > 1 ?
+                                                  owner = item.owner_2 != null ?
                                                           titleCase(item.owner_1.trim()) + "\n" + titleCase(item.owner_2.trim()):
                                                           titleCase(item.owner_1.trim()) :
                 state.lastSearchMethod === "owner search" ?

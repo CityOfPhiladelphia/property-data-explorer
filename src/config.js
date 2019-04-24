@@ -20,7 +20,7 @@ let config = {
       params: {
         q: function(input){
           var inputEncoded = Object.keys(input).map(k => "'" + input[k] + "'").join(",");
-          return "select * from opa_properties_public where parcel_number IN("+ inputEncoded +") AND unit = ''"
+          return "select * from opa_properties_public_test where pwd_parcel_id IN("+ inputEncoded +")"
         }
       },
     }
@@ -122,6 +122,7 @@ let config = {
           if (state.lastSearchMethod === 'owner search') {
             return state.ownerSearch.data
           } else if (state.lastSearchMethod === 'shape search') {
+            // console.log(state.shapeSearch.data)
             return state.shapeSearch.data.rows
           } else {
             let opa = []
@@ -134,9 +135,9 @@ let config = {
         },
         getTargetId: function(target) {
           if(target.properties){
-            return target.properties.opa_account_num;
+            return target.properties.pwd_parcel_id;
           } else {
-            return target.parcel_number
+            return target.pwd_parcel_id
           }
         }
       },
