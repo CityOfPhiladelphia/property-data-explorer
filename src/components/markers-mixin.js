@@ -25,9 +25,10 @@ export default {
           const options = layer.options || {};
           const data = options.data;
           if (!data) return;
-          const layerFeatureId = data.BRT_ID;
+          const layerFeatureId = data.PARCELID.toString();
           return layerFeatureId === featureIdPrev;
         })[0];
+        console.log("matchingLayerPrev", matchingLayerPrev)
         this.updateMarkerFillColor(matchingLayerPrev);
       }
 
@@ -38,9 +39,11 @@ export default {
           const options = layer.options || {};
           const data = options.data;
           if (!data) return;
-          const layerFeatureId = data.BRT_ID;
+          const layerFeatureId = data.PARCELID.toString();
+          // console.log(layerFeatureId, featureIdNext)
           return layerFeatureId === featureIdNext;
         })[0];
+        // console.log(matchingLayerNext);
         this.updateMarkerFillColor(matchingLayerNext);
         this.bringMarkerToFront(matchingLayerNext);
       }
@@ -343,7 +346,7 @@ export default {
         let result = this.$store.state.shapeSearch.data.rows.filter( function(object) {
           return object._featureId === feature.featureId
         });
-        featureId = result[0].parcel_number
+        featureId = result[0].pwd_parcel_id
       } else {
         featureId = null
       }
@@ -360,9 +363,11 @@ export default {
         });
         rowId = result[0]._featureId
       } else if (this.$store.state.shapeSearch.status === "success") {
+        console.log(featureId, this.$store.state.shapeSearch.data.rows)
         let result = this.$store.state.shapeSearch.data.rows.filter( function(object){
-          return object.parcel_number === featureId
+          return object.pwd_parcel_id === featureId
         });
+        console.log(result)
         rowId = result[0]._featureId
       } else {
         rowId = null
@@ -420,8 +425,8 @@ export default {
       if (!this.isMobileOrTablet) {
         // console.log('handleMarkerMouseover actions are running');
         const { target } = e;
-        // console.log('target:', target);
-        const featureId  = this.identifyRow(target.options.data.BRT_ID);
+        // console.log('PARCEL ID target:', target);
+        const featureId  = this.identifyRow(target.options.data.PARCELID.toString());
         this.$store.commit('setActiveFeature',  {featureId} );
       }
     },
@@ -435,7 +440,7 @@ export default {
     },
     updateMarkerFillColor(marker) {
       // get next fill color
-      const featureId = marker.options.data.BRT_ID;
+      const featureId = marker.options.data.PARCELID.toString();
       const activeFeature = this.$store.state.activeFeature
       const nextFillColor = this.fillColorForOverlayMarker(featureId, activeFeature);
 

@@ -200,7 +200,7 @@ export default {
                 {
                   label: 'Code',
                   value: function(state, item){
-                    return item.data.zoning.trim()
+                    return item[0].zoning.trim()
                   },
                   transforms: [
                     'nowrap',
@@ -210,7 +210,7 @@ export default {
                 {
                   label: 'Description',
                   value: function (state, item) {
-                    const code = item.data.zoning ;
+                    const code = item[0].zoning ;
                     return helpers.ZONING_CODE_MAP[code.trim()];
                   },
                 },
@@ -225,16 +225,14 @@ export default {
                   let result = state.ownerSearch.data.filter(
                     object => { return object._featureId === state.activeModal.featureId }
                   );
-                  console.log(result)
                   id =  result[0].properties.opa_account_num
                 } else {
                   let result = state.shapeSearch.data.rows.filter(
                     object => { return object._featureId === state.activeModal.featureId }
                   );
-                  id = result[0].parcel_number
+                  id = result
                 }
-                const target = new Array(state.sources.opa_public.targets[id]) || {};
-                return target.map( item => Object.assign({}, { random: Math.random(), }, item) )
+                return new Array(Object.assign({}, id))
               },
             }
           }
@@ -632,10 +630,9 @@ export default {
                 let result = state.shapeSearch.data.rows.filter(object => {
                   return object._featureId === state.activeModal.featureId
                 });
-                let owners = result[0].owner_2.length > 1 ?
+                let owners = result[0].owner_2 != null ?
                              titleCase(result[0].owner_1) + ", " + titleCase(result[0].owner_2):
-                             titleCase(result[0].owner_1)
-
+                             result[0].owner_1 != null ? titleCase(result[0].owner_1) : ""
                 return owners
               }
             },

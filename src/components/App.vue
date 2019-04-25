@@ -343,32 +343,50 @@
             {
               label: 'Market Value',
               value: function(state, item){
-                return formatter.format(item.market_value)
+                if(item.market_value != "") {
+                  return formatter.format(item.market_value)
+                } else {
+                  return ""
+                }
               },
             },
             {
               label: 'Date of Last Sale',
               value: function(state, item) {
-                return moment(item.sale_date).format('MM/DD/YYYY')
+                if (item.sale_date != ""){
+                  return moment(item.sale_date).format('MM/DD/YYYY')
+                } else {
+                  return ""
+                }
               },
               customkey: function(state, item) {
-                return Date.parse(item.sale_date)
+                if (item.sale_date != "") {
+                  return Date.parse(item.sale_date)
+                } else {
+                  return 0
+                }
               }
             },
             {
               label: 'Price of Last Sale',
               value: function(state, item) {
-                return formatter.format(item.sale_price)
+                if (item.sale_price != "") {
+                  return formatter.format(item.sale_price)
+                } else {
+                  return ""
+                }
               },
             },
             {
               label: 'Owner',
               value: function(state, item){
-                let owners = item.owner_2 != null ?
-                             titleCase(item.owner_1.trim()) + ", " + titleCase(item.owner_2.trim()):
-                             titleCase(item.owner_1.trim())
+                if (item.owner_1 != "") {
+                  let owners = item.owner_2 != null ?
+                               titleCase(item.owner_1.trim()) + ", " + titleCase(item.owner_2.trim()):
+                               titleCase(item.owner_1.trim())
 
-                return owners
+                  return owners
+                } else { return "" }
               },
             },
           ],
