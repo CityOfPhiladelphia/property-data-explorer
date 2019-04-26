@@ -135,9 +135,11 @@ let config = {
         },
         getTargetId: function(target) {
           if(target.properties){
-            return target.properties.pwd_parcel_id;
+            // console.log("target.properties.opa_account_num: ", target.properties.opa_account_num)
+            return target.properties.opa_account_num;
           } else {
-            return target.pwd_parcel_id
+            // console.log("target.parcel_number: ", target.parcel_number)
+            return target.parcel_number
           }
         }
       },

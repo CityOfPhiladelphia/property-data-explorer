@@ -465,10 +465,12 @@
                         })
                 } else {
                   let obj_id = item.parcel_number;
-                  return state.sources.opa_public.targets[obj_id].data.total_livable_area
-                        .toLocaleString('en-US', {
-                          minimumFractionDigits: 0
-                        })
+                  if (obj_id != "") {
+                    return state.sources.opa_public.targets[obj_id].data.total_livable_area
+                    .toLocaleString('en-US', {
+                      minimumFractionDigits: 0
+                    })
+                  } else {return ""}
                 }
               }
             },
@@ -489,10 +491,12 @@
                         })
                 } else {
                   let obj_id = item.parcel_number;
-                  return state.sources.opa_public.targets[obj_id].data.total_area
-                        .toLocaleString('en-US', {
-                          minimumFractionDigits: 0
-                        })
+                  if (obj_id != "") {
+                    return state.sources.opa_public.targets[obj_id].data.total_area
+                    .toLocaleString('en-US', {
+                      minimumFractionDigits: 0
+                    })
+                  } else { return "" }
                 }
               },
             },
@@ -518,7 +522,9 @@
                   return cond_code(state.sources.opa_public.targets[obj_id].data.exterior_condition)
                 } else {
                   let obj_id = item.parcel_number;
-                  return cond_code(state.sources.opa_public.targets[obj_id].data.exterior_condition)
+                  if (obj_id != "") {
+                    return cond_code(state.sources.opa_public.targets[obj_id].data.exterior_condition)
+                  } else { return ""}
                 }
               },
             },
@@ -533,7 +539,9 @@
                   return state.sources.opa_public.targets[obj_id].data.building_code_description
                 } else {
                   let obj_id = item.parcel_number
-                  return state.sources.opa_public.targets[obj_id].data.building_code_description
+                  if (typeof obj_id != 'undefined' && obj_id != "") {
+                    return state.sources.opa_public.targets[obj_id].data.building_code_description
+                  } else {return ""}
                 }
               },
             },
@@ -559,12 +567,14 @@
 
                 } else {
                   let obj_id = item.parcel_number
-                  return state.sources.opa_public.targets[obj_id].data.homestead_exemption
-                        .toLocaleString('en-US', {
-                          style: "currency",
-                          currency:"USD",
-                          minimumFractionDigits: 0
-                        })
+                  if(typeof obj_id != 'undefined' && obj_id != "") {
+                    return state.sources.opa_public.targets[obj_id].data.homestead_exemption
+                    .toLocaleString('en-US', {
+                      style: "currency",
+                      currency:"USD",
+                      minimumFractionDigits: 0
+                    })
+                  } else { return ""}
                 }
               },
             },
@@ -587,7 +597,9 @@
                 state.geocode.status === "success"?  id =  item.properties.opa_account_num :
                 state.ownerSearch.status === "success" ? id =  item.properties.opa_account_num :
                 id = item.parcel_number
-                return state.sources.opa_public.targets[id].data.zoning.trim()
+                if (typeof id != 'undefined' && id != "") {
+                  return state.sources.opa_public.targets[id].data.zoning.trim()
+                } else {return ""}
               },
             },
             {
@@ -597,8 +609,10 @@
                 state.geocode.status === "success"?  id =  item.properties.opa_account_num :
                 state.ownerSearch.status === "success" ? id =  item.properties.opa_account_num :
                 id = item.parcel_number
-                const code = state.sources.opa_public.targets[id].data.zoning ;
-                return helpers.ZONING_CODE_MAP[code.trim()];
+                if (typeof id != 'undefined' && id != "") {
+                  const code = state.sources.opa_public.targets[id].data.zoning ;
+                  return helpers.ZONING_CODE_MAP[code.trim()];
+                } else { return "" }
               },
             },
           ]

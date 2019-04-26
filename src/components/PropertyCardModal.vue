@@ -243,6 +243,7 @@ export default {
     pDetailOptions() {
       const options = {
         id: 'modalProperties',
+        dataSources: ['opa_public'],
         title: "Property Details",
         fields: [
           {
@@ -291,6 +292,7 @@ export default {
                   return object._featureId === state.activeModal.featureId
                 });
                 let obj_id = result[0].parcel_number
+
                 return state.sources.opa_public.targets[obj_id].data.homestead_exemption
                       .toLocaleString('en-US', {
                         style: "currency",
@@ -870,7 +872,7 @@ header {
 
 .openmaps-modal {
   color: rgb(15, 77, 144);
-  height: 97%;
+  height: 92%;
   padding: 20px;
   overflow-y: auto;
   position: fixed;
