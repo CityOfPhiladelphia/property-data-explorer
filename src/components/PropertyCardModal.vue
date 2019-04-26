@@ -870,15 +870,16 @@ header {
 
 .openmaps-modal {
   color: rgb(15, 77, 144);
-  width: 97%;
-  height: 80%;
+  height: 97%;
   padding: 20px;
   overflow-y: auto;
-  position: absolute;
-  top: 70px;
-  left: 10px;
+  position: fixed;
   background: white;
   z-index:1000;
+  margin: auto;
+  max-width: 1200px;
+  left: 2%;
+  right: 2%;
 }
 
 .openmaps-modal-content{
@@ -888,10 +889,8 @@ header {
 }
 
 .openmaps-modal-close{
-  position: absolute;
-  top:15px;
-  left:15px;
-  background: white;
+  position: fixed;
+  background: transparent;
   height: 30px;
   width: 30px;
 }
