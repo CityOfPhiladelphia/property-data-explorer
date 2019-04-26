@@ -242,7 +242,7 @@
         const options = {
           id: 'ownerProperties',
           tableid: 'bbb',
-          // dataSources: ['opa_assessment'],
+          dataSources: ['opa_assessment'],
           mapOverlay: {},
           clickEnabled: true,
           export: {
