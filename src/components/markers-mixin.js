@@ -28,7 +28,7 @@ export default {
           const layerFeatureId = data.PARCELID.toString();
           return layerFeatureId === featureIdPrev;
         })[0];
-        console.log("matchingLayerPrev", matchingLayerPrev)
+        // console.log("matchingLayerPrev", matchingLayerPrev)
         this.updateMarkerFillColor(matchingLayerPrev);
       }
 
@@ -40,10 +40,8 @@ export default {
           const data = options.data;
           if (!data) return;
           const layerFeatureId = data.PARCELID.toString();
-          // console.log(layerFeatureId, featureIdNext)
           return layerFeatureId === featureIdNext;
         })[0];
-        // console.log(matchingLayerNext);
         this.updateMarkerFillColor(matchingLayerNext);
         this.bringMarkerToFront(matchingLayerNext);
       }
@@ -335,13 +333,14 @@ export default {
       // console.log("identify marker starting: ", feature)
       let featureId;
       if (this.$store.state.geocode.status === "success") {
+        // console.log(this.$store.state.geocode.data, feature)
         featureId = this.$store.state.geocode.data._featureId = feature.featureId ?
-        this.$store.state.geocode.data.properties.opa_account_num : null
+        this.$store.state.geocode.data.properties.pwd_parcel_id : null
       } else if (this.$store.state.ownerSearch.status === "success" ) {
         let result = this.$store.state.ownerSearch.data.filter( function(object) {
           return object._featureId === feature.featureId
         });
-        featureId = result[0].properties.opa_account_num
+        featureId = result[0].properties.pwd_parcel_id
       } else if (this.$store.state.shapeSearch.status === "success") {
         let result = this.$store.state.shapeSearch.data.rows.filter( function(object) {
           return object._featureId === feature.featureId
@@ -359,15 +358,13 @@ export default {
         rowId = opa_account_num = featureId ? this.$store.state.geocode.data._featureId : null;
       } else if (this.$store.state.ownerSearch.status === "success" ) {
           let result = this.$store.state.ownerSearch.data.filter( function(object) {
-          return object.properties.opa_account_num === featureId
+          return object.properties.pwd_parcel_id === featureId
         });
         rowId = result[0]._featureId
       } else if (this.$store.state.shapeSearch.status === "success") {
-        console.log(featureId, this.$store.state.shapeSearch.data.rows)
         let result = this.$store.state.shapeSearch.data.rows.filter( function(object){
           return object.pwd_parcel_id === featureId
         });
-        console.log(result)
         rowId = result[0]._featureId
       } else {
         rowId = null
@@ -440,6 +437,7 @@ export default {
     },
     updateMarkerFillColor(marker) {
       // get next fill color
+      console.log(marker)
       const featureId = marker.options.data.PARCELID.toString();
       const activeFeature = this.$store.state.activeFeature
       const nextFillColor = this.fillColorForOverlayMarker(featureId, activeFeature);
