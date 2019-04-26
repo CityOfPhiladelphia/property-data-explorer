@@ -188,6 +188,7 @@ export default {
     zoningBadgeOptions(){
       const options = {
         titleBackground: '#58c04d',
+        dataSources: ['opa_public'],
         components: [
           {
             type: 'horizontal-table',
@@ -200,7 +201,7 @@ export default {
                 {
                   label: 'Code',
                   value: function(state, item){
-                    return item[0].zoning.trim()
+                    return item.data.zoning.trim()
                   },
                   transforms: [
                     'nowrap',
@@ -210,7 +211,7 @@ export default {
                 {
                   label: 'Description',
                   value: function (state, item) {
-                    const code = item[0].zoning ;
+                    const code = item.data.zoning ;
                     return helpers.ZONING_CODE_MAP[code.trim()];
                   },
                 },
@@ -228,11 +229,13 @@ export default {
                   id =  result[0].properties.opa_account_num
                 } else {
                   let result = state.shapeSearch.data.rows.filter(
-                    object => { return object._featureId === state.activeModal.featureId }
+                    object => {
+                      return object._featureId === state.activeModal.featureId }
                   );
-                  id = result
+                  id = result[0].parcel_number
                 }
-                return new Array(Object.assign({}, id))
+                item = new Array(state.sources.opa_public.targets[id])
+                return item
               },
             }
           }
