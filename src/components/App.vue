@@ -230,7 +230,11 @@
             {
               label: 'Owner',
               value: function(state, item){
-                return titleCase(item.properties.opa_owners.join(', '));
+                if (item.properties.opa_owners != '') {
+                  return titleCase(item.properties.opa_owners.join(', '));
+                } else {
+                  return titleCase(item.properties.usps_bldgfirm);
+                }
               },
               /* nullValue: 'no date available', */
             },
@@ -298,8 +302,12 @@
             {
               label: 'Owner',
               value: function(state, item){
-                return titleCase(item.properties.opa_owners.join(', '));
-              },
+                if (item.properties.opa_owners != '') {
+                  return titleCase(item.properties.opa_owners.join(', '));
+                } else {
+                  return titleCase(item.properties.usps_bldgfirm);
+                }
+              }
             },
           ],
         }
@@ -386,7 +394,9 @@
                                titleCase(item.owner_1.trim())
 
                   return owners
-                } else { return "" }
+                } else {
+                  return ""
+                }
               },
             },
           ],
