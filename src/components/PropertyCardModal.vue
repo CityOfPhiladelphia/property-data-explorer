@@ -797,6 +797,7 @@ export default {
   }
   .openmaps-modal {
     overflow: visible !important;
+    position: absolute !important;
     top: 0 !important;
     padding: 0 !important;
     height: 100%;
