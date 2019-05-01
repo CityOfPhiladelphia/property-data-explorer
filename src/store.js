@@ -42,6 +42,9 @@ function createStore(config) {
     activeModal: {
       featureId: null,
     },
+    activeCondo: {
+      featureId: null,
+    },
     appData: {
       propertyBalance: 0,
     },
@@ -149,6 +152,12 @@ function createStore(config) {
         const { featureId } = payload || {};
         const nextActiveFeature = { featureId };
         state.activeModal = nextActiveFeature;
+      },
+      setCondoModal(state, payload) {
+        console.log("Set condo modal: ", state, payload)
+        const { featureId } = payload || {};
+        const nextActiveFeature = { featureId };
+        state.activeCondo = nextActiveFeature;
       },
       setImageOverlay(state, payload) {
         state.map.imageOverlay = payload;

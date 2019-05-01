@@ -112,6 +112,10 @@
       '$store.state.activeModal': function() {
         this.$controller.activeFeatureChange();
       },
+      '$store.state.condoModal': function() {
+        console.log("Condo modal watcher.")
+        // this.$controller.activeFeatureChange();
+      },
       '$store.state.ownerSearch.status': function() {
         if(this.$store.state.ownerSearch.status === 'success') {
           this.$controller.geocodeOwnerSearch()
