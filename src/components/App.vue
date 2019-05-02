@@ -15,6 +15,7 @@
         </div>
       </div>
     </header>
+    <condo-card-modal></condo-card-modal>
     <property-card-modal></property-card-modal>
 
     <div id="components-root">
@@ -60,16 +61,15 @@
 <script>
 
   require("sorttable")
-  import axios from 'axios';
-  import MapPanel from './MapPanel.vue';
   import * as philaVueComps from '@cityofphiladelphia/phila-vue-comps';
+  import axios from 'axios';
+  import CondoCardModal from './CondoCardModal.vue';
+  import helpers from '../util/helpers';
+  import MapPanel from './MapPanel.vue';
   import moment from 'moment';
   import PropertyCardModal from './PropertyCardModal.vue';
   import transforms from '../general/transforms';
-  import helpers from '../util/helpers';
   const titleCase = transforms.titleCase.transform;
-  const VerticalTable = philaVueComps.VerticalTable;
-  const HorizontalTable = philaVueComps.HorizontalTable;
   const AddressInput = philaVueComps.AddressInput;
   const Callout = philaVueComps.Callout;
   const Badge = philaVueComps.Badge;
@@ -77,6 +77,8 @@
   const CollectionSummary = philaVueComps.CollectionSummary;
   const ExternalLink = philaVueComps.ExternalLink;
   const FullScreenTopicsToggleTabVertical = philaVueComps.FullScreenTopicsToggleTabVertical;
+  const HorizontalTable = philaVueComps.HorizontalTable;
+  const VerticalTable = philaVueComps.VerticalTable;
   const formatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',
@@ -90,6 +92,7 @@
       Badge,
       BadgeCustom,
       CollectionSummary,
+      CondoCardModal,
       ExternalLink,
       FullScreenTopicsToggleTabVertical,
       HorizontalTable,
@@ -112,7 +115,7 @@
       '$store.state.activeModal': function() {
         this.$controller.activeFeatureChange();
       },
-      '$store.state.condoModal': function() {
+      '$store.state.activeCondo': function() {
         console.log("Condo modal watcher.")
         // this.$controller.activeFeatureChange();
       },

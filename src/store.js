@@ -154,7 +154,6 @@ function createStore(config) {
         state.activeModal = nextActiveFeature;
       },
       setCondoModal(state, payload) {
-        console.log("Set condo modal: ", state, payload)
         const { featureId } = payload || {};
         const nextActiveFeature = { featureId };
         state.activeCondo = nextActiveFeature;
