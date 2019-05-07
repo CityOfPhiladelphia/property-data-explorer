@@ -75,10 +75,10 @@
       />
 
       <horizontal-table
-        v-if="this.$store.state.activeSearch.data"
+        v-if="this.$store.state.activeSearch.assessmentHistory.data"
         :slots="{
           title: 'Valuation History',
-          items: this.$store.state.activeSearch.data.rows
+          items: this.$store.state.activeSearch.assessmentHistory.data
         }"
         :options="this.activeOptions"
       />
@@ -87,6 +87,15 @@
         :slots="this.pDetailOptions"
         :options="this.pDetailOptions"
       />
+
+      <horizontal-table
+      v-if="this.$store.state.activeSearch.salesHistory.data"
+      :slots="{
+        title: 'Sales History',
+        items: this.$store.state.activeSearch.salesHistory.data
+        }"
+        :options="this.activeSalesOptions"
+        />
 
     </div>
   </section>
@@ -179,6 +188,7 @@ export default {
     zoningBadgeOptions(){
       const options = {
         titleBackground: '#58c04d',
+        dataSources: ['opa_public'],
         components: [
           {
             type: 'horizontal-table',
@@ -216,16 +226,16 @@ export default {
                   let result = state.ownerSearch.data.filter(
                     object => { return object._featureId === state.activeModal.featureId }
                   );
-                  console.log(result)
                   id =  result[0].properties.opa_account_num
                 } else {
                   let result = state.shapeSearch.data.rows.filter(
-                    object => { return object._featureId === state.activeModal.featureId }
+                    object => {
+                      return object._featureId === state.activeModal.featureId }
                   );
                   id = result[0].parcel_number
                 }
-                const target = new Array(state.sources.opa_public.targets[id]) || {};
-                return target.map( item => Object.assign({}, { random: Math.random(), }, item) )
+                item = new Array(state.sources.opa_public.targets[id])
+                return item
               },
             }
           }
@@ -236,6 +246,7 @@ export default {
     pDetailOptions() {
       const options = {
         id: 'modalProperties',
+        dataSources: ['opa_public'],
         title: "Property Details",
         fields: [
           {
@@ -284,6 +295,7 @@ export default {
                   return object._featureId === state.activeModal.featureId
                 });
                 let obj_id = result[0].parcel_number
+
                 return state.sources.opa_public.targets[obj_id].data.homestead_exemption
                       .toLocaleString('en-US', {
                         style: "currency",
@@ -536,6 +548,57 @@ export default {
       }
       return options;
     },
+    activeSalesOptions() {
+      const options = {
+        id: 'salesHistory',
+        tableid: 'ddd',
+        // dataSources: ['opa'],
+        mapOverlay: {},
+        mouseOverDisabled: true,
+        fields: [
+          {
+            label: 'Date',
+            value: function(state, item){
+              return moment(item.document_date).format('MM/DD/YYYY')
+            }
+          },
+          {
+            label: 'Adjusted Total',
+            value: function(state, item){
+              return item.adjusted_total_consideration
+            },
+            transforms: ['currency'],
+          },
+          {
+            label: 'Grantees',
+            value: function(state, item){
+              return item.grantees
+            },
+          },
+          {
+            label: 'Grantors',
+            value: function(state, item){
+              return item.grantors
+            },
+          },
+          {
+            label: 'Document Id',
+            value: function(state, item){
+              return item.document_id
+            },
+          },
+        ],
+        sort: {
+          // this should return the val to sort on
+          getValue: function(item) {
+            return item.year;
+          },
+          // asc or desc
+          order: 'desc'
+        },
+      }
+      return options;
+    },
     vtableOptions() {
       const options = {
         id: 'modalProperties',
@@ -572,10 +635,9 @@ export default {
                 let result = state.shapeSearch.data.rows.filter(object => {
                   return object._featureId === state.activeModal.featureId
                 });
-                let owners = result[0].owner_2.length > 1 ?
+                let owners = result[0].owner_2 != null ?
                              titleCase(result[0].owner_1) + ", " + titleCase(result[0].owner_2):
-                             titleCase(result[0].owner_1)
-
+                             result[0].owner_1 != null ? titleCase(result[0].owner_1) : ""
                 return owners
               }
             },
@@ -735,6 +797,7 @@ export default {
   }
   .openmaps-modal {
     overflow: visible !important;
+    position: absolute !important;
     top: 0 !important;
     padding: 0 !important;
     height: 100%;
@@ -813,15 +876,16 @@ header {
 
 .openmaps-modal {
   color: rgb(15, 77, 144);
-  width: 97%;
-  height: 80%;
+  height: 92%;
   padding: 20px;
   overflow-y: auto;
-  position: absolute;
-  top: 70px;
-  left: 10px;
+  position: fixed;
   background: white;
   z-index:1000;
+  margin: auto;
+  max-width: 1200px;
+  left: 2%;
+  right: 2%;
 }
 
 .openmaps-modal-content{
@@ -831,10 +895,8 @@ header {
 }
 
 .openmaps-modal-close{
-  position: absolute;
-  top:15px;
-  left:15px;
-  background: white;
+  position: fixed;
+  background: transparent;
   height: 30px;
   width: 30px;
 }

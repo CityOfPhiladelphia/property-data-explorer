@@ -15,13 +15,12 @@ let config = {
     popoutAble: true,
   },
   shapeSearch: {
-
     url: 'https://phl.carto.com/api/v2/sql',
     options: {
       params: {
         q: function(input){
           var inputEncoded = Object.keys(input).map(k => "'" + input[k] + "'").join(",");
-          return "select * from opa_properties_public where parcel_number IN("+ inputEncoded +")"
+          return "select * from opa_properties_public_test where pwd_parcel_id IN("+ inputEncoded +")"
         }
       },
     }
@@ -33,23 +32,51 @@ let config = {
     },
     params: {
       gatekeeperKey: '82fe014b6575b8c38b44235580bc8b11',
-      include_units: true,
+      include_units: false,
       opa_only: true,
       page: 1,
     },
   },
   activeSearch: {
+    assessmentHistory: {
       type: 'http-get',
       url: 'https://phl.carto.com/api/v2/sql',
         options: {
           params: {
-              q: function(feature){ return "select * from assessments where parcel_number = '" + feature + "'"},
+            q: function(input){
+              if (typeof input === 'string') {
+                return "select * from assessments where parcel_number IN('"+ input +"')"
+              } else {
+                var inputEncoded = "'" + input.join("','") + "'";
+                return "select * from assessments where parcel_number IN("+ inputEncoded +")"
+              }
+            }
           },
           success: function(data) {
-            return data;
+            return data.rows;
           }
         }
     },
+    salesHistory: {
+      type: 'http-get',
+      url: 'https://phl.carto.com/api/v2/sql',
+      options: {
+        params: {
+          q: function(input){
+            if (typeof input === 'string') {
+              return "select * from RTT_SUMMARY where opa_account_num = '"+ input +"' AND document_type = 'DEED'"
+            } else {
+              var inputEncoded = "'" + input.join("','") + "'";
+              return "select * from RTT_SUMMARY where opa_account_num IN("+ inputEncoded +") AND document_type = 'DEED'"
+            }
+          }
+        },
+        success: function(data) {
+          return data.rows;
+        }
+      }
+    }
+  },
   pictometry: {
     enabled: true,
   },
@@ -95,6 +122,7 @@ let config = {
           if (state.lastSearchMethod === 'owner search') {
             return state.ownerSearch.data
           } else if (state.lastSearchMethod === 'shape search') {
+            // console.log(state.shapeSearch.data)
             return state.shapeSearch.data.rows
           } else {
             let opa = []
@@ -107,8 +135,10 @@ let config = {
         },
         getTargetId: function(target) {
           if(target.properties){
+            // console.log("target.properties.opa_account_num: ", target.properties.opa_account_num)
             return target.properties.opa_account_num;
           } else {
+            // console.log("target.parcel_number: ", target.parcel_number)
             return target.parcel_number
           }
         }

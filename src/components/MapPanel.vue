@@ -76,7 +76,7 @@
       :opacity="geojsonFeature.properties.opacity"
       :fillOpacity="geojsonFeature.properties.fillOpacity"
       :data="geojsonFeature.properties"
-      :key="geojsonFeature.properties.BRT_ID"
+      :key="geojsonFeature.properties.PARCELID.toString()"
       />
 
       <!-- vector markers -->

@@ -13,6 +13,7 @@ Vue.use(Vuex);
 
 function createStore(config) {
 
+  const activeSearch = pvdStore.createActivesearch(config);
   const sources = pvdStore.createSources(config);
   const parcels = pvdStore.createParcels(config);
 
@@ -28,6 +29,7 @@ function createStore(config) {
     addressEntered: null,
     parcels,
     sources,
+    activeSearch,
     horizontalTables: {
       // table id => filtered rows
       filteredData: {},
@@ -38,6 +40,9 @@ function createStore(config) {
       tableId: null
     },
     activeModal: {
+      featureId: null,
+    },
+    activeCondo: {
       featureId: null,
     },
     appData: {
@@ -147,6 +152,11 @@ function createStore(config) {
         const { featureId } = payload || {};
         const nextActiveFeature = { featureId };
         state.activeModal = nextActiveFeature;
+      },
+      setCondoModal(state, payload) {
+        const { featureId } = payload || {};
+        const nextActiveFeature = { featureId };
+        state.activeCondo = nextActiveFeature;
       },
       setImageOverlay(state, payload) {
         state.map.imageOverlay = payload;
