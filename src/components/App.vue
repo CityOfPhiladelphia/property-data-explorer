@@ -9,7 +9,7 @@
           <div class="app-divide"></div>
           <div class="page-title-container">
             <a href="#/">
-              <h1 class="page-title">Property Data Explorer</h1>
+              <h1 class="page-title">CONCEPT: Property Data Explorer</h1>
             </a>
           </div>
         </div>
