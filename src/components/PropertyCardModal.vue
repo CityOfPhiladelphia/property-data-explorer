@@ -9,7 +9,7 @@
             <img src="https://standards.phila.gov/img/logo/city-of-philadelphia-blue-text.png" alt="City of Philadelphia">
           </div>
           <div class="page-title-container">
-            <h1 class="page-title">CONCEPT: Property Data Explorer</h1>
+            <h1 class="page-title">Property Data Explorer</h1>
           </div>
         </div>
       </div>
