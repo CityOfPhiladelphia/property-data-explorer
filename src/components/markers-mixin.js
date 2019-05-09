@@ -25,7 +25,8 @@ export default {
           const options = layer.options || {};
           const data = options.data;
           if (!data) return;
-          const layerFeatureId = data.PARCELID.toString();
+          const layerFeatureId = data.PARCELID;
+          // console.log("layerFeatureId: ", layerFeatureId, "featureIdPrev: ", featureIdPrev)
           return layerFeatureId === featureIdPrev;
         })[0];
         // console.log("matchingLayerPrev", matchingLayerPrev)
@@ -39,9 +40,11 @@ export default {
           const options = layer.options || {};
           const data = options.data;
           if (!data) return;
-          const layerFeatureId = data.PARCELID.toString();
+          const layerFeatureId = data.PARCELID;
+          // console.log("layerFeatureId: ", featureIdNext, "featureIdPrev: ", featureIdNext)
           return layerFeatureId === featureIdNext;
         })[0];
+        // console.log("matchingLayerNext", matchingLayerNext)
         this.updateMarkerFillColor(matchingLayerNext);
         this.bringMarkerToFront(matchingLayerNext);
       }
@@ -111,6 +114,7 @@ export default {
           features = [features]
         }
       }
+      // console.log("feature from geojsonParcels: ", features)
       return features;
     },
 
@@ -275,54 +279,26 @@ export default {
     // for highlighting horizontal table rows
     reactiveGeojsonFeatures() {
       const features = [];
-
-      // const filteredData = this.$store.state.horizontalTables.filteredData;
-      // // get visible tables based on active topic
-      // const tableIds = this.$store.getters.visibleTableIds;
-      //
-      // for (let tableId of tableIds) {
-      //   const tableConfig = this.getConfigForTable(tableId) || {};
-      //   const mapOverlay = (tableConfig.options || {}).mapOverlay;
-      //
-      //   if (!mapOverlay || mapOverlay.marker !== 'geojson') {
-      //     continue;
-      //   }
-      //
-      //   const items = filteredData[tableId];
-      //
-      //   if (items.length < 1) {
-      //     continue;
-      //   }
-      //
-      //   const style = mapOverlay.style;
-      //   items.push(tableId);
-      //
-      //   // go through rows
-
       let style;
 
       if (this.$store.state.shapeSearch.data !== null) {
 
         let item = this.$store.state.shapeSearch.data.rows;
-
         let props = Object.assign({}, style);
 
-        // props.geojson = item.geometry;
-        // props.key = item.id;
         props.featureId = item._featureId || null;
-        // props.tableId = items[items.length-1];
         features.push(props);
-        // }
       }
       return features;
 
     },
 
     leafletMarkers() {
-      console.log("leafletMarkers is running")
+      // console.log("leafletMarkers is running")
       const markers = [];
 
       markers.push.apply(markers, this.markers);
+      // console.log("this.geojsonParcels: ", this.geojsonParcels)
       markers.push.apply(markers, this.geojsonParcels);
 
       return markers;
@@ -335,17 +311,17 @@ export default {
       if (this.$store.state.geocode.status === "success") {
         // console.log(this.$store.state.geocode.data, feature)
         featureId = this.$store.state.geocode.data._featureId = feature.featureId ?
-        this.$store.state.geocode.data.properties.pwd_parcel_id : null
+        Number(this.$store.state.geocode.data.properties.pwd_parcel_id) : null
       } else if (this.$store.state.ownerSearch.status === "success" ) {
         let result = this.$store.state.ownerSearch.data.filter( function(object) {
           return object._featureId === feature.featureId
         });
-        featureId = result[0].properties.pwd_parcel_id
+        featureId = Number(result[0].properties.pwd_parcel_id)
       } else if (this.$store.state.shapeSearch.status === "success") {
         let result = this.$store.state.shapeSearch.data.rows.filter( function(object) {
           return object._featureId === feature.featureId
         });
-        featureId = result[0].pwd_parcel_id
+        featureId = Number(result[0].pwd_parcel_id)
       } else {
         featureId = null
       }
@@ -423,7 +399,7 @@ export default {
         // console.log('handleMarkerMouseover actions are running');
         const { target } = e;
         // console.log('PARCEL ID target:', target);
-        const featureId  = this.identifyRow(target.options.data.PARCELID.toString());
+        const featureId  = this.identifyRow(target.options.data.PARCELID);
         this.$store.commit('setActiveFeature',  {featureId} );
       }
     },
@@ -437,7 +413,8 @@ export default {
     },
     updateMarkerFillColor(marker) {
       // get next fill color
-      const featureId = marker.options.data.PARCELID.toString();
+      console.log("Marker: ", marker)
+      const featureId = marker.options.data.PARCELID;
       const activeFeature = this.$store.state.activeFeature
       const nextFillColor = this.fillColorForOverlayMarker(featureId, activeFeature);
 

@@ -15,6 +15,7 @@
         </div>
       </div>
     </header>
+    <condo-card-modal></condo-card-modal>
     <property-card-modal></property-card-modal>
 
     <div id="components-root">
@@ -60,16 +61,15 @@
 <script>
 
   require("sorttable")
-  import axios from 'axios';
-  import MapPanel from './MapPanel.vue';
   import * as philaVueComps from '@cityofphiladelphia/phila-vue-comps';
+  import axios from 'axios';
+  import CondoCardModal from './CondoCardModal.vue';
+  import helpers from '../util/helpers';
+  import MapPanel from './MapPanel.vue';
   import moment from 'moment';
   import PropertyCardModal from './PropertyCardModal.vue';
   import transforms from '../general/transforms';
-  import helpers from '../util/helpers';
   const titleCase = transforms.titleCase.transform;
-  const VerticalTable = philaVueComps.VerticalTable;
-  const HorizontalTable = philaVueComps.HorizontalTable;
   const AddressInput = philaVueComps.AddressInput;
   const Callout = philaVueComps.Callout;
   const Badge = philaVueComps.Badge;
@@ -77,6 +77,8 @@
   const CollectionSummary = philaVueComps.CollectionSummary;
   const ExternalLink = philaVueComps.ExternalLink;
   const FullScreenTopicsToggleTabVertical = philaVueComps.FullScreenTopicsToggleTabVertical;
+  const HorizontalTable = philaVueComps.HorizontalTable;
+  const VerticalTable = philaVueComps.VerticalTable;
   const formatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',
@@ -90,6 +92,7 @@
       Badge,
       BadgeCustom,
       CollectionSummary,
+      CondoCardModal,
       ExternalLink,
       FullScreenTopicsToggleTabVertical,
       HorizontalTable,
@@ -167,6 +170,7 @@
               mailing: "Mailing Labels"
             }
           },
+          expandedData: this.expandedData,
           customClass: {
             table: 'sortable',
             th: function(field) {
@@ -230,7 +234,11 @@
             {
               label: 'Owner',
               value: function(state, item){
-                return titleCase(item.properties.opa_owners.join(', '));
+                if (item.properties.opa_owners != '') {
+                  return titleCase(item.properties.opa_owners.join(', '));
+                } else {
+                  return titleCase(item.properties.usps_bldgfirm);
+                }
               },
               /* nullValue: 'no date available', */
             },
@@ -298,8 +306,12 @@
             {
               label: 'Owner',
               value: function(state, item){
-                return titleCase(item.properties.opa_owners.join(', '));
-              },
+                if (item.properties.opa_owners != '') {
+                  return titleCase(item.properties.opa_owners.join(', '));
+                } else {
+                  return titleCase(item.properties.usps_bldgfirm);
+                }
+              }
             },
           ],
         }
@@ -386,7 +398,9 @@
                                titleCase(item.owner_1.trim())
 
                   return owners
-                } else { return "" }
+                } else {
+                  return ""
+                }
               },
             },
           ],
@@ -655,6 +669,40 @@
                 // return titleCase(item.location)
                 // return item.properties.opa_account_num
               // },
+            },
+          ],
+        };
+      },
+      mailingFields(state, item) {
+        return  {
+          fields: [
+            {
+              label: 'Owner',
+              value: function(item){
+                let owners = item.owner_2.length > 1 ?
+                             titleCase(item.owner_1.trim()) + ", " + titleCase(item.owner_2.trim()):
+                             titleCase(item.owner_1.trim())
+
+                return owners
+              },
+            },
+            {
+              label: 'Street Address',
+              value: function(item) {
+                return titleCase(item.properties.opa_address)
+              },
+            },
+            {
+              label: 'Zip Code',
+              value: function(item) {
+                return titleCase(item.location)
+              },
+            },
+            {
+              label: 'Street Address',
+              value: function(state, item) {
+                return titleCase(item.location)
+              },
             },
           ],
         };
