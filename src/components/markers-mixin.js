@@ -26,6 +26,7 @@ export default {
           const data = options.data;
           if (!data) return;
           const layerFeatureId = data.PARCELID;
+          // console.log("layerFeatureId: ", layerFeatureId, "featureIdPrev: ", featureIdPrev)
           return layerFeatureId === featureIdPrev;
         })[0];
         // console.log("matchingLayerPrev", matchingLayerPrev)
@@ -40,8 +41,10 @@ export default {
           const data = options.data;
           if (!data) return;
           const layerFeatureId = data.PARCELID;
+          // console.log("layerFeatureId: ", featureIdNext, "featureIdPrev: ", featureIdNext)
           return layerFeatureId === featureIdNext;
         })[0];
+        // console.log("matchingLayerNext", matchingLayerNext)
         this.updateMarkerFillColor(matchingLayerNext);
         this.bringMarkerToFront(matchingLayerNext);
       }
@@ -111,6 +114,7 @@ export default {
           features = [features]
         }
       }
+      // console.log("feature from geojsonParcels: ", features)
       return features;
     },
 
@@ -275,54 +279,26 @@ export default {
     // for highlighting horizontal table rows
     reactiveGeojsonFeatures() {
       const features = [];
-
-      // const filteredData = this.$store.state.horizontalTables.filteredData;
-      // // get visible tables based on active topic
-      // const tableIds = this.$store.getters.visibleTableIds;
-      //
-      // for (let tableId of tableIds) {
-      //   const tableConfig = this.getConfigForTable(tableId) || {};
-      //   const mapOverlay = (tableConfig.options || {}).mapOverlay;
-      //
-      //   if (!mapOverlay || mapOverlay.marker !== 'geojson') {
-      //     continue;
-      //   }
-      //
-      //   const items = filteredData[tableId];
-      //
-      //   if (items.length < 1) {
-      //     continue;
-      //   }
-      //
-      //   const style = mapOverlay.style;
-      //   items.push(tableId);
-      //
-      //   // go through rows
-
       let style;
 
       if (this.$store.state.shapeSearch.data !== null) {
 
         let item = this.$store.state.shapeSearch.data.rows;
-
         let props = Object.assign({}, style);
 
-        // props.geojson = item.geometry;
-        // props.key = item.id;
         props.featureId = item._featureId || null;
-        // props.tableId = items[items.length-1];
         features.push(props);
-        // }
       }
       return features;
 
     },
 
     leafletMarkers() {
-      console.log("leafletMarkers is running")
+      // console.log("leafletMarkers is running")
       const markers = [];
 
       markers.push.apply(markers, this.markers);
+      // console.log("this.geojsonParcels: ", this.geojsonParcels)
       markers.push.apply(markers, this.geojsonParcels);
 
       return markers;
