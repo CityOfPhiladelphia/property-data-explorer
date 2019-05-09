@@ -413,7 +413,7 @@ export default {
     },
     updateMarkerFillColor(marker) {
       // get next fill color
-      console.log("Marker: ", marker)
+      // console.log("Marker: ", marker)
       const featureId = marker.options.data.PARCELID;
       const activeFeature = this.$store.state.activeFeature
       const nextFillColor = this.fillColorForOverlayMarker(featureId, activeFeature);
