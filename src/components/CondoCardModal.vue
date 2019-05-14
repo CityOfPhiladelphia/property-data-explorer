@@ -55,15 +55,15 @@ export default {
       return address();
     },
     totalRecords() {
-      let featureId
+      let featureId;
       if (this.$store.state.lastSearchMethod === "shape search") {
         let result = this.$store.state.shapeSearch.data.rows.filter(
           object => {
             return object._featureId === this.$store.state.activeCondo.featureId }
-          )
-        featureId = result[0].pwd_parcel_id
+          );
+        featureId = result[0].pwd_parcel_id;
       } else {
-        featureId = this.$store.state.activeCondo.featureId
+        featureId = this.$store.state.activeCondo.featureId;
       }
       return this.$store.state.condoUnits.units[featureId].length
     }
@@ -74,8 +74,15 @@ export default {
       this.$store.commit('setActiveFeature', null);
     },
     addCondoRecords(state) {
-      console.log("addCondoRecords button clicked")
-      this.closeModal(state)
+      if(this.$store.state.lastSearchMethod === "geocode") {
+        var i = 0;
+        this.$store.state.condoUnits.units[this.$store.state.activeCondo.featureId].map(
+          a => {a._featureId = a.properties.pwd_parcel_id + "-UNIT-" + i, i++}
+        );
+        this.$store.commit('setGeocodeRelated', this.$store.state.condoUnits.units[this.$store.state.activeCondo.featureId]);
+      } else { console.log("lastSearchMethod: ", this.$store.state.lastSearchMethod);}
+      this.$controller.dataManager.fetchData();
+      this.closeModal(state);
     }
   },
 }
