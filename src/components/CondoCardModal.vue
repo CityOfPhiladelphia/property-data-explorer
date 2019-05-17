@@ -75,12 +75,11 @@ export default {
     },
     addCondoRecords(state) {
       let mapUnitIds = function(id) {
-        var i = 0;
         let unitsToAdd = this.$store.state.condoUnits.units[id]
         unitsToAdd.map(
-          a => {
-            typeof a.properties != 'undefined' ? a._featureId = a.properties.pwd_parcel_id + "-UNIT-" + i :
-            a._featureId = a.pwd_parcel_id + "-UNIT-" + i, i++
+          (a, index) => {
+            typeof a.properties != 'undefined' ? a._featureId = a.properties.pwd_parcel_id + "-UNIT-" + index :
+            a._featureId = a.pwd_parcel_id + "-UNIT-" + index
           }
         );
         return unitsToAdd
