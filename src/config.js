@@ -137,6 +137,8 @@ let config = {
           if(target.properties){
             // console.log("target.properties.opa_account_num: ", target.properties.opa_account_num)
             return target.properties.opa_account_num;
+          } else if(target.parcel_number === null) {
+            return
           } else {
             // console.log("target.parcel_number: ", target.parcel_number)
             return target.parcel_number
