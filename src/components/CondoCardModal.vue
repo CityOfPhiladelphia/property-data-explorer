@@ -77,9 +77,9 @@ export default {
       let mapUnitIds = function(id) {
         let unitsToAdd = this.$store.state.condoUnits.units[id]
         unitsToAdd.map(
-          (a, index) => {
-            typeof a.properties != 'undefined' ? a._featureId = a.properties.pwd_parcel_id + "-UNIT-" + index :
-            a._featureId = a.pwd_parcel_id + "-UNIT-" + index
+          (item, index) => {
+            typeof item.properties != 'undefined' ? item._featureId = item.properties.pwd_parcel_id + "-UNIT-" + index :
+            item._featureId = item.pwd_parcel_id + "-UNIT-" + index
           }
         );
         return unitsToAdd
