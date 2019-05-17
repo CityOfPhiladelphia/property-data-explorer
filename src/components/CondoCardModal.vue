@@ -74,14 +74,32 @@ export default {
       this.$store.commit('setActiveFeature', null);
     },
     addCondoRecords(state) {
-      if(this.$store.state.lastSearchMethod === "geocode") {
-        var i = 0;
-        this.$store.state.condoUnits.units[this.$store.state.activeCondo.featureId].map(
-          a => {a._featureId = a.properties.pwd_parcel_id + "-UNIT-" + i, i++}
+      let mapUnitIds = function(id) {
+        let unitsToAdd = this.$store.state.condoUnits.units[id]
+        unitsToAdd.map(
+          (item, index) => {
+            typeof item.properties != 'undefined' ? item._featureId = item.properties.pwd_parcel_id + "-UNIT-" + index :
+            item._featureId = item.pwd_parcel_id + "-UNIT-" + index
+          }
         );
-        this.$store.commit('setGeocodeRelated', this.$store.state.condoUnits.units[this.$store.state.activeCondo.featureId]);
-      } else { console.log("lastSearchMethod: ", this.$store.state.lastSearchMethod);}
-      this.$controller.dataManager.fetchData();
+        return unitsToAdd
+      }
+      mapUnitIds = mapUnitIds.bind(this)
+      let unitData;
+      if(this.$store.state.lastSearchMethod === "geocode") {
+        unitData = mapUnitIds(this.$store.state.activeCondo.featureId);
+        this.$store.commit('setGeocodeRelated', unitData);
+        this.$controller.dataManager.fetchData();
+      } else {
+        let result = this.$store.state.shapeSearch.data.rows.filter(
+          a => a._featureId === this.$store.state.activeCondo.featureId
+        )
+        let units = mapUnitIds(result[0].pwd_parcel_id)
+        // console.log("Matching Id for Units: ", units);
+        this.$store.commit('setShapeSearchDataPush', units);
+        this.$controller.dataManager.resetData();
+        this.$controller.dataManager.didShapeSearch();
+      }
       this.closeModal(state);
     }
   },
