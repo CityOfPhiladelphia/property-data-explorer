@@ -127,10 +127,12 @@ let config = {
           } else {
             let opa = []
             opa.push(state.geocode.data);
-            for (let relate of state.geocode.related) {
-              opa.push(relate);
+            if (state.geocode.related != null){
+              for (let relate of state.geocode.related) {
+                opa.push(relate);
+              }
+              return opa;
             }
-            return opa;
           }
         },
         getTargetId: function(target) {
