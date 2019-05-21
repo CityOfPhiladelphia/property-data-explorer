@@ -341,7 +341,11 @@ export default {
         let result = this.$store.state.shapeSearch.data.rows.filter( function(object){
           return object.pwd_parcel_id === featureId
         });
-        rowId = result[0]._featureId
+        if(typeof result[0] != 'undefined') {
+          rowId = result[0]._featureId
+        } else {
+          rowId = null
+        }
       } else {
         rowId = null
       }
