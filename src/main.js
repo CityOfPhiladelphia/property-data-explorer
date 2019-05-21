@@ -15,19 +15,10 @@ import configMixin from './util/config-mixin';
 import mergeDeep from './util/merge-deep';
 import config from './config.js';
 
-
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faCaretDown } from '@fortawesome/pro-solid-svg-icons/faCaretDown';
-import { faCaretUp } from '@fortawesome/pro-solid-svg-icons/faCaretUp';
-import { faMapMarkerAlt } from '@fortawesome/pro-solid-svg-icons/faMapMarkerAlt';
-library.add(faCaretDown, faCaretUp, faMapMarkerAlt);
+import * as faAll from './fa.js';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
-
-import philaVueMapping from '@cityofphiladelphia/phila-vue-mapping';
-import philaVueComps from '@cityofphiladelphia/phila-vue-comps';
-import philaVueDatafetch from '@cityofphiladelphia/phila-vue-datafetch';
-const controllerMixin = philaVueDatafetch.controllerMixin;
+import controllerMixin from '@philly/vue-datafetch/src/controller/index.js';
 
 const clientConfig = config;
 const baseConfigUrl = config.baseConfig;
