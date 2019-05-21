@@ -1,9 +1,9 @@
 {
-  "name": "property-bulk",
+  "name": "property-data-explorer",
   "version": "1.0.0",
   "main": "",
-  "repository": "https://github.com/CityOfPhiladelphia/property-bulk.git",
-  "author": "andy.rothwell <rothwell.andy@gmail.com>",
+  "repository": "https://github.com/CityOfPhiladelphia/property-data-explorer.git",
+  "author": "stephen.skilton <stephenjskilton@gmail.com>",
   "license": "MIT",
   "scripts": {
     "build": "cross-env NODE_ENV=production npx webpack",
