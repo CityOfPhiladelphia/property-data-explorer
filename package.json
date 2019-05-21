@@ -12,7 +12,7 @@
   "dependencies": {
     "1.0.2": "^1.0.0",
     "@cityofphiladelphia/phila-vue-comps": "https://github.com/CityOfPhiladelphia/phila-vue-comps#58e50384ee3afdcaa9d71bce28f8ea95a5f1b260",
-    "@cityofphiladelphia/phila-vue-datafetch": "https://github.com/CityOfPhiladelphia/phila-vue-datafetch#1c8d78fd3f096af654b5cbe3dd9a1898c1fabb11",
+    "@cityofphiladelphia/phila-vue-datafetch": "https://github.com/CityOfPhiladelphia/phila-vue-datafetch#d4180c3fb6d1b22821182b22ee6108ce62365987",
     "@cityofphiladelphia/phila-vue-mapping": "https://github.com/CityOfPhiladelphia/phila-vue-mapping#19a864f01e9dc50c26b6737d82860a7fc0b6156e",
     "accounting": "^0.4.1",
     "axios": "^0.18.0",
