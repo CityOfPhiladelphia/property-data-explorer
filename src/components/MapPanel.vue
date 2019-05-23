@@ -234,7 +234,7 @@
       CyclomediaButton,
       MeasureControl,
       LegendControl,
-      AddressInput,
+      MapAddressInput,
     },
     data() {
       const data = {
