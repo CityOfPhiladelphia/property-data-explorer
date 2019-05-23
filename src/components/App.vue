@@ -70,7 +70,7 @@
   import PropertyCardModal from './PropertyCardModal.vue';
   import transforms from '../general/transforms';
   const titleCase = transforms.titleCase.transform;
-  // const MapAddressInput = philaVueComps.MapAddressInput;
+  // const MapAddressInput = philaVueMapping.MapAddressInput;
   // const Callout = philaVueComps.Callout;
   // const Badge = philaVueComps.Badge;
   // const BadgeCustom = philaVueComps.BadgeCustom;
@@ -90,7 +90,7 @@
       CondoCardModal,
       MapPanel,
       PropertyCardModal,
-      AddressInput: () => import(/* webpackChunkName: "pvc_AddressInput" */'@philly/vue-comps/src/components/AddressInput.vue'),
+      MapAddressInput: () => import(/* webpackChunkName: "pvc_AddressInput" */'@philly/vue-mapping/src/components/MapAddressInput.vue'),
       Callout: () => import(/* webpackChunkName: "pvc_Callout" */'@philly/vue-comps/src/components/Callout.vue'),
       Badge: () => import(/* webpackChunkName: "pvc_Badge" */'@philly/vue-comps/src/components/Badge.vue'),
       BadgeCustom: () => import(/* webpackChunkName: "pvc_BadgeCustom" */'@philly/vue-comps/src/components/BadgeCustom.vue'),

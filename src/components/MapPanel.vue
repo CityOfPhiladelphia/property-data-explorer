@@ -156,11 +156,11 @@
       </scale-control> -->
       <div>
         <div v-once>
-          <address-input :position="this.addressInputPosition"
+          <map-address-input :position="this.addressInputPosition"
                          :placeholder="this.addressInputPlaceholder"
                          widthFromConfig="350"
           >
-          </address-input>
+        </map-address-input>
           <!-- <div v-once class="draw-control"> -->
           <div class="draw-control">
             <draw-control :position="this.addressInputPosition"
