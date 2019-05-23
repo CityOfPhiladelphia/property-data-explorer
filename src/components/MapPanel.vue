@@ -159,10 +159,12 @@
           <address-input :position="this.addressInputPosition"
                          :placeholder="this.addressInputPlaceholder"
                          widthFromConfig="350"
-          />
-          <div v-once class="draw-control">
+          >
+          </address-input>
+          <!-- <div v-once class="draw-control"> -->
+          <div class="draw-control">
             <draw-control :position="this.addressInputPosition"
-            :control="true"
+                          :control="true"
             />
           </div>
         </div>
@@ -177,66 +179,63 @@
 
 <script>
   import * as L from 'leaflet';
-  import * as philaVueMapping from '@cityofphiladelphia/phila-vue-mapping';
+  import 'leaflet/dist/leaflet.css';
+
+  const FeatureGroup = L.default.featureGroup;
+  const GeoJSON = L.default.geoJSON;
+  const Lmarker = L.default.marker;
 
   // mixins
   import markersMixin from './markers-mixin';
 
-  // vue doesn't like it when you import this as Map (reserved-ish word)
-  const Map_ = philaVueMapping.Map_;
-  const Control = philaVueMapping.Control;
-  const DivIconMarker = philaVueMapping.DivIconMarker;
-  const AddressInput = philaVueMapping.AddressInput;
-  const AddressCandidateList = philaVueMapping.AddressCandidateList;
-  const EsriTiledMapLayer = philaVueMapping.EsriTiledMapLayer;
-  const EsriTiledOverlay = philaVueMapping.EsriTiledOverlay;
-  const EsriFeatureLayer = philaVueMapping.EsriFeatureLayer;
-  const Geojson = philaVueMapping.Geojson;
-  const CircleMarker = philaVueMapping.CircleMarker;
-  // const OpacitySlider = philaVueMapping.OpacitySlider;
-  const VectorMarker = philaVueMapping.VectorMarker;
-  const PngMarker = philaVueMapping.PngMarker;
-  const BasemapToggleControl = philaVueMapping.BasemapToggleControl;
-  const BasemapSelectControl = philaVueMapping.BasemapSelectControl;
-  const FullScreenMapToggleTabVertical = philaVueMapping.FullScreenMapToggleTabVertical;
-  const LocationControl = philaVueMapping.LocationControl;
-  const SvgViewConeMarker = philaVueMapping.SvgViewConeMarker;
-  const MeasureControl = philaVueMapping.MeasureControl;
-  const LegendControl = philaVueMapping.LegendControl;
-  const BasemapTooltip = philaVueMapping.BasemapTooltip;
-  const DrawControl = philaVueMapping.DrawControl;
-  const ControlCorner = philaVueMapping.ControlCorner;
+  // components
+  import ControlCorner from '@philly/vue-mapping/src/leaflet/ControlCorner.vue';
+  import FullScreenMapToggleTab from '@philly/vue-mapping/src/components/FullScreenMapToggleTab.vue';
+  import FullScreenMapToggleTabVertical from '@philly/vue-mapping/src/components/FullScreenMapToggleTabVertical.vue';
+  import Map_ from '@philly/vue-mapping/src/leaflet/Map.vue';
+  import LocationControl from '@philly/vue-mapping/src/components/LocationControl.vue';
+  import BasemapToggleControl from '@philly/vue-mapping/src/components/BasemapToggleControl.vue';
+  import BasemapSelectControl from '@philly/vue-mapping/src/components/BasemapSelectControl.vue';
+  import PictometryButton from '@philly/vue-mapping/src/pictometry/Button.vue';
+  import CyclomediaButton from '@philly/vue-mapping/src/cyclomedia/Button.vue';
+  import MeasureControl from '@philly/vue-mapping/src/components/MeasureControl.vue';
+  import LegendControl from '@philly/vue-mapping/src/components/LegendControl.vue';
+  import AddressInput from '@philly/vue-mapping/src/components/AddressInput.vue';
+  import DrawControl from '@philly/vue-mapping/src/components/DrawControl.vue';
+
 
   export default {
     mixins: [
       markersMixin,
     ],
     components: {
+      DrawControl,
+      // DrawControl: () => import(/* webpackChunkName: "mbmp_pvm_DrawControl" */'@philly/vue-mapping/src/components/DrawControl.vue'),
+      Control: () => import(/* webpackChunkName: "mbmp_pvm_Control" */'@philly/vue-mapping/src/leaflet/Control.vue'),
+      EsriTiledMapLayer: () => import(/* webpackChunkName: "mbmp_pvm_EsriTiledMapLayer" */'@philly/vue-mapping/src/esri-leaflet/TiledMapLayer.vue'),
+      EsriTiledOverlay: () => import(/* webpackChunkName: "mbmp_pvm_EsriTiledOverlay" */'@philly/vue-mapping/src/esri-leaflet/TiledOverlay.vue'),
+      EsriDynamicMapLayer: () => import(/* webpackChunkName: "mbmp_pvm_EsriDynamicMapLayer" */'@philly/vue-mapping/src/esri-leaflet/DynamicMapLayer.vue'),
+      EsriFeatureLayer: () => import(/* webpackChunkName: "mbmp_pvm_EsriFeatureLayer" */'@philly/vue-mapping/src/esri-leaflet/FeatureLayer.vue'),
+      Geojson: () => import(/* webpackChunkName: "mbmp_pvm_Geojson" */'@philly/vue-mapping/src/leaflet/Geojson.vue'),
+      CircleMarker: () => import(/* webpackChunkName: "mbmp_pvm_CircleMarker" */'@philly/vue-mapping/src/leaflet/CircleMarker.vue'),
+      VectorMarker: () => import(/* webpackChunkName: "mbmp_pvm_VectorMarker" */'@philly/vue-mapping/src/components/VectorMarker.vue'),
+      PngMarker: () => import(/* webpackChunkName: "mbmp_pvm_PngMarker" */'@philly/vue-mapping/src/components/PngMarker.vue'),
+      CyclomediaRecordingCircle: () => import(/* webpackChunkName: "mbmp_pvm_CyclomediaRecordingCircle" */'@philly/vue-mapping/src/cyclomedia/RecordingCircle.vue'),
+      SvgViewConeMarker: () => import(/* webpackChunkName: "mbmp_pvm_CyclomediaSvgViewConeMarker" */'@philly/vue-mapping/src/cyclomedia/SvgViewConeMarker.vue'),
+      BasemapTooltip: () => import(/* webpackChunkName: "mbmp_pvm_BasemapTooltip" */'@philly/vue-mapping/src/components/BasemapTooltip.vue'),
+      ControlCorner,
+      FullScreenMapToggleTab,
+      FullScreenMapToggleTabVertical,
       Map_,
-      Control,
-      DivIconMarker,
-      AddressInput,
-      AddressCandidateList,
-      EsriTiledMapLayer,
-      EsriTiledOverlay,
-      EsriFeatureLayer,
-      Geojson,
-      CircleMarker,
-      // OpacitySlider,
-      VectorMarker,
-      PngMarker,
+      LocationControl,
       BasemapToggleControl,
       BasemapSelectControl,
-      FullScreenMapToggleTabVertical,
-      LocationControl,
-      SvgViewConeMarker,
+      PictometryButton,
+      CyclomediaButton,
       MeasureControl,
       LegendControl,
-      BasemapTooltip,
-      ControlCorner,
-      DrawControl
+      AddressInput,
     },
-    // data: {
     data() {
       const data = {
         zoomToShape: {
@@ -253,11 +252,13 @@
         this.$controller.goToDefaultAddress(defaultAddress);
       }
     },
+    mounted() {
+      console.log('MapPanel mounted is running, DrawControl', DrawControl)
+    },
 
     computed: {
 
       drawProps() {
-
         const draw = {
           polyline: true,
           polygon: false,
@@ -268,7 +269,6 @@
 
         return draw
       },
-
       addressAutocompleteEnabled() {
         // TODO tidy up the code
         if (this.$config.addressInput) {

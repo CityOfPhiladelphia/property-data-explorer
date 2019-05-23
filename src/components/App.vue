@@ -61,7 +61,7 @@
 <script>
 
   require("sorttable")
-  import * as philaVueComps from '@cityofphiladelphia/phila-vue-comps';
+  // import * as philaVueComps from '@philly/vue-comps';
   import axios from 'axios';
   import CondoCardModal from './CondoCardModal.vue';
   import helpers from '../util/helpers';
@@ -70,15 +70,15 @@
   import PropertyCardModal from './PropertyCardModal.vue';
   import transforms from '../general/transforms';
   const titleCase = transforms.titleCase.transform;
-  const AddressInput = philaVueComps.AddressInput;
-  const Callout = philaVueComps.Callout;
-  const Badge = philaVueComps.Badge;
-  const BadgeCustom = philaVueComps.BadgeCustom;
-  const CollectionSummary = philaVueComps.CollectionSummary;
-  const ExternalLink = philaVueComps.ExternalLink;
-  const FullScreenTopicsToggleTabVertical = philaVueComps.FullScreenTopicsToggleTabVertical;
-  const HorizontalTable = philaVueComps.HorizontalTable;
-  const VerticalTable = philaVueComps.VerticalTable;
+  // const AddressInput = philaVueComps.AddressInput;
+  // const Callout = philaVueComps.Callout;
+  // const Badge = philaVueComps.Badge;
+  // const BadgeCustom = philaVueComps.BadgeCustom;
+  // const CollectionSummary = philaVueComps.CollectionSummary;
+  // const ExternalLink = philaVueComps.ExternalLink;
+  // const FullScreenTopicsToggleTabVertical = philaVueComps.FullScreenTopicsToggleTabVertical;
+  // const HorizontalTable = philaVueComps.HorizontalTable;
+  // const VerticalTable = philaVueComps.VerticalTable;
   const formatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',
@@ -87,18 +87,18 @@
 
   export default {
     components: {
-      AddressInput,
-      Callout,
-      Badge,
-      BadgeCustom,
-      CollectionSummary,
       CondoCardModal,
-      ExternalLink,
-      FullScreenTopicsToggleTabVertical,
-      HorizontalTable,
       MapPanel,
       PropertyCardModal,
-      VerticalTable,
+      AddressInput: () => import(/* webpackChunkName: "pvc_AddressInput" */'@philly/vue-comps/src/components/AddressInput.vue'),
+      Callout: () => import(/* webpackChunkName: "pvc_Callout" */'@philly/vue-comps/src/components/Callout.vue'),
+      Badge: () => import(/* webpackChunkName: "pvc_Badge" */'@philly/vue-comps/src/components/Badge.vue'),
+      BadgeCustom: () => import(/* webpackChunkName: "pvc_BadgeCustom" */'@philly/vue-comps/src/components/BadgeCustom.vue'),
+      CollectionSummary: () => import(/* webpackChunkName: "pvc_CollectionSummary" */'@philly/vue-comps/src/components/CollectionSummary.vue'),
+      ExternalLink: () => import(/* webpackChunkName: "pvc_ExternalLink" */'@philly/vue-comps/src/components/ExternalLink.vue'),
+      FullScreenTopicsToggleTabVertical: () => import(/* webpackChunkName: "pvc_FullScreenTopicsToggleTabVertical" */'@philly/vue-comps/src/components/FullScreenTopicsToggleTabVertical.vue'),
+      HorizontalTable: () => import(/* webpackChunkName: "pvc_HorizontalTable" */'@philly/vue-comps/src/components/HorizontalTable.vue'),
+      VerticalTable: () => import(/* webpackChunkName: "pvc_VerticalTable" */'@philly/vue-comps/src/components/VerticalTable.vue'),
     },
     data() {
       return {

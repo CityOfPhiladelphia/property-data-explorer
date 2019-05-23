@@ -102,11 +102,6 @@
 </template>
 
 <script>
-import * as philaVueComps from '@cityofphiladelphia/phila-vue-comps';
-const BadgeCustom = philaVueComps.BadgeCustom;
-const Callout = philaVueComps.Callout;
-const HorizontalTable = philaVueComps.HorizontalTable;
-const VerticalTable = philaVueComps.VerticalTable;
 import helpers from '../util/helpers';
 import moment from 'moment';
 import transforms from '../general/transforms';
@@ -128,10 +123,10 @@ let findIdForGeocoded = function(state){
 export default {
 
   components: {
-    Callout,
-    BadgeCustom,
-    VerticalTable,
-    HorizontalTable,
+    Callout: () => import(/* webpackChunkName: "pvc_pcm_Callout" */'@philly/vue-comps/src/components/Callout.vue'),
+    BadgeCustom: () => import(/* webpackChunkName: "pvc_pcm_BadgeCustom" */'@philly/vue-comps/src/components/BadgeCustom.vue'),
+    HorizontalTable: () => import(/* webpackChunkName: "pvc_pcm_HorizontalTable" */'@philly/vue-comps/src/components/HorizontalTable.vue'),
+    VerticalTable: () => import(/* webpackChunkName: "pvc_pcm_VerticalTable" */'@philly/vue-comps/src/components/VerticalTable.vue'),
   },
   name: 'Property-Card-Modal',
 
