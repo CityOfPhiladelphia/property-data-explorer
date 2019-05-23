@@ -70,7 +70,7 @@
   import PropertyCardModal from './PropertyCardModal.vue';
   import transforms from '../general/transforms';
   const titleCase = transforms.titleCase.transform;
-  // const AddressInput = philaVueComps.AddressInput;
+  // const MapAddressInput = philaVueComps.MapAddressInput;
   // const Callout = philaVueComps.Callout;
   // const Badge = philaVueComps.Badge;
   // const BadgeCustom = philaVueComps.BadgeCustom;

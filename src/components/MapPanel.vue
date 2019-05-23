@@ -200,7 +200,7 @@
   import CyclomediaButton from '@philly/vue-mapping/src/cyclomedia/Button.vue';
   import MeasureControl from '@philly/vue-mapping/src/components/MeasureControl.vue';
   import LegendControl from '@philly/vue-mapping/src/components/LegendControl.vue';
-  import AddressInput from '@philly/vue-mapping/src/components/AddressInput.vue';
+  import MapAddressInput from '@philly/vue-mapping/src/components/MapAddressInput.vue';
   import DrawControl from '@philly/vue-mapping/src/components/DrawControl.vue';
 
 
