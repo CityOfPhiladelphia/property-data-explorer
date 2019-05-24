@@ -12,6 +12,6 @@ deploy:
     secret_access_key: $AWS_SECRET_ACCESS_KEY
     bucket: 'property-bulk'
     on:
-      branch: fix-travis
+      branch: master
     local_dir: dist
     skip_cleanup: true
