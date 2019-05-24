@@ -87,16 +87,25 @@ export default {
       mapUnitIds = mapUnitIds.bind(this)
       let unitData;
       if(this.$store.state.lastSearchMethod === "geocode") {
+        // console.log("Not shape search, input: ", input)
+
+        this.$controller.dataManager.resetData();
+        const input = this.$store.state.parcels.pwd.properties.ADDRESS;
+        this.$controller.dataManager.clients.condoSearch.fetch(input)
+
         unitData = mapUnitIds(this.$store.state.activeCondo.featureId);
         this.$store.commit('setGeocodeRelated', unitData);
+
         this.$controller.dataManager.fetchData();
       } else {
         let result = this.$store.state.shapeSearch.data.rows.filter(
-          a => a._featureId === this.$store.state.activeCondo.featureId
+          item => item._featureId === this.$store.state.activeCondo.featureId
         )
-        let units = mapUnitIds(result[0].pwd_parcel_id)
+        
         // console.log("Matching Id for Units: ", units);
+        let units = mapUnitIds(result[0].pwd_parcel_id)
         this.$store.commit('setShapeSearchDataPush', units);
+
         this.$controller.dataManager.resetData();
         this.$controller.dataManager.didShapeSearch();
       }

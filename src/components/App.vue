@@ -673,43 +673,8 @@
           ],
         };
       },
-      mailingFields(state, item) {
-        return  {
-          fields: [
-            {
-              label: 'Owner',
-              value: function(item){
-                let owners = item.owner_2.length > 1 ?
-                             titleCase(item.owner_1.trim()) + ", " + titleCase(item.owner_2.trim()):
-                             titleCase(item.owner_1.trim())
-
-                return owners
-              },
-            },
-            {
-              label: 'Street Address',
-              value: function(item) {
-                return titleCase(item.properties.opa_address)
-              },
-            },
-            {
-              label: 'Zip Code',
-              value: function(item) {
-                return titleCase(item.location)
-              },
-            },
-            {
-              label: 'Street Address',
-              value: function(state, item) {
-                return titleCase(item.location)
-              },
-            },
-          ],
-        };
-      },
     }
   };
-
 
 </script>
 
