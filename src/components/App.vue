@@ -109,7 +109,7 @@
     watch: {
       '$store.state.drawShape': function() {
         if(this.$store.state.drawShape !== null) {
-          this.$controller.geocodeDrawnShape();
+        this.$controller.geocodeDrawnShape();
         }
       },
       '$store.state.activeModal': function() {
@@ -349,7 +349,11 @@
             {
               label: 'Street Address',
               value: function(state, item) {
-                return titleCase(item.location)
+                if(item.unit != null && item.unit != "") {
+                  return titleCase(item.address_std)
+                } else {
+                  return titleCase(item.location)
+                }
               },
             },
             {
