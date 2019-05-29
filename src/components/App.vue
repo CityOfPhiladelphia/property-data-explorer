@@ -25,6 +25,7 @@
       <div :class="'flexing ' + this.tableClass">
         <full-screen-topics-toggle-tab-vertical/>
         <horizontal-table
+          v-colspan
           v-if="this.$store.state.lastSearchMethod === 'geocode'"
           padding-top="0"
           :slots="{
@@ -43,6 +44,7 @@
           :options="this.ownerOptions"
         />
         <horizontal-table
+          v-colspan
           v-if="this.$store.state.lastSearchMethod === 'shape search'
                 && this.$store.state.shapeSearch.data !== null"
           :slots="{
@@ -120,6 +122,28 @@
           this.$controller.geocodeOwnerSearch()
         }
       },
+    },
+    directives: {
+      colspan: {
+        // directive definition
+         inserted: function (el) {
+           let allRows = el.querySelectorAll('td')
+          console.log("el: ", el.querySelectorAll('td'), "typeof: ", typeof allRows)
+
+          allRows.forEach(
+
+            a => a.querySelector('button') ? (a.setAttribute('colspan', '3'), a.setAttribute('style', 'padding: unset')):
+                 a.querySelectorAll('div').forEach( b => b.innerHTML === "Not Applicable"? a.remove():"")
+
+              )
+        }
+
+
+
+
+
+
+      }
     },
     computed: {
       geocode() {
@@ -199,7 +223,7 @@
                 if(state.sources.opa_assessment.targets[item.properties.opa_account_num]){
                   return formatter.format(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.market_value)
                 } else {
-                  return ""
+                  return '<button class="condo-button">Button</button>'
                 }
               },
             },
@@ -210,12 +234,12 @@
                   return moment(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date)
                   .format('MM/DD/YYYY')
                 } else {
-                  return ""
+                  return "Not Applicable"
                 }
               },
               customkey: function(state, item) {
                 if(state.sources.opa_assessment.targets[item.properties.opa_account_num]) {
-                  return Date.parse(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date)
+                  return moment(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date).format("YYYYMMDD")
                 } else {
                   return 0
                 }
@@ -227,7 +251,7 @@
                 if(state.sources.opa_assessment.targets[item.properties.opa_account_num]){
                   return formatter.format(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_price)
                 } else {
-                  return ""
+                  return "Not Applicable"
                 }
               },
             },
@@ -294,7 +318,7 @@
                       .format('MM/DD/YYYY')
               },
               customkey: function(state, item) {
-                return Date.parse(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date.toString())
+                return moment(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date.toString()).format("YYYYMMDD")
               }
             },
             {
@@ -362,7 +386,7 @@
                 if(item.market_value != "") {
                   return formatter.format(item.market_value)
                 } else {
-                  return ""
+                  return '<button class="condo-button">Button</button>'
                 }
               },
             },
@@ -372,12 +396,12 @@
                 if (item.sale_date != ""){
                   return moment(item.sale_date).format('MM/DD/YYYY')
                 } else {
-                  return ""
+                  return "Not Applicable"
                 }
               },
               customkey: function(state, item) {
                 if (item.sale_date != "") {
-                  return Date.parse(item.sale_date)
+                  return moment(item.sale_date).format("YYYYMMDD")
                 } else {
                   return 0
                 }
@@ -389,7 +413,7 @@
                 if (item.sale_price != "") {
                   return formatter.format(item.sale_price)
                 } else {
-                  return ""
+                  return "Not Applicable"
                 }
               },
             },
@@ -449,7 +473,6 @@
       expandedData() {
         let modalComputed = PropertyCardModal.computed
 
-        // console.log(modalComputed)
         return [
             {
               label: 'Zip Code',
@@ -667,12 +690,6 @@
                 let zip = item.properties ? item.properties.zip_code : item.zip_code.substring(0,5)
                 return 'Philadelphia, PA' + zip
               }
-                // return titleCase(item.location)
-                // return item.properties.opa_account_num
-              // value: function(state, item) {
-                // return titleCase(item.location)
-                // return item.properties.opa_account_num
-              // },
             },
           ],
         };
@@ -720,6 +737,12 @@
 
 .component-label {
   font-size: 20px;
+}
+
+.condo-button {
+  padding: 0 !important;
+  height: 100%;
+  width: 100%;
 }
 
 .ib {
