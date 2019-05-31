@@ -740,9 +740,13 @@
 }
 
 .condo-button {
-  padding: 0 !important;
+  background-color: #5555;
+  padding: 10.5, 0, 10.5, 0 !important;
   height: 100%;
   width: 100%;
+  text-transform: unset;
+  font-family: "Open Sans", Helvetica, Roboto, Arial, sans-serif;
+  font-weight: 600;
 }
 
 .ib {
