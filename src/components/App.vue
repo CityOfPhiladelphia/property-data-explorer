@@ -223,7 +223,7 @@
                 if(state.sources.opa_assessment.targets[item.properties.opa_account_num]){
                   return formatter.format(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.market_value)
                 } else {
-                  return '<button class="condo-button">Button</button>'
+                  return '<button class="condo-button"  onclick="">Click to add units to results.</button>'
                 }
               },
             },
@@ -386,7 +386,7 @@
                 if(item.market_value != "") {
                   return formatter.format(item.market_value)
                 } else {
-                  return '<button class="condo-button">Button</button>'
+                  return '<button class="condo-button" onclick="" >Click to add units to results.</button>'
                 }
               },
             },
