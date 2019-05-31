@@ -131,18 +131,11 @@
           console.log("el: ", el.querySelectorAll('td'), "typeof: ", typeof allRows)
 
           allRows.forEach(
-
-            a => a.querySelector('button') ? (a.setAttribute('colspan', '3'), a.setAttribute('style', 'padding: unset')):
+            a => a.querySelector('.condo-button') ? (a.setAttribute('colspan', '3'), a.setAttribute('style', 'padding: unset')):
                  a.querySelectorAll('div').forEach( b => b.innerHTML === "Not Applicable"? a.remove():"")
 
               )
         }
-
-
-
-
-
-
       }
     },
     computed: {
@@ -181,7 +174,7 @@
         const options = {
           id: 'ownerProperties',
           tableid: 'aaa',
-          // dataSources: ['opa_assessment'],
+          dataSources: ['opa_assessment'],
           mapOverlay: {},
           clickEnabled: true,
           expandDataDownload: true,
@@ -211,7 +204,6 @@
               value: function(state, item) {
                 if(item.properties.opa_address != "" ) {
                   return titleCase(item.properties.opa_address)
-                  // return '<a href=# onclick="'+test+'()">'+item.properties.street_address+' <i class="fa fa-external-link"></i></a>'
                 } else {
                   return titleCase(item.properties.street_address)
                 }
@@ -223,9 +215,31 @@
                 if(state.sources.opa_assessment.targets[item.properties.opa_account_num]){
                   return formatter.format(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.market_value)
                 } else {
-                  return '<button class="condo-button"  onclick="">Click to add units to results.</button>'
+                  return ''
                 }
               },
+              components: [
+                {
+                  type: 'button-comp',
+                  slots: {
+                    text: 'testing',
+                    buttonAction: function() {
+                      console.log('clicked')
+                    }
+                  },
+                  options: {
+                    class: function (state, item) {
+                      return state.sources.opa_assessment.targets[item.properties.opa_account_num] ? "" :
+                             state.sources.opa_assessment.status === "success"| typeof state.sources.opa_assessment.status === 'undefined' ? 'condo-button' : ""
+                    },
+                    style: function (state, item) {
+                      return state.sources.opa_assessment.targets[item.properties.opa_account_num] ? { display: 'none' } :
+                      state.sources.opa_assessment.status === "success" | typeof state.sources.opa_assessment.status === 'undefined' ? "" :
+                      { display: 'none' }
+                    },
+                  }
+                }
+              ],
             },
             {
               label: 'Date of Last Sale',
@@ -319,7 +333,7 @@
               },
               customkey: function(state, item) {
                 return moment(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date.toString()).format("YYYYMMDD")
-              }
+              },
             },
             {
               label: 'Price of Last Sale',
