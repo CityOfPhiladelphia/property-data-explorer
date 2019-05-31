@@ -607,6 +607,25 @@ button {
     left: 60px;
   }
 
+  .leaflet-bar button {
+  padding: inherit !important;
+  }
+</style>
+
+<style scoped>
+
+  input:focus, select:focus, textarea:focus, button:focus {
+  outline: none;
+  }
+
+
+  #map-panel-container {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+  }
+
   .pvm-search-control-container {
     display: inline-block;
     float: left;
