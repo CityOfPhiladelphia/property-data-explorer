@@ -44,9 +44,9 @@
           :options="this.ownerOptions"
         />
         <horizontal-table
-          v-colspan
           v-if="this.$store.state.lastSearchMethod === 'shape search'
                 && this.$store.state.shapeSearch.data !== null"
+          v-colspan
           :slots="{
             items: function(state) {
               var data = state.shapeSearch.data.rows;
@@ -128,14 +128,14 @@
         // directive definition
          inserted: function (el) {
            let allRows = el.querySelectorAll('td')
-          console.log("el: ", el.querySelectorAll('td'), "typeof: ", typeof allRows)
+          // console.log("el: ", el.querySelectorAll('td'), "typeof: ", typeof allRows)
 
           allRows.forEach(
             a => a.querySelector('.condo-button') ? (a.setAttribute('colspan', '3'), a.setAttribute('style', 'padding: unset')):
                  a.querySelectorAll('div').forEach( b => b.innerHTML === "Not Applicable"? a.remove():"")
 
               )
-        }
+        },
       }
     },
     computed: {
@@ -174,7 +174,7 @@
         const options = {
           id: 'ownerProperties',
           tableid: 'aaa',
-          dataSources: ['opa_assessment'],
+          // dataSources: ['opa_assessment'],
           mapOverlay: {},
           clickEnabled: true,
           expandDataDownload: true,
@@ -278,7 +278,6 @@
                   return titleCase(item.properties.usps_bldgfirm);
                 }
               },
-              /* nullValue: 'no date available', */
             },
           ],
         }
@@ -359,7 +358,7 @@
         const options = {
           id: 'ownerProperties',
           tableid: 'ccc',
-          // dataSources: ['opa'],
+          // dataSources: ['opa_assessment'],
           mapOverlay: {},
           clickEnabled: true,
           // downloadButton: true,
