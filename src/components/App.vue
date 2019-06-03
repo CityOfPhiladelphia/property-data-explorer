@@ -222,10 +222,8 @@
                 {
                   type: 'button-comp',
                   slots: {
-                    text: 'testing',
-                    buttonAction: function() {
-                      console.log('clicked')
-                    }
+                    text: 'Click to add units to results.',
+                    buttonAction: this.addCondoRecords
                   },
                   options: {
                     class: function (state, item) {
@@ -399,9 +397,26 @@
                 if(item.market_value != "") {
                   return formatter.format(item.market_value)
                 } else {
-                  return '<button class="condo-button" onclick="" >Click to add units to results.</button>'
+                  return  ''
                 }
               },
+              components: [
+                {
+                  type: 'button-comp',
+                  slots: {
+                    text: 'Click to add units to results.',
+                    buttonAction: this.addCondoRecords,
+                  },
+                  options: {
+                    class: function (state, item) {
+                      return item.condo ? 'condo-button' : ""
+                    },
+                    style: function (state, item) {
+                      return item.condo ? "" : { display: 'none' }
+                    },
+                  }
+                }
+              ],
             },
             {
               label: 'Date of Last Sale',
@@ -450,6 +465,45 @@
       },
     },
     methods: {
+      addCondoRecords(state, item) {
+        console.log("this: ", this)
+        let mapUnitIds = function(id) {
+          let unitsToAdd = this.$store.state.condoUnits.units[id]
+          unitsToAdd.map(
+            (item, index) => {
+              typeof item.properties != 'undefined' ? item._featureId = item.properties.pwd_parcel_id + "-UNIT-" + index :
+              item._featureId = item.pwd_parcel_id + "-UNIT-" + index
+            }
+          );
+          return unitsToAdd
+        }
+        mapUnitIds = mapUnitIds.bind(this)
+        let unitData;
+        if(this.$store.state.lastSearchMethod === "geocode") {
+          // console.log("Not shape search, input: ", input)
+
+          this.$controller.dataManager.resetData();
+          const input = this.$store.state.parcels.pwd.properties.ADDRESS;
+          this.$controller.dataManager.clients.condoSearch.fetch(input)
+
+          unitData = mapUnitIds(item._featureId);
+          this.$store.commit('setGeocodeRelated', unitData);
+
+          this.$controller.dataManager.fetchData();
+        } else {
+          let result = this.$store.state.shapeSearch.data.rows.filter(
+            row => row._featureId === item._featureId
+          )
+
+          // console.log("Matching Id for Units: ", units);
+          let units = mapUnitIds(result[0].pwd_parcel_id)
+          this.$store.commit('setShapeSearchDataPush', units);
+
+          this.$controller.dataManager.resetData();
+          this.$controller.dataManager.didShapeSearch();
+        }
+        // this.closeModal(state);
+      },
       tableSort(fields){
 
         Array.prototype.move = function (from, to) {
