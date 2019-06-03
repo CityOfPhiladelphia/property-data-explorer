@@ -15,7 +15,6 @@
         </div>
       </div>
     </header>
-    <condo-card-modal></condo-card-modal>
     <property-card-modal></property-card-modal>
 
     <div id="components-root">
@@ -65,7 +64,6 @@
   require("sorttable")
   // import * as philaVueComps from '@philly/vue-comps';
   import axios from 'axios';
-  import CondoCardModal from './CondoCardModal.vue';
   import helpers from '../util/helpers';
   import MapPanel from './MapPanel.vue';
   import moment from 'moment';
@@ -89,7 +87,6 @@
 
   export default {
     components: {
-      CondoCardModal,
       MapPanel,
       PropertyCardModal,
       MapAddressInput: () => import(/* webpackChunkName: "pvc_AddressInput" */'@philly/vue-mapping/src/components/MapAddressInput.vue'),
