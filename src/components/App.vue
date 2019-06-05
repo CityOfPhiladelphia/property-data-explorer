@@ -24,7 +24,7 @@
       <div :class="'flexing ' + this.tableClass">
         <full-screen-topics-toggle-tab-vertical/>
         <horizontal-table
-          v-colspan
+
           v-if="this.$store.state.lastSearchMethod === 'geocode'"
           padding-top="0"
           :slots="{
@@ -45,7 +45,7 @@
         <horizontal-table
           v-if="this.$store.state.lastSearchMethod === 'shape search'
                 && this.$store.state.shapeSearch.data !== null"
-          v-colspan
+
           :slots="{
             items: function(state) {
               var data = state.shapeSearch.data.rows;
@@ -120,21 +120,7 @@
         }
       },
     },
-    directives: {
-      colspan: {
-        // directive definition
-         inserted: function (el) {
-           let allRows = el.querySelectorAll('td')
-          // console.log("el: ", el.querySelectorAll('td'), "typeof: ", typeof allRows)
 
-          allRows.forEach(
-            a => a.querySelector('.condo-button') ? (a.setAttribute('colspan', '3'), a.setAttribute('style', 'padding: unset')):
-                 a.querySelectorAll('div').forEach( b => b.innerHTML === "Not Applicable"? a.remove():"")
-
-              )
-        },
-      }
-    },
     computed: {
       geocode() {
         return this.$store.state.geocode;
@@ -224,13 +210,10 @@
                   },
                   options: {
                     class: function (state, item) {
-                      return state.sources.opa_assessment.targets[item.properties.opa_account_num] ? "" :
-                             state.sources.opa_assessment.status === "success"| typeof state.sources.opa_assessment.status === 'undefined' ? 'condo-button' : ""
+                      return state.sources.opa_assessment.targets[item.properties.opa_account_num] ? "" : 'condo-button'
                     },
                     style: function (state, item) {
-                      return state.sources.opa_assessment.targets[item.properties.opa_account_num] ? { display: 'none' } :
-                      state.sources.opa_assessment.status === "success" | typeof state.sources.opa_assessment.status === 'undefined' ? "" :
-                      { display: 'none' }
+                      return state.sources.opa_assessment.targets[item.properties.opa_account_num] ? { display: 'none' } : ""
                     },
                   }
                 }
@@ -239,7 +222,7 @@
             {
               label: 'Date of Last Sale',
               value: function(state, item) {
-                if(state.sources.opa_assessment.targets[item.properties.opa_account_num]){
+                if(item.properties.opa_account_num != ""){
                   return moment(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date)
                   .format('MM/DD/YYYY')
                 } else {
@@ -247,7 +230,7 @@
                 }
               },
               customkey: function(state, item) {
-                if(state.sources.opa_assessment.targets[item.properties.opa_account_num]) {
+                if(item.properties.opa_account_num != "") {
                   return moment(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date).format("YYYYMMDD")
                 } else {
                   return 0
@@ -257,7 +240,7 @@
             {
               label: 'Price of Last Sale',
               value: function(state, item) {
-                if(state.sources.opa_assessment.targets[item.properties.opa_account_num]){
+                if(item.properties.opa_account_num != ""){
                   return formatter.format(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_price)
                 } else {
                   return "Not Applicable"
