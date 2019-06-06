@@ -321,9 +321,7 @@ export default {
         let result = this.$store.state.shapeSearch.data.rows.filter( function(object) {
           return object._featureId === feature.featureId
         });
-        if(typeof result[0] != 'undefined'){
-          featureId = Number(result[0].pwd_parcel_id)
-        } else { return }
+        featureId = Number(result[0].pwd_parcel_id)
       } else {
         featureId = null
       }
@@ -343,11 +341,7 @@ export default {
         let result = this.$store.state.shapeSearch.data.rows.filter( function(object){
           return object.pwd_parcel_id === featureId
         });
-        if(typeof result[0] != 'undefined') {
-          rowId = result[0]._featureId
-        } else {
-          rowId = null
-        }
+        rowId = result[0]._featureId
       } else {
         rowId = null
       }
@@ -420,16 +414,15 @@ export default {
     updateMarkerFillColor(marker) {
       // get next fill color
       // console.log("Marker: ", marker)
-      if(typeof marker != 'undefined') {
-        const featureId = marker.options.data.PARCELID;
-        const activeFeature = this.$store.state.activeFeature
-        // highlight. we're doing this here (non-reactively) because binding the
-        // fill color property was not performing well enough.
-        const nextStyle = Object.assign({}, marker.options);
-        nextStyle.fillColor = nextFillColor;
-        marker.setStyle(nextStyle);
-        const nextFillColor = this.fillColorForOverlayMarker(featureId, activeFeature);
-      }
+      const featureId = marker.options.data.PARCELID;
+      const activeFeature = this.$store.state.activeFeature
+      const nextFillColor = this.fillColorForOverlayMarker(featureId, activeFeature);
+
+      // highlight. we're doing this here (non-reactively) because binding the
+      // fill color property was not performing well enough.
+      const nextStyle = Object.assign({}, marker.options);
+      nextStyle.fillColor = nextFillColor;
+      marker.setStyle(nextStyle);
     },
     styleForMarker(markerId) {
       // get map overlay style and hover style for table

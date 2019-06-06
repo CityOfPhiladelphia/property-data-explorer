@@ -2,8 +2,8 @@
   "name": "property-data-explorer",
   "version": "1.0.0",
   "main": "",
-  "repository": "https://github.com/CityOfPhiladelphia/property-data-explorer.git",
-  "author": "stephen.skilton <stephenjskilton@gmail.com>",
+  "repository": "https://github.com/CityOfPhiladelphia/property-bulk.git",
+  "author": "andy.rothwell <rothwell.andy@gmail.com>",
   "license": "MIT",
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -13,8 +13,8 @@
   "dependencies": {
     "1.0.2": "^1.0.0",
     "@fortawesome/pro-solid-svg-icons": "^5.8.2",
-    "@philly/vue-comps": "https://github.com/CityOfPhiladelphia/phila-vue-comps#98de50e3b9ed33ef728b10e4868e2885fc575b45",
-    "@philly/vue-datafetch": "https://github.com/CityOfPhiladelphia/phila-vue-datafetch#80556dc20ac3490aa786b92cef90e276466ff79d",
+    "@philly/vue-comps": "https://github.com/CityOfPhiladelphia/phila-vue-comps#dde366b544481ef30dacef294e9c6b3790bbb14b",
+    "@philly/vue-datafetch": "https://github.com/CityOfPhiladelphia/phila-vue-datafetch#ea0ec6f84f8afdd287ff09408eaf4a321e1eb364",
     "@philly/vue-mapping": "https://github.com/CityOfPhiladelphia/phila-vue-mapping#928d89a0858a1bc7ed8d981f88bba9467afd8d87",
     "accounting": "^0.4.1",
     "axios": "^0.18.0",
