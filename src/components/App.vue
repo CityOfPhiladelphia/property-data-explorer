@@ -157,7 +157,7 @@
         const options = {
           id: 'ownerProperties',
           tableid: 'aaa',
-          // dataSources: ['opa_assessment'],
+          dataSources: ['opa_assessment'],
           mapOverlay: {},
           clickEnabled: true,
           expandDataDownload: true,

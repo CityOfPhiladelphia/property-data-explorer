@@ -119,6 +119,7 @@ let config = {
       targets: {
         runOnce: true,
         get: function(state) {
+          // console.log("opa_public get running")
           if (state.lastSearchMethod === 'owner search') {
             return state.ownerSearch.data
           } else if (state.lastSearchMethod === 'shape search') {
@@ -131,18 +132,19 @@ let config = {
               for (let relate of state.geocode.related) {
                 opa.push(relate);
               }
-              return opa;
             }
+            if (state.geocode.data.condo == true) {
+              opa.push(state.condoUnits.units[Number(state.parcels.pwd.properties.PARCELID)][0]);
+            }
+            return opa;
           }
         },
         getTargetId: function(target) {
           if(target.properties){
-            // console.log("target.properties.opa_account_num: ", target.properties.opa_account_num)
             return target.properties.opa_account_num;
           } else if(target.parcel_number === null) {
             return
           } else {
-            // console.log("target.parcel_number: ", target.parcel_number)
             return target.parcel_number
           }
         }
@@ -173,8 +175,13 @@ let config = {
           } else {
             let opa = []
             opa.push(state.geocode.data);
-            for (let relate of state.geocode.related) {
-              opa.push(relate);
+            if (state.geocode.related != null){
+              for (let relate of state.geocode.related) {
+                opa.push(relate);
+              }
+            }
+            if (state.geocode.data.condo == true) {
+              opa.push(state.condoUnits.units[Number(state.parcels.pwd.properties.PARCELID)][0]);
             }
             return opa;
           }
@@ -189,7 +196,6 @@ let config = {
       },
       options: {
         params: {
-          // parcel_number: function(feature) {
           q: function(feature) {
             return "SELECT parcel_number, market_value, sale_date, sale_price FROM opa_properties_public WHERE parcel_number IN (" + feature + ")";
           }
