@@ -563,21 +563,6 @@
 
 <style>
 
-input:focus, select:focus, textarea:focus, button:focus {
- outline: none;
-}
-
-button {
- padding: inherit !important;
-}
-
-  #map-panel-container {
-    position: relative;
-    height: 100%;
-    width: 100%;
-    overflow: hidden;
-  }
-
   .leaflet-draw.leaflet-control {
     clear: unset;
     display: inline-block;
@@ -605,6 +590,25 @@ button {
 
   .leaflet-touch .leaflet-draw-actions {
     left: 60px;
+  }
+
+  .leaflet-bar button {
+  padding: inherit !important;
+  }
+</style>
+
+<style scoped>
+
+  input:focus, select:focus, textarea:focus, button:focus {
+  outline: none;
+  }
+
+
+  #map-panel-container {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
   }
 
   .pvm-search-control-container {
