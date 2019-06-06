@@ -123,7 +123,6 @@ let config = {
           if (state.lastSearchMethod === 'owner search') {
             return state.ownerSearch.data
           } else if (state.lastSearchMethod === 'shape search') {
-            // console.log(state.shapeSearch.data)
             return state.shapeSearch.data.rows
           } else {
             let opa = []
