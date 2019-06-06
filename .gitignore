@@ -8,4 +8,3 @@ _bin/
 package-lock.json
 main_old.js
 .npmrc
-dist/
