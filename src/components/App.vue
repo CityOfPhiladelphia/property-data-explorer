@@ -15,7 +15,6 @@
         </div>
       </div>
     </header>
-    <condo-card-modal></condo-card-modal>
     <property-card-modal></property-card-modal>
 
     <div id="components-root">
@@ -25,6 +24,7 @@
       <div :class="'flexing ' + this.tableClass">
         <full-screen-topics-toggle-tab-vertical/>
         <horizontal-table
+
           v-if="this.$store.state.lastSearchMethod === 'geocode'"
           padding-top="0"
           :slots="{
@@ -45,6 +45,7 @@
         <horizontal-table
           v-if="this.$store.state.lastSearchMethod === 'shape search'
                 && this.$store.state.shapeSearch.data !== null"
+
           :slots="{
             items: function(state) {
               var data = state.shapeSearch.data.rows;
@@ -63,7 +64,6 @@
   require("sorttable")
   // import * as philaVueComps from '@philly/vue-comps';
   import axios from 'axios';
-  import CondoCardModal from './CondoCardModal.vue';
   import helpers from '../util/helpers';
   import MapPanel from './MapPanel.vue';
   import moment from 'moment';
@@ -87,7 +87,6 @@
 
   export default {
     components: {
-      CondoCardModal,
       MapPanel,
       PropertyCardModal,
       MapAddressInput: () => import(/* webpackChunkName: "pvc_AddressInput" */'@philly/vue-mapping/src/components/MapAddressInput.vue'),
@@ -109,7 +108,7 @@
     watch: {
       '$store.state.drawShape': function() {
         if(this.$store.state.drawShape !== null) {
-          this.$controller.geocodeDrawnShape();
+        this.$controller.geocodeDrawnShape();
         }
       },
       '$store.state.activeModal': function() {
@@ -121,6 +120,7 @@
         }
       },
     },
+
     computed: {
       geocode() {
         return this.$store.state.geocode;
@@ -157,7 +157,7 @@
         const options = {
           id: 'ownerProperties',
           tableid: 'aaa',
-          // dataSources: ['opa_assessment'],
+          dataSources: ['opa_assessment'],
           mapOverlay: {},
           clickEnabled: true,
           expandDataDownload: true,
@@ -187,7 +187,6 @@
               value: function(state, item) {
                 if(item.properties.opa_address != "" ) {
                   return titleCase(item.properties.opa_address)
-                  // return '<a href=# onclick="'+test+'()">'+item.properties.street_address+' <i class="fa fa-external-link"></i></a>'
                 } else {
                   return titleCase(item.properties.street_address)
                 }
@@ -199,23 +198,40 @@
                 if(state.sources.opa_assessment.targets[item.properties.opa_account_num]){
                   return formatter.format(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.market_value)
                 } else {
-                  return ""
+                  return ''
                 }
               },
+              components: [
+                {
+                  type: 'button-comp',
+                  slots: {
+                    text: 'Click to add units to results.',
+                    buttonAction: this.addCondoRecords
+                  },
+                  options: {
+                    class: function (state, item) {
+                      return state.sources.opa_assessment.targets[item.properties.opa_account_num] ? "" : 'condo-button'
+                    },
+                    style: function (state, item) {
+                      return state.sources.opa_assessment.targets[item.properties.opa_account_num] ? { display: 'none' } : ""
+                    },
+                  }
+                }
+              ],
             },
             {
               label: 'Date of Last Sale',
               value: function(state, item) {
-                if(state.sources.opa_assessment.targets[item.properties.opa_account_num]){
+                if(item.properties.opa_account_num != ""){
                   return moment(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date)
                   .format('MM/DD/YYYY')
                 } else {
-                  return ""
+                  return "Not Applicable"
                 }
               },
               customkey: function(state, item) {
-                if(state.sources.opa_assessment.targets[item.properties.opa_account_num]) {
-                  return Date.parse(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date)
+                if(item.properties.opa_account_num != "") {
+                  return moment(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date).format("YYYYMMDD")
                 } else {
                   return 0
                 }
@@ -224,10 +240,10 @@
             {
               label: 'Price of Last Sale',
               value: function(state, item) {
-                if(state.sources.opa_assessment.targets[item.properties.opa_account_num]){
+                if(item.properties.opa_account_num != ""){
                   return formatter.format(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_price)
                 } else {
-                  return ""
+                  return "Not Applicable"
                 }
               },
             },
@@ -240,7 +256,6 @@
                   return titleCase(item.properties.usps_bldgfirm);
                 }
               },
-              /* nullValue: 'no date available', */
             },
           ],
         }
@@ -294,8 +309,8 @@
                       .format('MM/DD/YYYY')
               },
               customkey: function(state, item) {
-                return Date.parse(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date.toString())
-              }
+                return moment(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date.toString()).format("YYYYMMDD")
+              },
             },
             {
               label: 'Price of Last Sale',
@@ -321,7 +336,7 @@
         const options = {
           id: 'ownerProperties',
           tableid: 'ccc',
-          // dataSources: ['opa'],
+          // dataSources: ['opa_assessment'],
           mapOverlay: {},
           clickEnabled: true,
           // downloadButton: true,
@@ -349,7 +364,11 @@
             {
               label: 'Street Address',
               value: function(state, item) {
-                return titleCase(item.location)
+                if(item.unit != null && item.unit != "") {
+                  return titleCase(item.address_std)
+                } else {
+                  return titleCase(item.location)
+                }
               },
             },
             {
@@ -358,9 +377,26 @@
                 if(item.market_value != "") {
                   return formatter.format(item.market_value)
                 } else {
-                  return ""
+                  return  ''
                 }
               },
+              components: [
+                {
+                  type: 'button-comp',
+                  slots: {
+                    text: 'Click to add units to results.',
+                    buttonAction: this.addCondoRecords,
+                  },
+                  options: {
+                    class: function (state, item) {
+                      return item.condo ? 'condo-button' : ""
+                    },
+                    style: function (state, item) {
+                      return item.condo ? "" : { display: 'none' }
+                    },
+                  }
+                }
+              ],
             },
             {
               label: 'Date of Last Sale',
@@ -368,12 +404,12 @@
                 if (item.sale_date != ""){
                   return moment(item.sale_date).format('MM/DD/YYYY')
                 } else {
-                  return ""
+                  return "Not Applicable"
                 }
               },
               customkey: function(state, item) {
                 if (item.sale_date != "") {
-                  return Date.parse(item.sale_date)
+                  return moment(item.sale_date).format("YYYYMMDD")
                 } else {
                   return 0
                 }
@@ -385,7 +421,7 @@
                 if (item.sale_price != "") {
                   return formatter.format(item.sale_price)
                 } else {
-                  return ""
+                  return "Not Applicable"
                 }
               },
             },
@@ -409,6 +445,45 @@
       },
     },
     methods: {
+      addCondoRecords(state, item) {
+        console.log("this: ", this)
+        let mapUnitIds = function(id) {
+          let unitsToAdd = this.$store.state.condoUnits.units[id]
+          unitsToAdd.map(
+            (item, index) => {
+              typeof item.properties != 'undefined' ? item._featureId = item.properties.pwd_parcel_id + "-UNIT-" + index :
+              item._featureId = item.pwd_parcel_id + "-UNIT-" + index
+            }
+          );
+          return unitsToAdd
+        }
+        mapUnitIds = mapUnitIds.bind(this)
+        let unitData;
+        if(this.$store.state.lastSearchMethod === "geocode") {
+          // console.log("Not shape search, input: ", input)
+
+          this.$controller.dataManager.resetData();
+          const input = this.$store.state.parcels.pwd.properties.ADDRESS;
+          this.$controller.dataManager.clients.condoSearch.fetch(input)
+
+          unitData = mapUnitIds(item._featureId);
+          this.$store.commit('setGeocodeRelated', unitData);
+
+          this.$controller.dataManager.fetchData();
+        } else {
+          let result = this.$store.state.shapeSearch.data.rows.filter(
+            row => row._featureId === item._featureId
+          )
+
+          // console.log("Matching Id for Units: ", units);
+          let units = mapUnitIds(result[0].pwd_parcel_id)
+          this.$store.commit('setShapeSearchDataPush', units);
+
+          this.$controller.dataManager.resetData();
+          this.$controller.dataManager.didShapeSearch();
+        }
+        // this.closeModal(state);
+      },
       tableSort(fields){
 
         Array.prototype.move = function (from, to) {
@@ -445,7 +520,6 @@
       expandedData() {
         let modalComputed = PropertyCardModal.computed
 
-        // console.log(modalComputed)
         return [
             {
               label: 'Zip Code',
@@ -663,53 +737,12 @@
                 let zip = item.properties ? item.properties.zip_code : item.zip_code.substring(0,5)
                 return 'Philadelphia, PA' + zip
               }
-                // return titleCase(item.location)
-                // return item.properties.opa_account_num
-              // value: function(state, item) {
-                // return titleCase(item.location)
-                // return item.properties.opa_account_num
-              // },
-            },
-          ],
-        };
-      },
-      mailingFields(state, item) {
-        return  {
-          fields: [
-            {
-              label: 'Owner',
-              value: function(item){
-                let owners = item.owner_2.length > 1 ?
-                             titleCase(item.owner_1.trim()) + ", " + titleCase(item.owner_2.trim()):
-                             titleCase(item.owner_1.trim())
-
-                return owners
-              },
-            },
-            {
-              label: 'Street Address',
-              value: function(item) {
-                return titleCase(item.properties.opa_address)
-              },
-            },
-            {
-              label: 'Zip Code',
-              value: function(item) {
-                return titleCase(item.location)
-              },
-            },
-            {
-              label: 'Street Address',
-              value: function(state, item) {
-                return titleCase(item.location)
-              },
             },
           ],
         };
       },
     }
   };
-
 
 </script>
 
@@ -751,6 +784,16 @@
 
 .component-label {
   font-size: 20px;
+}
+
+.condo-button {
+  background-color: #5555;
+  padding: 10.5, 0, 10.5, 0 !important;
+  height: 100%;
+  width: 100%;
+  text-transform: unset;
+  font-family: "Open Sans", Helvetica, Roboto, Arial, sans-serif;
+  font-weight: 600;
 }
 
 .ib {

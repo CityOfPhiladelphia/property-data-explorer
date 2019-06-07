@@ -150,11 +150,6 @@ function createStore(config) {
         const nextActiveFeature = { featureId };
         state.activeModal = nextActiveFeature;
       },
-      setCondoModal(state, payload) {
-        const { featureId } = payload || {};
-        const nextActiveFeature = { featureId };
-        state.activeCondo = nextActiveFeature;
-      },
       setImageOverlay(state, payload) {
         state.map.imageOverlay = payload;
       },
