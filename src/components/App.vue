@@ -230,7 +230,7 @@
                 }
               },
               customkey: function(state, item) {
-                if(item.properties.opa_account_num != "") {
+                if(typeof item.properties != 'undefined' && item.properties.opa_account_num != "") {
                   return moment(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date).format("YYYYMMDD")
                 } else {
                   return 0
@@ -446,7 +446,6 @@
     },
     methods: {
       addCondoRecords(state, item) {
-        console.log("this: ", this)
         let mapUnitIds = function(id) {
           let unitsToAdd = this.$store.state.condoUnits.units[id]
           unitsToAdd.map(
