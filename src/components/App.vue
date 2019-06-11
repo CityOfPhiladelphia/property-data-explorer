@@ -196,7 +196,9 @@
               label: 'Market Value',
               value: function(state, item){
                 if(state.sources.opa_assessment.targets[item.properties.opa_account_num]){
-                  return formatter.format(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.market_value)
+                  if(typeof state.sources.opa_assessment.targets[item.properties.opa_account_num].data != 'undefined') {
+                    return formatter.format(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.market_value)
+                  }
                 } else {
                   return ''
                 }
@@ -223,15 +225,19 @@
               label: 'Date of Last Sale',
               value: function(state, item) {
                 if(item.properties.opa_account_num != ""){
-                  return moment(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date)
+                  if(typeof state.sources.opa_assessment.targets[item.properties.opa_account_num] != 'undefined'){
+                    return moment(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date)
                   .format('MM/DD/YYYY')
+                  }
                 } else {
                   return "Not Applicable"
                 }
               },
               customkey: function(state, item) {
-                if(typeof item.properties != 'undefined' && item.properties.opa_account_num != "") {
-                  return moment(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date).format("YYYYMMDD")
+                if(item.properties.opa_account_num != "") {
+                  if(typeof state.sources.opa_assessment.targets[item.properties.opa_account_num] != 'undefined'){
+                    return moment(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date).format("YYYYMMDD")
+                  } else { return}
                 } else {
                   return 0
                 }
@@ -241,7 +247,9 @@
               label: 'Price of Last Sale',
               value: function(state, item) {
                 if(item.properties.opa_account_num != ""){
-                  return formatter.format(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_price)
+                  if(typeof state.sources.opa_assessment.targets[item.properties.opa_account_num] != 'undefined'){
+                    return formatter.format(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_price)
+                  }
                 } else {
                   return "Not Applicable"
                 }
