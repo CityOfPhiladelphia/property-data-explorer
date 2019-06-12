@@ -225,7 +225,7 @@ export default {
           {
             label: 'Homestead Exemption',
             value: function(state) {
-              if (state.ownerSearch.status === "geocode"){
+              if (state.lastSearchMethod=== "geocode"){
                 if (typeof state.geocode.data != 'undefined'){
                   let result = findIdForGeocoded(state)
                   return state.sources.opa_public.targets[result].data.homestead_exemption
@@ -235,7 +235,7 @@ export default {
                     minimumFractionDigits: 0
                   })
                 } else { return 0 }
-              } else if (state.ownerSearch.status === "success") {
+              } else if (state.lastSearchMethod=== "owner search") {
                 let result = state.ownerSearch.data.filter(object => {
                   return object._featureId === state.activeModal.featureId
                 });
