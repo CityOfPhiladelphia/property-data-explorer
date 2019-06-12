@@ -225,7 +225,7 @@ export default {
           {
             label: 'Homestead Exemption',
             value: function(state) {
-              if (state.geocode.status === "success"){
+              if (state.ownerSearch.status === "geocode"){
                 if (typeof state.geocode.data != 'undefined'){
                   let result = findIdForGeocoded(state)
                   return state.sources.opa_public.targets[result].data.homestead_exemption
