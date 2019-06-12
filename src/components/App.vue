@@ -24,11 +24,15 @@
       <div :class="'flexing ' + this.tableClass">
         <full-screen-topics-toggle-tab-vertical/>
         <horizontal-table
-
+          v-show="this.$data.showTable"
           v-if="this.$store.state.lastSearchMethod === 'geocode'"
           padding-top="0"
           :slots="{
-            items: geocodeItems
+            items: geocodeItems,
+            buttonFinished: function() {
+              $data.showTable = true
+              $data.buttonHide = true
+            }
           }"
           :options="this.geocodeOptions"
         />
@@ -103,6 +107,7 @@
       return {
         'top': 3,
         'bottom': 2,
+        'showTable': true,
       }
     },
     watch: {
@@ -117,6 +122,11 @@
       '$store.state.ownerSearch.status': function() {
         if(this.$store.state.ownerSearch.status === 'success') {
           this.$controller.geocodeOwnerSearch()
+        }
+      },
+      't$store.sources.opa_assessment.status': function() {
+        if(this.$store.sources.opa_assessment.status === 'success'){
+          this.$data.showTable = true
         }
       },
     },
@@ -208,7 +218,11 @@
                   type: 'button-comp',
                   slots: {
                     text: 'Click to add units to results.',
-                    buttonAction: this.addCondoRecords
+                    buttonAction: this.addCondoRecords,
+                    buttonFinished() {
+                      console.log("button finished running")
+                      this.$data.showTable = true
+                    },
                   },
                   options: {
                     class: function (state, item) {
@@ -454,6 +468,8 @@
     },
     methods: {
       addCondoRecords(state, item) {
+        this.$data.showTable = false;
+        console.log("this$data.showTable = ", this.$data.showTable)
         let mapUnitIds = function(id) {
           let unitsToAdd = this.$store.state.condoUnits.units[id]
           unitsToAdd.map(
