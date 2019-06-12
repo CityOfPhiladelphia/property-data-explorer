@@ -132,7 +132,7 @@ let config = {
                 opa.push(relate);
               }
             }
-            if (state.geocode.data.condo == true) {
+            if (state.geocode.data.condo != null && state.geocode.data.condo == true) {
               opa.push(state.condoUnits.units[Number(state.parcels.pwd.properties.PARCELID)][0]);
             }
             return opa;
@@ -179,7 +179,7 @@ let config = {
                 opa.push(relate);
               }
             }
-            if (state.geocode.data.condo == true) {
+            if (state.geocode.data.condo != null && state.geocode.data.condo == true) {
               opa.push(state.condoUnits.units[Number(state.parcels.pwd.properties.PARCELID)][0]);
             }
             return opa;

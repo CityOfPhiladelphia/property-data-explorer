@@ -469,7 +469,6 @@
     methods: {
       addCondoRecords(state, item) {
         this.$data.showTable = false;
-        console.log("this$data.showTable = ", this.$data.showTable)
         let mapUnitIds = function(id) {
           let unitsToAdd = this.$store.state.condoUnits.units[id]
           unitsToAdd.map(
@@ -564,16 +563,24 @@
               value: function(state, item) {
                 if (state.geocode.status === "success"){
                   let obj_id = item.properties.opa_account_num;
-                  return state.sources.opa_public.targets[obj_id].data.total_livable_area
-                        .toLocaleString('en-US', {
-                          minimumFractionDigits: 0
-                        })
+                  if (item.properties.opa_account_num === ""){
+                    return ""
+                  } else {
+                    return state.sources.opa_public.targets[obj_id].data.total_livable_area
+                          .toLocaleString('en-US', {
+                            minimumFractionDigits: 0
+                          })
+                  }
                 } else if (state.ownerSearch.status === "success") {
                   let obj_id = item.properties.opa_account_num;
+                  if (item.properties.opa_account_num === ""){
+                    return ""
+                  } else {
                   return state.sources.opa_public.targets[obj_id].data.total_livable_area
                         .toLocaleString('en-US', {
                           minimumFractionDigits: 0
                         })
+                  }
                 } else {
                   let obj_id = item.parcel_number;
                   if (obj_id != "") {
@@ -590,16 +597,24 @@
               value: function(state, item) {
                 if (state.geocode.status === "success"){
                   let obj_id = item.properties.opa_account_num;
+                  if (item.properties.opa_account_num === ""){
+                    return ""
+                  } else {
                   return state.sources.opa_public.targets[obj_id].data.total_area
                         .toLocaleString('en-US', {
                           minimumFractionDigits: 0
                         })
+                  }
                 } else if (state.ownerSearch.status === "success") {
                   let obj_id = item.properties.opa_account_num;
-                  return state.sources.opa_public.targets[obj_id].data.total_area
-                        .toLocaleString('en-US', {
-                          minimumFractionDigits: 0
-                        })
+                  if (item.properties.opa_account_num === ""){
+                    return ""
+                  } else {
+                    return state.sources.opa_public.targets[obj_id].data.total_area
+                          .toLocaleString('en-US', {
+                            minimumFractionDigits: 0
+                          })
+                  }
                 } else {
                   let obj_id = item.parcel_number;
                   if (obj_id != "") {
@@ -627,10 +642,18 @@
                   }
                 if (state.geocode.status === "success"){
                   let obj_id = item.properties.opa_account_num;
-                  return cond_code(state.sources.opa_public.targets[obj_id].data.exterior_condition)
+                  if (item.properties.opa_account_num === ""){
+                    return ""
+                  } else {
+                    return cond_code(state.sources.opa_public.targets[obj_id].data.exterior_condition)
+                  }
                 } else if (state.ownerSearch.status === "success") {
                   let obj_id = item.properties.opa_account_num;
-                  return cond_code(state.sources.opa_public.targets[obj_id].data.exterior_condition)
+                  if (item.properties.opa_account_num === ""){
+                    return ""
+                  } else {
+                    return cond_code(state.sources.opa_public.targets[obj_id].data.exterior_condition)
+                  }
                 } else {
                   let obj_id = item.parcel_number;
                   if (obj_id != "") {
@@ -644,7 +667,11 @@
               value: function(state, item) {
                 if (state.geocode.status === "success"){
                   let obj_id = item.properties.opa_account_num;
-                  return state.sources.opa_public.targets[obj_id].data.building_code_description
+                  if (item.properties.opa_account_num === ""){
+                    return ""
+                  } else {
+                    return state.sources.opa_public.targets[obj_id].data.building_code_description
+                  }
                 } else if (state.ownerSearch.status === "success") {
                   let obj_id = item.properties.opa_account_num
                   return state.sources.opa_public.targets[obj_id].data.building_code_description
@@ -661,21 +688,28 @@
               value: function(state, item) {
                 if (state.geocode.status === "success"){
                   let obj_id = item.properties.opa_account_num;
-                  return state.sources.opa_public.targets[obj_id].data.homestead_exemption
-                        .toLocaleString('en-US', {
-                          style: "currency",
-                          currency:"USD",
-                          minimumFractionDigits: 0
-                        })
+                  if (item.properties.opa_account_num === ""){
+                    return ""
+                  } else {
+                    return state.sources.opa_public.targets[obj_id].data.homestead_exemption
+                          .toLocaleString('en-US', {
+                            style: "currency",
+                            currency:"USD",
+                            minimumFractionDigits: 0
+                          })
+                  }
                 } else if (state.ownerSearch.status === "success") {
                   let obj_id = item.properties.opa_account_num
-                  return state.sources.opa_public.targets[obj_id].data.homestead_exemption
-                        .toLocaleString('en-US', {
-                          style: "currency",
-                          currency:"USD",
-                          minimumFractionDigits: 0
-                        })
-
+                  if (item.properties.opa_account_num === "") {
+                    return ""
+                  } else {
+                    return state.sources.opa_public.targets[obj_id].data.homestead_exemption
+                          .toLocaleString('en-US', {
+                            style: "currency",
+                            currency:"USD",
+                            minimumFractionDigits: 0
+                          })
+                  }
                 } else {
                   let obj_id = item.parcel_number
                   if(typeof obj_id != 'undefined' && obj_id != "") {
