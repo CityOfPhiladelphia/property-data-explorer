@@ -143,7 +143,14 @@ export default {
       const state = this.$store.state
       let address =  function() {
         if (state.geocode.status === "success"){
-          return titleCase(state.geocode.data.properties.street_address)
+          if(state.geocode.data.condo != true){
+            return titleCase(state.geocode.data.properties.street_address)
+          } else {
+            let filtered = state.geocode.related.filter(object => {
+              return object._featureId === state.activeFeature.featureId
+          })
+            return titleCase(filtered[0].properties.street_address)
+          }
         } else if (state.ownerSearch.status === "success") {
           let result = state.ownerSearch.data.filter(object => {
             return object._featureId === state.activeModal.featureId
