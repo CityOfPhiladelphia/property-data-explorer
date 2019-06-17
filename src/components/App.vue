@@ -713,12 +713,14 @@
                 } else {
                   let obj_id = item.parcel_number
                   if(typeof obj_id != 'undefined' && obj_id != "") {
-                    return state.sources.opa_public.targets[obj_id].data.homestead_exemption
-                    .toLocaleString('en-US', {
-                      style: "currency",
-                      currency:"USD",
-                      minimumFractionDigits: 0
-                    })
+                    if(state.sources.opa_public.targets[obj_id].data.homestead_exemption != null) {
+                      return state.sources.opa_public.targets[obj_id].data.homestead_exemption
+                      .toLocaleString('en-US', {
+                        style: "currency",
+                        currency:"USD",
+                        minimumFractionDigits: 0
+                      })
+                    }  else { return ""}
                   } else { return ""}
                 }
               },
