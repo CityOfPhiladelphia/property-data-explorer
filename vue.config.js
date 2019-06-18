@@ -12,7 +12,6 @@ module.exports = {
   },
   transpileDependencies: [
     // can be string or regex
-    '@philly/mapboard',
     '@philly/vue-comps',
     '@philly/vue-mapping',
     '@philly/vue-datafetch',
