@@ -170,6 +170,7 @@
           dataSources: ['opa_assessment'],
           mapOverlay: {},
           clickEnabled: true,
+          downloadButton: false,
           expandDataDownload: true,
           mailingFields: this.mailingFields,
           tableSort: this.tableSort,
@@ -290,6 +291,7 @@
           dataSources: ['opa_assessment'],
           mapOverlay: {},
           clickEnabled: true,
+          downloadButton: false,
           export: {
             formatButtons: {
               csv: "Download CSV",
@@ -361,7 +363,7 @@
           // dataSources: ['opa_assessment'],
           mapOverlay: {},
           clickEnabled: true,
-          // downloadButton: true,
+          downloadButton: false,
           expandDataDownload: true,
           mailingFields: this.mailingFields,
           tableSort: this.tableSort,
