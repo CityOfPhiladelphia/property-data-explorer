@@ -2,11 +2,20 @@ import transforms from './util/transforms';
 import helpers from './util/helpers';
 import map from './general/map';
 
+// data-sources
+import opa_assessment from './data-sources/opa-assessment';
+import opa_public from './data-sources/opa-public';
+
 let config = {
   baseConfig: '//raw.githubusercontent.com/stevetotheizz0/atlas_base_config/master/config.js',
   gatekeeperKey: '82fe014b6575b8c38b44235580bc8b11',
   router: {
-    enabled: true
+    enabled: false,
+  },
+  app: {
+    title: 'Property Data Explorer',
+    tagLine: 'Explore Property Data',
+    logoAlt: 'logo',
   },
   transforms,
   cyclomedia: {
@@ -113,97 +122,8 @@ let config = {
     },
   },
   dataSources: {
-    opa_public: {
-      type: 'http-get',
-      url: 'https://phl.carto.com/api/v2/sql',
-      targets: {
-        runOnce: true,
-        get: function(state) {
-          // console.log("opa_public get running")
-          if (state.lastSearchMethod === 'owner search') {
-            return state.ownerSearch.data
-          } else if (state.lastSearchMethod === 'shape search') {
-            return state.shapeSearch.data.rows
-          } else {
-            let opa = []
-            opa.push(state.geocode.data);
-            if (state.geocode.related != null){
-              for (let relate of state.geocode.related) {
-                opa.push(relate);
-              }
-            }
-            if (state.geocode.data.condo != null && state.geocode.data.condo == true) {
-              opa.push(state.condoUnits.units[Number(state.parcels.pwd.properties.PARCELID)][0]);
-            }
-            return opa;
-          }
-        },
-        getTargetId: function(target) {
-          if(target.properties){
-            return target.properties.opa_account_num;
-          } else if(target.parcel_number === null) {
-            return
-          } else {
-            return target.parcel_number
-          }
-        }
-      },
-      options: {
-        params: {
-          q: function(input){
-            // var inputEncoded = Object.keys(input).map(k => "'" + input[k] + "'").join(",");
-            return "select * from opa_properties_public where parcel_number IN("+ input +")"
-          }
-        },
-        success: function(data) {
-          return data.rows;
-        }
-      }
-    },
-    opa_assessment: {
-      type: 'http-get',
-      url: 'https://phl.carto.com/api/v2/sql',
-      targets: {
-        runOnce: true,
-        get: function(state) {
-          // console.log('opa get is running');
-          if (state.lastSearchMethod === 'owner search') {
-            return state.ownerSearch.data
-          } else if (state.lastSearchMethod === 'shape search') {
-            return state.shapeSearch.data.rows
-          } else {
-            let opa = []
-            opa.push(state.geocode.data);
-            if (state.geocode.related != null){
-              for (let relate of state.geocode.related) {
-                opa.push(relate);
-              }
-            }
-            if (state.geocode.data.condo != null && state.geocode.data.condo == true) {
-              opa.push(state.condoUnits.units[Number(state.parcels.pwd.properties.PARCELID)][0]);
-            }
-            return opa;
-          }
-        },
-        getTargetId: function(target) {
-          if(target.properties){
-            return target.properties.opa_account_num;
-          } else {
-            return target.parcel_number
-          }
-        }
-      },
-      options: {
-        params: {
-          q: function(feature) {
-            return "SELECT parcel_number, market_value, sale_date, sale_price FROM opa_properties_public WHERE parcel_number IN (" + feature + ")";
-          }
-        },
-        success: function(data) {
-          return data.rows;
-        }
-      }
-    },
+    opa_public,
+    opa_assessment,
   }
 }
 
