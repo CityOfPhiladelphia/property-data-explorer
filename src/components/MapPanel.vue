@@ -173,7 +173,44 @@
                               :position="this.addressInputPosition"
       />
 
+      <!-- marker using a png and ablility to rotate it -->
+      <png-marker v-if="this.cyclomediaActive"
+                  :icon="this.sitePath + 'images/camera.png'"
+                  :latlng="cycloLatlng"
+                  :rotationAngle="cycloRotationAngle"
+      />
+
+      <!-- marker using custom code extending icons - https://github.com/iatkin/leaflet-svgicon -->
+      <svg-view-cone-marker v-if="this.cyclomediaActive"
+                            :latlng="cycloLatlng"
+                            :rotationAngle="cycloRotationAngle"
+                            :hFov="cycloHFov"
+      />
+
+      <div v-once>
+        <cyclomedia-button v-if="this.shouldShowCyclomediaButton"
+                           v-once
+                           :position="'topright'"
+                           :link="'cyclomedia'"
+                           :imgSrc="this.sitePath + 'images/cyclomedia.png'"
+                           @click="handleCyclomediaButtonClick"
+        />
+      </div>
+
+      <cyclomedia-recording-circle v-for="recording in cyclomediaRecordings"
+                                   v-if="cyclomediaActive"
+                                   :key="recording.imageId"
+                                   :imageId="recording.imageId"
+                                   :latlng="[recording.lat, recording.lng]"
+                                   :size="1.2"
+                                   :color="'#3388ff'"
+                                   :weight="1"
+                                   @l-click="handleCyclomediaRecordingClick"
+      />
+
+
     </map_>
+    <slot class='widget-slot' name="cycloWidget" />
   </div>
 </template>
 
@@ -187,8 +224,11 @@
 
   // mixins
   import markersMixin from './markers-mixin';
+  import cyclomediaMixin from '@philly/vue-mapping/src/cyclomedia/map-panel-mixin.js';
+
 
   // components
+  import CyclomediaRecordingsClient from '@philly/vue-mapping/src/cyclomedia/recordings-client.js';
   import ControlCorner from '@philly/vue-mapping/src/leaflet/ControlCorner.vue';
   import FullScreenMapToggleTab from '@philly/vue-mapping/src/components/FullScreenMapToggleTab.vue';
   import FullScreenMapToggleTabVertical from '@philly/vue-mapping/src/components/FullScreenMapToggleTabVertical.vue';
@@ -207,6 +247,7 @@
   export default {
     mixins: [
       markersMixin,
+      cyclomediaMixin,
     ],
     components: {
       DrawControl,
@@ -250,6 +291,17 @@
       const defaultAddress = this.$config.defaultAddress;
       if (defaultAddress) {
         this.$controller.goToDefaultAddress(defaultAddress);
+      }
+
+      const cyclomediaConfig = this.$config.cyclomedia || {};
+      if (cyclomediaConfig.enabled) {
+      // create cyclomedia recordings client
+        this.$cyclomediaRecordingsClient = new CyclomediaRecordingsClient(
+          this.$config.cyclomedia.recordingsUrl,
+          this.$config.cyclomedia.username,
+          this.$config.cyclomedia.password,
+          4326
+        );
       }
     },
     mounted() {
@@ -316,13 +368,10 @@
         return this.$store.state.fullScreenMapEnabled;
       },
       mapPanelContainerClass() {
-        // return 'medium-12 small-order-1 small-24 medium-order-2 mb-panel mb-panel-map'
-        if (this.fullScreenMapEnabled) {
-          return 'medium-24 small-order-1 small-24 medium-order-2 mb-panel mb-panel-map'
-        } else if (this.fullScreenMapOnly) {
-          return 'medium-1 small-order-1 small-1 medium-order-2 mb-panel mb-panel-map'
-        } else {
+        if (this.$store.state.cyclomedia.active) {
           return 'medium-12 small-order-1 small-24 medium-order-2 mb-panel mb-panel-map'
+        } else {
+          return 'medium-24 small-order-1 small-24 medium-order-2 mb-panel mb-panel-map'
         }
       },
       isMobileOrTablet() {
@@ -441,6 +490,31 @@
       isGeocoding() {
         return this.$store.state.geocode.status === 'waiting';
       },
+
+      cycloLatlng() {
+        if (this.$store.state.cyclomedia.orientation.xyz !== null) {
+          const xyz = this.$store.state.cyclomedia.orientation.xyz;
+          return [xyz[1], xyz[0]];
+        } else {
+          const center = this.$config.map.center;
+          return center;
+        }
+      },
+      cycloRotationAngle() {
+        return this.$store.state.cyclomedia.orientation.yaw * (180/3.14159265359);
+      },
+      cycloHFov() {
+        return this.$store.state.cyclomedia.orientation.hFov;
+      },
+      shouldShowCyclomediaButton() {
+        return this.$config.cyclomedia.enabled;
+      },
+      sitePath() {
+        if (process.env.VUE_APP_PUBLICPATH) {
+          return window.location.origin + process.env.VUE_APP_PUBLICPATH;
+        }
+        return '';
+      },
     },
     watch: {
 
@@ -466,6 +540,14 @@
         } else {
           dzts.markersForAddress = nextMarkers;
           this.checkBoundsChanges();
+        }
+      },
+
+      picOrCycloActive() {
+        if (this.cyclomediaActive) {
+          return true;
+        } else {
+          return false;
         }
       },
     },
@@ -552,10 +634,19 @@
         }
       },
       handleMapMove(e) {
+        console.log('handleMapMove is firing')
         const map = this.$store.state.map.map;
         const center = map.getCenter();
         const { lat, lng } = center;
         const coords = [lng, lat];
+
+        const cyclomediaConfig = this.$config.cyclomedia || {};
+
+        if (cyclomediaConfig.enabled) {
+          // update cyclo recordings
+          this.updateCyclomediaRecordings();
+          this.$store.commit('setCyclomediaLatLngFromMap', [lat, lng]);
+        }
       },
     }, // end of methods
   }; //end of export
@@ -607,8 +698,8 @@
   #map-panel-container {
     position: relative;
     height: 100%;
-    width: 100%;
-    overflow: hidden;
+    /* width: 100%; */
+    /* overflow: hidden; */
   }
 
   .pvm-search-control-container {
@@ -622,8 +713,8 @@
   }
 
   .mb-map-with-widget {
-      height: 50%;
-    }
+    width: 50%;
+  }
 
   .widget-slot {
     position: relative;
