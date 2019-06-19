@@ -519,6 +519,7 @@ export default {
         // dataSources: ['opa'],
         mapOverlay: {},
         mouseOverDisabled: true,
+        downloadButton: false,
         fields: [
           {
             label: 'Year',
@@ -578,6 +579,7 @@ export default {
         id: 'salesHistory',
         tableid: 'ddd',
         // dataSources: ['opa'],
+        downloadButton: false,
         mapOverlay: {},
         mouseOverDisabled: true,
         fields: [
@@ -789,6 +791,11 @@ export default {
     page-break-inside: avoid !important;
   }
 
+  .pvc-download-data-button, .pvc-export-data-button {
+    visibility: hidden;
+  }
+
+
   .table-container[data-v-42075018] {
     padding-top: 1rem !important;
     padding-bottom: 1rem !important;
@@ -835,6 +842,7 @@ export default {
   #components-root {
     display:none;
   }
+
   .openmaps-modal {
     overflow: visible !important;
     position: absolute !important;
