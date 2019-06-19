@@ -56,6 +56,8 @@ const formatter = new Intl.NumberFormat('en-US', {
   minimumFractionDigits: 0
 })
 
+import PropertyCardModal from './PropertyCardModal.vue';
+
 export default {
   components: {
     Callout: () => import(/* webpackChunkName: "pvc_Callout" */'@philly/vue-comps/src/components/Callout.vue'),
@@ -69,7 +71,7 @@ export default {
   },
   data() {
     return {
-      'showTable': true,
+      'showTable': false,
     }
   },
   watch: {
