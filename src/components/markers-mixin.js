@@ -321,7 +321,7 @@ export default {
           return object._featureId === feature.featureId
         });
         console.log(result)
-        featureId = Number(result[0].properties.pwd_parcel_id)
+        featureId = result.length > 0 ? Number(result[0].properties.pwd_parcel_id) : null
       } else if (this.$store.state.shapeSearch.status === "success") {
         let result = this.$store.state.shapeSearch.data.rows.filter( function(object) {
           return object._featureId === feature.featureId
