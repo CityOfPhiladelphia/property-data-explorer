@@ -6,8 +6,11 @@ import map from './general/map';
 import opa_assessment from './data-sources/opa-assessment';
 import opa_public from './data-sources/opa-public';
 
+var BASE_CONFIG_URL = 'https://cdn.jsdelivr.net/gh/cityofphiladelphia/mapboard-default-base-config@d3ad38f050cf55b4ab0dc2ff68e6f18025690246/config.js';
+
 let config = {
-  baseConfig: '//raw.githubusercontent.com/stevetotheizz0/atlas_base_config/master/config.js',
+  baseConfig: BASE_CONFIG_URL,
+  // baseConfig: '//raw.githubusercontent.com/stevetotheizz0/atlas_base_config/master/config.js',
   gatekeeperKey: '82fe014b6575b8c38b44235580bc8b11',
   router: {
     enabled: false,

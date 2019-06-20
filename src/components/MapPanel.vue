@@ -1,215 +1,217 @@
 <template>
   <div id="map-panel-container"
-       :class="this.mapPanelContainerClass"
+       class="surrounding-div grid-x medium-grid-frame"
   >
     <full-screen-map-toggle-tab-vertical v-once />
-    <map_ id="map-tag"
-          :center="this.$store.state.map.center"
-          :zoom="this.$store.state.map.zoom"
-          @l-click="handleMapClick"
-          @l-moveend="handleMapMove"
-          zoom-control-position="bottomright"
-          :min-zoom="this.$config.map.minZoom"
-          :max-zoom="this.$config.map.maxZoom"
-    >
-      <!-- loading mask -->
-      <div v-show="isGeocoding" class="mb-map-loading-mask">
-        <div class="mb-map-loading-mask-inner">
-          <i class="fa fa-spinner fa-4x spin"></i>
-          <h1>Finding address...</h1>
+    <div :class="this.mapPanelContainerClass">
+      <map_ id="map-tag"
+            :center="this.$store.state.map.center"
+            :zoom="this.$store.state.map.zoom"
+            @l-click="handleMapClick"
+            @l-moveend="handleMapMove"
+            zoom-control-position="bottomright"
+            :min-zoom="this.$config.map.minZoom"
+            :max-zoom="this.$config.map.maxZoom"
+      >
+        <!-- loading mask -->
+        <div v-show="isGeocoding" class="mb-map-loading-mask">
+          <div class="mb-map-loading-mask-inner">
+            <i class="fa fa-spinner fa-4x spin"></i>
+            <h1>Finding address...</h1>
+          </div>
         </div>
-      </div>
 
-      <!-- basemaps -->
-      <esri-tiled-map-layer v-for="(basemap, key) in this.$config.map.basemaps"
-                            v-if="activeBasemap === key"
-                            :key="key"
-                            :url="basemap.url"
-                            :max-zoom="basemap.maxZoom"
-                            :attribution="basemap.attribution"
-      />
+        <!-- basemaps -->
+        <esri-tiled-map-layer v-for="(basemap, key) in this.$config.map.basemaps"
+                              v-if="activeBasemap === key"
+                              :key="key"
+                              :url="basemap.url"
+                              :max-zoom="basemap.maxZoom"
+                              :attribution="basemap.attribution"
+        />
 
-      <!-- basemap labels and parcels outlines -->
-      <esri-tiled-map-layer v-for="(tiledLayer, key) in this.$config.map.tiledLayers"
-                            v-if="tiledLayers.includes(key)"
+        <!-- basemap labels and parcels outlines -->
+        <esri-tiled-map-layer v-for="(tiledLayer, key) in this.$config.map.tiledLayers"
+                              v-if="tiledLayers.includes(key)"
+                              :key="key"
+                              :url="tiledLayer.url"
+                              :zIndex="tiledLayer.zIndex"
+                              :attribution="tiledLayer.attribution"
+        />
+
+        <esri-tiled-overlay v-for="(tiledLayer, key) in this.$config.map.tiledOverlays"
+                            v-if="activeTiledOverlays.includes(key)"
                             :key="key"
                             :url="tiledLayer.url"
                             :zIndex="tiledLayer.zIndex"
-                            :attribution="tiledLayer.attribution"
-      />
-
-      <esri-tiled-overlay v-for="(tiledLayer, key) in this.$config.map.tiledOverlays"
-                          v-if="activeTiledOverlays.includes(key)"
-                          :key="key"
-                          :url="tiledLayer.url"
-                          :zIndex="tiledLayer.zIndex"
-                          :opacity="tiledLayer.opacity"
-      />
-
-      <!-- dorParcels, pwdParcels, vacantLand, vacantBuilding -->
-      <esri-feature-layer v-for="(featureLayer, key) in this.$config.map.featureLayers"
-                          v-if="shouldShowFeatureLayer(key, featureLayer.minZoom)"
-                          :key="key"
-                          :layerName="key"
-                          :url="featureLayer.url"
-                          :color="featureLayer.color"
-                          :fillColor="featureLayer.color"
-                          :fillOpacity="featureLayer.fillOpacity"
-                          :weight="featureLayer.weight"
-                          :style_="featureLayer.style"
-                          :minZoom="featureLayer.minZoom"
-                          :maxZoom="featureLayer.maxZoom"
-                          :zIndex="featureLayer.zIndex"
-                          :markerType="featureLayer.markerType"
-                          :radius="featureLayer.radius"
-                          :interactive="featureLayer.interactive"
-      />
-
-      <!-- reactive geojson parcels -->
-      <geojson v-for="geojsonFeature in geojsonParcels"
-      @l-mouseover="handleMarkerMouseover"
-      @l-mouseout="handleMarkerMouseout"
-      :geojson="geojsonFeature"
-      :fillColor="geojsonFeature.properties.fillColor"
-      :color="geojsonFeature.properties.color"
-      :weight="geojsonFeature.properties.weight"
-      :opacity="geojsonFeature.properties.opacity"
-      :fillOpacity="geojsonFeature.properties.fillOpacity"
-      :data="geojsonFeature.properties"
-      :key="geojsonFeature.properties.PARCELID"
-      />
-
-      <!-- vector markers -->
-      <vector-marker v-for="(marker, index) in markersForAddress"
-                     :latlng="marker.latlng"
-                     :key="marker.key"
-                     :markerColor="marker.color"
-                     :icon="marker.icon"
-      />
-
-      <!-- vector markers -->
-      <vector-marker v-for="(marker, index) in markersForTopic"
-                     :latlng="marker.latlng"
-                     :key="marker.key"
-                     :markerColor="marker.color"
-                     :icon="marker.icon"
-      />
-
-
-
-
-      <!-- CONTROLS: -->
-      <!-- basemap control -->
-      <control-corner :vSide="'top'"
-                      :hSide="'almostright'"
-      >
-      </control-corner>
-
-      <control-corner :vSide="'top'"
-                      :hSide="'almostleft'"
-      >
-      </control-corner>
-
-      <!-- <basemap-tooltip :position="'topright'"
-      /> -->
-
-      <div v-once>
-        <basemap-toggle-control v-if="shouldShowImageryToggle"
-                                v-once
-                                :position="'topright'"
+                            :opacity="tiledLayer.opacity"
         />
-      </div>
 
-      <div v-once>
-        <basemap-select-control :position="this.basemapSelectControlPosition" />
-      </div>
-
-
-      <!-- <div v-once
-           v-if="this.measureControlEnabled"
-      >
-        <measure-control :position="'bottomleft'" />
-      </div> -->
-
-      <div v-once>
-        <legend-control v-for="legendControl in Object.keys(legendControls)"
-                        :key="legendControl"
-                        :position="'bottomleft'"
-                        :options="legendControls[legendControl].options"
-                        :items="legendControls[legendControl].data"
+        <!-- dorParcels, pwdParcels, vacantLand, vacantBuilding -->
+        <esri-feature-layer v-for="(featureLayer, key) in this.$config.map.featureLayers"
+                            v-if="shouldShowFeatureLayer(key, featureLayer.minZoom)"
+                            :key="key"
+                            :layerName="key"
+                            :url="featureLayer.url"
+                            :color="featureLayer.color"
+                            :fillColor="featureLayer.color"
+                            :fillOpacity="featureLayer.fillOpacity"
+                            :weight="featureLayer.weight"
+                            :style_="featureLayer.style"
+                            :minZoom="featureLayer.minZoom"
+                            :maxZoom="featureLayer.maxZoom"
+                            :zIndex="featureLayer.zIndex"
+                            :markerType="featureLayer.markerType"
+                            :radius="featureLayer.radius"
+                            :interactive="featureLayer.interactive"
         />
-      </div>
 
-      <div v-once>
-        <location-control v-once
-                          v-if="this.geolocationEnabled"
-                          :position="'bottomright'"
+        <!-- reactive geojson parcels -->
+        <geojson v-for="geojsonFeature in geojsonParcels"
+        @l-mouseover="handleMarkerMouseover"
+        @l-mouseout="handleMarkerMouseout"
+        :geojson="geojsonFeature"
+        :fillColor="geojsonFeature.properties.fillColor"
+        :color="geojsonFeature.properties.color"
+        :weight="geojsonFeature.properties.weight"
+        :opacity="geojsonFeature.properties.opacity"
+        :fillOpacity="geojsonFeature.properties.fillOpacity"
+        :data="geojsonFeature.properties"
+        :key="geojsonFeature.properties.PARCELID"
         />
-      </div>
 
-      <!-- <basemap-tooltip :position="'bottomalmostleft'"
-      /> -->
+        <!-- vector markers -->
+        <vector-marker v-for="(marker, index) in markersForAddress"
+                       :latlng="marker.latlng"
+                       :key="marker.key"
+                       :markerColor="marker.color"
+                       :icon="marker.icon"
+        />
 
-      <!-- <scale-control :vSide="'top'"
-                     :hSide="'almostright'"
-      >
-      </scale-control> -->
-      <div>
+        <!-- vector markers -->
+        <vector-marker v-for="(marker, index) in markersForTopic"
+                       :latlng="marker.latlng"
+                       :key="marker.key"
+                       :markerColor="marker.color"
+                       :icon="marker.icon"
+        />
+
+
+
+
+        <!-- CONTROLS: -->
+        <!-- basemap control -->
+        <control-corner :vSide="'top'"
+                        :hSide="'almostright'"
+        >
+        </control-corner>
+
+        <control-corner :vSide="'top'"
+                        :hSide="'almostleft'"
+        >
+        </control-corner>
+
+        <!-- <basemap-tooltip :position="'topright'"
+        /> -->
+
         <div v-once>
-          <map-address-input :position="this.addressInputPosition"
-                         :placeholder="this.addressInputPlaceholder"
-                         widthFromConfig="350"
-          >
-        </map-address-input>
-          <!-- <div v-once class="draw-control"> -->
-          <div class="draw-control">
-            <draw-control :position="this.addressInputPosition"
-                          :control="true"
-            />
+          <basemap-toggle-control v-if="shouldShowImageryToggle"
+                                  v-once
+                                  :position="'topright'"
+          />
+        </div>
+
+        <div v-once>
+          <basemap-select-control :position="this.basemapSelectControlPosition" />
+        </div>
+
+
+        <!-- <div v-once
+             v-if="this.measureControlEnabled"
+        >
+          <measure-control :position="'bottomleft'" />
+        </div> -->
+
+        <div v-once>
+          <legend-control v-for="legendControl in Object.keys(legendControls)"
+                          :key="legendControl"
+                          :position="'bottomleft'"
+                          :options="legendControls[legendControl].options"
+                          :items="legendControls[legendControl].data"
+          />
+        </div>
+
+        <div v-once>
+          <location-control v-once
+                            v-if="this.geolocationEnabled"
+                            :position="'bottomright'"
+          />
+        </div>
+
+        <!-- <basemap-tooltip :position="'bottomalmostleft'"
+        /> -->
+
+        <!-- <scale-control :vSide="'top'"
+                       :hSide="'almostright'"
+        >
+        </scale-control> -->
+        <div>
+          <div v-once>
+            <map-address-input :position="this.addressInputPosition"
+                           :placeholder="this.addressInputPlaceholder"
+                           widthFromConfig="350"
+            >
+          </map-address-input>
+            <!-- <div v-once class="draw-control"> -->
+            <div class="draw-control">
+              <draw-control :position="this.addressInputPosition"
+                            :control="true"
+              />
+            </div>
           </div>
         </div>
-      </div>
-      <address-candidate-list v-if="this.addressAutocompleteEnabled"
-                              :position="this.addressInputPosition"
-      />
-
-      <!-- marker using a png and ablility to rotate it -->
-      <png-marker v-if="this.cyclomediaActive"
-                  :icon="this.sitePath + 'images/camera.png'"
-                  :latlng="cycloLatlng"
-                  :rotationAngle="cycloRotationAngle"
-      />
-
-      <!-- marker using custom code extending icons - https://github.com/iatkin/leaflet-svgicon -->
-      <svg-view-cone-marker v-if="this.cyclomediaActive"
-                            :latlng="cycloLatlng"
-                            :rotationAngle="cycloRotationAngle"
-                            :hFov="cycloHFov"
-      />
-
-      <div v-once>
-        <cyclomedia-button v-if="this.shouldShowCyclomediaButton"
-                           v-once
-                           :position="'topright'"
-                           :link="'cyclomedia'"
-                           :imgSrc="this.sitePath + 'images/cyclomedia.png'"
-                           @click="handleCyclomediaButtonClick"
+        <address-candidate-list v-if="this.addressAutocompleteEnabled"
+                                :position="this.addressInputPosition"
         />
-      </div>
 
-      <cyclomedia-recording-circle v-for="recording in cyclomediaRecordings"
-                                   v-if="cyclomediaActive"
-                                   :key="recording.imageId"
-                                   :imageId="recording.imageId"
-                                   :latlng="[recording.lat, recording.lng]"
-                                   :size="1.2"
-                                   :color="'#3388ff'"
-                                   :weight="1"
-                                   @l-click="handleCyclomediaRecordingClick"
-      />
+        <!-- marker using a png and ablility to rotate it -->
+        <png-marker v-if="this.cyclomediaActive"
+                    :icon="this.sitePath + 'images/camera.png'"
+                    :latlng="cycloLatlng"
+                    :rotationAngle="cycloRotationAngle"
+        />
+
+        <!-- marker using custom code extending icons - https://github.com/iatkin/leaflet-svgicon -->
+        <svg-view-cone-marker v-if="this.cyclomediaActive"
+                              :latlng="cycloLatlng"
+                              :rotationAngle="cycloRotationAngle"
+                              :hFov="cycloHFov"
+        />
+
+        <div v-once>
+          <cyclomedia-button v-if="this.shouldShowCyclomediaButton"
+                             v-once
+                             :position="'topright'"
+                             :link="'cyclomedia'"
+                             :imgSrc="this.sitePath + 'images/cyclomedia.png'"
+                             @click="handleCyclomediaButtonClick"
+          />
+        </div>
+
+        <cyclomedia-recording-circle v-for="recording in cyclomediaRecordings"
+                                     v-if="cyclomediaActive"
+                                     :key="recording.imageId"
+                                     :imageId="recording.imageId"
+                                     :latlng="[recording.lat, recording.lng]"
+                                     :size="1.2"
+                                     :color="'#3388ff'"
+                                     :weight="1"
+                                     @l-click="handleCyclomediaRecordingClick"
+        />
 
 
-    </map_>
+      </map_>
+    </div>
     <slot class='widget-slot' name="cycloWidget" />
   </div>
 </template>
@@ -306,6 +308,10 @@
     },
     mounted() {
       console.log('MapPanel mounted is running, DrawControl', DrawControl)
+      const map = this.$store.state.map.map;
+      const center = map.getCenter();
+      const { lat, lng } = center;
+      this.$store.commit('setCyclomediaLatLngFromMap', [lat, lng]);
     },
 
     computed: {
@@ -369,11 +375,18 @@
       },
       mapPanelContainerClass() {
         if (this.$store.state.cyclomedia.active) {
-          return 'medium-12 small-order-1 small-24 medium-order-2 mb-panel mb-panel-map'
+          return 'small-24 medium-12'
         } else {
-          return 'medium-24 small-order-1 small-24 medium-order-2 mb-panel mb-panel-map'
+          return 'small-24  medium-24'
         }
       },
+      // mapPanelContainerClass() {
+      //   if (this.$store.state.cyclomedia.active) {
+      //     return 'medium-12 small-order-1 small-24 medium-order-1'
+      //   } else {
+      //     return 'medium-24 small-order-1 small-24 medium-order-1'
+      //   }
+      // },
       isMobileOrTablet() {
         return this.$store.state.isMobileOrTablet;
       },
@@ -550,6 +563,11 @@
           return false;
         }
       },
+      cyclomediaActive(value) {
+        this.$nextTick(() => {
+          this.$store.state.map.map.invalidateSize();
+        })
+      }
     },
     methods: {
       fillColorForOverlayMarker(markerId, activeFeature) {
@@ -634,7 +652,7 @@
         }
       },
       handleMapMove(e) {
-        console.log('handleMapMove is firing')
+        // console.log('handleMapMove is firing')
         const map = this.$store.state.map.map;
         const center = map.getCenter();
         const { lat, lng } = center;
@@ -694,30 +712,11 @@
   outline: none;
   }
 
-
-  #map-panel-container {
-    position: relative;
+  .surrounding-div {
     height: 100%;
-    /* width: 100%; */
-    /* overflow: hidden; */
   }
 
   .pvm-search-control-container {
-    display: inline-block;
-    float: left;
-  }
-
-  .mb-panel-map {
-    /*this allows the loading mask to fill the div*/
-    position: relative;
-  }
-
-  .mb-map-with-widget {
-    width: 50%;
-  }
-
-  .widget-slot {
-    position: relative;
     display: inline-block;
     float: left;
   }
