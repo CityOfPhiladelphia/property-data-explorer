@@ -6,7 +6,7 @@ export default {
 
   watch: {
     activeFeature(nextActiveFeature, prevActiveFeature) {
-      // console.log('WATCH active feature', prevActiveFeature, '=>', nextActiveFeature);
+      console.log('WATCH active feature', prevActiveFeature, '=>', nextActiveFeature);
 
       const layerMap = this.$store.state.map.map._layers;
       const layers = Object.values(layerMap);
@@ -24,6 +24,7 @@ export default {
         matchingLayerPrev = layers.filter(layer => {
           const options = layer.options || {};
           const data = options.data;
+          // console.log("data: ", data)
           if (!data) return;
           const layerFeatureId = data.PARCELID;
           // console.log("layerFeatureId: ", layerFeatureId, "featureIdPrev: ", featureIdPrev)
@@ -39,12 +40,15 @@ export default {
         matchingLayerNext = layers.filter(layer => {
           const options = layer.options || {};
           const data = options.data;
+          console.log("data: ", data)
           if (!data) return;
-          const layerFeatureId = data.PARCELID;
-          // console.log("layerFeatureId: ", featureIdNext, "featureIdPrev: ", featureIdNext)
+          console.log(layer)
+          const layerFeatureId = layer.options.data.PARCELID;
+          // const layerFeatureId = layer.feature.properties.PARCELID;
+          console.log("layerFeatureId: ", layerFeatureId, "featureIdNext: ", featureIdNext)
           return layerFeatureId === featureIdNext;
         })[0];
-        // console.log("matchingLayerNext", matchingLayerNext)
+        console.log("matchingLayerNext", matchingLayerNext)
         this.updateMarkerFillColor(matchingLayerNext);
         this.bringMarkerToFront(matchingLayerNext);
       }
@@ -306,17 +310,18 @@ export default {
   },
   methods: {
     identifyMarker(feature) {
-      // console.log("identify marker starting: ", feature)
+      console.log("identify marker starting: ", feature)
       let featureId;
       if (this.$store.state.geocode.status === "success") {
-        // console.log(this.$store.state.geocode.data, feature)
-        featureId = this.$store.state.geocode.data._featureId = feature.featureId ?
+        console.log(this.$store.state.geocode.data, feature)
+        featureId = this.$store.state.geocode.data._featureId === feature.featureId ?
         Number(this.$store.state.geocode.data.properties.pwd_parcel_id) : null
       } else if (this.$store.state.ownerSearch.status === "success" ) {
         let result = this.$store.state.ownerSearch.data.filter( function(object) {
           return object._featureId === feature.featureId
         });
-        featureId = Number(result[0].properties.pwd_parcel_id)
+        console.log(result)
+        featureId = result.length > 0 ? Number(result[0].properties.pwd_parcel_id) : null
       } else if (this.$store.state.shapeSearch.status === "success") {
         let result = this.$store.state.shapeSearch.data.rows.filter( function(object) {
           return object._featureId === feature.featureId
@@ -327,16 +332,22 @@ export default {
       } else {
         featureId = null
       }
+      console.log(featureId)
       return featureId
     },
     identifyRow(featureId) {
+      console.log("identifyRow starting", featureId)
       let rowId;
       if (this.$store.state.geocode.status === "success") {
-        let opa_account_num = this.$store.state.geocode.data.properties.opa_account_num;
-        rowId = opa_account_num = featureId ? this.$store.state.geocode.data._featureId : null;
+        // console.log(this.$store.state.geocode.data)
+        let pwd_parcel_id = Number(this.$store.state.geocode.data.properties.pwd_parcel_id);
+        // console.log("opa_account_num: ", pwd_parcel_id, "featureId: ", featureId)
+        rowId = pwd_parcel_id === featureId ? this.$store.state.geocode.data._featureId : null;
+        // console.log("rowId from geocode success: ", rowId)
       } else if (this.$store.state.ownerSearch.status === "success" ) {
           let result = this.$store.state.ownerSearch.data.filter( function(object) {
-          return object.properties.pwd_parcel_id === featureId
+            // console.log("object.properties.pwd_parcel_id: ", object.properties.pwd_parcel_id, "featureId: ", featureId)
+          return Number(object.properties.pwd_parcel_id) === featureId
         });
         rowId = result[0]._featureId
       } else if (this.$store.state.shapeSearch.status === "success") {
@@ -346,11 +357,14 @@ export default {
         if(typeof result[0] != 'undefined') {
           rowId = result[0]._featureId
         } else {
+          // console.log("rowId = null")
           rowId = null
         }
       } else {
+        // console.log("rowId = null")
         rowId = null
       }
+      // console.log("rowId: ", rowId)
       return rowId
     },
     getTableFromComps(comps, tableId) {
@@ -400,47 +414,55 @@ export default {
       group.appendChild(el);
     },
     handleMarkerMouseover(e) {
-      // console.log('handleMarkerMouseover is starting');
+      console.log('handleMarkerMouseover is starting');
       if (!this.isMobileOrTablet) {
         // console.log('handleMarkerMouseover actions are running');
         const { target } = e;
-        // console.log('PARCEL ID target:', target);
+        console.log('PARCEL ID target:', target);
         const featureId  = this.identifyRow(target.options.data.PARCELID);
+        console.log('featureId: ', featureId, "target: ", target);
         this.$store.commit('setActiveFeature',  {featureId} );
       }
     },
     handleMarkerMouseout(e) {
       // console.log('handleMarkerMouseout is starting');
       // if (!this.isMobileOrTablet) {
-        // console.log('handleMarkerMouseout actions are running');
+        console.log('handleMarkerMouseout actions are running');
         const { target } = e;
         this.$store.commit('setActiveFeature', null);
       // }
     },
     updateMarkerFillColor(marker) {
       // get next fill color
-      // console.log("Marker: ", marker)
+      console.log("Marker: ", marker)
+      // console.log(this.$store.state.geocode.data._featureId)
       if(typeof marker != 'undefined') {
-        const featureId = marker.options.data.PARCELID;
+        console.log("marker.options.data: ", marker.options.data)
+        const featureId = Number(marker.options.data.PARCELID);
         const activeFeature = this.$store.state.activeFeature
         // highlight. we're doing this here (non-reactively) because binding the
         // fill color property was not performing well enough.
         const nextStyle = Object.assign({}, marker.options);
+        // console.log("Marker: ", marker)
+        console.log("fillColor: ", nextFillColor, "nextStyle: ", nextStyle)
+        const nextFillColor = this.fillColorForOverlayMarker(featureId, activeFeature);
         nextStyle.fillColor = nextFillColor;
         marker.setStyle(nextStyle);
-        const nextFillColor = this.fillColorForOverlayMarker(featureId, activeFeature);
+        console.log("nextFillColor: ", nextFillColor)
       }
     },
     styleForMarker(markerId) {
       // get map overlay style and hover style for table
       const mapOverlay = this.$config.mapOverlay;
       const { style, hoverStyle } = mapOverlay;
+      console.log("style: ", style, "hoverStyle: ", hoverStyle)
 
       // compare id to active feature id
       const activeFeature = this.activeFeature;
       const useHoverStyle = (
         markerId === activeFeature.featureId
       );
+      console.log("markerId: ", markerId, "activeFeature.featureId: ", activeFeature.featureId)
       const curStyle = useHoverStyle ? hoverStyle : style;
 
       return curStyle;

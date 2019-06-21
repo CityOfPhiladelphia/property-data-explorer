@@ -576,11 +576,13 @@
         const { style, hoverStyle } = mapOverlay;
 
         // compare id to active feature id
-        // console.log("this.identifyMarker(activeFeatureId): ", this.identifyMarker(activeFeature))
+        console.log("this.identifyMarker(activeFeatureId): ", this.identifyMarker(activeFeature))
         const useHoverStyle = (
           activeFeature.featureId ? markerId === this.identifyMarker(activeFeature) : null
         );
         const curStyle = useHoverStyle ? hoverStyle : style;
+
+        console.log("curStyle: ", curStyle)
 
         return curStyle.fillColor;
       },

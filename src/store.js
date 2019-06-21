@@ -140,7 +140,7 @@ function createStore(config) {
         state.parcels[parcelLayer].activeMapreg = activeMapreg;
       },
       setActiveFeature(state, payload) {
-        // console.log('store setActiveFeature is running');
+        console.log('store setActiveFeature is running: ', payload);
         const { featureId, tableId } = payload || {};
         const nextActiveFeature = { featureId, tableId };
         state.activeFeature = nextActiveFeature;
