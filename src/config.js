@@ -6,7 +6,7 @@ import map from './general/map';
 import opa_assessment from './data-sources/opa-assessment';
 import opa_public from './data-sources/opa-public';
 
-var BASE_CONFIG_URL = 'https://cdn.jsdelivr.net/gh/cityofphiladelphia/mapboard-default-base-config@d3ad38f050cf55b4ab0dc2ff68e6f18025690246/config.js';
+var BASE_CONFIG_URL = 'https://cdn.jsdelivr.net/gh/cityofphiladelphia/pde_base_config@e9ccbb6d63aaa4e619378c6549e5427634f1f304/config.js';
 
 let config = {
   baseConfig: BASE_CONFIG_URL,
