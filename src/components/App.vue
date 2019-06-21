@@ -20,7 +20,14 @@
 
     <div class="cell medium-auto medium-cell-block-container main-content">
       <div :class="this.mapClass">
-        <map-panel />
+        <map-panel>
+          <cyclomedia-widget
+            v-if="this.shouldLoadCyclomediaWidget"
+            v-show="cyclomediaActive"
+            slot="cycloWidget"
+            screen-percent="2"
+          />
+        </map-panel>
       </div>
 
       <div :class="this.tableClass">
@@ -54,6 +61,7 @@
       MapPanel,
       DataPanel,
       PropertyCardModal,
+      CyclomediaWidget: () => import(/* webpackChunkName: "mbmb_pvm_CyclomediaWidget" */'@philly/vue-mapping/src/cyclomedia/Widget.vue'),
     },
 
     data() {
@@ -110,6 +118,28 @@
         return this.fullScreenMapEnabled ? 'bottom-none':
                this.fullScreenTopicsEnabled? 'bottom-full':
                'bottom-half';
+      },
+
+      shouldLoadCyclomediaWidget() {
+        return this.$config.cyclomedia.enabled && !this.isMobileOrTablet;
+      },
+      cyclomediaActive() {
+        return this.$store.state.cyclomedia.active;
+      },
+      cycloLatlng() {
+        if (this.$store.state.cyclomedia.orientation.xyz !== null) {
+          const xyz = this.$store.state.cyclomedia.orientation.xyz;
+          return [ xyz[1], xyz[0] ];
+        }
+        const center = this.$config.map.center;
+        return center;
+
+      },
+      cycloRotationAngle() {
+        return this.$store.state.cyclomedia.orientation.yaw * (180/3.14159265359);
+      },
+      cycloHFov() {
+        return this.$store.state.cyclomedia.orientation.hFov;
       },
     },
 
