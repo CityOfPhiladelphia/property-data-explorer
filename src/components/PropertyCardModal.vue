@@ -124,6 +124,7 @@ export default {
 
   components: {
     Callout: () => import(/* webpackChunkName: "pvc_pcm_Callout" */'@philly/vue-comps/src/components/Callout.vue'),
+    TopicComponentGroup: () => import(/* webpackChunkName: "pvc_pcm_TopicComponentGroup" */'@philly/vue-comps/src/components/TopicComponentGroup.vue'),
     BadgeCustom: () => import(/* webpackChunkName: "pvc_pcm_BadgeCustom" */'@philly/vue-comps/src/components/BadgeCustom.vue'),
     HorizontalTable: () => import(/* webpackChunkName: "pvc_pcm_HorizontalTable" */'@philly/vue-comps/src/components/HorizontalTable.vue'),
     VerticalTable: () => import(/* webpackChunkName: "pvc_pcm_VerticalTable" */'@philly/vue-comps/src/components/VerticalTable.vue'),
@@ -391,11 +392,12 @@ export default {
     zoningBadgeOptions(){
       const options = {
         titleBackground: '#58c04d',
-        dataSources: ['opa_public'],
+        // dataSources: ['opa_public'],
         components: [
           {
             type: 'horizontal-table',
             options: {
+              downloadButton: false,
               shouldShowFilters: false,
               shouldShowHeaders: false,
               id: 'baseZoning',
