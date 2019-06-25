@@ -855,6 +855,10 @@ export default {
 
 }
 
+#plans-button{
+  padding: 10.5px 25px 10.5px;
+}
+
 header {
   visibility: hidden ;
   display: none;
