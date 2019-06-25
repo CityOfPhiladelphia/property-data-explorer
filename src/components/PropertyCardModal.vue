@@ -926,7 +926,7 @@ header {
 
 .openmaps-modal {
   color: rgb(15, 77, 144);
-  height: 92%;
+  height: calc(100% - 44px) ;
   padding: 20px;
   overflow-y: auto;
   position: fixed;
