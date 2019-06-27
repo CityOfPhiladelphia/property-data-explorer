@@ -747,7 +747,7 @@ export default {
     font-weight: 525;
   }
 
-  #components-root {
+  #components-root, .bottom-half {
     visibility: hidden;
   }
 
@@ -769,6 +769,10 @@ export default {
   .hide-print {
     display: none !important;
     visibility: hidden !important;
+  }
+
+  .app-header, .app-footer, #map-panel-container {
+    display:none;
   }
 
   .mb-badge {
@@ -841,7 +845,7 @@ export default {
     border-collapse: unset !important;
   }
 
-  #components-root {
+  #components-root, #map-panel-container {
     display:none;
   }
 
