@@ -271,7 +271,6 @@
 //
 
 a.button {
-  // padding: 10.5px 0 10.5px 0;
 }
 
 .condo-button {
@@ -281,6 +280,7 @@ a.button {
   text-transform: unset;
   font-family: "Open Sans", Helvetica, Roboto, Arial, sans-serif;
   font-weight: 600;
+  padding: 10.5px 0 10.5px 0;
 }
 
 //
