@@ -1,7 +1,8 @@
 <template>
 
   <div
-    id="app-root"
+    id="app"
+    class="grid-y medium-grid-frame"
   >
     <PhilaHeader
       :app-title="this.$config.app.title"
@@ -17,8 +18,8 @@
     </PhilaHeader>
     <property-card-modal></property-card-modal>
 
-    <div id="components-root">
-      <div :class=" 'flexing ' + this.mapClass">
+    <div class="cell medium-auto medium-cell-block-container main-content">
+      <div :class="this.mapClass">
         <map-panel>
           <cyclomedia-widget
             v-if="this.shouldLoadCyclomediaWidget"
@@ -29,8 +30,8 @@
         </map-panel>
       </div>
 
-      <div :class="'flexing ' + this.tableClass">
-        <data-panel/>
+      <div :class="this.tableClass">
+        <data-panel />
       </div>
 
     </div>
@@ -162,10 +163,9 @@
 .toggle-map{
   margin:0 !important;
 }
-
-.main-content{
-  margin-top:.5rem;
-}
+// .main-content{
+//   margin-top:.5rem;
+// }
 
 //TODO, move to standards
 @each $value in $colors {
@@ -190,7 +190,6 @@
   overflow: hidden;
   height: 100vh;
 }
-
 .toggle-map{
   position: fixed;
   bottom:0;
@@ -232,25 +231,25 @@
   }
 }
 
-#app-root {
+#app {
   height: 100%
 }
 //
-#components-root {
-  display: flex;
-  flex-direction:column;
-  height: 90%;
-  overflow-y: auto;
-  position: relative;
-}
-
-.flexing {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  position: relative;
-}
-
+// #components-root {
+//   display: flex;
+//   flex-direction:column;
+//   height: 90%;
+//   overflow-y: auto;
+//   position: relative;
+// }
+//
+// .flexing {
+//   display: flex;
+//   flex: 1;
+//   flex-direction: column;
+//   position: relative;
+// }
+//
 .bottom-full {
   overflow-y: auto;
   flex: 1;
@@ -271,9 +270,9 @@
 // }
 //
 
-// a.button {
+a.button {
   // padding: 10.5px 0 10.5px 0;
-// }
+}
 
 .condo-button {
   background-color: #5555;
@@ -284,10 +283,10 @@
   font-weight: 600;
 }
 
-
-.ib {
-  display: inline-block;
-}
+//
+// .ib {
+//   display: inline-block;
+// }
 
 .leaflet-top, .leaflet-bottom {
   z-index: 999 !important;
@@ -298,17 +297,17 @@
 //   margin-left: 20px;
 //   margin-right: 20px;
 // }
-
+//
 // .margin-20 {
 //   margin-left: 20px;
 //   margin-right: 20px;
 //   margin-bottom: 20px;
 // }
-
+//
 // .margin-bottom-60 {
 //   margin-bottom: 60px !important;
 // }
-
+//
 .pvc-horizontal-table-controls {
   margin-bottom: 0 !important;
 }
@@ -337,11 +336,11 @@ th {
 }
 
 .pvc-download-data-button, .pvc-export-data-button {
-  position: fixed;
+  position: absolute;
   clear:both;
   z-index: 999;
   display: inline-block;
-  top: calc(62% - 5px);
+  top: calc(60% - 5px);
 }
 
 .mailing {
