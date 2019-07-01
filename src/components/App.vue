@@ -337,10 +337,10 @@ th {
 }
 
 .pvc-download-data-button, .pvc-export-data-button {
+  float: right;
   position: sticky;
   padding: 5px;
   z-index: 999;
-  display: inline-block;
   margin-top: 2px !important;
   margin-bottom: 0px !important;
   top: 0;
