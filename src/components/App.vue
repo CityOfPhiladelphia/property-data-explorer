@@ -2,7 +2,7 @@
 
   <div
     id="app"
-    class="grid-y medium-grid-frame"
+    class="grid-y"
   >
     <PhilaHeader
       :app-title="this.$config.app.title"
