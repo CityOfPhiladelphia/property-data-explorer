@@ -271,6 +271,7 @@
 //
 
 a.button {
+  // padding: 10.5px 0 10.5px 0;
 }
 
 .condo-button {
@@ -336,11 +337,13 @@ th {
 }
 
 .pvc-download-data-button, .pvc-export-data-button {
-  position: absolute;
-  clear:both;
+  position: sticky;
+  padding: 5px;
   z-index: 999;
   display: inline-block;
-  top: calc(60% - 5px);
+  margin-top: 2px !important;
+  margin-bottom: 0px !important;
+  top: 0;
 }
 
 .mailing {
