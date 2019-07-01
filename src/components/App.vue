@@ -231,7 +231,7 @@
   }
 }
 
-#app-root {
+#app {
   height: 100%
 }
 //
@@ -271,7 +271,7 @@
 //
 
 a.button {
-  padding: 10.5px 0 10.5px 0;
+  // padding: 10.5px 0 10.5px 0;
 }
 
 .condo-button {
@@ -340,7 +340,7 @@ th {
   clear:both;
   z-index: 999;
   display: inline-block;
-  top: calc(60% - 20px);
+  top: calc(60% - 5px);
 }
 
 .mailing {
