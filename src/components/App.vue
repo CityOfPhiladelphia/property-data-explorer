@@ -46,7 +46,6 @@
 
 <script>
 
-  // require("sorttable")
   import PhilaHeader from './PhilaHeader.vue';
   import PhilaFooter from './PhilaFooter.vue';
 
@@ -95,11 +94,6 @@
           this.$controller.geocodeOwnerSearch()
         }
       },
-      // '$store.sources.opa_assessment.status': function() {
-      //   if(this.$store.sources.opa_assessment.status === 'success'){
-      //     this.$data.showTable = true
-      //   }
-      // },
     },
 
     computed: {
@@ -169,7 +163,6 @@
 
 //TODO, move to standards
 @each $value in $colors {
-  //sass-lint:disable-block no-important
   .#{nth($value, 1)} {
     color: nth($value, 2) !important;
   }
@@ -180,12 +173,7 @@
     border-color: nth($value, 2) !important;
   }
 }
-// @media screen and (max-width: 749px) {
-//   .main-content{
-//     margin-top:9rem;
-//     margin-bottom:2rem;
-//   }
-// }
+
 .no-scroll{
   overflow: hidden;
   height: 100vh;
@@ -234,22 +222,7 @@
 #app {
   height: 100%
 }
-//
-// #components-root {
-//   display: flex;
-//   flex-direction:column;
-//   height: 90%;
-//   overflow-y: auto;
-//   position: relative;
-// }
-//
-// .flexing {
-//   display: flex;
-//   flex: 1;
-//   flex-direction: column;
-//   position: relative;
-// }
-//
+
 .bottom-full {
   overflow-y: auto;
   flex: 1;
@@ -265,15 +238,6 @@
   display: none;
 }
 
-// .component-label {
-//   font-size: 20px;
-// }
-//
-
-a.button {
-  // padding: 10.5px 0 10.5px 0;
-}
-
 .condo-button {
   background-color: #5555;
   height: 100%;
@@ -284,31 +248,10 @@ a.button {
   padding: 10.5px 0 10.5px 0;
 }
 
-//
-// .ib {
-//   display: inline-block;
-// }
-
 .leaflet-top, .leaflet-bottom {
   z-index: 999 !important;
 }
 
-// .margin-sides-20 {
-//   display: block;
-//   margin-left: 20px;
-//   margin-right: 20px;
-// }
-//
-// .margin-20 {
-//   margin-left: 20px;
-//   margin-right: 20px;
-//   margin-bottom: 20px;
-// }
-//
-// .margin-bottom-60 {
-//   margin-bottom: 60px !important;
-// }
-//
 .pvc-horizontal-table-controls {
   margin-bottom: 0 !important;
 }
@@ -337,7 +280,7 @@ th {
 }
 
 .pvc-download-data-button, .pvc-export-data-button {
-  float: right;
+  float: right !important;
   position: sticky;
   padding: 5px;
   z-index: 999;
@@ -350,18 +293,10 @@ th {
   left: 125px;
 }
 
-
-
 @media screen and (max-width: 750px) {
   .pvc-download-data-button, .pvc-export-data-button {
     visibility: hidden;
   }
 }
-
-// @media print, screen and (min-width: 65.625em) {
-//   .large-12 {
-//     width: 100%;
-//   }
-// }
 
 </style>
