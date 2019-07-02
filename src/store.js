@@ -30,6 +30,7 @@ function createStore(config) {
     horizontalTables: {
       // table id => filtered rows
       filteredData: {},
+      mouseover: false,
     },
     // horizontalTableGroups: createHorizontalTableGroups(config),
     activeFeature: {
@@ -115,6 +116,9 @@ function createStore(config) {
         // check for not-null table id
         if (!tableId) return;
         state.horizontalTables.filteredData[tableId] = data;
+      },
+      setHorizontalTableMouseover(state, payload) {
+        state.horizontalTables.mouseover = payload
       },
       setMapFilters(state, payload) {
         state.map.filters = payload;

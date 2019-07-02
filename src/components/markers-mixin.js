@@ -50,7 +50,7 @@ export default {
         })[0];
         // console.log("matchingLayerNext", matchingLayerNext)
         this.updateMarkerFillColor(matchingLayerNext);
-        this.bringMarkerToFront(matchingLayerNext);
+        // this.bringMarkerToFront(matchingLayerNext);
       }
 
     },
@@ -310,21 +310,21 @@ export default {
   },
   methods: {
     identifyMarker(feature) {
-      // console.log("identify marker starting: ", feature)
+      // console.log("identify marker starting: ", feature, 'feature.featureId.toString().slice(0,6):', parseInt(feature.featureId.toString().slice(0,6)))
       let featureId;
       if (this.$store.state.geocode.status === "success") {
         // console.log(this.$store.state.geocode.data, feature)
-        featureId = this.$store.state.geocode.data._featureId === feature.featureId ?
+        featureId = this.$store.state.geocode.data._featureId === parseInt(feature.featureId.toString().slice(0,6)) ?
         Number(this.$store.state.geocode.data.properties.pwd_parcel_id) : null
       } else if (this.$store.state.ownerSearch.status === "success" ) {
         let result = this.$store.state.ownerSearch.data.filter( function(object) {
-          return object._featureId === feature.featureId
+          return object._featureId === parseInt(feature.featureId.toString().slice(0,6));
         });
         // console.log(result)
         featureId = result.length > 0 ? Number(result[0].properties.pwd_parcel_id) : null
       } else if (this.$store.state.shapeSearch.status === "success") {
         let result = this.$store.state.shapeSearch.data.rows.filter( function(object) {
-          return object._featureId === feature.featureId
+          return object._featureId === parseInt(feature.featureId.toString().slice(0,6));
         });
         if(typeof result[0] != 'undefined'){
           featureId = Number(result[0].pwd_parcel_id)
@@ -433,13 +433,14 @@ export default {
       // }
     },
     updateMarkerFillColor(marker) {
+      // console.log('updateMarkerFillColor is running')
       // get next fill color
       // console.log("Marker: ", marker)
       // console.log(this.$store.state.geocode.data._featureId)
       if(typeof marker != 'undefined') {
         // console.log("marker.options.data: ", marker.options.data)
         const featureId = Number(marker.options.data.PARCELID);
-        const activeFeature = this.$store.state.activeFeature
+        const activeFeature = this.$store.state.activeFeature;
         // highlight. we're doing this here (non-reactively) because binding the
         // fill color property was not performing well enough.
         const nextStyle = Object.assign({}, marker.options);
