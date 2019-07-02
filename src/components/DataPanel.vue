@@ -754,3 +754,13 @@ export default {
 }
 
 </script>
+
+<style>
+
+@media print {
+  #data-panel-container {
+    display: none;
+  }
+}
+
+</style>
