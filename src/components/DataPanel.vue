@@ -5,7 +5,7 @@
       <full-screen-topics-toggle-tab-vertical/>
       <horizontal-table
         v-show="this.$data.showTable"
-        v-if="this.$store.state.lastSearchMethod === 'geocode'"
+        v-if="this.lastSearchMethod === 'geocode' || this.lastSearchMethod === 'reverseGeocode'"
         padding-top="0"
         :slots="{
           items: geocodeItems,
@@ -17,7 +17,7 @@
         :options="this.geocodeOptions"
       />
       <horizontal-table
-        v-if="this.$store.state.lastSearchMethod === 'owner search'"
+        v-if="this.lastSearchMethod === 'owner search'"
         :slots="{
           items: function(state) {
             var data = state.ownerSearch.data;
@@ -27,7 +27,7 @@
         :options="this.ownerOptions"
       />
       <horizontal-table
-        v-if="this.$store.state.lastSearchMethod === 'shape search'
+        v-if="this.lastSearchMethod === 'shape search'
               && this.$store.state.shapeSearch.data !== null"
 
         :slots="{
@@ -82,6 +82,9 @@ export default {
     },
   },
   computed: {
+    lastSearchMethod() {
+      return this.$store.state.lastSearchMethod;
+    },
     opa() {
       return this.$store.state.sources.opa_assessment;
     },

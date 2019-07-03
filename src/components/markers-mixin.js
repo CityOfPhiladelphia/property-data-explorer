@@ -19,6 +19,7 @@ export default {
           matchingLayerPrev;
 
       if (prevActiveFeature && prevActiveFeature.featureId) {
+        // console.log('first');
         updateFeaturePrev = prevActiveFeature;
         featureIdPrev = this.identifyMarker(prevActiveFeature);
         matchingLayerPrev = layers.filter(layer => {
@@ -37,6 +38,7 @@ export default {
       if (nextActiveFeature && nextActiveFeature.featureId) {
         updateFeatureNext = nextActiveFeature;
         featureIdNext = this.identifyMarker(updateFeatureNext);
+        // console.log('second, nextActiveFeature.featureId:', nextActiveFeature.featureId, 'featureIdNext:', featureIdNext);
         matchingLayerNext = layers.filter(layer => {
           const options = layer.options || {};
           const data = options.data;
@@ -45,10 +47,13 @@ export default {
           // console.log(layer)
           const layerFeatureId = layer.options.data.PARCELID;
           // const layerFeatureId = layer.feature.properties.PARCELID;
-          // console.log("layerFeatureId: ", layerFeatureId, "featureIdNext: ", featureIdNext)
-          return layerFeatureId === featureIdNext;
+          // console.log("layerFeatureId: ", layerFeatureId, "featureIdNext: ", featureIdNext, 'nextActiveFeature.featureId:', nextActiveFeature.featureId);
+          if (layerFeatureId === nextActiveFeature.featureId || layerFeatureId === featureIdNext) {
+            return true;
+          }
+          // return layerFeatureId === featureIdNext;
         })[0];
-        // console.log("matchingLayerNext", matchingLayerNext)
+        // console.log('matchingLayerNext:', matchingLayerNext);
         this.updateMarkerFillColor(matchingLayerNext);
         // this.bringMarkerToFront(matchingLayerNext);
       }
@@ -310,21 +315,33 @@ export default {
   },
   methods: {
     identifyMarker(feature) {
-      // console.log("identify marker starting: ", feature, 'feature.featureId.toString().slice(0,6):', parseInt(feature.featureId.toString().slice(0,6)))
+      // console.log('identifyMarker starting: feature.featureId', feature.featureId, 'feature.featureId.toString().slice(0,6):', feature.featureId.toString().slice(0,6));
       let featureId;
       if (this.$store.state.geocode.status === "success") {
-        // console.log(this.$store.state.geocode.data, feature)
-        featureId = this.$store.state.geocode.data._featureId === parseInt(feature.featureId.toString().slice(0,6)) ?
-        Number(this.$store.state.geocode.data.properties.pwd_parcel_id) : null
+        const geocodeId = this.$store.state.geocode.data._featureId;
+        // console.log('identifyMarker, geocode.status is success, geocodeId:', geocodeId);
+        // featureId = this.$store.state.geocode.data._featureId === parseInt(feature.featureId.toString().slice(0,6)) ?
+        if (geocodeId === feature.featureId || geocodeId === parseInt(feature.featureId.toString().slice(0,6))) {
+          featureId = parseInt(this.$store.state.geocode.data.properties.pwd_parcel_id);
+          // featureId = geocodeId;
+        } else {
+          featureId = null;
+        }
+        // Number(this.$store.state.geocode.data.properties.pwd_parcel_id) : null
+
+
       } else if (this.$store.state.ownerSearch.status === "success" ) {
         let result = this.$store.state.ownerSearch.data.filter( function(object) {
           return object._featureId === parseInt(feature.featureId.toString().slice(0,6));
         });
         // console.log(result)
         featureId = result.length > 0 ? Number(result[0].properties.pwd_parcel_id) : null
+
+
       } else if (this.$store.state.shapeSearch.status === "success") {
         let result = this.$store.state.shapeSearch.data.rows.filter( function(object) {
-          return object._featureId === parseInt(feature.featureId.toString().slice(0,6));
+          // return object._featureId === parseInt(feature.featureId.toString().slice(0,6));
+          return object._featureId === feature.featureId;
         });
         if(typeof result[0] != 'undefined'){
           featureId = Number(result[0].pwd_parcel_id)
@@ -332,7 +349,7 @@ export default {
       } else {
         featureId = null
       }
-      // console.log(featureId)
+      // console.log('end of identifyMarker, featureId:', featureId);
       return featureId
     },
     identifyRow(featureId) {
@@ -433,7 +450,7 @@ export default {
       // }
     },
     updateMarkerFillColor(marker) {
-      // console.log('updateMarkerFillColor is running')
+      // console.log('updateMarkerFillColor is running, marker:', marker)
       // get next fill color
       // console.log("Marker: ", marker)
       // console.log(this.$store.state.geocode.data._featureId)
