@@ -1,5 +1,5 @@
 <template>
-  <section :class="['openmaps-about' ,'openmaps-modal']"
+  <div :class="['openmaps-about', 'openmaps-modal']"
             v-if="this.$store.state.activeModal.featureId"
   >
     <header class="modal">
@@ -98,7 +98,7 @@
         />
 
     </div>
-  </section>
+  </div>
 </template>
 
 <script>
@@ -786,6 +786,7 @@ export default {
   .openmaps-modal {
     display: inline;
     background: white;
+    border-style: none !important;
   }
 
   .pvc-horizontal-table table tr:nth-child(odd) td {
@@ -855,6 +856,7 @@ export default {
     top: 0 !important;
     padding: 0 !important;
     height: 100%;
+    border-style: none !important;
   }
 
 }
@@ -944,6 +946,9 @@ header {
   max-width: 1200px;
   left: 2%;
   right: 2%;
+  border-style: solid;
+  border-width: 4px;
+  border-color: #8a8a8a;
 }
 
 .openmaps-modal-content{
