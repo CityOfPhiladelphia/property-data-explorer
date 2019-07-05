@@ -4,7 +4,7 @@
     <!-- <div :class="this.tableClass"> -->
       <full-screen-topics-toggle-tab-vertical/>
       <div class="spinner-div small-12 cell"
-           v-show="this.loadingData"
+           v-show="this.loadingData && this.lastSearchMethod != 'shape search'"
       >
         <font-awesome-icon icon="spinner"
                            class="fa-4x"
@@ -13,7 +13,7 @@
         <h3>Loading Data</h3>
       </div>
       <horizontal-table
-        v-show="this.$data.showTable"
+        v-show="!this.loadingData"
         v-if="this.lastSearchMethod === 'geocode' || this.lastSearchMethod === 'reverseGeocode'"
         padding-top="0"
         :slots="{
@@ -26,6 +26,7 @@
         :options="this.geocodeOptions"
       />
       <horizontal-table
+        v-show="!this.loadingData"
         v-if="this.lastSearchMethod === 'owner search'"
         :slots="{
           items: function(state) {
