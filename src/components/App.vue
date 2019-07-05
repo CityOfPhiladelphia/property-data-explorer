@@ -4,6 +4,42 @@
     id="app"
     class="grid-y"
   >
+    <PhilaModal
+      v-show="isModalOpen"
+      @close="closeModal"
+    >
+      <div slot="body">
+        <div class="step-group">
+          <div class="step-label">
+            1
+          </div>
+          <div class="step">
+            <div class="step-title">
+              Step 1
+            </div>
+            <div class="step-content" />
+          </div>
+          <div class="step-label">
+            2
+          </div>
+          <div class="step">
+            <div class="step-title">
+              Step 2
+            </div>
+            <div class="step-content" />
+          </div>
+          <div class="step-label">
+            3
+          </div>
+          <div class="step">
+            <div class="step-title">
+              Step 3
+            </div>
+            <div class="step-content" />
+          </div>
+        </div>
+      </div>
+    </PhilaModal>
     <PhilaHeader :class="this.openModal"
       :app-title="this.$config.app.title"
       :app-tag-line="this.$config.app.tagLine"
@@ -48,6 +84,7 @@
 
   import PhilaHeader from './PhilaHeader.vue';
   import PhilaFooter from './PhilaFooter.vue';
+  import PhilaModal from './PhilaModal.vue';
 
   import MapPanel from './MapPanel.vue';
   import DataPanel from './DataPanel.vue';
@@ -57,6 +94,7 @@
     components: {
       PhilaHeader,
       PhilaFooter,
+      PhilaModal,
       MapPanel,
       DataPanel,
       PropertyCardModal,
@@ -70,6 +108,7 @@
         'top': 3,
         'bottom': 2,
         hasData: false,
+        isModalOpen: false,
       }
     },
     mounted() {
@@ -175,6 +214,22 @@
         } else {
           this.$data.isLarge = false;
         }
+      },
+      toggleModal() {
+        this.isModalOpen = !this.isModalOpen;
+        this.toggleBodyClass('no-scroll');
+      },
+      showModal() {
+        this.isModalOpen = true;
+        this.toggleBodyClass('no-scroll');
+      },
+      closeModal() {
+        this.isModalOpen = false;
+        this.toggleBodyClass('no-scroll');
+      },
+      toggleBodyClass(className) {
+        const el = document.body;
+        return this.isOpen ? el.classList.add(className) : el.classList.remove(className);
       },
     }
   };
@@ -330,6 +385,40 @@ th {
 @media screen and (max-width: 750px) {
   .pvc-download-data-button, .pvc-export-data-button {
     visibility: hidden;
+  }
+}
+
+.step-group{
+  margin-left:$spacing-medium;
+
+  .step-label {
+    @include secondary-font(400);
+    display: inline-block;
+    margin-left: -$spacing-medium;
+    background: black;
+    border-radius: $spacing-extra-large;
+    color:white;
+    padding: 0 $spacing-small;
+    width:$spacing-large;
+    height:$spacing-large;
+    line-height: $spacing-large;
+    text-align: center;
+  }
+  .step{
+    margin-top: -$spacing-large;
+    padding-left: $spacing-large;
+    padding-bottom: $spacing-large;
+    border-left:1px solid black;
+
+    &:last-of-type {
+      border:none;
+    }
+
+    .step-title{
+      @include secondary-font(400);
+      font-size:1.2rem;
+      margin-bottom: $spacing-small;
+    }
   }
 }
 
