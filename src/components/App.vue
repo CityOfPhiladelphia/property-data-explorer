@@ -69,6 +69,7 @@
         isLarge: true,
         'top': 3,
         'bottom': 2,
+        hasData: false,
       }
     },
     mounted() {
@@ -94,9 +95,32 @@
           this.$controller.geocodeOwnerSearch()
         }
       },
+      opaStatus(nextOpaStatus) {
+        if(nextOpaStatus === 'success' || nextOpaStatus === 'waiting'){
+          this.$data.hasData = true;
+          this.$store.commit('setFullScreenMapEnabled', false);
+        } else {
+          this.$data.hasData = false;
+          this.$store.commit('setFullScreenMapEnabled', true);
+        }
+      },
     },
 
     computed: {
+      opa() {
+        return this.$store.state.sources.opa_assessment;
+      },
+      opaStatus() {
+        if (this.opa) {
+          if (this.opa.status) {
+            return this.opa.status
+          } else{
+            return null;
+          }
+        } else {
+          return null;
+        }
+      },
       fullScreenMapEnabled() {
         return this.$store.state.fullScreenMapEnabled;
       },
@@ -117,7 +141,7 @@
                'bottom-half';
       },
       openModal() {
-        console.log("openModal: ", this.activeModal)
+        // console.log("openModal: ", this.activeModal)
         return this.activeModal != null ? 'modal-opacity' : ""
       },
       shouldLoadCyclomediaWidget() {
