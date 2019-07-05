@@ -718,11 +718,6 @@
     height: 100%;
   }
 
-  .pvm-search-control-container {
-    display: inline-block;
-    float: left;
-  }
-
   .mb-map-loading-mask {
     position: absolute;
     top: 0;

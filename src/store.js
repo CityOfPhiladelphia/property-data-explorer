@@ -20,7 +20,7 @@ function createStore(config) {
       mapOnly: false,
       topicsOnly: false,
     },
-    fullScreenMapEnabled: false,
+    fullScreenMapEnabled: true,
     fullScreenTopicsEnabled: false,
     candidates: [],
     addressEntered: null,
