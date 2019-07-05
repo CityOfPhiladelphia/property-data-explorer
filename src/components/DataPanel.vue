@@ -1,8 +1,17 @@
 <template>
-  <div id="data-panel-container">
+  <div id="data-panel-container grid-x align-center">
 
     <!-- <div :class="this.tableClass"> -->
       <full-screen-topics-toggle-tab-vertical/>
+      <div class="spinner-div small-12 cell"
+           v-show="this.loadingData"
+      >
+        <font-awesome-icon icon="spinner"
+                           class="fa-4x"
+                           aria-hidden="true"
+        />
+        <h3>Loading Data</h3>
+      </div>
       <horizontal-table
         v-show="this.$data.showTable"
         v-if="this.lastSearchMethod === 'geocode' || this.lastSearchMethod === 'reverseGeocode'"
@@ -72,12 +81,18 @@ export default {
   data() {
     return {
       'showTable': false,
+      'loadingData': false,
     }
   },
   watch: {
     opaStatus(nextOpaStatus) {
-      if(nextOpaStatus === 'success'){
-        this.$data.showTable = true
+      if (nextOpaStatus === 'success') {
+        this.$data.showTable = true;
+        this.$data.loadingData = false;
+      } else if (nextOpaStatus === 'waiting') {
+        this.$data.loadingData = true;
+      } else {
+        this.$data.loadingData = false;
       }
     },
   },
@@ -764,6 +779,16 @@ export default {
   #data-panel-container {
     display: none;
   }
+}
+
+.data-panel.container {
+  justify-content: center;
+}
+
+.spinner-div {
+  padding-top: 40px;
+  padding-bottom: 20px;
+  text-align: center;
 }
 
 </style>
