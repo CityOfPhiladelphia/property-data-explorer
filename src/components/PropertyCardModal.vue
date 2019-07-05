@@ -444,7 +444,36 @@ export default {
               },
             }
           }
-        ]
+        ],
+        externalLink: {
+          action: function() {
+            return 'View more Zoning Information in Atlas';
+          },
+          href: function(state) {
+            let address;
+            if (state.geocode.status === "success"){
+              if(state.geocode.data.condo != true){
+                address = titleCase(state.geocode.data.properties.street_address)
+              } else {
+                let filtered = state.geocode.related.filter(object => {
+                  return object._featureId === state.activeFeature.featureId
+              })
+                address = titleCase(filtered[0].properties.street_address)
+              }
+            } else if (state.ownerSearch.status === "success") {
+              let result = state.ownerSearch.data.filter(object => {
+                return object._featureId === state.activeModal.featureId
+              });
+              address = titleCase(result[0].properties.street_address)
+            } else {
+              let result = state.shapeSearch.data.rows.filter(object => {
+                return object._featureId === state.activeModal.featureId
+              });
+              address = titleCase(result[0].location)
+            }
+            return '//atlas.phila.gov/#/' + address + '/zoning';
+          }
+        }
       }
       return options
     },
@@ -709,9 +738,33 @@ export default {
           action: function() {
             return 'View the Real Estate Tax Balance';
           },
-          href: function() {
-            return '//legacy.phila.gov/revenue/realestatetax/';
+          href: function(state) {
+            let address;
+            if (state.geocode.status === "success"){
+              if(state.geocode.data.condo != true){
+                address = titleCase(state.geocode.data.properties.street_address)
+              } else {
+                let filtered = state.geocode.related.filter(object => {
+                  return object._featureId === state.activeFeature.featureId
+              })
+                address = titleCase(filtered[0].properties.street_address)
+              }
+            } else if (state.ownerSearch.status === "success") {
+              let result = state.ownerSearch.data.filter(object => {
+                return object._featureId === state.activeModal.featureId
+              });
+              address = titleCase(result[0].properties.street_address)
+            } else {
+              let result = state.shapeSearch.data.rows.filter(object => {
+                return object._featureId === state.activeModal.featureId
+              });
+              address = titleCase(result[0].location)
+            }
+            return '//www.phila.gov/revenue/realestatetax/#/' + address + '/property';
           }
+          // href: function() {
+          //   return '//legacy.phila.gov/revenue/realestatetax/';
+          // }
         },
       }
       return options;
