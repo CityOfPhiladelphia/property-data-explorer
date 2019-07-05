@@ -259,7 +259,7 @@
 }
 
 .modal-opacity {
-  opacity: 0.5;
+  opacity: 0.2;
 }
 
 .pvc-horizontal-table-controls {
