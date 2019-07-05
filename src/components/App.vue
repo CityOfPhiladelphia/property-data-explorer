@@ -4,7 +4,7 @@
     id="app"
     class="grid-y"
   >
-    <PhilaHeader
+    <PhilaHeader :class="this.openModal"
       :app-title="this.$config.app.title"
       :app-tag-line="this.$config.app.tagLine"
       :app-logo="`${publicPath}logo.png`"
@@ -18,7 +18,7 @@
     </PhilaHeader>
     <property-card-modal></property-card-modal>
 
-    <div class="cell medium-auto medium-cell-block-container main-content">
+    <div :class="'cell medium-auto medium-cell-block-container main-content ' + this.openModal">
       <div :class="this.mapClass">
         <map-panel>
           <cyclomedia-widget
@@ -30,7 +30,7 @@
         </map-panel>
       </div>
 
-      <div :class="this.tableClass">
+      <div :class="this.tableClass + this.openModal">
         <data-panel />
       </div>
 
@@ -103,6 +103,9 @@
       fullScreenTopicsEnabled() {
         return this.$store.state.fullScreenTopicsEnabled;
       },
+      activeModal() {
+        return this.$store.state.activeModal.featureId
+      },
       mapClass() {
         return this.fullScreenMapEnabled ? 'top-full':
                this.fullScreenTopicsEnabled ? 'top-none':
@@ -113,7 +116,10 @@
                this.fullScreenTopicsEnabled? 'bottom-full':
                'bottom-half';
       },
-
+      openModal() {
+        console.log("openModal: ", this.activeModal)
+        return this.activeModal != null ? 'modal-opacity' : ""
+      },
       shouldLoadCyclomediaWidget() {
         return this.$config.cyclomedia.enabled && !this.isMobileOrTablet;
       },
@@ -250,6 +256,10 @@
 
 .leaflet-top, .leaflet-bottom {
   z-index: 999 !important;
+}
+
+.modal-opacity {
+  opacity: 0.2;
 }
 
 .pvc-horizontal-table-controls {
