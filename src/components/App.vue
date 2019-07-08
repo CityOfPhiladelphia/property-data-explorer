@@ -138,10 +138,10 @@
         if(nextOpaStatus === 'success' || nextOpaStatus === 'waiting'){
           this.$data.hasData = true;
           this.$store.commit('setFullScreenMapEnabled', false);
-        } else {
-          this.$data.hasData = false;
-          this.$store.commit('setFullScreenMapEnabled', true);
-        }
+        } //else {
+        //   this.$data.hasData = false;
+        //   this.$store.commit('setFullScreenMapEnabled', true);
+        // }
       },
     },
 
