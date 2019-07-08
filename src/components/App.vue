@@ -113,6 +113,7 @@
     },
     mounted() {
       this.onResize();
+      console.log('App.vue mounted is running, this.$route:', this.$route);
     },
     created() {
       window.addEventListener('resize', this.onResize);

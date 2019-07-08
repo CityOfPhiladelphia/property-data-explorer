@@ -31,6 +31,8 @@ import 'leaflet-easybutton/src/easy-button.css';
 import 'leaflet-measure/dist/leaflet-measure.css';
 // import './styles.css';
 
+import router from './router';
+
 import App from './components/App.vue';
 var BASE_CONFIG_URL = 'https://cdn.jsdelivr.net/gh/ajrothwell/mapboard-base-config@74cf4692237e16757681f6860b936efd734c27d8/config.js';
 
@@ -48,6 +50,7 @@ function initVue(config) {
   const vm = new Vue({
     el: '#vue-app',
     render: h => h(App),
+    router,
     store
   });
 }
