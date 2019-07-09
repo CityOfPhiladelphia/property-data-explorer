@@ -350,6 +350,10 @@
   margin-top: 0 !important;
 }
 
+.pointer {
+  cursor: pointer;
+}
+
 .top-half {
   flex: 3;
 }

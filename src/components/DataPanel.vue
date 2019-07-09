@@ -39,7 +39,6 @@
       <horizontal-table
         v-if="this.lastSearchMethod === 'shape search'
               && this.$store.state.shapeSearch.data !== null"
-
         :slots="{
           items: function(state) {
             var data = state.shapeSearch.data.rows;
@@ -157,7 +156,8 @@ export default {
                             field === 'Date of Last Sale' ? 'sorttable_ddmm': ''
             return classType
 
-          }
+          },
+          tr: 'pointer',
         },
         fields: [
           {
@@ -277,7 +277,8 @@ export default {
                             field === 'Date of Last Sale' ? 'sorttable_ddmmyyyy': ''
             return classType
 
-          }
+          },
+          tr: 'pointer',
         },
         fields: [
           {
@@ -349,7 +350,8 @@ export default {
 
             return classType
 
-          }
+          },
+          tr: 'pointer',
         },
         fields: [
           {
