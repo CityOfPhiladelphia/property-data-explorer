@@ -83,6 +83,11 @@
         :options="this.activeOptions"
       />
 
+      <callout
+        :slots="this.propValueCallout"
+        :options="this.propValueCallout"
+      />
+
       <vertical-table
         :slots="this.pDetailOptions"
         :options="this.pDetailOptions"
@@ -201,6 +206,18 @@ export default {
       const options = {
         text: '\
         Property assessment and sale information for this address. Source: Office of Property Assessments (OPA). OPA was formerly a part of the Bureau of Revision of Taxes (BRT) and some City records may still use that name.\
+        ',
+      }
+      return options;
+    },
+    propValueCallout() {
+      const options = {
+        text: '\
+        <small> \
+        Note: Taxable and exempt land values can represent the contributory value of land in relation to the total market value, or \
+        were no structure is present, the value of vacant land. (Consistent with International Association of Assessing Officers (IAAO) standards, \
+        the value of an improved parcel is separated into the portion of value attributed to the improvement and the portion of value attributed to the land.)\
+        </small> \
         ',
       }
       return options;
