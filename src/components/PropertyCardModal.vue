@@ -441,6 +441,7 @@ export default {
             },
             slots: {
               items(state, item) {
+                console.log('slots items is running')
                 let id = [];
                 if (state.geocode.status === "success"){
                   id = findIdForGeocoded(state);
@@ -450,13 +451,17 @@ export default {
                   );
                   id =  result[0].properties.opa_account_num
                 } else {
+                  console.log('state.shapeSearch.data:', state.shapeSearch.data)
                   let result = state.shapeSearch.data.rows.filter(
                     object => {
+                      console.log('object._featureId:', object._featureId)
                       return object._featureId === state.activeModal.featureId }
                   );
                   id = result[0].parcel_number
                 }
+                console.log('id:', id)
                 item = new Array(state.sources.opa_public.targets[id])
+                console.log('item:', item)
                 return item
               },
             }
