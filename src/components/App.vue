@@ -122,44 +122,36 @@
       window.removeEventListener('resize', this.onResize);
     },
     watch: {
-      '$store.state.drawShape': function() {
-        if(this.$store.state.drawShape !== null) {
-        this.$controller.geocodeDrawnShape();
+      drawShape(nextDrawShape) {
+        if (nextDrawShape !== null) {
+          this.onDataChange('shapeSearch');
+          this.$controller.getParcelsByDrawnShape();
+          this.$store.commit('setShapeSearchStatus', 'waiting');
         }
       },
-      '$store.state.activeModal': function() {
-        this.$controller.activeFeatureChange();
-      },
-      '$store.state.ownerSearch.status': function() {
-        if(this.$store.state.ownerSearch.status === 'success') {
-          this.$controller.geocodeOwnerSearch()
+      geocodeStatus(nextGeocodeStatus) {
+        if (nextGeocodeStatus === 'waiting') {
+          this.onDataChange('geocode');
         }
       },
-      opaStatus(nextOpaStatus) {
-        if(nextOpaStatus === 'success' || nextOpaStatus === 'waiting'){
-          this.$data.hasData = true;
-          this.$store.commit('setFullScreenMapEnabled', false);
-        } //else {
-        //   this.$data.hasData = false;
-        //   this.$store.commit('setFullScreenMapEnabled', true);
-        // }
+      ownerSearchStatus(nextOwnerSearchStatus) {
+        if (nextOwnerSearchStatus === 'waiting') {
+          this.onDataChange('ownerSearch');
+        }
       },
     },
-
     computed: {
-      opa() {
-        return this.$store.state.sources.opa_assessment;
+      drawShape() {
+        return this.$store.state.drawShape;
       },
-      opaStatus() {
-        if (this.opa) {
-          if (this.opa.status) {
-            return this.opa.status
-          } else{
-            return null;
-          }
-        } else {
-          return null;
-        }
+      geocodeStatus() {
+        return this.$store.state.geocode.status;
+      },
+      ownerSearchStatus() {
+        return this.$store.state.ownerSearch.status;
+      },
+      shapeSearchStatus() {
+        return this.$store.state.shapeSearch.status;
       },
       fullScreenMapEnabled() {
         return this.$store.state.fullScreenMapEnabled;
@@ -208,6 +200,11 @@
     },
 
     methods: {
+      onDataChange(type) {
+        console.log('onDataChange, type:', type)
+        this.$data.hasData = true;
+        this.$store.commit('setFullScreenMapEnabled', false);
+      },
       onResize() {
         if (window.innerWidth > 749) {
           this.$data.isMapVisible = true;
