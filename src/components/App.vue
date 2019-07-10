@@ -122,6 +122,9 @@
       window.removeEventListener('resize', this.onResize);
     },
     watch: {
+      activeModal() {
+        this.$controller.activeFeatureChange();
+      },
       drawShape(nextDrawShape) {
         if (nextDrawShape !== null) {
           this.onDataChange('shapeSearch');
@@ -141,6 +144,9 @@
       },
     },
     computed: {
+      activeModal() {
+        return this.$store.state.activeModal;
+      },
       drawShape() {
         return this.$store.state.drawShape;
       },
