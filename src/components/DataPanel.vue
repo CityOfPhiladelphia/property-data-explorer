@@ -466,8 +466,16 @@ export default {
           row => row._featureId === item._featureId
         )
 
-        // console.log("Matching Id for Units: ", units);
+        function arrayObjectIndexOf(myArray, searchTerm, property) {
+            for(let i = 0, len = myArray.length; i < len; i++) {
+                if (myArray[i][property] === searchTerm) return i;
+            }
+            return -1;
+        }
+
         let units = mapUnitIds(result[0].pwd_parcel_id)
+        units.objIndex = arrayObjectIndexOf(this.$store.state.shapeSearch.data.rows, item._featureId, "_featureId" )
+
         this.$store.commit('setShapeSearchDataPush', units);
 
         this.$controller.dataManager.resetData();
