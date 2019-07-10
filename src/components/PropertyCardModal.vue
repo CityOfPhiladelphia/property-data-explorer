@@ -19,16 +19,6 @@
         <font-awesome-icon icon="times" class="fa-lg" aria-hidden="true" />
       </span>
     </div>
-    <div class="columns small-24 medium-6 flex-div div-padding-and-margin hide-print">
-      <a id="plans-button"
-         href="#"
-         class="button"
-         @click.prevent="print"
-      >
-        Print
-      </a>
-      <!-- <p class="p-margin">Print a payment coupon.</p> -->
-    </div>
     <div class="openmaps-modal-content">
 
       <div class="address-header cell small-24 medium-24">
@@ -45,6 +35,16 @@
 
             <font-awesome-icon icon="map-marker-alt"/>
             {{ address }}
+          <div class="columns small-24 medium-6 flex-div div-padding-and-margin hide-print">
+            <a id="plans-button"
+              href="#"
+              class="button"
+              @click.prevent="print"
+            >
+              Print
+            </a>
+            <!-- <p class="p-margin">Print a payment coupon.</p> -->
+          </div>
           </h1>
           <div class="address-header-line-2">
             PHILADELPHIA, PA
@@ -447,7 +447,7 @@ export default {
         ],
         externalLink: {
           action: function() {
-            return 'View more Zoning Information in Atlas';
+            return 'View more zoning Information in Atlas';
           },
           href: function(state) {
             let address;
@@ -916,6 +916,7 @@ export default {
 
 #plans-button{
   padding: 10.5px 25px 10.5px;
+  float: right;
 }
 
 header {
@@ -925,6 +926,7 @@ header {
 
 .address-container {
   height: 100%;
+  width: 100%;
   align-items: flex-start;
   padding-left: 20px;
   padding-top: 20px;
