@@ -4,7 +4,7 @@
     <!-- <div :class="this.tableClass"> -->
       <full-screen-topics-toggle-tab-vertical/>
       <div class="spinner-div small-12 cell"
-           v-show="this.loadingData && this.lastSearchMethod != 'shape search'"
+           v-show="this.loadingData"
       >
         <font-awesome-icon icon="spinner"
                            class="fa-4x"
@@ -37,6 +37,7 @@
         :options="this.ownerOptions"
       />
       <horizontal-table
+        v-show="!this.loadingData"
         v-if="this.lastSearchMethod === 'shape search'
               && this.$store.state.shapeSearch.data !== null"
         :slots="{
