@@ -207,7 +207,7 @@
 
     methods: {
       onDataChange(type) {
-        console.log('onDataChange, type:', type)
+        //console.log('onDataChange, type:', type)
         this.$data.hasData = true;
         this.$store.commit('setFullScreenMapEnabled', false);
       },
