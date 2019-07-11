@@ -113,6 +113,7 @@
     },
     mounted() {
       this.onResize();
+      //console.log('App.vue mounted is running, this.$route:', this.$route);
     },
     created() {
       window.addEventListener('resize', this.onResize);
@@ -121,44 +122,42 @@
       window.removeEventListener('resize', this.onResize);
     },
     watch: {
-      '$store.state.drawShape': function() {
-        if(this.$store.state.drawShape !== null) {
-        this.$controller.geocodeDrawnShape();
-        }
-      },
-      '$store.state.activeModal': function() {
+      activeModal() {
         this.$controller.activeFeatureChange();
       },
-      '$store.state.ownerSearch.status': function() {
-        if(this.$store.state.ownerSearch.status === 'success') {
-          this.$controller.geocodeOwnerSearch()
+      drawShape(nextDrawShape) {
+        if (nextDrawShape !== null) {
+          this.onDataChange('shapeSearch');
+          this.$controller.getParcelsByDrawnShape();
+          this.$store.commit('setShapeSearchStatus', 'waiting');
         }
       },
-      opaStatus(nextOpaStatus) {
-        if(nextOpaStatus === 'success' || nextOpaStatus === 'waiting'){
-          this.$data.hasData = true;
-          this.$store.commit('setFullScreenMapEnabled', false);
-        } //else {
-        //   this.$data.hasData = false;
-        //   this.$store.commit('setFullScreenMapEnabled', true);
-        // }
+      geocodeStatus(nextGeocodeStatus) {
+        if (nextGeocodeStatus === 'waiting') {
+          this.onDataChange('geocode');
+        }
+      },
+      ownerSearchStatus(nextOwnerSearchStatus) {
+        if (nextOwnerSearchStatus === 'waiting') {
+          this.onDataChange('ownerSearch');
+        }
       },
     },
-
     computed: {
-      opa() {
-        return this.$store.state.sources.opa_assessment;
+      activeModal() {
+        return this.$store.state.activeModal;
       },
-      opaStatus() {
-        if (this.opa) {
-          if (this.opa.status) {
-            return this.opa.status
-          } else{
-            return null;
-          }
-        } else {
-          return null;
-        }
+      drawShape() {
+        return this.$store.state.drawShape;
+      },
+      geocodeStatus() {
+        return this.$store.state.geocode.status;
+      },
+      ownerSearchStatus() {
+        return this.$store.state.ownerSearch.status;
+      },
+      shapeSearchStatus() {
+        return this.$store.state.shapeSearch.status;
       },
       fullScreenMapEnabled() {
         return this.$store.state.fullScreenMapEnabled;
@@ -207,6 +206,11 @@
     },
 
     methods: {
+      onDataChange(type) {
+        //console.log('onDataChange, type:', type)
+        this.$data.hasData = true;
+        this.$store.commit('setFullScreenMapEnabled', false);
+      },
       onResize() {
         if (window.innerWidth > 749) {
           this.$data.isMapVisible = true;
