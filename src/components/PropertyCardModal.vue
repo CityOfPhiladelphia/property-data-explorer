@@ -451,7 +451,7 @@ export default {
                   );
                   id =  result[0].properties.opa_account_num
                 } else {
-                  console.log('state.shapeSearch.data:', state.shapeSearch.data)
+                  //console.log('state.shapeSearch.data:', state.shapeSearch.data)
                   let result = state.shapeSearch.data.rows.filter(
                     object => {
                       console.log('object._featureId:', object._featureId)
