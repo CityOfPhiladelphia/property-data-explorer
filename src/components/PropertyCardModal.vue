@@ -441,7 +441,7 @@ export default {
             },
             slots: {
               items(state, item) {
-                console.log('slots items is running')
+                //console.log('slots items is running')
                 let id = [];
                 if (state.geocode.status === "success"){
                   id = findIdForGeocoded(state);
@@ -459,9 +459,9 @@ export default {
                   );
                   id = result[0].parcel_number
                 }
-                console.log('id:', id)
+                //console.log('id:', id)
                 item = new Array(state.sources.opa_public.targets[id])
-                console.log('item:', item)
+                //console.log('item:', item)
                 return item
               },
             }
