@@ -454,7 +454,7 @@ export default {
                   //console.log('state.shapeSearch.data:', state.shapeSearch.data)
                   let result = state.shapeSearch.data.rows.filter(
                     object => {
-                      console.log('object._featureId:', object._featureId)
+                      //console.log('object._featureId:', object._featureId)
                       return object._featureId === state.activeModal.featureId }
                   );
                   id = result[0].parcel_number
