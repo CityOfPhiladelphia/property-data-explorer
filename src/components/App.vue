@@ -113,7 +113,8 @@
     },
     mounted() {
       this.onResize();
-      //console.log('App.vue mounted is running, this.$route:', this.$route);
+      console.log('App.vue mounted is running, this.$route:', this.$route);
+      // this.$router.push({ query: { ...this.$route.query, ...{ services: ['fun', 'cat'] }}});
     },
     created() {
       window.addEventListener('resize', this.onResize);
