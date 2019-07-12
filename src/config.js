@@ -13,7 +13,7 @@ let config = {
   // baseConfig: '//raw.githubusercontent.com/stevetotheizz0/atlas_base_config/master/config.js',
   gatekeeperKey: '82fe014b6575b8c38b44235580bc8b11',
   router: {
-    enabled: false,
+    enabled: true,
   },
   app: {
     title: 'Property Data Explorer',
