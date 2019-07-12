@@ -142,6 +142,7 @@ export default {
         mailingFields: this.mailingFields,
         tableSort: this.tableSort,
         expandedData: this.expandedData,
+        rowAction: this.rowClick,
         export: {
           formatButtons: {
             csv: "Download CSV",
@@ -270,6 +271,7 @@ export default {
         mailingFields: this.mailingFields,
         tableSort: this.tableSort,
         expandedData: this.expandedData,
+        rowAction: this.rowClick,
         customClass: {
           table: 'sortable',
           th: function(field) {
@@ -337,6 +339,7 @@ export default {
         mailingFields: this.mailingFields,
         tableSort: this.tableSort,
         expandedData: this.expandedData,
+        rowAction: this.rowClick,
         export: {
           formatButtons: {
             csv: "Download CSV",
@@ -518,6 +521,21 @@ export default {
 
       return fields
 
+    },
+    rowClick(state, item) {
+      console.log("rowClick this: ", this)
+      let coords = [];
+      if( typeof this.geocodeItems[0] != 'undefined') {
+        console.log("rowClick: ",this,  this.geocodeItems[0].geometry.coordinates)
+        Array.prototype.push.apply(coords, [this.geocodeItems[0].geometry.coordinates[0],this.geocodeItems[0].geometry.coordinates[1]])
+      } else if (this.lastSearchMethod === "owner search") {
+        Array.prototype.push.apply(coords, [item.geometry.coordinates[0], item.geometry.coordinates[1]])
+
+      } else {
+        console.log("rowClick: ", this, "item: ", item  ,item.geocode_lat, item.geocode_lon)
+        Array.prototype.push.apply(coords, [item.geocode_lon, item.geocode_lat])
+      }
+      this.$store.commit('setMapCenter', coords);
     },
     expandedData() {
       let modalComputed = PropertyCardModal.computed
