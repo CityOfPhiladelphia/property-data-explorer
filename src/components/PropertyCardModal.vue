@@ -936,6 +936,23 @@ export default {
 
 }
 
+@media screen and (max-width: 750px) {
+  #plans-button {
+    display: none;
+  }
+  .button-state {
+    background: white;
+  }
+
+  .openmaps-modal {
+    width: 100% !important;
+    height: 100% !important;
+    margin: 0;
+    left: 0 !important;
+    right: 0 !important;
+  }
+}
+
 #plans-button{
   padding: 10.5px 25px 10.5px;
   float: right;
