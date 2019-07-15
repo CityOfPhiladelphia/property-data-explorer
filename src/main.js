@@ -34,7 +34,6 @@ import 'leaflet-measure/dist/leaflet-measure.css';
 import router from './router';
 
 import App from './components/App.vue';
-var BASE_CONFIG_URL = 'https://cdn.jsdelivr.net/gh/ajrothwell/mapboard-base-config@74cf4692237e16757681f6860b936efd734c27d8/config.js';
 
 function initVue(config) {
   const store = createStore(config);
