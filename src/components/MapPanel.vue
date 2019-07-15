@@ -674,6 +674,32 @@
 
 <style>
 
+  @media screen and (max-width: 750px) {
+
+    .leaflet-almostleft {
+      right: 0 !important;
+    }
+
+    .leaflet-draw {
+      top: 29%;
+    }
+
+    .leaflet-draw-polygon, .leaflet-draw-toolbar.leaflet-bar.leaflet-draw-toolbar-top {
+      width: 34px !important;
+      height: 34px !important;
+      background: white;
+      margin-right: 10px;
+    }
+
+    a.leaflet-draw-draw-polygon {
+      width: 30px !important;
+      height: 30px !important;
+      background-position: -65px -10px !important;
+      background-size: 450px 48px !important;
+    }
+
+  }
+
   .leaflet-draw.leaflet-control {
     clear: unset;
     display: inline-block;
