@@ -766,7 +766,7 @@
     }
 
     a.leaflet-draw-draw-polygon {
-      width: 30px ;
+      width: 30px !important;
       height: 30px !important;
       background-position: -65px -10px !important;
       background-size: 450px 48px !important;
