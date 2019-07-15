@@ -81,6 +81,7 @@
 </template>
 
 <script>
+  import { LatLng } from 'leaflet';
 
   import PhilaHeader from './PhilaHeader.vue';
   import PhilaFooter from './PhilaFooter.vue';
@@ -113,7 +114,33 @@
     },
     mounted() {
       this.onResize();
-      //console.log('App.vue mounted is running, this.$route:', this.$route);
+      let query = this.$route.query;
+      console.log('App.vue mounted is running, this.$route.query:', this.$route.query);
+      if (query.shape) {
+        let shape = query.shape;
+        shape = shape.slice(2, shape.length-2);
+        shape = shape.split('],[')
+        let test = []
+        for (let point of shape) {
+          test.push(point.split(','))
+        }
+        let _latlngs = []
+        for (let item of test) {
+          let latlng = new LatLng(parseFloat(item[0]), parseFloat(item[1]))
+          _latlngs.push(latlng)
+        }
+        const points = { _latlngs }
+        this.$controller.getParcelsByPoints(points);
+        this.onDataChange('shapeSearch');
+      } else if (query.address) {
+        // console.log('query.address:', query.address);
+        this.$controller.handleSearchFormSubmit(query.address);
+        this.onDataChange('geocode');
+      } else if (query.owner) {
+        // console.log('query.owner:', query.owner);
+        this.$controller.handleSearchFormSubmit(query.owner);
+        this.onDataChange('ownerSearch');
+      }
     },
     created() {
       window.addEventListener('resize', this.onResize);

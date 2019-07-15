@@ -42,7 +42,7 @@ function initVue(config) {
   Vue.use(configMixin, config);
 
   // mix in controller
-  Vue.use(controllerMixin, { config, store });
+  Vue.use(controllerMixin, { config, store, router });
 
   Vue.component('font-awesome-icon', FontAwesomeIcon)
   // mount main vue
