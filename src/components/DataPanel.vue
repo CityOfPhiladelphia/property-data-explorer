@@ -38,8 +38,8 @@
       />
       <horizontal-table
         v-show="!this.loadingData"
-        v-if="this.lastSearchMethod === 'shape search'
-              && this.$store.state.shapeSearch.data !== null"
+        v-if="this.lastSearchMethod === 'shape search' && this.$store.state.shapeSearch.data !== null
+              || this.lastSearchMethod === 'buffer search' && this.$store.state.shapeSearch.data !== null"
         :slots="{
           items: function(state) {
             var data = state.shapeSearch.data.rows;
@@ -443,8 +443,10 @@ export default {
   },
   methods: {
     addCondoRecords(state, item) {
+      console.log('addCondoRecords is running');
       this.$data.showTable = false;
       let mapUnitIds = function(id) {
+        // console.log('running mapUnitIds');
         let unitsToAdd = this.$store.state.condoUnits.units[id]
         unitsToAdd.map(
           (item, index) => {
@@ -455,6 +457,7 @@ export default {
         return unitsToAdd
       }
       mapUnitIds = mapUnitIds.bind(this)
+      // console.log('after mapUnitIds');
       let unitData;
       if(this.$store.state.lastSearchMethod === "geocode") {
         // console.log("Not shape search, input: ", input)
@@ -468,6 +471,7 @@ export default {
 
         this.$controller.dataManager.fetchData();
       } else {
+        // console.log('last search method is not geocode')
         let result = this.$store.state.shapeSearch.data.rows.filter(
           row => row._featureId === item._featureId
         )
@@ -484,7 +488,9 @@ export default {
 
         this.$store.commit('setShapeSearchDataPush', units);
 
+        // console.log('this.$controller.dataManager.resetData() is about to run');
         this.$controller.dataManager.resetData();
+        // console.log('this.$controller.dataManager.didShapeSearch() is about to run');
         this.$controller.dataManager.didShapeSearch();
       }
       // this.closeModal(state);
@@ -768,7 +774,7 @@ export default {
             label: 'Owner',
             value: function(state, item) {
               let owner;
-              state.lastSearchMethod === "shape search" ?
+              state.lastSearchMethod === "shape search" || state.lastSearchMethod === "buffer search" ?
                                                 owner = item.owner_2 != null ?
                                                         titleCase(item.owner_1.trim()) + "\n" + titleCase(item.owner_2.trim()):
                                                         titleCase(item.owner_1.trim()) :
