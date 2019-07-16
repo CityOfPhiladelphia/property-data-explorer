@@ -685,10 +685,6 @@
     height: 49px;
   }
 
-  .leaflet-draw-section {
-    margin-top: 2px;
-  }
-
   .leaflet-draw-draw-polygon {
     width: 45px !important;
     height: 45px !important;
