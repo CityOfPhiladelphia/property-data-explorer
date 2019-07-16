@@ -43,7 +43,7 @@
     <PhilaHeader :class="this.openModal"
       :app-title="this.$config.app.title"
       :app-tag-line="this.$config.app.tagLine"
-      :app-logo="`${publicPath}logo.png`"
+      :app-logo="appLogo"
       :app-logo-alt="this.$config.app.logoAlt"
     >
       <div slot="mobile-menu">
@@ -90,6 +90,7 @@
   import MapPanel from './MapPanel.vue';
   import DataPanel from './DataPanel.vue';
   import PropertyCardModal from './PropertyCardModal.vue';
+  import Logo from '@/assets/city-of-philadelphia-logo.png';
 
   export default {
     components: {
@@ -102,9 +103,15 @@
       CyclomediaWidget: () => import(/* webpackChunkName: "mbmb_pvm_CyclomediaWidget" */'@philly/vue-mapping/src/cyclomedia/Widget.vue'),
     },
 
+    props: {
+      appLogo: {
+        type: String,
+        default: Logo,
+      }
+    },
     data() {
       return {
-        publicPath: process.env.BASE_URL,
+        publicPath: '@/assets/',
         isLarge: true,
         'top': 3,
         'bottom': 2,
@@ -421,6 +428,13 @@ th {
   .pvc-download-data-button, .pvc-export-data-button {
     visibility: hidden;
   }
+
+  .mobile-menu-content {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+  }
+
 }
 
 .step-group{
