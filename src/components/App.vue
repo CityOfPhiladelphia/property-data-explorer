@@ -147,6 +147,10 @@
         // console.log('query.owner:', query.owner);
         this.$controller.handleSearchFormSubmit(query.owner);
         this.onDataChange('ownerSearch');
+      } else if (query.buffer) {
+        this.$store.commit('setBufferMode', true);
+        this.$controller.handleSearchFormSubmit(query.buffer);
+        this.onDataChange('bufferSearch');
       }
     },
     created() {

@@ -68,22 +68,29 @@
 
         <!-- reactive geojson parcels -->
         <geojson v-for="geojsonFeature in geojsonParcels"
-        @l-mouseover="handleMarkerMouseover"
-        @l-mouseout="handleMarkerMouseout"
-        :geojson="geojsonFeature"
-        :fillColor="geojsonFeature.properties.fillColor"
-        :color="geojsonFeature.properties.color"
-        :weight="geojsonFeature.properties.weight"
-        :opacity="geojsonFeature.properties.opacity"
-        :fillOpacity="geojsonFeature.properties.fillOpacity"
-        :data="geojsonFeature.properties"
-        :key="geojsonFeature.properties.PARCELID"
+                @l-mouseover="handleMarkerMouseover"
+                @l-mouseout="handleMarkerMouseout"
+                :geojson="geojsonFeature"
+                :fillColor="geojsonFeature.properties.fillColor"
+                :color="geojsonFeature.properties.color"
+                :weight="geojsonFeature.properties.weight"
+                :opacity="geojsonFeature.properties.opacity"
+                :fillOpacity="geojsonFeature.properties.fillOpacity"
+                :data="geojsonFeature.properties"
+                :key="geojsonFeature.properties.PARCELID"
         />
 
         <!-- vector markers -->
         <vector-marker v-for="(marker, index) in markersForAddress"
                        :latlng="marker.latlng"
                        :key="marker.key"
+                       :markerColor="marker.color"
+                       :icon="marker.icon"
+        />
+
+        <vector-marker v-for="(marker, index) in markersForBufferSearch"
+                       :latlng="marker.latlng"
+                       :key="marker.key + '1'"
                        :markerColor="marker.color"
                        :icon="marker.icon"
         />
@@ -107,7 +114,12 @@
         </control-corner>
 
         <control-corner :vSide="'top'"
-                        :hSide="'almostleft'"
+                        :hSide="'nearleft'"
+        >
+        </control-corner>
+
+        <control-corner :vSide="'top'"
+                        :hSide="'nearleft2'"
         >
         </control-corner>
 
@@ -148,28 +160,32 @@
           />
         </div>
 
-        <!-- <basemap-tooltip :position="'bottomalmostleft'"
-        /> -->
-
-        <!-- <scale-control :vSide="'top'"
-                       :hSide="'almostright'"
-        >
-        </scale-control> -->
         <div>
           <div v-once>
-            <map-address-input :position="this.addressInputPosition"
+            <map-address-input :position="'topleft'"
                            :placeholder="this.addressInputPlaceholder"
                            widthFromConfig="350"
             >
-          </map-address-input>
-            <!-- <div v-once class="draw-control"> -->
+            </map-address-input>
+
             <div class="draw-control">
-              <draw-control :position="this.addressInputPosition"
+              <draw-control :position="'topnearleft'"
                             :control="true"
               />
             </div>
+            <buffer-control :position="'topnearleft2'"
+                            :barHeight="'49px'"
+                            :barWidth="'49px'"
+                            :barLineHeight="'49px'"
+                            :buttonHeight="'45px'"
+                            :buttonWidth="'45px'"
+                            :buttonLineHeight="'45px'"
+            />
+
           </div>
         </div>
+
+
         <address-candidate-list v-if="this.addressAutocompleteEnabled"
                                 :position="this.addressInputPosition"
         />
@@ -244,6 +260,7 @@
   import LegendControl from '@philly/vue-mapping/src/components/LegendControl.vue';
   import MapAddressInput from '@philly/vue-mapping/src/components/MapAddressInput.vue';
   import DrawControl from '@philly/vue-mapping/src/components/DrawControl.vue';
+  import BufferControl from '@philly/vue-mapping/src/components/BufferControl.vue';
 
 
   export default {
@@ -253,6 +270,7 @@
     ],
     components: {
       DrawControl,
+      BufferControl,
       // DrawControl: () => import(/* webpackChunkName: "mbmp_pvm_DrawControl" */'@philly/vue-mapping/src/components/DrawControl.vue'),
       Control: () => import(/* webpackChunkName: "mbmp_pvm_Control" */'@philly/vue-mapping/src/leaflet/Control.vue'),
       EsriTiledMapLayer: () => import(/* webpackChunkName: "mbmp_pvm_EsriTiledMapLayer" */'@philly/vue-mapping/src/esri-leaflet/TiledMapLayer.vue'),
@@ -285,6 +303,8 @@
           geojsonParcels: [],
           markersForAddress: [],
         },
+        lastGeocodeGeom: {},
+        lastGeocodeResult: {},
       };
       return data;
     },
@@ -343,7 +363,7 @@
         if (this.isMobileOrTablet) {
           return 'topleft'
         } else {
-          return 'topalmostleft'
+          return 'topnearleft'
         }
       },
       addressInputPlaceholder() {
@@ -530,7 +550,17 @@
       },
     },
     watch: {
-
+      geocodeGeom(nextGeocodeGeom) {
+        if (nextGeocodeGeom) {
+          this.lastGeocodeGeom = nextGeocodeGeom;
+        }
+      },
+      geocodeResult(nextGeocodeResult) {
+        // console.log('watch geocodeResult is running, nextGeocodeResult:', nextGeocodeResult);
+        if (Object.keys(nextGeocodeResult).length > 0) {
+          this.lastGeocodeResult = nextGeocodeResult;
+        }
+      },
       geojsonParcels(nextGeojson) {
         let czts = this.activeTopicConfig.zoomToShape;
         let dzts = this.$data.zoomToShape;
@@ -672,7 +702,47 @@
   }; //end of export
 </script>
 
-<style>
+<style lang="scss">
+
+  @media screen and (min-width: 750px) {
+    .leaflet-nearleft {
+      position: absolute;
+      bottom: 0px;
+      top: -3px;
+      left: 365px;
+      padding-bottom: 10px;
+      z-index: 500;
+    }
+
+    .leaflet-nearleft2 {
+      position: absolute;
+      bottom: 0px;
+      top: -1px;
+      left: 420px;
+      padding-bottom: 10px;
+      z-index: 500;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .leaflet-nearleft {
+      position: absolute;
+      bottom: 0px;
+      top: -3px;
+      left: 315px;
+      padding-bottom: 10px;
+      z-index: 500;
+    }
+
+    .leaflet-nearleft2 {
+      position: absolute;
+      bottom: 0px;
+      top: -1px;
+      left: 370px;
+      padding-bottom: 10px;
+      z-index: 500;
+    }
+  }
 
   .leaflet-draw.leaflet-control {
     clear: unset;
@@ -702,6 +772,7 @@
   .leaflet-bar button {
   padding: inherit !important;
   }
+
 </style>
 
 <style scoped>

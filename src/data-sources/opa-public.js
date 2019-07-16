@@ -8,7 +8,7 @@ export default {
       // console.log("opa_public get running")
       if (state.lastSearchMethod === 'owner search') {
         return state.ownerSearch.data
-      } else if (state.lastSearchMethod === 'shape search') {
+      } else if (state.lastSearchMethod === 'shape search' || state.lastSearchMethod === 'buffer search') {
         return state.shapeSearch.data.rows
       } else {
         let opa = []
