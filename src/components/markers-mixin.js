@@ -99,6 +99,28 @@ export default {
       return markers;
     },
 
+    markersForBufferSearch() {
+      // console.log('markers-mixin.js markersForAddress computed is running');
+      const markers = [];
+      // geocoded address marker
+      const geocodeGeom = this.lastGeocodeGeom;
+      if (this.identifyFeature === 'address-marker' && geocodeGeom) {
+        const latlng = [...geocodeGeom.coordinates].reverse();
+        const key = this.lastGeocodeResult.properties.street_address;
+        const color = '#2176d2';
+        const markerType = 'geocode';
+        const icon = {
+          prefix: 'fas',
+          icon: 'map-marker-alt',
+          shadow: true,
+          size: 50,
+        }
+        const addressMarker = {latlng, key, color, markerType, icon};
+        markers.push(addressMarker);
+      }
+      return markers;
+    },
+
     // returns geojson parcels to be rendered on the map along with
     // necessary props.
     geojsonParcels() {
@@ -317,7 +339,7 @@ export default {
     identifyMarker(feature) {
       // console.log('identifyMarker starting: feature.featureId', feature.featureId, 'feature.featureId.toString().slice(0,6):', feature.featureId.toString().slice(0,6));
       let featureId;
-      if (this.$store.state.geocode.status === "success") {
+      if (this.$store.state.geocode.status === "success" && this.$store.state.lastSearchMethod !== 'shape search') {
         const geocodeId = this.$store.state.geocode.data._featureId;
         // console.log('identifyMarker, geocode.status is success, geocodeId:', geocodeId);
         // featureId = this.$store.state.geocode.data._featureId === parseInt(feature.featureId.toString().slice(0,6)) ?
@@ -355,7 +377,7 @@ export default {
     identifyRow(featureId) {
       // console.log("identifyRow starting", featureId)
       let rowId;
-      if (this.$store.state.geocode.status === "success") {
+      if (this.$store.state.geocode.status === "success" && this.$store.state.lastSearchMethod !== 'shape search') {
         // console.log(this.$store.state.geocode.data)
         let pwd_parcel_id = Number(this.$store.state.geocode.data.properties.pwd_parcel_id);
         // console.log("opa_account_num: ", pwd_parcel_id, "featureId: ", featureId)
@@ -433,7 +455,7 @@ export default {
     handleMarkerMouseover(e) {
       // console.log('handleMarkerMouseover is starting');
       if (!this.isMobileOrTablet) {
-        // console.log('handleMarkerMouseover actions are running');
+        // console.log('handleMarkerMouseover actions are running, e.target.options:', e.target.options);
         const { target } = e;
         // console.log('PARCEL ID target:', target);
         const featureId  = this.identifyRow(target.options.data.PARCELID);

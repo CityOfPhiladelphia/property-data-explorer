@@ -5,6 +5,8 @@ import map from './general/map';
 // data-sources
 import opa_assessment from './data-sources/opa-assessment';
 import opa_public from './data-sources/opa-public';
+// import neighboringProperties from './data-sources/neighboring-properties';
+
 
 var BASE_CONFIG_URL = 'https://cdn.jsdelivr.net/gh/cityofphiladelphia/pde_base_config@9b3bdb4f0ad53a2d7859a2d592343fb6fb417740/config.js';
 
@@ -131,6 +133,7 @@ let config = {
   dataSources: {
     opa_public,
     opa_assessment,
+    // neighboringProperties,
   }
 }
 
