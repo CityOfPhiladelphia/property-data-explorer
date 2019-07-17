@@ -1,5 +1,5 @@
 <template>
-  <div id="data-panel-container grid-x align-center">
+  <div id="data-panel-container">
 
     <!-- <div :class="this.tableClass"> -->
       <full-screen-topics-toggle-tab-vertical/>
