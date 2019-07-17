@@ -708,7 +708,7 @@
     .leaflet-nearleft {
       position: absolute;
       bottom: 0px;
-      top: -3px;
+      top: -1px;
       left: 365px;
       padding-bottom: 10px;
       z-index: 500;
