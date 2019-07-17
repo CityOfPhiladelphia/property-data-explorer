@@ -88,7 +88,9 @@
                        :icon="marker.icon"
         />
 
+        <!-- buffer search needs a marker that can't be the geocode marker -->
         <vector-marker v-for="(marker, index) in markersForBufferSearch"
+                       v-if="lastSearchMethod === 'buffer search'"
                        :latlng="marker.latlng"
                        :key="marker.key + '1'"
                        :markerColor="marker.color"
@@ -335,7 +337,9 @@
     },
 
     computed: {
-
+      lastSearchMethod() {
+        return this.$store.state.lastSearchMethod;
+      },
       drawProps() {
         const draw = {
           polyline: true,
