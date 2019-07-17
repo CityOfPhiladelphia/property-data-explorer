@@ -170,12 +170,7 @@
             >
             </map-address-input>
 
-            <div class="draw-control">
-              <draw-control :position="'topnearleft'"
-                            :control="true"
-              />
-            </div>
-            <buffer-control :position="'topnearleft2'"
+            <buffer-control :position="'topnearleft'"
                             :barHeight="'49px'"
                             :barWidth="'49px'"
                             :barLineHeight="'49px'"
@@ -183,6 +178,11 @@
                             :buttonWidth="'45px'"
                             :buttonLineHeight="'45px'"
             />
+            <div class="draw-control">
+              <draw-control :position="'topnearleft2'"
+                            :control="true"
+              />
+            </div>
 
           </div>
         </div>
@@ -776,19 +776,33 @@
 
   @media screen and (max-width: 750px) {
 
-    .leaflet-almostleft {
+    .leaflet-nearleft {
       right: 0 !important;
+      left: unset;
+      top: 27% !important;
+    }
+
+    .leaflet-nearleft2 {
+      right: 0 !important;
+      top: 20% !important;
     }
 
     .leaflet-draw {
-      top: 29%;
+      top: 28%;
     }
 
-    .leaflet-draw-toolbar.leaflet-bar.leaflet-draw-toolbar-top {
-      width: 34px !important;
-      height: 34px !important;
+    .leaflet-draw-toolbar.leaflet-bar.leaflet-draw-toolbar-top,
+    ,.leaflet-bar.easy-button-container.leaflet-control {
+      width: 30px !important;
+      height: 30px !important;
       background: white;
       margin-right: 10px;
+    }
+
+    .leaflet-bar.easy-button-container.leaflet-control>button,
+    .leaflet-bar.easy-button-container.leaflet-control {
+      width: 30px !important;
+      height: 30px !important;
     }
 
     a.leaflet-draw-draw-polygon {
@@ -796,6 +810,13 @@
       height: 30px !important;
       background-position: -65px -10px !important;
       background-size: 450px 48px !important;
+    }
+
+    .leaflet-control>button>span>svg {
+      height: 28px;
+      left: -2px;
+      top: -2px;
+      position: absolute;
     }
 
   }
