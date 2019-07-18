@@ -459,8 +459,8 @@ export default {
       mapUnitIds = mapUnitIds.bind(this)
       // console.log('after mapUnitIds');
       let unitData;
-      if(this.$store.state.lastSearchMethod === "geocode") {
-        // console.log("Not shape search, input: ", input)
+      if(this.$store.state.lastSearchMethod === "geocode" || this.$store.state.lastSearchMethod === "reverseGeocode") {
+        console.log("Not shape search, input: ", input)
 
         this.$controller.dataManager.resetData();
         const input = this.$store.state.parcels.pwd.properties.ADDRESS;
