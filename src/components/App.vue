@@ -122,7 +122,7 @@
     mounted() {
       this.onResize();
       let query = this.$route.query;
-      console.log('App.vue mounted is running, this.$route.query:', this.$route.query);
+      // console.log('App.vue mounted is running, this.$route.query:', this.$route.query);
       if (query.shape) {
         let shape = query.shape;
         shape = shape.slice(2, shape.length-2);

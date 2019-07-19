@@ -329,7 +329,7 @@
       }
     },
     mounted() {
-      console.log('MapPanel mounted is running, DrawControl', DrawControl)
+      // console.log('MapPanel mounted is running, DrawControl', DrawControl)
       const map = this.$store.state.map.map;
       const center = map.getCenter();
       const { lat, lng } = center;
