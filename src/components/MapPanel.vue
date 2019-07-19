@@ -750,36 +750,14 @@
 
   @media screen and (max-width: 750px) {
 
-    .leaflet-almostleft {
-      right: 0 !important;
+    .leaflet-control-zoom-in, .leaflet-control-zoom-out {
+      display: none !important;
     }
-
-    .leaflet-draw {
-      top: 29%;
-    }
-
-    .leaflet-draw-toolbar.leaflet-bar.leaflet-draw-toolbar-top {
-      width: 34px !important;
-      height: 34px !important;
-      background: white;
-      margin-right: 10px;
-    }
-
-    a.leaflet-draw-draw-polygon {
-      width: 30px !important;
-      height: 30px !important;
-      background-position: -65px -10px !important;
-      background-size: 450px 48px !important;
-    }
-
-  }
-
-  @media screen and (max-width: 750px) {
 
     .leaflet-nearleft {
       right: 0 !important;
       left: unset;
-      top: 27% !important;
+      top: 26% !important;
     }
 
     .leaflet-nearleft2 {
@@ -788,34 +766,45 @@
     }
 
     .leaflet-draw {
-      top: 28%;
+      top: 25%;
     }
 
     .leaflet-draw-toolbar.leaflet-bar.leaflet-draw-toolbar-top,
     ,.leaflet-bar.easy-button-container.leaflet-control {
       width: 30px !important;
       height: 30px !important;
-      background: white;
       margin-right: 10px;
     }
 
-    .leaflet-bar.easy-button-container.leaflet-control>button,
+    .leaflet-bar.easy-button-container.leaflet-control>button{
+      width: 26px !important;
+      height: 26px !important;
+    }
+
     .leaflet-bar.easy-button-container.leaflet-control {
       width: 30px !important;
       height: 30px !important;
     }
 
+    .icon-padding {
+      padding-top: unset;
+    }
+
     a.leaflet-draw-draw-polygon {
-      width: 30px !important;
-      height: 30px !important;
-      background-position: -65px -10px !important;
-      background-size: 450px 48px !important;
+      width: 26px !important;
+      height: 26px !important;
+      background-position: -74px -10px !important;
+      background-size: 440px 44px !important;
+    }
+
+    .button-state>img {
+      height: 26px;
     }
 
     .leaflet-control>button>span>svg {
-      height: 28px;
-      left: -2px;
-      top: -2px;
+      height: 24px;
+      left: -4px;
+      top: -4px;
       position: absolute;
     }
 
