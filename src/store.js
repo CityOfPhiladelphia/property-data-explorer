@@ -16,6 +16,7 @@ function createStore(config) {
 
   const initialState = {
     // isMobileOrTablet: isMobileDevice(),
+    mapViewWasSetOnAppLoad: false,
     fullScreen: {
       mapOnly: false,
       topicsOnly: false,
@@ -77,6 +78,9 @@ function createStore(config) {
       // }
     },
     mutations: {
+      setMapViewWasSetOnAppLoad(state, payload) {
+        state.mapViewWasSetOnAppLoad = payload;
+      },
       setCandidates(state, payload) {
         state.candidates = payload;
       },

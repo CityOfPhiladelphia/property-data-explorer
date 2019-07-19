@@ -329,7 +329,7 @@
       }
     },
     mounted() {
-      console.log('MapPanel mounted is running, DrawControl', DrawControl)
+      // console.log('MapPanel mounted is running, DrawControl', DrawControl)
       const map = this.$store.state.map.map;
       const center = map.getCenter();
       const { lat, lng } = center;
@@ -566,18 +566,11 @@
         }
       },
       geojsonParcels(nextGeojson) {
-        let czts = this.activeTopicConfig.zoomToShape;
-        let dzts = this.$data.zoomToShape;
-        if (!czts || !czts.includes('geojsonParcels')) {
-          dzts.geojsonParcels = [];
-          return;
-        } else {
-          dzts.geojsonParcels = nextGeojson;
-          // console.log('exiting geojsonParcels');
-          this.checkBoundsChanges();
+        if (!this.$store.state.mapViewWasSetOnAppLoad && this.lastSearchMethod === 'shape search') {
+          this.setMapToBounds();
+          this.$store.commit('setMapViewWasSetOnAppLoad', true);
         }
       },
-
       markersForAddress(nextMarkers) {
         let czts = this.activeTopicConfig.zoomToShape;
         let dzts = this.$data.zoomToShape;
@@ -586,10 +579,9 @@
           return;
         } else {
           dzts.markersForAddress = nextMarkers;
-          this.checkBoundsChanges();
+          this.setMapToBounds();
         }
       },
-
       picOrCycloActive() {
         if (this.cyclomediaActive) {
           return true;
@@ -616,55 +608,18 @@
         );
         const curStyle = useHoverStyle ? hoverStyle : style;
 
-        // console.log("curStyle: ", curStyle)
-
         return curStyle.fillColor;
       },
 
-      checkBoundsChanges() {
-        let czts = this.activeTopicConfig.zoomToShape;
-        if (!czts) {
-          return;
-        }
-        let dzts = this.$data.zoomToShape;
-        let tf = [];
-        for (let shape of czts) {
-          if (dzts[shape] !== false && dzts[shape].length > 0) {
-            tf.push(true);
-          } else {
-            tf.push(false);
-          }
-        }
-        if (tf.includes(false)) {
-          return;
-        } else {
-          this.setMapToBounds();
-        }
-      },
-
       setMapToBounds() {
+        // console.log('setMapToBounds is running, this.geojsonParcels:', this.geojsonParcels)
         let featureArray = []
-        let czts = this.activeTopicConfig.zoomToShape;
-        if (czts) {
-          if (czts.includes('geojsonParcels')) {
-            for (let geojsonFeature of this.geojsonParcels) {
-              featureArray.push(L.geoJSON(geojsonFeature.geojson))
-            }
-          }
-          if (czts.includes('markersForAddress')) {
-            for (let marker of this.markersForAddress) {
-              featureArray.push(L.marker(marker.latlng))
-            }
-          }
-          if (czts.includes('circleMarkers')) {
-            for (let marker of this.circleMarkers) {
-              featureArray.push(L.marker(marker.latlng))
-            }
-          }
-          const group = new L.featureGroup(featureArray);
-          const bounds = group.getBounds();
-          this.$store.commit('setMapBounds', bounds);
+        for (let geojsonFeature of this.geojsonParcels) {
+          featureArray.push(GeoJSON(geojsonFeature))
         }
+        const group = new FeatureGroup(featureArray);
+        const bounds = group.getBounds();
+        this.$store.commit('setMapBounds', bounds);
       },
       configForBasemap(basemap) {
         return this.$config.map.basemaps[basemap] || {};

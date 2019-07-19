@@ -237,7 +237,7 @@ export default {
       // get visible tables based on active topic
       const tableIds = this.$store.getters.visibleTableIds;
 
-      console.log('computed tableIdMarkers is rerunning, filteredData:', filteredData, 'tableIds:', tableIds);
+      // console.log('computed tableIdMarkers is rerunning, filteredData:', filteredData, 'tableIds:', tableIds);
 
       for (let tableId of tableIds) {
         const tableConfig = this.getConfigForTable(tableId) || {};
