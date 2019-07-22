@@ -801,10 +801,14 @@
       height: 26px;
     }
 
+    .leaflet-touch .leaflet-bar button {
+      line-height: unset;
+    }
+
     .leaflet-control>button>span>svg {
       height: 24px;
-      left: -4px;
-      top: -4px;
+      left: -5px;
+      top: -3px;
       position: absolute;
     }
 
