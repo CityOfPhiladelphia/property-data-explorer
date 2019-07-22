@@ -728,24 +728,6 @@
     }
   }
 
-  @media screen and (max-width: 749px) {
-    .leaflet-nearleft {
-      position: absolute;
-      bottom: 0px;
-      top: -3px;
-      padding-bottom: 10px;
-      z-index: 500;
-    }
-
-    .leaflet-nearleft2 {
-      position: absolute;
-      bottom: 0px;
-      top: -1px;
-      left: 370px;
-      padding-bottom: 10px;
-      z-index: 500;
-    }
-  }
 
   @media screen and (max-width: 750px) {
 
@@ -754,14 +736,23 @@
     }
 
     .leaflet-nearleft {
+      position: absolute;
+      bottom: 0px;
+      padding-bottom: 10px;
+      z-index: 500;
       right: 0 !important;
       left: unset;
       top: 26% !important;
     }
 
     .leaflet-nearleft2 {
+      position: absolute;
+      bottom: 0px;
+      left: 370px;
+      padding-bottom: 10px;
+      z-index: 500;
       right: 0 !important;
-      top: 20% !important;
+      top: 19% !important;
     }
 
     .leaflet-draw {
@@ -769,7 +760,7 @@
     }
 
     .leaflet-draw-toolbar.leaflet-bar.leaflet-draw-toolbar-top,
-    ,.leaflet-bar.easy-button-container.leaflet-control {
+    .leaflet-bar.easy-button-container.leaflet-control {
       width: 30px !important;
       height: 30px !important;
       margin-right: 10px;
@@ -785,16 +776,19 @@
       height: 30px !important;
     }
 
+    a.leaflet-draw-draw-polygon {
+      width: 26px !important;
+      height: 26px !important;
+    }
+
+    .leaflet-touch .leaflet-draw-toolbar .leaflet-draw-draw-polygon {
+      background-position: -31px -1px;
+    }
+
     .icon-padding {
       padding-top: unset;
     }
 
-    a.leaflet-draw-draw-polygon {
-      width: 26px !important;
-      height: 26px !important;
-      background-position: -74px -10px !important;
-      background-size: 440px 44px !important;
-    }
 
     .button-state>img {
       height: 26px;
@@ -813,12 +807,6 @@
 
   }
 
-  .leaflet-draw.leaflet-control {
-    clear: unset;
-    display: inline-block;
-    float: right
-  }
-
   .leaflet-draw-toolbar.leaflet-bar.leaflet-draw-toolbar-top {
     width: 49px;
     height: 49px;
@@ -829,9 +817,21 @@
     height: 45px !important;
   }
 
+@media screen and (min-width: 750px) {
   .leaflet-touch .leaflet-draw-toolbar .leaflet-draw-draw-polygon {
     background-position: -65px -9px;
     background-size: 540px 60px;
+  }
+}
+
+  .leaflet-draw.leaflet-control {
+    clear: unset;
+    float: right;
+  }
+
+  .leaflet-draw-toolbar.leaflet-bar.leaflet-draw-toolbar-top {
+    width: 49px;
+    height: 49px;
   }
 
   .leaflet-touch .leaflet-draw-actions {
