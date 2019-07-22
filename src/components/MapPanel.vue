@@ -733,7 +733,6 @@
       position: absolute;
       bottom: 0px;
       top: -3px;
-      left: 315px;
       padding-bottom: 10px;
       z-index: 500;
     }
