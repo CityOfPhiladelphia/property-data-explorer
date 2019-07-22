@@ -165,10 +165,14 @@ export default {
           {
             label: 'Street Address',
             value: function(state, item) {
-              if(item.properties.opa_address != "" ) {
-                return titleCase(item.properties.opa_address)
+              if( state.lastSearchMethod === "buffer search") {
+                return titleCase(item.address_std)
               } else {
-                return titleCase(item.properties.street_address)
+                if(item.properties.opa_address != "" ) {
+                  return titleCase(item.properties.opa_address)
+                } else {
+                  return titleCase(item.properties.street_address)
+                }
               }
             },
           },
