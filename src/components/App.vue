@@ -408,7 +408,7 @@
   flex: 0;
 }
 
-th {
+#data-panel-container .pvc-horizontal-table .pvc-horizontal-table-body .stack>thead>tr>th {
   position: sticky;
   top: 0;
   z-index: 2;
