@@ -86,6 +86,7 @@
                        :key="marker.key"
                        :markerColor="marker.color"
                        :icon="marker.icon"
+                       :interactive="false"
         />
 
         <!-- buffer search needs a marker that can't be the geocode marker -->
@@ -237,6 +238,7 @@
 <script>
   import * as L from 'leaflet';
   import 'leaflet/dist/leaflet.css';
+  import 'leaflet-event-forwarder';
 
   const FeatureGroup = L.default.featureGroup;
   const GeoJSON = L.default.geoJSON;
@@ -334,6 +336,15 @@
       const center = map.getCenter();
       const { lat, lng } = center;
       this.$store.commit('setCyclomediaLatLngFromMap', [lat, lng]);
+
+      const myEventForwarder = new L.eventForwarder({
+        map: map,
+        events: {
+          click: true,
+          mousemove: true,
+        }
+      })
+      myEventForwarder.enable();
     },
 
     computed: {
