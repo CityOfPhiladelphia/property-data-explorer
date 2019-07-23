@@ -796,6 +796,9 @@ export default {
     closeModal (state) {
       this.$store.state.activeModal.featureId = null;
       this.$store.commit('setActiveFeature', null);
+      this.$nextTick(() => {
+        this.$store.state.map.map.invalidateSize();
+      })
     },
     print() {
       window.print()
