@@ -753,9 +753,9 @@
     vue "^2.6.9"
     vuex "^3.0.1"
 
-"@philly/vue-datafetch@https://github.com/CityOfPhiladelphia/phila-vue-datafetch#4389f1821a0695e0a151f4f6390bd7a5bd125baf":
+"@philly/vue-datafetch@https://github.com/CityOfPhiladelphia/phila-vue-datafetch#4cf15c46e9f08b972e645a3e5ade74d2c2e4b061":
   version "0.0.16"
-  resolved "https://github.com/CityOfPhiladelphia/phila-vue-datafetch#4389f1821a0695e0a151f4f6390bd7a5bd125baf"
+  resolved "https://github.com/CityOfPhiladelphia/phila-vue-datafetch#4cf15c46e9f08b972e645a3e5ade74d2c2e4b061"
   dependencies:
     "@turf/turf" "^5.1.6"
     axios "^0.18.0"
@@ -767,9 +767,9 @@
     vue "^2.6.9"
     vuex "^3.0.1"
 
-"@philly/vue-mapping@https://github.com/CityOfPhiladelphia/phila-vue-mapping#3216ec9c8d8e4685e65fc8004bad9c28becffa13":
+"@philly/vue-mapping@https://github.com/CityOfPhiladelphia/phila-vue-mapping#ca2898bb25b9b582d000ecd3e71540894693291c":
   version "1.0.29"
-  resolved "https://github.com/CityOfPhiladelphia/phila-vue-mapping#3216ec9c8d8e4685e65fc8004bad9c28becffa13"
+  resolved "https://github.com/CityOfPhiladelphia/phila-vue-mapping#ca2898bb25b9b582d000ecd3e71540894693291c"
   dependencies:
     "@fortawesome/fontawesome-svg-core" "^1.2.15"
     "@fortawesome/free-regular-svg-icons" "^5.7.2"
@@ -784,6 +784,7 @@
     esri-leaflet-legend "https://github.com/CityOfPhiladelphia/esri-leaflet-legend#8d42cbc1ed71c630fd8f9c6795877b5f7498b49f"
     leaflet "^1.4.0"
     leaflet-easybutton "^2.3.0"
+    leaflet-event-forwarder "^0.0.3"
     leaflet-measure "https://github.com/CityOfPhiladelphia/leaflet-measure#b70886af342f19597dc2937d79d64bad6bab07c6"
     leaflet-rotatedmarker "^0.2.0"
     leaflet-vector-icon "https://github.com/CityOfPhiladelphia/leaflet-vector-icon#c37571e92c66ce0003f22058f2d246b31d3941a5"
@@ -5621,6 +5622,11 @@ leaflet-easybutton@^2.3.0:
   resolved "https://registry.yarnpkg.com/leaflet-easybutton/-/leaflet-easybutton-2.4.0.tgz#3ad8ad31c9cf6d5ca7a6a1988f82eed13ff2c1af"
   dependencies:
     leaflet "^1.0.1"
+
+leaflet-event-forwarder@^0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/leaflet-event-forwarder/-/leaflet-event-forwarder-0.0.3.tgz#0b97d1f687dd8cabd3d523c3aeb8624050b0a593"
+  integrity sha512-vLBZTtnjCODq9vaY9E9OxPPqU6AJMKuOt7pw+D7RZ0EPG92W8JfA1F/l7M1M++h3ByypMidkmKNfCFfEkWjuVw==
 
 "leaflet-measure@https://github.com/CityOfPhiladelphia/leaflet-measure#b70886af342f19597dc2937d79d64bad6bab07c6":
   version "4.0.0"

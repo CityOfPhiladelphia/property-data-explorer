@@ -100,11 +100,11 @@ export default {
     },
 
     markersForBufferSearch() {
-      // console.log('markers-mixin.js markersForAddress computed is running');
+      // console.log('markers-mixin.js markersForBufferSearch computed is running');
       const markers = [];
       // geocoded address marker
       const geocodeGeom = this.lastGeocodeGeom;
-      if (this.identifyFeature === 'address-marker' && geocodeGeom) {
+      if (this.identifyFeature === 'address-marker' && Object.keys(geocodeGeom).length > 0) {
         const latlng = [...geocodeGeom.coordinates].reverse();
         const key = this.lastGeocodeResult.properties.street_address;
         const color = '#2176d2';

@@ -39,13 +39,13 @@
                               :attribution="tiledLayer.attribution"
         />
 
-        <esri-tiled-overlay v-for="(tiledLayer, key) in this.$config.map.tiledOverlays"
+        <!-- <esri-tiled-overlay v-for="(tiledLayer, key) in this.$config.map.tiledOverlays"
                             v-if="activeTiledOverlays.includes(key)"
                             :key="key"
                             :url="tiledLayer.url"
                             :zIndex="tiledLayer.zIndex"
                             :opacity="tiledLayer.opacity"
-        />
+        /> -->
 
         <!-- dorParcels, pwdParcels, vacantLand, vacantBuilding -->
         <esri-feature-layer v-for="(featureLayer, key) in this.$config.map.featureLayers"
@@ -86,6 +86,7 @@
                        :key="marker.key"
                        :markerColor="marker.color"
                        :icon="marker.icon"
+                       :interactive="false"
         />
 
         <!-- buffer search needs a marker that can't be the geocode marker -->
@@ -237,6 +238,7 @@
 <script>
   import * as L from 'leaflet';
   import 'leaflet/dist/leaflet.css';
+  import 'leaflet-event-forwarder';
 
   const FeatureGroup = L.default.featureGroup;
   const GeoJSON = L.default.geoJSON;
@@ -276,7 +278,7 @@
       // DrawControl: () => import(/* webpackChunkName: "mbmp_pvm_DrawControl" */'@philly/vue-mapping/src/components/DrawControl.vue'),
       Control: () => import(/* webpackChunkName: "mbmp_pvm_Control" */'@philly/vue-mapping/src/leaflet/Control.vue'),
       EsriTiledMapLayer: () => import(/* webpackChunkName: "mbmp_pvm_EsriTiledMapLayer" */'@philly/vue-mapping/src/esri-leaflet/TiledMapLayer.vue'),
-      EsriTiledOverlay: () => import(/* webpackChunkName: "mbmp_pvm_EsriTiledOverlay" */'@philly/vue-mapping/src/esri-leaflet/TiledOverlay.vue'),
+      // EsriTiledOverlay: () => import(/* webpackChunkName: "mbmp_pvm_EsriTiledOverlay" */'@philly/vue-mapping/src/esri-leaflet/TiledOverlay.vue'),
       EsriDynamicMapLayer: () => import(/* webpackChunkName: "mbmp_pvm_EsriDynamicMapLayer" */'@philly/vue-mapping/src/esri-leaflet/DynamicMapLayer.vue'),
       EsriFeatureLayer: () => import(/* webpackChunkName: "mbmp_pvm_EsriFeatureLayer" */'@philly/vue-mapping/src/esri-leaflet/FeatureLayer.vue'),
       Geojson: () => import(/* webpackChunkName: "mbmp_pvm_Geojson" */'@philly/vue-mapping/src/leaflet/Geojson.vue'),
@@ -331,9 +333,18 @@
     mounted() {
       // console.log('MapPanel mounted is running, DrawControl', DrawControl)
       const map = this.$store.state.map.map;
-      const center = map.getCenter();
-      const { lat, lng } = center;
-      this.$store.commit('setCyclomediaLatLngFromMap', [lat, lng]);
+      // const center = map.getCenter();
+      // const { lat, lng } = center;
+      // this.$store.commit('setCyclomediaLatLngFromMap', [lat, lng]);
+
+      const myEventForwarder = new L.eventForwarder({
+        map: map,
+        events: {
+          click: true,
+          mousemove: true,
+        }
+      })
+      myEventForwarder.enable();
     },
 
     computed: {
@@ -439,13 +450,13 @@
 
         return activeBasemapConfig.tiledLayers || [];
       },
-      activeTiledOverlays() {
-        if (!this.activeTopicConfig || !this.activeTopicConfig.tiledOverlays) {
-          return [];
-        } else {
-          return this.activeTopicConfig.tiledOverlays;
-        }
-      },
+      // activeTiledOverlays() {
+      //   if (!this.activeTopicConfig || !this.activeTopicConfig.tiledOverlays) {
+      //     return [];
+      //   } else {
+      //     return this.activeTopicConfig.tiledOverlays;
+      //   }
+      // },
       activeFeatureLayers() {
         if (!this.activeTopicConfig || !this.activeTopicConfig.featureLayers) {
           return [];
@@ -567,19 +578,9 @@
       },
       geojsonParcels(nextGeojson) {
         if (!this.$store.state.mapViewWasSetOnAppLoad && this.lastSearchMethod === 'shape search') {
+          console.log('watch geojsonParcels is affecting things');
           this.setMapToBounds();
           this.$store.commit('setMapViewWasSetOnAppLoad', true);
-        }
-      },
-      markersForAddress(nextMarkers) {
-        let czts = this.activeTopicConfig.zoomToShape;
-        let dzts = this.$data.zoomToShape;
-        if (!czts || !czts.includes('markersForAddress')) {
-          dzts.markersForAddress = [];
-          return;
-        } else {
-          dzts.markersForAddress = nextMarkers;
-          this.setMapToBounds();
         }
       },
       picOrCycloActive() {
@@ -612,7 +613,7 @@
       },
 
       setMapToBounds() {
-        // console.log('setMapToBounds is running, this.geojsonParcels:', this.geojsonParcels)
+        console.log('setMapToBounds is running, this.geojsonParcels:', this.geojsonParcels)
         let featureArray = []
         for (let geojsonFeature of this.geojsonParcels) {
           featureArray.push(GeoJSON(geojsonFeature))
