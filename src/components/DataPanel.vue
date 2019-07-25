@@ -2,7 +2,8 @@
   <div id="data-panel-container">
 
     <!-- <div :class="this.tableClass"> -->
-      <full-screen-topics-toggle-tab-vertical/>
+      <full-screen-topics-toggle-tab-vertical id="lower-toggle-tab"
+      />
       <div class="spinner-div small-12 cell"
            v-show="this.loadingData"
       >

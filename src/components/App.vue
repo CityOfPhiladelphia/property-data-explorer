@@ -65,6 +65,9 @@
           />
         </map-panel>
       </div>
+      <div id="results-summary">
+        Test text
+      </div>
 
       <div :class="this.tableClass + this.openModal">
         <data-panel />
@@ -350,6 +353,25 @@
   height: 100%
 }
 
+// .bottom-half #data-panel-container #lower-toggle-tab {
+//   // position: fixed;
+//   top: calc(60% - 10px);
+// }
+
+.bottom-full #data-panel-container #lower-toggle-tab {
+  position: fixed;
+}
+
+.bottom-half #data-panel-container #lower-toggle-tab {
+    // add height from #results-summary
+    top: calc(60% - 10px) !important;
+}
+
+
+#results-summary{
+  height: 30px;
+}
+
 .bottom-full {
   overflow-y: auto;
   flex: 1;
@@ -414,19 +436,39 @@
   z-index: 2;
 }
 
-.pvc-download-data-button, .pvc-export-data-button {
-  float: right !important;
-  position: sticky;
-  padding: 5px;
+// .pvc-download-data-button, .pvc-export-data-button {
+//   float: right !important;
+//   position: sticky;
+//   padding: 5px;
+//   z-index: 999;
+//   margin-top: 2px !important;
+//   margin-bottom: 0px !important;
+//   top: calc(60% -20px);
+// }
+
+.bottom-half #data-panel-container .pvc-horizontal-table .pvc-horizontal-table-body .pvc-export-data-button {
+  clear:both;
   z-index: 999;
-  margin-top: 2px !important;
-  margin-bottom: 0px !important;
-  top: 0;
+  top: calc(60% - 10px);
+  // right: 70px;
+}
+
+.pvc-export-data-button {
+  position: fixed;
+  float: right !important;
+}
+
+.csv {
+  right: 5px !important;
 }
 
 .mailing {
-  left: 125px;
+  right: 137px !important;
 }
+
+// .mailing {
+//   left: 125px;
+// }
 
 @media screen and (max-width: 750px) {
   .pvc-download-data-button, .pvc-export-data-button {
