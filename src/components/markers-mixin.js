@@ -456,7 +456,7 @@ export default {
     },
     // handleMarkerMouseover(e) {
     handleMarkerMouseover: throttle(function (e) {
-        console.log('handleMarkerMouseover is starting');
+        // console.log('handleMarkerMouseover is starting');
         if (!this.isMobileOrTablet) {
           // console.log('handleMarkerMouseover actions are running, e.target.options:', e.target.options);
           const { target } = e;
