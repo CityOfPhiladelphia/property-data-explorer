@@ -65,10 +65,13 @@
           />
         </map-panel>
       </div>
-      <div id="results-summary">
-        Test text
-      </div>
+      <collection-summary id="results-summary"
+        v-if="this.shapeSearchStatus === 'success'"
+        :options="this.summaryOptions"
+        :slots="this.summaryOptions.slots"
 
+      >
+      </collection-summary>
       <div :class="this.tableClass + this.openModal">
         <data-panel />
       </div>
@@ -104,6 +107,7 @@
       DataPanel,
       PropertyCardModal,
       CyclomediaWidget: () => import(/* webpackChunkName: "mbmb_pvm_CyclomediaWidget" */'@philly/vue-mapping/src/cyclomedia/Widget.vue'),
+      CollectionSummary: () => import(/* webpackChunkName: "pvc_Callout" */'@philly/vue-comps/src/components/CollectionSummary.vue'),
     },
 
     props: {
@@ -185,6 +189,40 @@
       },
     },
     computed: {
+       summaryOptions() {
+        const options = {
+          // dataSources: ['opa_assessment'],
+          descriptor: 'parcel',
+          // this will include zero quantities
+          // includeZeroes: true,
+          getValue: function(item) {
+            if(item){
+            return 1;
+            }
+          },
+          context: function(list){ return 'Showing ' + list + ' results'},
+          types: [
+            {
+              value: 1,
+              label: ''
+            },
+          ],
+          slots: {
+            items: function(state) {
+              // return state.dorParcels.data;
+              // return state.parcels.dor.data;
+              console.log("state in items: ", state.shapeSearch)
+              if(state.shapeSearch.data != null) {
+                console.log("returning rows")
+                return state.shapeSearch.data.rows
+              } else {
+                return null
+              }
+            }
+          }
+        }
+        return options
+      },
       activeModal() {
         return this.$store.state.activeModal;
       },
