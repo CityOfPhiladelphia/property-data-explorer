@@ -179,9 +179,6 @@ function createStore(config) {
         // state.modals[name].open = open === null ? !state.modals[name].open : open
         state.modals.open = name;
       },
-
-
-
     }
   }
 
@@ -189,6 +186,14 @@ function createStore(config) {
   let mergeStore = mergeDeep(pvcStore, pvdStore.store);
   mergeStore = mergeDeep(mergeStore, pvmStore);
   mergeStore = mergeDeep(mergeStore, mb);
+
+  // reset the map center and zoom based on the config
+  if (config.map) {
+    mergeStore.state.map.center = config.map.center;
+    mergeStore.state.map.zoom = config.map.zoom;
+    mergeStore.state.pictometry.map.center = config.map.center;
+    mergeStore.state.pictometry.map.zoom = config.map.zoom;
+  }
 
 
   // TODO standardize how payloads are passed around/handled
