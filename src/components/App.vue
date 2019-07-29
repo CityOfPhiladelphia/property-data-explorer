@@ -407,7 +407,13 @@
 
 
 #results-summary{
-  height: 30px;
+  height: 45px;
+  padding: 10px 0px  0px 10px;
+  margin: 0 2px 0 2px;
+  background-color: #f0f0f0;
+  border-style: solid;
+  border-color: #0f4d90;
+  border-width: 2px 0 0 0 ;
 }
 
 .bottom-full {
