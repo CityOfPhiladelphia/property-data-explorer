@@ -754,9 +754,9 @@
     vue "^2.6.9"
     vuex "^3.0.1"
 
-"@philly/vue-datafetch@https://github.com/CityOfPhiladelphia/phila-vue-datafetch#91997fb5de861ce85f798da1de4cde525021d6c0":
+"@philly/vue-datafetch@https://github.com/CityOfPhiladelphia/phila-vue-datafetch#55f2abb5f8157fc9ee666c63081ca3f272fe698c":
   version "0.0.16"
-  resolved "https://github.com/CityOfPhiladelphia/phila-vue-datafetch#91997fb5de861ce85f798da1de4cde525021d6c0"
+  resolved "https://github.com/CityOfPhiladelphia/phila-vue-datafetch#55f2abb5f8157fc9ee666c63081ca3f272fe698c"
   dependencies:
     "@turf/turf" "^5.1.6"
     axios "^0.18.0"
@@ -768,9 +768,9 @@
     vue "^2.6.9"
     vuex "^3.0.1"
 
-"@philly/vue-mapping@https://github.com/CityOfPhiladelphia/phila-vue-mapping#ca2898bb25b9b582d000ecd3e71540894693291c":
+"@philly/vue-mapping@https://github.com/CityOfPhiladelphia/phila-vue-mapping#9a7339f3310bb328d331c4e0a655adcb280aea02":
   version "1.0.29"
-  resolved "https://github.com/CityOfPhiladelphia/phila-vue-mapping#ca2898bb25b9b582d000ecd3e71540894693291c"
+  resolved "https://github.com/CityOfPhiladelphia/phila-vue-mapping#9a7339f3310bb328d331c4e0a655adcb280aea02"
   dependencies:
     "@fortawesome/fontawesome-svg-core" "^1.2.15"
     "@fortawesome/free-regular-svg-icons" "^5.7.2"
