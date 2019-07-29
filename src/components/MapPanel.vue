@@ -578,7 +578,7 @@
       },
       geojsonParcels(nextGeojson) {
         if (!this.$store.state.mapViewWasSetOnAppLoad && this.lastSearchMethod === 'shape search') {
-          console.log('watch geojsonParcels is affecting things');
+          // console.log('watch geojsonParcels is affecting things');
           this.setMapToBounds();
           this.$store.commit('setMapViewWasSetOnAppLoad', true);
         }
@@ -613,7 +613,7 @@
       },
 
       setMapToBounds() {
-        console.log('setMapToBounds is running, this.geojsonParcels:', this.geojsonParcels)
+        // console.log('setMapToBounds is running, this.geojsonParcels:', this.geojsonParcels)
         let featureArray = []
         for (let geojsonFeature of this.geojsonParcels) {
           featureArray.push(GeoJSON(geojsonFeature))
