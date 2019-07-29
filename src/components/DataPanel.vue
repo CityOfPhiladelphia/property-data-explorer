@@ -696,35 +696,39 @@ export default {
                 if (item.properties.opa_account_num === ""){
                   return ""
                 } else {
-                  return state.sources.opa_public.targets[obj_id].data.homestead_exemption
-                        .toLocaleString('en-US', {
+                  console.log("obj_id: ", obj_id, "state.sources.opa_public.targets[obj_id]: ", state.sources.opa_public.targets[obj_id] )
+
+                  return state.sources.opa_public.targets[obj_id].data.homestead_exemption != null ?
+                         state.sources.opa_public.targets[obj_id].data.homestead_exemption.toLocaleString('en-US', {
                           style: "currency",
                           currency:"USD",
                           minimumFractionDigits: 0
-                        })
+                        }) : ""
                 }
               } else if (state.ownerSearch.status === "success") {
                 let obj_id = item.properties.opa_account_num
                 if (item.properties.opa_account_num === "") {
                   return ""
                 } else {
-                  return state.sources.opa_public.targets[obj_id].data.homestead_exemption
-                        .toLocaleString('en-US', {
+                  console.log("obj_id: ", obj_id, "state.sources.opa_public.targets[obj_id]: ", state.sources.opa_public.targets[obj_id] )
+                  return state.sources.opa_public.targets[obj_id].data.homestead_exemption != null ?
+                         state.sources.opa_public.targets[obj_id].data.homestead_exemption.toLocaleString('en-US', {
                           style: "currency",
                           currency:"USD",
                           minimumFractionDigits: 0
-                        })
+                        }) : ""
                 }
               } else {
                 let obj_id = item.parcel_number
                 if(typeof obj_id != 'undefined' && obj_id != "") {
                   if(state.sources.opa_public.targets[obj_id].data.homestead_exemption != null) {
-                    return state.sources.opa_public.targets[obj_id].data.homestead_exemption
-                    .toLocaleString('en-US', {
-                      style: "currency",
-                      currency:"USD",
-                      minimumFractionDigits: 0
-                    })
+                  console.log("obj_id: ", obj_id, "state.sources.opa_public.targets[obj_id]: ", state.sources.opa_public.targets[obj_id] )
+                    return state.sources.opa_public.targets[obj_id].data.homestead_exemption != null ?
+                           state.sources.opa_public.targets[obj_id].data.homestead_exemption.toLocaleString('en-US', {
+                            style: "currency",
+                            currency:"USD",
+                            minimumFractionDigits: 0
+                          }) : ""
                   }  else { return ""}
                 } else { return ""}
               }
