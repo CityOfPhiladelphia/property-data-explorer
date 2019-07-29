@@ -262,6 +262,9 @@
                this.fullScreenTopicsEnabled? 'bottom-full':
                'bottom-half';
       },
+      summaryClass() {
+        return this.fullScreenMapEnabled ? 'bottom-none': ""
+      },
       openModal() {
         // console.log("openModal: ", this.activeModal)
         return this.activeModal != null ? 'modal-opacity' : ""
