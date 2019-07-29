@@ -205,7 +205,11 @@
             return 1;
             }
           },
-          context: function(list){ return 'Showing ' + list + ' results'},
+          context: {
+            singular: function(list){ return 'Showing ' + list + ' result'},
+            plural: function(list){ return 'Showing ' + list + ' results'},
+            pluralizeList: false
+          },
           types: [
             {
               value: 1,
@@ -216,12 +220,19 @@
             items: function(state) {
               // return state.dorParcels.data;
               // return state.parcels.dor.data;
-              console.log("state in items: ", state.shapeSearch)
               if(state.shapeSearch.data != null) {
-                console.log("returning rows")
                 return state.shapeSearch.data.rows
-              } else {
-                return null
+              } else if (state.geocode.data != null) {
+                let geocodeArray = []
+                geocodeArray.push(state.geocode.data.properties)
+                if(state.geocode.related != null ) {
+                  state.geocode.related.map(a => geocodeArray.push(a))
+                  return geocodeArray
+                } else {
+                return geocodeArray
+                }
+              } else if (state.ownerSearch.data != null) {
+                  return state.ownerSearch.data
               }
             }
           }
@@ -242,6 +253,13 @@
       },
       shapeSearchStatus() {
         return this.$store.state.shapeSearch.status;
+      },
+      anySearchStatus() {
+        console.log("any search status: ", this.geocodeStatus)
+        return this.geocodeStatus != 'success' ?
+               this.ownerSearchStatus != 'success' ?
+               this.shapeSearchStatus != 'success' ? null
+               : 'success' : 'success' : 'success'
       },
       fullScreenMapEnabled() {
         return this.$store.state.fullScreenMapEnabled;
