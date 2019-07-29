@@ -65,13 +65,18 @@
           />
         </map-panel>
       </div>
-      <collection-summary id="results-summary"
-        v-if="this.shapeSearchStatus === 'success'"
-        :options="this.summaryOptions"
-        :slots="this.summaryOptions.slots"
-
+      <div
+        id="results-summary"
+        :class="this.summaryClass"
       >
-      </collection-summary>
+        <collection-summary
+          v-if="this.anySearchStatus === 'success'"
+          :options="this.summaryOptions"
+          :slots="this.summaryOptions.slots"
+
+        >
+        </collection-summary>
+      </div>
       <div :class="this.tableClass + this.openModal">
         <data-panel />
       </div>
@@ -402,9 +407,8 @@
 
 .bottom-half #data-panel-container #lower-toggle-tab {
     // add height from #results-summary
-    top: calc(60% - 10px) !important;
+    top: calc(60% - 20px) !important;
 }
-
 
 #results-summary{
   height: 45px;
