@@ -553,6 +553,12 @@
 //   left: 125px;
 // }
 
+@media print {
+  #results-summary {
+    display: none;
+  }
+}
+
 @media screen and (max-width: 750px) {
   .pvc-download-data-button, .pvc-export-data-button {
     visibility: hidden;
