@@ -163,6 +163,7 @@
         this.$store.commit('setBufferMode', true);
         this.$controller.handleSearchFormSubmit(query.buffer);
         this.onDataChange('bufferSearch');
+        this.$store.commit('setLastSearchMethod', 'buffer search');
       }
     },
     created() {
@@ -272,6 +273,7 @@
         console.log('onDataChange, type:', type)
         this.$data.hasData = true;
         this.$store.commit('setFullScreenMapEnabled', false);
+        this.introPage = false;
       },
       onResize() {
         if (window.innerWidth > 749) {
