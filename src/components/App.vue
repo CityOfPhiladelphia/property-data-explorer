@@ -467,7 +467,7 @@
 
 .bottom-full #data-panel-container #lower-toggle-tab {
   // position: relative;
-  top: 85px;
+  top: 87px;
 }
 
 .bottom-half #data-panel-container #lower-toggle-tab {
