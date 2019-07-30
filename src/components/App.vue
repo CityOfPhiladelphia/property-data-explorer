@@ -76,6 +76,13 @@
 
         >
         </collection-summary>
+                <!-- error -->
+        <div class="topic-body"
+            v-show="shouldShowError"
+            v-html="this.errorMessage"
+        >
+        <!-- Could not locate records for that address. -->
+        </div>
       </div>
       <div :class="this.tableClass + this.openModal">
         <data-panel />
@@ -239,6 +246,13 @@
         }
         return options
       },
+      shouldShowError() {
+        const shouldShowError = (this.anySearchStatus === 'error' );
+        return shouldShowError;
+      },
+      errorMessage() {
+        return 'Could not locate records for that address.';
+      },
       activeModal() {
         return this.$store.state.activeModal;
       },
@@ -255,11 +269,22 @@
         return this.$store.state.shapeSearch.status;
       },
       anySearchStatus() {
-        console.log("any search status: ", this.geocodeStatus)
-        return this.geocodeStatus != 'success' ?
+        // console.log("any search status: ", this.geocodeStatus)
+
+        let checkForError = function(state) {
+          // console.log("checkForError state: ", state)
+          let status = state.geocodeStatus === 'error' ? 'error' :
+               state.ownerSearchStatus === 'error' ? 'error' :
+               state.shapeSearchStatus === 'error' ? 'error' : null
+          return status
+        }
+
+
+        let status = this.geocodeStatus != 'success' ?
                this.ownerSearchStatus != 'success' ?
-               this.shapeSearchStatus != 'success' ? null
+               this.shapeSearchStatus != 'success' ? checkForError(this)
                : 'success' : 'success' : 'success'
+        return status
       },
       fullScreenMapEnabled() {
         return this.$store.state.fullScreenMapEnabled;
@@ -309,7 +334,6 @@
         return this.$store.state.cyclomedia.orientation.hFov;
       },
     },
-
     methods: {
       onDataChange(type) {
         //console.log('onDataChange, type:', type)
