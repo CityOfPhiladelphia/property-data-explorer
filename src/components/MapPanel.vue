@@ -10,6 +10,7 @@
             @l-click="handleMapClick"
             @l-moveend="handleMapMove"
             zoom-control-position="bottomright"
+            attribution-position="bottomleft"
             :min-zoom="this.$config.map.minZoom"
             :max-zoom="this.$config.map.maxZoom"
       >
@@ -231,6 +232,7 @@
 
       </map_>
     </div>
+    <slot class='widget-slot' name="introPage" />
     <slot class='widget-slot' name="cycloWidget" />
   </div>
 </template>

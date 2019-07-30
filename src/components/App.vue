@@ -57,6 +57,11 @@
     <div :class="'cell medium-auto medium-cell-block-container main-content ' + this.openModal">
       <div :class="this.mapClass">
         <map-panel>
+          <intro-page
+            v-if="introPage"
+            slot="introPage"
+            screen-percent="2"
+          />
           <cyclomedia-widget
             v-if="this.shouldLoadCyclomediaWidget"
             v-show="cyclomediaActive"
@@ -106,6 +111,7 @@
 
   import MapPanel from './MapPanel.vue';
   import DataPanel from './DataPanel.vue';
+  import IntroPage from './IntroPage.vue';
   import PropertyCardModal from './PropertyCardModal.vue';
   import Logo from '@/assets/city-of-philadelphia-logo.png';
 
@@ -116,6 +122,7 @@
       PhilaModal,
       MapPanel,
       DataPanel,
+      IntroPage,
       PropertyCardModal,
       CyclomediaWidget: () => import(/* webpackChunkName: "mbmb_pvm_CyclomediaWidget" */'@philly/vue-mapping/src/cyclomedia/Widget.vue'),
       CollectionSummary: () => import(/* webpackChunkName: "pvc_Callout" */'@philly/vue-comps/src/components/CollectionSummary.vue'),
@@ -135,6 +142,7 @@
         'bottom': 2,
         hasData: false,
         isModalOpen: false,
+        introPage: true,
       }
     },
     mounted() {
@@ -198,6 +206,11 @@
           this.onDataChange('ownerSearch');
         }
       },
+      shouldDestroyIntroPage(nextShouldDestroyIntroPage) {
+        if (nextShouldDestroyIntroPage === false) {
+          this.$data.introPage = false;
+        }
+      }
     },
     computed: {
        summaryOptions() {
@@ -311,6 +324,13 @@
         // console.log("openModal: ", this.activeModal)
         return this.activeModal != null ? 'modal-opacity' : ""
       },
+      shouldDestroyIntroPage() {
+        if (this.$store.state.sources.opa_assessment.status || this.$store.state.cyclomedia.active) {
+          return false;
+        } else {
+          return true;
+        }
+      },
       shouldLoadCyclomediaWidget() {
         return this.$config.cyclomedia.enabled && !this.isMobileOrTablet;
       },
@@ -335,7 +355,7 @@
     },
     methods: {
       onDataChange(type) {
-        //console.log('onDataChange, type:', type)
+        console.log('onDataChange, type:', type)
         this.$data.hasData = true;
         this.$store.commit('setFullScreenMapEnabled', false);
       },

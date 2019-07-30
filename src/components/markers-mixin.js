@@ -2,6 +2,8 @@ import VectorIcon from 'leaflet-vector-icon';
 import { divIcon } from 'leaflet';
 import { Marker } from 'leaflet';
 
+import throttle from 'lodash-es/throttle';
+
 export default {
 
   watch: {
@@ -452,17 +454,19 @@ export default {
       // append to end (which brings it to the front)
       group.appendChild(el);
     },
-    handleMarkerMouseover(e) {
-      // console.log('handleMarkerMouseover is starting');
-      if (!this.isMobileOrTablet) {
-        // console.log('handleMarkerMouseover actions are running, e.target.options:', e.target.options);
-        const { target } = e;
-        // console.log('PARCEL ID target:', target);
-        const featureId  = this.identifyRow(target.options.data.PARCELID);
-        // console.log('featureId: ', featureId, "target: ", target);
-        this.$store.commit('setActiveFeature',  {featureId} );
-      }
-    },
+    // handleMarkerMouseover(e) {
+    handleMarkerMouseover: throttle(function (e) {
+        // console.log('handleMarkerMouseover is starting');
+        if (!this.isMobileOrTablet) {
+          // console.log('handleMarkerMouseover actions are running, e.target.options:', e.target.options);
+          const { target } = e;
+          // console.log('PARCEL ID target:', target);
+          const featureId  = this.identifyRow(target.options.data.PARCELID);
+          // console.log('featureId: ', featureId, "target: ", target);
+          this.$store.commit('setActiveFeature',  {featureId} );
+        }
+      }, 200
+    ),
     handleMarkerMouseout(e) {
       // console.log('handleMarkerMouseout is starting');
       // if (!this.isMobileOrTablet) {
