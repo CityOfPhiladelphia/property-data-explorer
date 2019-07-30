@@ -77,9 +77,8 @@
         >
         </collection-summary>
                 <!-- error -->
-        <div class="topic-body"
-            v-show="shouldShowError"
-            v-html="this.errorMessage"
+        <div v-show="shouldShowError"
+             v-html="this.errorMessage"
         >
         <!-- Could not locate records for that address. -->
         </div>
@@ -251,7 +250,7 @@
         return shouldShowError;
       },
       errorMessage() {
-        return 'Could not locate records for that address.';
+        return '<h3>Could not locate records for that address.<h3>';
       },
       activeModal() {
         return this.$store.state.activeModal;
@@ -525,19 +524,10 @@
 
 #data-panel-container .pvc-horizontal-table .pvc-horizontal-table-body .stack>thead>tr>th {
   position: sticky;
-  top: 0;
+  top: -2px !important;
   z-index: 2;
+  border-left:1px solid white;
 }
-
-// .pvc-download-data-button, .pvc-export-data-button {
-//   float: right !important;
-//   position: sticky;
-//   padding: 5px;
-//   z-index: 999;
-//   margin-top: 2px !important;
-//   margin-bottom: 0px !important;
-//   top: calc(60% -20px);
-// }
 
 .bottom-half #data-panel-container .pvc-horizontal-table .pvc-horizontal-table-body .pvc-export-data-button {
   clear:both;
@@ -573,6 +563,7 @@
     bottom: 0;
     width: 100%;
   }
+
 
 }
 
