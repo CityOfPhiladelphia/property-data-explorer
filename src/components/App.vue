@@ -70,7 +70,24 @@
           />
         </map-panel>
       </div>
+      <div
+        id="results-summary"
+        :class="this.summaryClass"
+      >
+        <collection-summary
+          v-if="this.anySearchStatus === 'success'"
+          :options="this.summaryOptions"
+          :slots="this.summaryOptions.slots"
 
+        >
+        </collection-summary>
+                <!-- error -->
+        <div v-show="shouldShowError"
+             v-html="this.errorMessage"
+        >
+        <!-- Could not locate records for that address. -->
+        </div>
+      </div>
       <div :class="this.tableClass + this.openModal">
         <data-panel />
       </div>
@@ -108,6 +125,7 @@
       IntroPage,
       PropertyCardModal,
       CyclomediaWidget: () => import(/* webpackChunkName: "mbmb_pvm_CyclomediaWidget" */'@philly/vue-mapping/src/cyclomedia/Widget.vue'),
+      CollectionSummary: () => import(/* webpackChunkName: "pvc_Callout" */'@philly/vue-comps/src/components/CollectionSummary.vue'),
     },
 
     props: {
@@ -200,6 +218,58 @@
       }
     },
     computed: {
+       summaryOptions() {
+        const options = {
+          // dataSources: ['opa_assessment'],
+          descriptor: 'parcel',
+          // this will include zero quantities
+          // includeZeroes: true,
+          getValue: function(item) {
+            if(item){
+            return 1;
+            }
+          },
+          context: {
+            singular: function(list){ return 'Showing ' + list + ' result'},
+            plural: function(list){ return 'Showing ' + list + ' results'},
+            pluralizeList: false
+          },
+          types: [
+            {
+              value: 1,
+              label: ''
+            },
+          ],
+          slots: {
+            items: function(state) {
+              // return state.dorParcels.data;
+              // return state.parcels.dor.data;
+              if(state.shapeSearch.data != null) {
+                return state.shapeSearch.data.rows
+              } else if (state.geocode.data != null) {
+                let geocodeArray = []
+                geocodeArray.push(state.geocode.data.properties)
+                if(state.geocode.related != null ) {
+                  state.geocode.related.map(a => geocodeArray.push(a))
+                  return geocodeArray
+                } else {
+                return geocodeArray
+                }
+              } else if (state.ownerSearch.data != null) {
+                  return state.ownerSearch.data
+              }
+            }
+          }
+        }
+        return options
+      },
+      shouldShowError() {
+        const shouldShowError = (this.anySearchStatus === 'error' );
+        return shouldShowError;
+      },
+      errorMessage() {
+        return '<h3>Could not locate records for that address.<h3>';
+      },
       activeModal() {
         return this.$store.state.activeModal;
       },
@@ -214,6 +284,24 @@
       },
       shapeSearchStatus() {
         return this.$store.state.shapeSearch.status;
+      },
+      anySearchStatus() {
+        // console.log("any search status: ", this.geocodeStatus)
+
+        let checkForError = function(state) {
+          // console.log("checkForError state: ", state)
+          let status = state.geocodeStatus === 'error' ? 'error' :
+               state.ownerSearchStatus === 'error' ? 'error' :
+               state.shapeSearchStatus === 'error' ? 'error' : null
+          return status
+        }
+
+
+        let status = this.geocodeStatus != 'success' ?
+               this.ownerSearchStatus != 'success' ?
+               this.shapeSearchStatus != 'success' ? checkForError(this)
+               : 'success' : 'success' : 'success'
+        return status
       },
       fullScreenMapEnabled() {
         return this.$store.state.fullScreenMapEnabled;
@@ -233,6 +321,9 @@
         return this.fullScreenMapEnabled ? 'bottom-none':
                this.fullScreenTopicsEnabled? 'bottom-full':
                'bottom-half';
+      },
+      summaryClass() {
+        return this.fullScreenMapEnabled ? 'bottom-none': ""
       },
       openModal() {
         // console.log("openModal: ", this.activeModal)
@@ -267,7 +358,6 @@
         return this.$store.state.cyclomedia.orientation.hFov;
       },
     },
-
     methods: {
       onDataChange(type) {
         console.log('onDataChange, type:', type)
@@ -376,6 +466,31 @@
   height: 100%
 }
 
+// .bottom-half #data-panel-container #lower-toggle-tab {
+//   // position: fixed;
+//   top: calc(60% - 10px);
+// }
+
+.bottom-full #data-panel-container #lower-toggle-tab {
+  // position: relative;
+  top: 87px;
+}
+
+.bottom-half #data-panel-container #lower-toggle-tab {
+    // add height from #results-summary
+    top: calc(60% - 20px) !important;
+}
+
+#results-summary{
+  height: 45px;
+  padding: 10px 0px  0px 10px;
+  margin: 0 2px 0 2px;
+  background-color: #f0f0f0;
+  border-style: solid;
+  border-color: #0f4d90;
+  border-width: 2px 0 0 0 ;
+}
+
 .bottom-full {
   overflow-y: auto;
   flex: 1;
@@ -436,22 +551,44 @@
 
 #data-panel-container .pvc-horizontal-table .pvc-horizontal-table-body .stack>thead>tr>th {
   position: sticky;
-  top: 0;
+  top: -2px !important;
   z-index: 2;
+  border-left:1px solid white;
 }
 
-.pvc-download-data-button, .pvc-export-data-button {
-  float: right !important;
-  position: sticky;
-  padding: 5px;
+.bottom-half #data-panel-container .pvc-horizontal-table .pvc-horizontal-table-body .pvc-export-data-button {
+  clear:both;
   z-index: 999;
-  margin-top: 2px !important;
-  margin-bottom: 0px !important;
-  top: 0;
+  top: calc(60% - 10px);
+  // right: 70px;
+}
+.bottom-full #data-panel-container .pvc-horizontal-table .pvc-horizontal-table-body .pvc-export-data-button {
+  clear:both;
+  z-index: 999;
+  top: 95px;
+}
+
+.pvc-export-data-button {
+  position: fixed;
+  float: right !important;
+}
+
+.csv {
+  right: 5px !important;
 }
 
 .mailing {
-  left: 125px;
+  right: 137px !important;
+}
+
+// .mailing {
+//   left: 125px;
+// }
+
+@media print {
+  #results-summary {
+    display: none;
+  }
 }
 
 @media screen and (max-width: 750px) {
@@ -464,6 +601,7 @@
     bottom: 0;
     width: 100%;
   }
+
 
 }
 
