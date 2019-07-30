@@ -466,7 +466,8 @@
 // }
 
 .bottom-full #data-panel-container #lower-toggle-tab {
-  position: fixed;
+  // position: relative;
+  top: 85px;
 }
 
 .bottom-half #data-panel-container #lower-toggle-tab {
@@ -554,6 +555,11 @@
   z-index: 999;
   top: calc(60% - 10px);
   // right: 70px;
+}
+.bottom-full #data-panel-container .pvc-horizontal-table .pvc-horizontal-table-body .pvc-export-data-button {
+  clear:both;
+  z-index: 999;
+  top: 95px;
 }
 
 .pvc-export-data-button {
