@@ -9,8 +9,8 @@
             :zoom="this.$store.state.map.zoom"
             @l-click="handleMapClick"
             @l-moveend="handleMapMove"
-            zoom-control-position="bottomright"
             attribution-position="bottomleft"
+            zoom-control-position="bottomleft"
             :min-zoom="this.$config.map.minZoom"
             :max-zoom="this.$config.map.maxZoom"
       >
@@ -80,6 +80,17 @@
                 :data="geojsonFeature.properties"
                 :key="geojsonFeature.properties.PARCELID"
         />
+
+        <polygon_ v-if="currentBuffer !== null"
+                  :latlngs="currentBuffer"
+        />
+        <!-- :color="'red'" -->
+        <!-- :fillColor="geojsonFeature.properties.fillColor"
+        :weight="geojsonFeature.properties.weight"
+        :opacity="geojsonFeature.properties.opacity"
+        :fillOpacity="geojsonFeature.properties.fillOpacity"
+        :data="geojsonFeature.properties"
+        :key="geojsonFeature.properties.PARCELID" -->
 
         <!-- vector markers -->
         <vector-marker v-for="(marker, index) in markersForAddress"
@@ -179,10 +190,14 @@
                             :buttonHeight="'45px'"
                             :buttonWidth="'45px'"
                             :buttonLineHeight="'45px'"
+                            @click="handleBufferClick"
             />
-            <div class="draw-control">
+            <div class="draw-control"
+                 @click="handleDrawControlClick"
+            >
               <draw-control :position="'topnearleft2'"
                             :control="true"
+                            @click="handleDrawControlClick"
               />
             </div>
 
@@ -284,6 +299,7 @@
       EsriDynamicMapLayer: () => import(/* webpackChunkName: "mbmp_pvm_EsriDynamicMapLayer" */'@philly/vue-mapping/src/esri-leaflet/DynamicMapLayer.vue'),
       EsriFeatureLayer: () => import(/* webpackChunkName: "mbmp_pvm_EsriFeatureLayer" */'@philly/vue-mapping/src/esri-leaflet/FeatureLayer.vue'),
       Geojson: () => import(/* webpackChunkName: "mbmp_pvm_Geojson" */'@philly/vue-mapping/src/leaflet/Geojson.vue'),
+      Polygon_: () => import(/* webpackChunkName: "mbmp_pvm_Geojson" */'@philly/vue-mapping/src/leaflet/Polygon.vue'),
       CircleMarker: () => import(/* webpackChunkName: "mbmp_pvm_CircleMarker" */'@philly/vue-mapping/src/leaflet/CircleMarker.vue'),
       VectorMarker: () => import(/* webpackChunkName: "mbmp_pvm_VectorMarker" */'@philly/vue-mapping/src/components/VectorMarker.vue'),
       PngMarker: () => import(/* webpackChunkName: "mbmp_pvm_PngMarker" */'@philly/vue-mapping/src/components/PngMarker.vue'),
@@ -599,6 +615,12 @@
       }
     },
     methods: {
+      handleBufferClick() {
+        console.log('handleBufferClick is running');
+      },
+      handleDrawControlClick() {
+        console.log('handleDrawControlClick is running');
+      },
       fillColorForOverlayMarker(markerId, activeFeature) {
         // get map overlay style and hover style for table
         const mapOverlay = this.$config.mapOverlay;

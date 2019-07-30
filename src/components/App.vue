@@ -150,6 +150,7 @@
       let query = this.$route.query;
       // console.log('App.vue mounted is running, this.$route.query:', this.$route.query);
       if (query.shape) {
+        this.introPage = false;
         let shape = query.shape;
         shape = shape.slice(2, shape.length-2);
         shape = shape.split('],[')
@@ -166,17 +167,21 @@
         this.$controller.getParcelsByPoints(points);
         this.onDataChange('shapeSearch');
       } else if (query.address) {
+        this.introPage = false;
         // console.log('query.address:', query.address);
         this.$controller.handleSearchFormSubmit(query.address);
         this.onDataChange('geocode');
       } else if (query.owner) {
+        this.introPage = false;
         // console.log('query.owner:', query.owner);
         this.$controller.handleSearchFormSubmit(query.owner);
         this.onDataChange('ownerSearch');
       } else if (query.buffer) {
+        this.introPage = false;
         this.$store.commit('setBufferMode', true);
         this.$controller.handleSearchFormSubmit(query.buffer);
         this.onDataChange('bufferSearch');
+        this.$store.commit('setLastSearchMethod', 'buffer search');
       }
     },
     created() {
@@ -206,8 +211,8 @@
           this.onDataChange('ownerSearch');
         }
       },
-      shouldDestroyIntroPage(nextShouldDestroyIntroPage) {
-        if (nextShouldDestroyIntroPage === false) {
+      shouldKeepIntroPage(nextShouldKeepIntroPage) {
+        if (nextShouldKeepIntroPage === false) {
           this.$data.introPage = false;
         }
       }
@@ -324,7 +329,7 @@
         // console.log("openModal: ", this.activeModal)
         return this.activeModal != null ? 'modal-opacity' : ""
       },
-      shouldDestroyIntroPage() {
+      shouldKeepIntroPage() {
         if (this.$store.state.sources.opa_assessment.status || this.$store.state.cyclomedia.active) {
           return false;
         } else {
@@ -358,6 +363,7 @@
         console.log('onDataChange, type:', type)
         this.$data.hasData = true;
         this.$store.commit('setFullScreenMapEnabled', false);
+        this.introPage = false;
       },
       onResize() {
         if (window.innerWidth > 749) {
