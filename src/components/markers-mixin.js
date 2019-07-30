@@ -63,6 +63,9 @@ export default {
     },
   },
   computed: {
+    currentBuffer() {
+      return this.$store.state.bufferShape;
+    },
     locationMarker() {
       const latlngArray = [this.$store.state.map.location.lat, this.$store.state.map.location.lng]
       const marker = {
