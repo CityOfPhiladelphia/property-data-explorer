@@ -70,6 +70,7 @@
           />
         </map-panel>
       </div>
+
       <div
         id="results-summary"
         :class="this.summaryClass"
@@ -78,16 +79,14 @@
           v-if="this.anySearchStatus === 'success'"
           :options="this.summaryOptions"
           :slots="this.summaryOptions.slots"
+        />
 
-        >
-        </collection-summary>
-                <!-- error -->
-        <div v-show="shouldShowError"
-             v-html="this.errorMessage"
-        >
-        <!-- Could not locate records for that address. -->
-        </div>
+        <!-- error -->
+        <div v-html="this.errorMessage"
+             v-show="this.currentErrorType !== null"
+        />
       </div>
+
       <div :class="this.tableClass + this.openModal">
         <data-panel />
       </div>
@@ -263,12 +262,25 @@
         }
         return options
       },
-      shouldShowError() {
-        const shouldShowError = (this.anySearchStatus === 'error' );
-        return shouldShowError;
+      // currentTest() {
+      //   return this.currentErrorType !== null;
+      // },
+      currentErrorType() {
+        let error = null
+        if (this.anySearchStatus === 'error'){
+          error = 'search'
+        } else if (this.$store.state.shapeSearch.status === 'too many') {
+          error = 'too_many'
+        }
+        return error;
       },
       errorMessage() {
-        return '<h3>Could not locate records for that address.<h3>';
+        let error = this.currentErrorType;
+        if (error === 'search') {
+          return '<h3>Could not locate records for that address.<h3>';
+        } else if (error === 'too_many') {
+          return '<h3>Too many parcels selected.  Try again.<h3>';
+        }
       },
       activeModal() {
         return this.$store.state.activeModal;
