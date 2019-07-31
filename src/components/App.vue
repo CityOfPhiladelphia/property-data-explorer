@@ -478,12 +478,12 @@
 
 .bottom-half #data-panel-container #lower-toggle-tab {
     // add height from #results-summary
-    top: calc(60% - 20px) !important;
+    top: calc(60% - 14px) !important;
 }
 
 #results-summary{
   height: 45px;
-  padding: 10px 0px  0px 10px;
+  padding: 8px 0px  0px 10px;
   margin: 0 2px 0 2px;
   background-color: #f0f0f0;
   border-style: solid;
@@ -559,13 +559,13 @@
 .bottom-half #data-panel-container .pvc-horizontal-table .pvc-horizontal-table-body .pvc-export-data-button {
   clear:both;
   z-index: 999;
-  top: calc(60% - 10px);
+  top: calc(60% - 7px);
   // right: 70px;
 }
 .bottom-full #data-panel-container .pvc-horizontal-table .pvc-horizontal-table-body .pvc-export-data-button {
   clear:both;
   z-index: 999;
-  top: 95px;
+  top: 93px;
 }
 
 .pvc-export-data-button {
@@ -594,12 +594,25 @@
 @media screen and (max-width: 750px) {
   .pvc-download-data-button, .pvc-export-data-button {
     visibility: hidden;
+    // clear:both;
+    // z-index: 999;
+    // top: 393px;
   }
 
   .mobile-menu-content {
     position: fixed;
     bottom: 0;
     width: 100%;
+  }
+
+  #results-summary{
+    height: 35px;
+    padding: 8px 0px  0px 10px;
+    margin: 0 2px 0 2px;
+    background-color: #f0f0f0;
+    border-style: solid;
+    border-color: #0f4d90;
+    border-width: 2px 0 0 0 ;
   }
 
 
