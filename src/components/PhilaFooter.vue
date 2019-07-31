@@ -49,7 +49,7 @@ export default {
   }
 
   .footer-nav {
-    margin: .5rem 0;
+    // margin: .5rem 0;
     padding: 0;
   }
 
