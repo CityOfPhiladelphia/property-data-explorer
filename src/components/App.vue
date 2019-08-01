@@ -262,9 +262,6 @@
         }
         return options
       },
-      // currentTest() {
-      //   return this.currentErrorType !== null;
-      // },
       currentErrorType() {
         let error = null
         if (this.anySearchStatus === 'error'){
@@ -298,21 +295,15 @@
         return this.$store.state.shapeSearch.status;
       },
       anySearchStatus() {
-        // console.log("any search status: ", this.geocodeStatus)
-
-        let checkForError = function(state) {
-          // console.log("checkForError state: ", state)
-          let status = state.geocodeStatus === 'error' ? 'error' :
-               state.ownerSearchStatus === 'error' ? 'error' :
-               state.shapeSearchStatus === 'error' ? 'error' : null
-          return status
+        let statusArray = [this.geocodeStatus, this.ownerSearchStatus, this.shapeSearchStatus];
+        let status;
+        if (statusArray.includes('waiting')) {
+          status = 'waiting';
+        } else if (statusArray.includes('success')) {
+          status = 'success';
+        } else if (statusArray.includes('error')) {
+          status = 'error';
         }
-
-
-        let status = this.geocodeStatus != 'success' ?
-               this.ownerSearchStatus != 'success' ?
-               this.shapeSearchStatus != 'success' ? checkForError(this)
-               : 'success' : 'success' : 'success'
         return status
       },
       fullScreenMapEnabled() {
