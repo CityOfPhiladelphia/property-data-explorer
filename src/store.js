@@ -41,9 +41,9 @@ function createStore(config) {
     activeModal: {
       featureId: null,
     },
-    activeCondo: {
-      featureId: null,
-    },
+    // activeCondo: {
+    //   featureId: null,
+    // },
     appData: {
       propertyBalance: 0,
     },
