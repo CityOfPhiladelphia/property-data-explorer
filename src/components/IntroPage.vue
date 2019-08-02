@@ -25,7 +25,7 @@
 
   export default {
     destroyed() {
-      console.log('intro page destroyed is running');
+      // console.log('intro page destroyed is running');
       this.map.invalidateSize();
     },
     computed: {
