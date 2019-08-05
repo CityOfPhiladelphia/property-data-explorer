@@ -459,13 +459,14 @@ export default {
             item._featureId = item.pwd_parcel_id + "-UNIT-" + index
           }
         );
+        // console.log("Units to add: ", unitsToAdd)
         return unitsToAdd
       }
       mapUnitIds = mapUnitIds.bind(this)
       // console.log('after mapUnitIds');
       let unitData;
       if(this.$store.state.lastSearchMethod === "geocode" || this.$store.state.lastSearchMethod === "reverseGeocode") {
-        console.log("Not shape search, input: ", input)
+        // console.log("Not shape search, input: ", input)
 
         this.$controller.dataManager.resetData();
         const input = this.$store.state.parcels.pwd.properties.ADDRESS;
