@@ -671,7 +671,7 @@ export default {
         sort: {
           // this should return the val to sort on
           getValue: function(item) {
-            return item.year;
+            return item.document_date;
           },
           // asc or desc
           order: 'desc'
