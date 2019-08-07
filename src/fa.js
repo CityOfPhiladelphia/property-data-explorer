@@ -10,6 +10,7 @@ import { faCaretDown } from '@fortawesome/pro-solid-svg-icons/faCaretDown';
 import { faCaretUp } from '@fortawesome/pro-solid-svg-icons/faCaretUp';
 import { faMapMarkerAlt } from '@fortawesome/pro-solid-svg-icons/faMapMarkerAlt';
 import { faCircle } from '@fortawesome/pro-solid-svg-icons/faCircle';
-library.add(faSpinner, faBars, faCaretDown, faCaretUp, faMapMarkerAlt, faCircle);
+import { faInfoCircle } from '@fortawesome/pro-solid-svg-icons/faInfoCircle';
+library.add(faSpinner, faBars, faCaretDown, faCaretUp, faMapMarkerAlt, faCircle, faInfoCircle);
 
 export default library;
