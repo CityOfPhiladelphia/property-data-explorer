@@ -297,8 +297,9 @@ export default {
             value: function(state, item) {
               return titleCase(item.properties.opa_address)
             },
+            hideMobileIcon: true,
             customStyle: {float: 'left', 'padding-right': '5px'},
-            mobileIcon: "info-circle"
+            mobileIcon: "info-circle",
           },
           {
             label: 'Market Value',
