@@ -1059,6 +1059,7 @@ header {
   background: transparent;
   height: 30px;
   width: 30px;
+  z-index: 999;
 }
 
 .openmaps-modal.openmaps-modal--open{
