@@ -754,9 +754,9 @@
     vue "^2.6.9"
     vuex "^3.0.1"
 
-"@philly/vue-datafetch@https://github.com/CityOfPhiladelphia/phila-vue-datafetch#2e2c176fd62e97a4d3b5163e0e8b0e58e6aceeb5":
+"@philly/vue-datafetch@https://github.com/CityOfPhiladelphia/phila-vue-datafetch#cdf67e998be91f880f6e08f73ebf99ffbe1b3bd3":
   version "0.0.16"
-  resolved "https://github.com/CityOfPhiladelphia/phila-vue-datafetch#2e2c176fd62e97a4d3b5163e0e8b0e58e6aceeb5"
+  resolved "https://github.com/CityOfPhiladelphia/phila-vue-datafetch#cdf67e998be91f880f6e08f73ebf99ffbe1b3bd3"
   dependencies:
     "@turf/turf" "^5.1.6"
     axios "^0.18.0"
@@ -5627,7 +5627,6 @@ leaflet-easybutton@^2.3.0:
 leaflet-event-forwarder@^0.0.3:
   version "0.0.3"
   resolved "https://registry.yarnpkg.com/leaflet-event-forwarder/-/leaflet-event-forwarder-0.0.3.tgz#0b97d1f687dd8cabd3d523c3aeb8624050b0a593"
-  integrity sha512-vLBZTtnjCODq9vaY9E9OxPPqU6AJMKuOt7pw+D7RZ0EPG92W8JfA1F/l7M1M++h3ByypMidkmKNfCFfEkWjuVw==
 
 "leaflet-measure@https://github.com/CityOfPhiladelphia/leaflet-measure#b70886af342f19597dc2937d79d64bad6bab07c6":
   version "4.0.0"
@@ -5749,7 +5748,6 @@ lodash-es@^4.17.11:
 lodash-es@^4.17.15:
   version "4.17.15"
   resolved "https://registry.yarnpkg.com/lodash-es/-/lodash-es-4.17.15.tgz#21bd96839354412f23d7a10340e5eac6ee455d78"
-  integrity sha512-rlrc3yU3+JNOpZ9zj5pQtxnx2THmvRykwL4Xlxoa8I9lHBlVbbyPhgyPMioxVZ4NqyxaVVtaJnzsyOidQIhyyQ==
 
 lodash.chunk@^4.2.0:
   version "4.2.0"
