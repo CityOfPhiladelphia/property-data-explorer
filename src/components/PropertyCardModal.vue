@@ -671,7 +671,7 @@ export default {
         sort: {
           // this should return the val to sort on
           getValue: function(item) {
-            return item.year;
+            return item.document_date;
           },
           // asc or desc
           order: 'desc'
@@ -1059,6 +1059,7 @@ header {
   background: transparent;
   height: 30px;
   width: 30px;
+  z-index: 999;
 }
 
 .openmaps-modal.openmaps-modal--open{
