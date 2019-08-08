@@ -176,6 +176,9 @@ export default {
                 }
               }
             },
+            customStyle: {float: 'left', 'padding-right': '5px'},
+            mobileIcon: "info-circle",
+            hideMobileIcon: (state, item) => typeof state.sources.opa_assessment.targets[item.properties.opa_account_num] != 'undefined' ? true : false ,
           },
           {
             label: 'Market Value',
@@ -294,10 +297,13 @@ export default {
             value: function(state, item) {
               return titleCase(item.properties.opa_address)
             },
+            hideMobileIcon: true,
+            customStyle: {float: 'left', 'padding-right': '5px'},
+            mobileIcon: "info-circle",
           },
           {
             label: 'Market Value',
-            value: function(state, item){
+            value: function(state, item) {
               if(state.sources.opa_assessment.targets){}
               return formatter.format(state.sources.opa_assessment.targets[item.properties.opa_account_num.toString()].data.market_value)
             },
@@ -372,6 +378,9 @@ export default {
                 return titleCase(item.location)
               }
             },
+            customStyle: {float: 'left', 'padding-right': '5px'},
+            mobileIcon: "info-circle",
+            hideMobileIcon: (state, item) => item.condo ? false : true ,
           },
           {
             label: 'Market Value',
@@ -459,13 +468,14 @@ export default {
             item._featureId = item.pwd_parcel_id + "-UNIT-" + index
           }
         );
+        // console.log("Units to add: ", unitsToAdd)
         return unitsToAdd
       }
       mapUnitIds = mapUnitIds.bind(this)
       // console.log('after mapUnitIds');
       let unitData;
       if(this.$store.state.lastSearchMethod === "geocode" || this.$store.state.lastSearchMethod === "reverseGeocode") {
-        console.log("Not shape search, input: ", input)
+        // console.log("Not shape search, input: ", input)
 
         this.$controller.dataManager.resetData();
         const input = this.$store.state.parcels.pwd.properties.ADDRESS;

@@ -612,12 +612,35 @@
     height: 35px;
     padding: 8px 0px  0px 10px;
     margin: 0 2px 0 2px;
-    background-color: #f0f0f0;
+    color: rgb(15, 77, 144);
+    background-color: #cfcfcf;
     border-style: solid;
     border-color: #0f4d90;
-    border-width: 2px 0 0 0 ;
+    border-width: 1px 0 1px 0 ;
   }
 
+
+  thead {
+    display: none;
+  }
+
+  td {
+    clear: both;
+    border: none !important;
+  }
+
+  th {
+    border: 1px solid white !important;
+    font-size: unset !important;
+  }
+
+  tbody th, tbody td {
+    padding: 0.28571rem 0.35714rem 0.35714rem;
+  }
+
+  td div svg {
+    float: right
+  }
 
 }
 
