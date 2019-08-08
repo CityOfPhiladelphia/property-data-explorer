@@ -130,8 +130,29 @@ export default {
   },
   titleCase: {
     transform: function(str) {
+
+
+      let titleCaseFix = {
+        Llc: "LLC",
+        Iii: "III",
+        Lp: "LP",
+        Usa: "USA",
+        Trs: "TRS",
+        "H/w": "H/W"
+
+      }
+
+      let fixit = function(str) {
+        for (let oldCase in titleCaseFix) {
+          let newCase = titleCaseFix[oldCase];
+        }
+        return str;
+      }
+
       str = str.toLowerCase().split(' ').map(function(word) {
-        return (word.charAt(0).toUpperCase() + word.slice(1));
+        let wordFormatted = word.charAt(0).toUpperCase() + word.slice(1)
+        wordFormatted = titleCaseFix[wordFormatted] || wordFormatted
+        return wordFormatted
       });
       return str.join(' ');
     }
