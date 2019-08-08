@@ -639,7 +639,6 @@
   }
 
   td div svg {
-    margin-right: 45px;
     float: right
   }
 
