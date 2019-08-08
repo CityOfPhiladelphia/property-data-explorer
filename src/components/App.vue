@@ -638,6 +638,11 @@
     padding: 0.28571rem 0.35714rem 0.35714rem;
   }
 
+  td div svg {
+    margin-right: 45px;
+    float: right
+  }
+
 }
 
 .step-group{
