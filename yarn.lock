@@ -607,6 +607,11 @@
   version "0.2.19"
   resolved "https://npm.fontawesome.com/@fortawesome/fontawesome-common-types/-/fontawesome-common-types-0.2.19.tgz#754a0f85e1290858152e1c05700ab502b11197f1"
 
+"@fortawesome/fontawesome-common-types@^0.2.21":
+  version "0.2.21"
+  resolved "https://npm.fontawesome.com/@fortawesome/fontawesome-common-types/-/fontawesome-common-types-0.2.21.tgz#f1c26ae24761cca583de7cafd1273ab4c70a4d87"
+  integrity sha512-iJtcrU2BtF9Wyr0zm3tHEJy3HqA6sADExhCqCv3SKaJJKKp4ORJ40t4nyHvcWXSVFtd7r1gcdqcRsAfoREGTFA==
+
 "@fortawesome/fontawesome-svg-core@^1.2.15":
   version "1.2.19"
   resolved "https://npm.fontawesome.com/@fortawesome/fontawesome-svg-core/-/fontawesome-svg-core-1.2.19.tgz#0eca1ce9285c3d99e6e340633ee8f615f9d1a2e0"
@@ -624,6 +629,13 @@
   resolved "https://npm.fontawesome.com/@fortawesome/free-solid-svg-icons/-/free-solid-svg-icons-5.9.0.tgz#1c73e7bac17417d23f934d83f7fff5b100a7fda9"
   dependencies:
     "@fortawesome/fontawesome-common-types" "^0.2.19"
+
+"@fortawesome/pro-solid-svg-icons@^5.8.2":
+  version "5.10.1"
+  resolved "https://npm.fontawesome.com/@fortawesome/pro-solid-svg-icons/-/pro-solid-svg-icons-5.10.1.tgz#37d9641baa96a76216dc72af9136f2952eb2a5f0"
+  integrity sha512-MdHMBSE40zKMHSPEwmU2nSwZRQUO1an9f+mENHqFi6apUS4q4WwrxHABsmOfk/2e+GSIEJchOVMiljqpUqbbUQ==
+  dependencies:
+    "@fortawesome/fontawesome-common-types" "^0.2.21"
 
 "@fortawesome/vue-fontawesome@^0.1.5":
   version "0.1.6"
@@ -762,9 +774,9 @@
     vue "^2.6.9"
     vuex "^3.0.1"
 
-"@philly/vue-mapping@https://github.com/CityOfPhiladelphia/phila-vue-mapping#df7fbf254b96b5fe32e390f10e94defe9d962fcd":
+"@philly/vue-mapping@https://github.com/CityOfPhiladelphia/phila-vue-mapping#6417e57c3efb4e8ce0f31e1cf204d10d7ec21fa3":
   version "1.0.29"
-  resolved "https://github.com/CityOfPhiladelphia/phila-vue-mapping#df7fbf254b96b5fe32e390f10e94defe9d962fcd"
+  resolved "https://github.com/CityOfPhiladelphia/phila-vue-mapping#6417e57c3efb4e8ce0f31e1cf204d10d7ec21fa3"
   dependencies:
     "@fortawesome/fontawesome-svg-core" "^1.2.15"
     "@fortawesome/free-regular-svg-icons" "^5.7.2"
