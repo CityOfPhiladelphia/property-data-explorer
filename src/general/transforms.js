@@ -131,15 +131,22 @@ export default {
   titleCase: {
     transform: function(str) {
 
-
       let titleCaseFix = {
         Llc: "LLC",
         Iii: "III",
         Lp: "LP",
         Usa: "USA",
         Trs: "TRS",
-        "H/w": "H/W"
-
+        "H/w": "H/W",
+        Of: "of",
+        Fdr: "FDR",
+        "S/w": "S/W",
+        Mcclellan: "McClellan",
+        "S/m": "S/M",
+        And: "and",
+        Cp: "CP",
+        Us: "US",
+        Ltd: "LTD",
       }
 
       let fixit = function(str) {
