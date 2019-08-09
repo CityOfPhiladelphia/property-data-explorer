@@ -23,6 +23,10 @@ let config = {
     logoAlt: 'logo',
   },
   transforms,
+  geolocation: {
+    enabled: true,
+    icon: ['far', 'dot-circle']
+  },
   cyclomedia: {
     enabled: true,
     measurementAllowed: false,

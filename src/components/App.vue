@@ -340,7 +340,8 @@
         }
       },
       shouldLoadCyclomediaWidget() {
-        return this.$config.cyclomedia.enabled && !this.isMobileOrTablet;
+        return this.$config.cyclomedia.enabled;
+        // return this.$config.cyclomedia.enabled && !this.isMobileOrTablet;
       },
       cyclomediaActive() {
         return this.$store.state.cyclomedia.active;

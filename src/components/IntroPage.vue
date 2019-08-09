@@ -61,12 +61,21 @@
 
 </script>
 
-<style>
+<style lang="scss">
 
 .introduction {
   padding: 30px;
-  /* height: 70%; */
+  /* height: 95%; */
   overflow-y: auto;
+  height: calc(100vh - 122px);
+}
+
+@media screen and (max-width: 750px) {
+  .introduction {
+    padding: 30px;
+    height: auto;
+    // height: calc(100vh - 122px);
+  }
 }
 
 .full-topics-open {

@@ -138,6 +138,11 @@
         >
         </control-corner>
 
+        <control-corner :vSide="'almostbottom'"
+                        :hSide="'left'"
+        >
+        </control-corner>
+
         <!-- <basemap-tooltip :position="'topright'"
         /> -->
 
@@ -171,37 +176,49 @@
         <div v-once>
           <location-control v-once
                             v-if="this.geolocationEnabled"
-                            :position="'bottomright'"
+                            :position="'almostbottomleft'"
           />
         </div>
 
+        <!-- location marker -->
+        <circle-marker v-if="this.$store.state.map.location.lat != null"
+                       :latlng="this.locationMarker.latlng"
+                       :radius="this.locationMarker.radius"
+                       :fillColor="this.locationMarker.fillColor"
+                       :color="this.locationMarker.color"
+                       :weight="this.locationMarker.weight"
+                       :opacity="this.locationMarker.opacity"
+                       :fillOpacity="this.locationMarker.fillOpacity"
+                       :key="Math.random()"
+        />
+
         <div>
-          <div v-once>
+          <!-- <div v-once> -->
             <map-address-input :position="'topleft'"
                            :placeholder="this.addressInputPlaceholder"
                            widthFromConfig="350"
             >
             </map-address-input>
 
-            <buffer-control :position="'topnearleft'"
-                            :barHeight="'49px'"
+            <buffer-control :barHeight="'49px'"
                             :barWidth="'49px'"
                             :barLineHeight="'49px'"
                             :buttonHeight="'45px'"
                             :buttonWidth="'45px'"
                             :buttonLineHeight="'45px'"
                             @click="handleBufferClick"
+                            :position="'topnearleft'"
             />
             <div class="draw-control"
                  @click="handleDrawControlClick"
             >
-              <draw-control :position="'topnearleft2'"
-                            :control="true"
+              <draw-control :control="true"
                             @click="handleDrawControlClick"
+                            :position="'topnearleft2'"
               />
             </div>
 
-          </div>
+          <!-- </div> -->
         </div>
 
 
@@ -706,12 +723,20 @@
       padding-bottom: 10px;
       z-index: 500;
     }
+
+    .leaflet-almostbottom {
+      position: absolute;
+      bottom: 90px;
+      left: 0px;
+      padding-bottom: 10px;
+      z-index: 500;
+    }
   }
 
 
   @media screen and (max-width: 750px) {
 
-    .leaflet-control-zoom-in, .leaflet-control-zoom-out {
+    .leaflet-control-zoom, .leaflet-control-zoom {
       display: none !important;
     }
 
@@ -722,7 +747,7 @@
       z-index: 500;
       right: 0 !important;
       left: unset;
-      top: 26% !important;
+      top: 80px !important;
     }
 
     .leaflet-nearleft2 {
@@ -732,7 +757,15 @@
       padding-bottom: 10px;
       z-index: 500;
       right: 0 !important;
-      top: 19% !important;
+      top: 78px !important;
+    }
+
+    .leaflet-almostbottom {
+      position: absolute;
+      bottom: 10px;
+      left: 0px;
+      padding-bottom: 10px;
+      z-index: 500;
     }
 
     .leaflet-draw {
@@ -779,10 +812,10 @@
     }
 
     .leaflet-control>button>span>svg {
-      height: 24px;
-      left: -5px;
-      top: -3px;
-      position: absolute;
+      // height: 24px;
+      // left: -5px;
+      // top: -3px;
+      // position: absolute;
     }
 
   }
