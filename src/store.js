@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import isMobileDevice from './util/is-mobile-device';
 import pvdStore from '@philly/vue-datafetch/src/controller/store';
 import pvmStore from '@philly/vue-mapping/src/store';
 import pvcStore from '@philly/vue-comps/src/store';
@@ -15,7 +16,7 @@ function createStore(config) {
   const parcels = pvdStore.createParcels(config);
 
   const initialState = {
-    // isMobileOrTablet: isMobileDevice(),
+    isMobileOrTablet: isMobileDevice(),
     mapViewWasSetOnAppLoad: false,
     fullScreen: {
       mapOnly: false,

@@ -128,6 +128,11 @@
         >
         </control-corner>
 
+        <control-corner :vSide="'almosttop'"
+                        :hSide="'almostright'"
+        >
+        </control-corner>
+
         <control-corner :vSide="'top'"
                         :hSide="'nearleft'"
         >
@@ -410,11 +415,11 @@
         }
       },
       addressInputPosition() {
-        if (this.isMobileOrTablet) {
-          return 'topleft'
-        } else {
-          return 'topnearleft'
-        }
+        // if (this.isMobileOrTablet) {
+        return 'topleft'
+        // } else {
+        //   return 'topnearleft'
+        // }
       },
       addressInputPlaceholder() {
         if (this.$config.addressInput) {
@@ -425,7 +430,7 @@
       },
       basemapSelectControlPosition() {
         if (this.isMobileOrTablet) {
-          return 'topright'
+          return 'almosttopalmostright'
         } else {
           return 'topalmostright'
         }
