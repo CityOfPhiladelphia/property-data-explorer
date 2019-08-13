@@ -245,7 +245,7 @@
               // return state.parcels.dor.data;
               if(state.shapeSearch.data != null) {
                 return state.shapeSearch.data.rows
-              } else if (state.geocode.data != null) {
+              } else if (state.geocode.data != null && state.geocode.data != "") {
                 let geocodeArray = []
                 geocodeArray.push(state.geocode.data.properties)
                 if(state.geocode.related != null ) {
