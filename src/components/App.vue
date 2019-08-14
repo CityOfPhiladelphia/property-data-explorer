@@ -279,9 +279,6 @@
           return '<h3>Too many parcels selected.  Try again.<h3>';
         }
       },
-      activeModal() {
-        return this.$store.state.activeModal;
-      },
       drawShape() {
         return this.$store.state.drawShape;
       },

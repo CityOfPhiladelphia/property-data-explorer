@@ -552,6 +552,7 @@ export default {
       } else {
         Array.prototype.push.apply(coords, [item.geocode_lon, item.geocode_lat])
       }
+      this.$store.commit('setMapZoom', 18);
       this.$store.commit('setMapCenter', coords);
     },
     expandedData() {
