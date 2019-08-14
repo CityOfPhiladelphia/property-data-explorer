@@ -255,7 +255,6 @@
 <script>
   import * as L from 'leaflet';
   import 'leaflet/dist/leaflet.css';
-  import 'leaflet-event-forwarder';
 
   const FeatureGroup = L.default.featureGroup;
   const GeoJSON = L.default.geoJSON;
@@ -355,14 +354,14 @@
       // const { lat, lng } = center;
       // this.$store.commit('setCyclomediaLatLngFromMap', [lat, lng]);
 
-      const myEventForwarder = new L.eventForwarder({
-        map: map,
-        events: {
-          click: true,
-          mousemove: true,
-        }
-      })
-      myEventForwarder.enable();
+      // const myEventForwarder = new L.eventForwarder({
+      //   map: map,
+      //   events: {
+      //     click: true,
+      //     mousemove: true,
+      //   }
+      // })
+      // myEventForwarder.enable();
     },
 
     computed: {
