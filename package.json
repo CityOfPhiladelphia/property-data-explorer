@@ -13,9 +13,9 @@
   "dependencies": {
     "1.0.2": "^1.0.0",
     "@fortawesome/pro-solid-svg-icons": "^5.8.2",
-    "@philly/vue-comps": "https://github.com/CityOfPhiladelphia/phila-vue-comps#46e39a7b3a99c4a05ca628d8090f7309fd614ebc",
+    "@philly/vue-comps": "https://github.com/CityOfPhiladelphia/phila-vue-comps#c33aff1a48e89bfae3d232125a01d026165d6dc2",
     "@philly/vue-datafetch": "https://github.com/CityOfPhiladelphia/phila-vue-datafetch#deb41d0b3605ef1a86f13db946eb677d398b9bac",
-    "@philly/vue-mapping": "https://github.com/CityOfPhiladelphia/phila-vue-mapping#3c1ee12858feae54edc135073eac9a745ddce527",
+    "@philly/vue-mapping": "https://github.com/CityOfPhiladelphia/phila-vue-mapping#4a42394e3100fb4168cf629f7e51cd83bdec6401",
     "accounting": "^0.4.1",
     "axios": "^0.18.0",
     "lodash.chunk": "^4.2.0",
