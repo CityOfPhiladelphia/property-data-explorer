@@ -603,6 +603,10 @@
     // top: 393px;
   }
 
+.leaflet-draw-actions {
+    left: 42px !important;
+}
+
   .mobile-menu-content {
     position: fixed;
     bottom: 0;
