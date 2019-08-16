@@ -395,7 +395,6 @@
     mounted() {
       // console.log('MapPanel mounted is running, DrawControl', DrawControl)
       const map = this.$store.state.map.map;
-
     },
 
     computed: {

@@ -359,7 +359,7 @@ export default {
 
       } else if (this.$store.state.ownerSearch.status === "success" ) {
         let result = this.$store.state.ownerSearch.data.filter( function(object) {
-          return object._featureId === parseInt(feature.featureId.toString().slice(0,6));
+          return object._featureId === feature.featureId;
         });
         // console.log(result)
         featureId = result.length > 0 ? Number(result[0].properties.pwd_parcel_id) : null

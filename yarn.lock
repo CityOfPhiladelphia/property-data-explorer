@@ -760,6 +760,7 @@
     vue "^2.6.9"
     vuex "^3.0.1"
 
+
 "@philly/vue-datafetch@https://github.com/CityOfPhiladelphia/phila-vue-datafetch#abe128040db6f28d03b9a16a6f5a24a49edb7a14":
   version "0.0.16"
   resolved "https://github.com/CityOfPhiladelphia/phila-vue-datafetch#abe128040db6f28d03b9a16a6f5a24a49edb7a14"
