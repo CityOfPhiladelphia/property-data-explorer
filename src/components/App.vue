@@ -337,7 +337,8 @@
         }
       },
       shouldLoadCyclomediaWidget() {
-        return this.$config.cyclomedia.enabled && !this.isMobileOrTablet;
+        return this.$config.cyclomedia.enabled;
+        // return this.$config.cyclomedia.enabled && !this.isMobileOrTablet;
       },
       cyclomediaActive() {
         return this.$store.state.cyclomedia.active;
@@ -598,6 +599,10 @@
     // z-index: 999;
     // top: 393px;
   }
+
+.leaflet-draw-actions {
+    left: 42px !important;
+}
 
   .mobile-menu-content {
     position: fixed;

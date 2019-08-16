@@ -154,7 +154,8 @@ export default {
           } else {
             let filtered = state.geocode.related.filter(object => {
               return object._featureId === state.activeFeature.featureId
-          })
+            })
+            // console.log('in PropertyCardModal computed "address", filtered:', filtered, 'state.activeFeature.featureId:', state.activeFeature.featureId);
             return titleCase(filtered[0].properties.street_address)
           }
         } else if (state.ownerSearch.status === "success") {

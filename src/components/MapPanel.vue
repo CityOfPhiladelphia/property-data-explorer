@@ -2,6 +2,8 @@
   <div id="map-panel-container"
        class="surrounding-div grid-x medium-grid-frame"
   >
+  <!-- this.mapDivClass -->
+  <!-- :class="'medium-grid-frame surrounding-div ' + this.mapDivClass" -->
     <full-screen-map-toggle-tab-vertical v-once />
     <div :class="this.mapPanelContainerClass">
       <map_ id="map-tag"
@@ -128,6 +130,11 @@
         >
         </control-corner>
 
+        <control-corner :vSide="'almosttop'"
+                        :hSide="'almostright'"
+        >
+        </control-corner>
+
         <control-corner :vSide="'top'"
                         :hSide="'nearleft'"
         >
@@ -135,6 +142,11 @@
 
         <control-corner :vSide="'top'"
                         :hSide="'nearleft2'"
+        >
+        </control-corner>
+
+        <control-corner :vSide="'almostbottom'"
+                        :hSide="'left'"
         >
         </control-corner>
 
@@ -151,7 +163,6 @@
         <div v-once>
           <basemap-select-control :position="this.basemapSelectControlPosition" />
         </div>
-
 
         <!-- <div v-once
              v-if="this.measureControlEnabled"
@@ -171,37 +182,51 @@
         <div v-once>
           <location-control v-once
                             v-if="this.geolocationEnabled"
-                            :position="'bottomright'"
+                            :position="'almostbottomleft'"
           />
         </div>
 
+        <!-- location marker -->
+        <circle-marker v-if="this.$store.state.map.location.lat != null"
+                       :latlng="this.locationMarker.latlng"
+                       :radius="this.locationMarker.radius"
+                       :fillColor="this.locationMarker.fillColor"
+                       :color="this.locationMarker.color"
+                       :weight="this.locationMarker.weight"
+                       :opacity="this.locationMarker.opacity"
+                       :fillOpacity="this.locationMarker.fillOpacity"
+                       :key="Math.random()"
+        />
+
         <div>
-          <div v-once>
+          <!-- <div v-once> -->
             <map-address-input :position="'topleft'"
                            :placeholder="this.addressInputPlaceholder"
-                           widthFromConfig="350"
+                           widthFromConfig="300"
             >
             </map-address-input>
 
-            <buffer-control :position="'topnearleft'"
-                            :barHeight="'49px'"
+            <buffer-control :barHeight="'49px'"
                             :barWidth="'49px'"
                             :barLineHeight="'49px'"
                             :buttonHeight="'45px'"
                             :buttonWidth="'45px'"
                             :buttonLineHeight="'45px'"
                             @click="handleBufferClick"
+                            :position="'topnearleft'"
+                            :class="this.buttonClass"
             />
+
             <div class="draw-control"
                  @click="handleDrawControlClick"
             >
-              <draw-control :position="'topnearleft2'"
-                            :control="true"
+              <draw-control :control="true"
                             @click="handleDrawControlClick"
+                            :position="'topnearleft2'"
               />
             </div>
 
-          </div>
+          <!-- </div> -->
         </div>
 
 
@@ -326,6 +351,14 @@
         },
         lastGeocodeGeom: {},
         lastGeocodeResult: {},
+        buttonDimensions: {
+          'barHeight': '49px',
+          'barWidth': '49px',
+          'barLineHeight': '49px',
+          'buttonHeight': '45px',
+          'buttonWidth': '45px',
+          'buttonLineHeight': '45px'
+        }
       };
       return data;
     },
@@ -346,25 +379,42 @@
           4326
         );
       }
+
+      console.log('MapPanel.vue created, this.isMobileOrTablet:', this.isMobileOrTablet);
+      if (this.isMobileOrTablet) {
+        this.$data.buttonDimensions = {
+          'barHeight': '30px',
+          'barWidth': '30px',
+          'barLineHeight': '30px',
+          'buttonHeight': '30px',
+          'buttonWidth': '30px',
+          'buttonLineHeight': '30px'
+        }
+      }
     },
     mounted() {
       // console.log('MapPanel mounted is running, DrawControl', DrawControl)
       const map = this.$store.state.map.map;
-      // const center = map.getCenter();
-      // const { lat, lng } = center;
-      // this.$store.commit('setCyclomediaLatLngFromMap', [lat, lng]);
-
-      // const myEventForwarder = new L.eventForwarder({
-      //   map: map,
-      //   events: {
-      //     click: true,
-      //     mousemove: true,
-      //   }
-      // })
-      // myEventForwarder.enable();
     },
 
     computed: {
+      isMobileOrTablet() {
+        return this.$store.state.isMobileOrTablet;
+      },
+      mapDivClass() {
+        if (this.cyclomediaActive) {
+          return 'map-div-cyclo';
+        } else {
+          return 'map-div';
+        }
+      },
+      buttonClass() {
+        if (this.isMobileOrTablet) {
+          return 'mobile-button';
+        } else {
+          return 'non-mobile-button';
+        }
+      },
       lastSearchMethod() {
         return this.$store.state.lastSearchMethod;
       },
@@ -392,11 +442,11 @@
         }
       },
       addressInputPosition() {
-        if (this.isMobileOrTablet) {
-          return 'topleft'
-        } else {
-          return 'topnearleft'
-        }
+        // if (this.isMobileOrTablet) {
+        return 'topleft'
+        // } else {
+        //   return 'topnearleft'
+        // }
       },
       addressInputPlaceholder() {
         if (this.$config.addressInput) {
@@ -406,11 +456,11 @@
         }
       },
       basemapSelectControlPosition() {
-        if (this.isMobileOrTablet) {
-          return 'topright'
-        } else {
+        // if (this.isMobileOrTablet) {
+        //   return 'almosttopalmostright'
+        // } else {
           return 'topalmostright'
-        }
+        // }
       },
       shouldShowAddressCandidateList() {
         return this.$store.state.shouldShowAddressCandidateList;
@@ -439,9 +489,6 @@
       //     return 'medium-24 small-order-1 small-24 medium-order-1'
       //   }
       // },
-      isMobileOrTablet() {
-        return this.$store.state.isMobileOrTablet;
-      },
       geolocationEnabled() {
         if (this.$config.geolocation) {
           return this.$config.geolocation.enabled;
@@ -687,30 +734,158 @@
 
 <style lang="scss">
 
+  // CSS FOR LARGE SCREEN APP
   @media screen and (min-width: 750px) {
-    .leaflet-nearleft {
+
+    // .map-div {
+    //   height: 100%;
+    // }
+    //
+    // .map-div-cyclo {
+    //   height: 100%;
+    // }
+
+    .leaflet-nearleft.non-mobile-corner {
       position: absolute;
       bottom: 0px;
       top: -1px;
-      left: 365px;
+      left: 315px;
+      // left: 365px;
       padding-bottom: 10px;
       z-index: 500;
     }
 
-    .leaflet-nearleft2 {
+    .leaflet-nearleft.mobile-corner {
+      position: absolute;
+      bottom: 0px;
+      padding-bottom: 10px;
+      z-index: 500;
+      right: 10px !important;
+      top: 88px !important;
+    }
+
+    .leaflet-nearleft2.non-mobile-corner {
       position: absolute;
       bottom: 0px;
       top: -1px;
-      left: 420px;
+      left: 370px;
+      // left: 420px;
       padding-bottom: 10px;
       z-index: 500;
     }
+
+    .leaflet-nearleft2.mobile-corner {
+      position: absolute;
+      bottom: 0px;
+      padding-bottom: 10px;
+      z-index: 500;
+      right: 10px !important;
+      top: 132px !important;
+    }
+
+    .leaflet-almostbottom {
+      position: absolute;
+      bottom: 90px;
+      left: 0px;
+      padding-bottom: 10px;
+      z-index: 500;
+    }
+
+    .leaflet-almostright {
+      position: absolute;
+      top: 0px;
+      right: 60px;
+      padding-bottom: 10px;
+      z-index: 500;
+    }
+
+    .leaflet-touch .leaflet-draw-toolbar .leaflet-draw-draw-polygon {
+      background-position: -65px -9px;
+      background-size: 540px 60px;
+    }
+
+    // BUFFER TOOL
+    // the .mobile-button class is at the same level as leaflet-bar...
+    .mobile-button {
+      width: 34px !important;
+      height: 34px !important;
+    }
+
+    .mobile-button > button {
+      width: 30px !important;
+      height: 30px !important;
+    }
+
+    .mobile-button > button > span > svg {
+      padding-top: 3px !important;
+      height: 24px;
+      left: -3px;
+      top: 2px;
+      position: absolute;
+    }
+
+    // DRAW TOOL
+    // this sets the size of the outer button for the draw tool
+    .mobile-corner > div > div > .leaflet-draw-toolbar.leaflet-bar.leaflet-draw-toolbar-top {
+      width: 34px !important;
+      height: 34px !important;
+    }
+
+    .non-mobile-corner > div > div > .leaflet-draw-toolbar.leaflet-bar.leaflet-draw-toolbar-top {
+      width: 49px !important;
+      height: 49px !important;
+    }
+
+    // this anchor tag comes from the draw control, and can't be accessed or changed
+    .mobile-corner > div > div > div> a {
+      width: 30px !important;
+      height: 30px !important;
+    }
+
+    .non-mobile-corner > div > div > div> a {
+      width: 45px !important;
+      height: 45px !important;
+    }
+
+    .mobile-corner > div > div > div > .leaflet-draw-draw-polygon {
+      background-position: -73px -15px !important;
+    }
+
+    // HIDES THE INSTRUCTIONS IF MOBILE
+    .leaflet-draw.leaflet-control {
+      clear: unset;
+      float: right;
+    }
+
+    .leaflet-draw-toolbar.leaflet-bar.leaflet-draw-toolbar-top {
+      width: 49px;
+      height: 49px;
+    }
+
+    .leaflet-touch .leaflet-draw-actions {
+      left: 60px;
+    }
+
+    .leaflet-bar button {
+      padding: inherit !important;
+    }
+
   }
+  // END OF CSS FOR LARGE SCREEN APP
 
 
+  // CSS FOR SMALL SCREEN APP
   @media screen and (max-width: 750px) {
 
-    .leaflet-control-zoom-in, .leaflet-control-zoom-out {
+    // .map-div {
+    //   height: 350px;
+    // }
+    //
+    // .map-div-cyclo {
+    //   height: 350px;
+    // }
+
+    .leaflet-control-zoom, .leaflet-control-zoom {
       display: none !important;
     }
 
@@ -721,23 +896,35 @@
       z-index: 500;
       right: 0 !important;
       left: unset;
-      top: 26% !important;
+      top: 78px !important;
     }
 
     .leaflet-nearleft2 {
       position: absolute;
       bottom: 0px;
-      left: 370px;
       padding-bottom: 10px;
       z-index: 500;
       right: 0 !important;
-      top: 19% !important;
+      top: 116px !important;
     }
 
-    .leaflet-draw {
-      top: 25%;
+    .mobile-corner.leaflet-almostright {
+      position: absolute;
+      top: 50px;
+      right: 60px;
+      padding-bottom: 10px;
+      z-index: 500;
     }
 
+    .leaflet-almostbottom {
+      position: absolute;
+      bottom: 10px;
+      left: 0px;
+      padding-bottom: 10px;
+      z-index: 500;
+    }
+
+    // BOTH TOOLS
     .leaflet-draw-toolbar.leaflet-bar.leaflet-draw-toolbar-top,
     .leaflet-bar.easy-button-container.leaflet-control {
       width: 30px !important;
@@ -745,17 +932,14 @@
       margin-right: 10px;
     }
 
-    .leaflet-bar.easy-button-container.leaflet-control>button{
+    // BUFFER TOOL
+    .leaflet-bar.easy-button-container.leaflet-control > button {
       width: 26px !important;
       height: 26px !important;
     }
 
-    .leaflet-bar.easy-button-container.leaflet-control {
-      width: 30px !important;
-      height: 30px !important;
-    }
-
-    a.leaflet-draw-draw-polygon {
+    // DRAW TOOL
+    .leaflet-draw-draw-polygon {
       width: 26px !important;
       height: 26px !important;
     }
@@ -764,64 +948,27 @@
       background-position: -31px -1px;
     }
 
+    // DOES THIS DO ANYTHING?
     .icon-padding {
       padding-top: unset;
     }
 
-
-    .button-state>img {
+    // IMAGERY AND CYCLOMEDIA BUTTONS
+    .button-state > img {
       height: 26px;
     }
 
+    // CYCLOMEDIA BUTTON
     .leaflet-touch .leaflet-bar button {
       line-height: unset;
     }
 
-    .leaflet-control>button>span>svg {
-      height: 24px;
-      left: -5px;
-      top: -3px;
-      position: absolute;
-    }
-
   }
+  // END OF CSS FOR SMALL SCREEN APP
 
-  .leaflet-draw-toolbar.leaflet-bar.leaflet-draw-toolbar-top {
-    width: 49px;
-    height: 49px;
-  }
-
-  .leaflet-draw-draw-polygon {
-    width: 45px !important;
-    height: 45px !important;
-  }
-
-@media screen and (min-width: 750px) {
-  .leaflet-touch .leaflet-draw-toolbar .leaflet-draw-draw-polygon {
-    background-position: -65px -9px;
-    background-size: 540px 60px;
-  }
-}
-
-  .leaflet-draw.leaflet-control {
-    clear: unset;
-    float: right;
-  }
-
-  .leaflet-draw-toolbar.leaflet-bar.leaflet-draw-toolbar-top {
-    width: 49px;
-    height: 49px;
-  }
-
-  .leaflet-touch .leaflet-draw-actions {
-    left: 60px;
-  }
-
-  .leaflet-bar button {
-  padding: inherit !important;
-  }
 
 </style>
+
 
 <style scoped>
 
