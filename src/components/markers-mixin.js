@@ -388,7 +388,7 @@ export default {
         // console.log("opa_account_num: ", pwd_parcel_id, "featureId: ", featureId)
         rowId = pwd_parcel_id === featureId ? this.$store.state.geocode.data._featureId : null;
         // console.log("rowId from geocode success: ", rowId)
-      } else if (this.$store.state.ownerSearch.status === "success" ) {
+      } else if (this.$store.state.ownerSearch.status === "success" && this.$store.state.lastSearchMethod !== 'shape search') {
           let result = this.$store.state.ownerSearch.data.filter( function(object) {
             // console.log("object.properties.pwd_parcel_id: ", object.properties.pwd_parcel_id, "featureId: ", featureId)
           return Number(object.properties.pwd_parcel_id) === featureId
