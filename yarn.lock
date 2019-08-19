@@ -760,17 +760,15 @@
     vue "^2.6.9"
     vuex "^3.0.1"
 
-
-"@philly/vue-datafetch@https://github.com/CityOfPhiladelphia/phila-vue-datafetch#abe128040db6f28d03b9a16a6f5a24a49edb7a14":
-  version "0.0.16"
-  resolved "https://github.com/CityOfPhiladelphia/phila-vue-datafetch#abe128040db6f28d03b9a16a6f5a24a49edb7a14"
+"@philly/vue-datafetch@https://github.com/CityOfPhiladelphia/phila-vue-datafetch#9e37ae8276df2e68e9e93b7e0556e693d71a730d":
+  version "0.0.22"
+  resolved "https://github.com/CityOfPhiladelphia/phila-vue-datafetch#9e37ae8276df2e68e9e93b7e0556e693d71a730d"
   dependencies:
     "@turf/turf" "^5.1.6"
-    axios "^0.18.0"
+    axios "^0.19.0"
     date-fns "^1.30.1"
     esri-leaflet "^2.2.3"
     leaflet "^1.4.0"
-    moment "^2.24.0"
     proj4 "^2.5.0"
     vue "^2.6.9"
     vuex "^3.0.1"
@@ -2542,6 +2540,14 @@ aws4@^1.8.0:
 axios@^0.18.0:
   version "0.18.1"
   resolved "https://registry.yarnpkg.com/axios/-/axios-0.18.1.tgz#ff3f0de2e7b5d180e757ad98000f1081b87bcea3"
+  dependencies:
+    follow-redirects "1.5.10"
+    is-buffer "^2.0.2"
+
+axios@^0.19.0:
+  version "0.19.0"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-0.19.0.tgz#8e09bff3d9122e133f7b8101c8fbdd00ed3d2ab8"
+  integrity sha512-1uvKqKQta3KBxIz14F2v06AEHZ/dIoeKfbTRkK1E5oqjDnuEerLmYTgJB5AiQZHJcljpg1TuRzdjDR06qNk0DQ==
   dependencies:
     follow-redirects "1.5.10"
     is-buffer "^2.0.2"
@@ -6134,7 +6140,7 @@ mkdirp@0.5.x, "mkdirp@>=0.5 0", mkdirp@^0.5.0, mkdirp@^0.5.1, mkdirp@~0.5.0, mkd
   dependencies:
     minimist "0.0.8"
 
-moment@^2.21.0, moment@^2.24.0:
+moment@^2.21.0:
   version "2.24.0"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.24.0.tgz#0d055d53f5052aa653c9f6eb68bb5d12bf5c2b5b"
 

@@ -158,7 +158,7 @@ export default {
             // console.log('in PropertyCardModal computed "address", filtered:', filtered, 'state.activeFeature.featureId:', state.activeFeature.featureId);
             return titleCase(filtered[0].properties.street_address)
           }
-        } else if (state.ownerSearch.status === "success") {
+        } else if (state.ownerSearch.status === "success" && state.lastSearchMethod !== 'shape search') {
           let result = state.ownerSearch.data.filter(object => {
             return object._featureId === state.activeModal.featureId
           });
@@ -186,7 +186,7 @@ export default {
       let address =  function() {
         if (state.geocode.status === "success"){
           return titleCase(state.geocode.data.properties.street_address);
-        } else if (state.ownerSearch.status === "success") {
+        } else if (state.ownerSearch.status === "success" && state.lastSearchMethod !== 'shape search') {
           let result = state.ownerSearch.data.filter(object => {
             return object._featureId === state.activeModal.featureId
           });
@@ -235,7 +235,7 @@ export default {
               if (state.geocode.status === "success"){
                 let result = findIdForGeocoded(state);
                 return result;
-              } else if (state.ownerSearch.status === "success") {
+              } else if (state.ownerSearch.status === "success" && state.lastSearchMethod !== 'shape search') {
                 let result = state.ownerSearch.data.filter(object => {
                   return object._featureId === state.activeModal.featureId
                 });
@@ -294,7 +294,7 @@ export default {
               if (state.geocode.status === "success"){
                 let result = findIdForGeocoded(state);
                 return state.sources.opa_public.targets[result].data.building_code_description
-              } else if (state.ownerSearch.status === "success") {
+              } else if (state.ownerSearch.status === "success" && state.lastSearchMethod !== 'shape search') {
                 let result = state.ownerSearch.data.filter(object => {
                   return object._featureId === state.activeModal.featureId
                 });
@@ -327,7 +327,7 @@ export default {
               if (state.geocode.status === "success"){
                 let result = findIdForGeocoded(state);
                 return cond_code(state.sources.opa_public.targets[result].data.exterior_condition)
-              } else if (state.ownerSearch.status === "success") {
+              } else if (state.ownerSearch.status === "success" && state.lastSearchMethod !== 'shape search') {
                 let result = state.ownerSearch.data.filter(object => {
                   return object._featureId === state.activeModal.featureId
                 });
@@ -352,7 +352,7 @@ export default {
                       .toLocaleString('en-US', {
                         minimumFractionDigits: 0
                       })
-              } else if (state.ownerSearch.status === "success") {
+              } else if (state.ownerSearch.status === "success" && state.lastSearchMethod !== 'shape search') {
                 let result = state.ownerSearch.data.filter(object => {
                   return object._featureId === state.activeModal.featureId
                 });
@@ -382,7 +382,7 @@ export default {
                       .toLocaleString('en-US', {
                         minimumFractionDigits: 0
                       })
-              } else if (state.ownerSearch.status === "success") {
+              } else if (state.ownerSearch.status === "success" && state.lastSearchMethod !== 'shape search') {
                 let result = state.ownerSearch.data.filter(object => {
                   return object._featureId === state.activeModal.featureId
                 });
@@ -446,7 +446,7 @@ export default {
                 let id = [];
                 if (state.geocode.status === "success"){
                   id = findIdForGeocoded(state);
-                } else if (state.ownerSearch.status === "success") {
+                } else if (state.ownerSearch.status === "success" && state.lastSearchMethod !== 'shape search') {
                   let result = state.ownerSearch.data.filter(
                     object => { return object._featureId === state.activeModal.featureId }
                   );
@@ -483,7 +483,7 @@ export default {
               })
                 address = titleCase(filtered[0].properties.street_address)
               }
-            } else if (state.ownerSearch.status === "success") {
+            } else if (state.ownerSearch.status === "success" && state.lastSearchMethod !== 'shape search') {
               let result = state.ownerSearch.data.filter(object => {
                 return object._featureId === state.activeModal.featureId
               });
@@ -517,7 +517,7 @@ export default {
                   minimumFractionDigits: 0
                 })
 
-              } else if (state.ownerSearch.status === "success") {
+              } else if (state.ownerSearch.status === "success" && state.lastSearchMethod !== 'shape search') {
                 let key = state.ownerSearch.data.filter(object => {
                   return object._featureId === state.activeModal.featureId
                 } );
@@ -547,7 +547,7 @@ export default {
                 let result = findIdForGeocoded(state);
                 return moment(state.sources.opa_assessment.targets[result].data.sale_date)
                       .format('MM/DD/YYYY')
-              } else if (state.ownerSearch.status === "success") {
+              } else if (state.ownerSearch.status === "success" && state.lastSearchMethod !== 'shape search') {
                 let key = state.ownerSearch.data.filter(object => {
                   return object._featureId === state.activeModal.featureId
                 } );
@@ -690,7 +690,7 @@ export default {
               if (state.geocode.status === "success"){
                 let result = findIdForGeocoded(state);
                 return result
-              } else if (state.ownerSearch.status === "success") {
+              } else if (state.ownerSearch.status === "success" && state.lastSearchMethod !== 'shape search') {
                 let result = state.ownerSearch.data.filter(object => {
                   return object._featureId === state.activeModal.featureId
                 });
@@ -715,7 +715,7 @@ export default {
                 } else {
                   return titleCase(state.geocode.data.properties.opa_owners.toString());
                 }
-              } else if (state.ownerSearch.status === "success") {
+              } else if (state.ownerSearch.status === "success" && state.lastSearchMethod !== 'shape search') {
                 let result = state.ownerSearch.data.filter(object => {
                   return object._featureId === state.activeModal.featureId
                 });
@@ -743,7 +743,7 @@ export default {
                 } else {
                   return titleCase(state.geocode.data.properties.street_address);
                 }
-              } else if (state.ownerSearch.status === "success") {
+              } else if (state.ownerSearch.status === "success" && state.lastSearchMethod !== 'shape search') {
                 let result = state.ownerSearch.data.filter(object => {
                   return object._featureId === state.activeModal.featureId
                 });
@@ -772,7 +772,7 @@ export default {
               })
                 address = titleCase(filtered[0].properties.street_address)
               }
-            } else if (state.ownerSearch.status === "success") {
+            } else if (state.ownerSearch.status === "success" && state.lastSearchMethod !== 'shape search') {
               let result = state.ownerSearch.data.filter(object => {
                 return object._featureId === state.activeModal.featureId
               });
