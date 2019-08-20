@@ -37,6 +37,17 @@
           <div class="cell shrink">
             <section class="title-container flex-child-auto">
               <a
+                :href="appLogoLink"
+                class="logo flex-child-auto"
+              >
+                <img
+                  :src="appLogo"
+                  :alt="appLogoAlt"
+                  class="app-logo"
+                >
+              </a>
+              <div class="app-divide"></div>
+              <a
                 class="app-title"
               >
               <!-- :to="appLink" -->
@@ -315,6 +326,7 @@ export default {
 .app-divide{
   display: inline-block;
   min-height:4rem;
+  margin: 0 1rem;
   vertical-align: middle;
   margin-bottom: 1rem;
 

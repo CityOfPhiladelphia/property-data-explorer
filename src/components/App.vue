@@ -467,6 +467,23 @@
   height: 100%
 }
 
+#data-panel-container .pvc-horizontal-table .pvc-horizontal-table-body .stack>thead>tr>th {
+  position: sticky;
+  top: -2px !important;
+  z-index: 2;
+  border-left:1px solid white;
+}
+
+#results-summary{
+  height: 45px;
+  padding: 8px 0px  0px 10px;
+  margin: 0 2px 0 2px;
+  background-color: #f0f0f0;
+  border-style: solid;
+  border-color: #0f4d90;
+  border-width: 2px 0 0 0 ;
+}
+
 // .bottom-half #data-panel-container #lower-toggle-tab {
 //   // position: fixed;
 //   top: calc(60% - 10px);
@@ -482,15 +499,12 @@
     top: calc(60% - 14px) !important;
 }
 
-#results-summary{
-  height: 45px;
-  padding: 8px 0px  0px 10px;
-  margin: 0 2px 0 2px;
-  background-color: #f0f0f0;
-  border-style: solid;
-  border-color: #0f4d90;
-  border-width: 2px 0 0 0 ;
+.logo {
+  line-height: 4em;
+  padding-left: 10px;
+  width: auto;
 }
+
 
 .bottom-full {
   overflow-y: auto;
@@ -550,13 +564,6 @@
   flex: 0;
 }
 
-#data-panel-container .pvc-horizontal-table .pvc-horizontal-table-body .stack>thead>tr>th {
-  position: sticky;
-  top: -2px !important;
-  z-index: 2;
-  border-left:1px solid white;
-}
-
 .bottom-half #data-panel-container .pvc-horizontal-table .pvc-horizontal-table-body .pvc-export-data-button {
   clear:both;
   z-index: 999;
@@ -592,7 +599,15 @@
   }
 }
 
+
 @media screen and (max-width: 750px) {
+
+  #demo-badge {
+    float: right;
+    position: absolute;
+    right: 25px;
+    top: 13px;
+  }
   .pvc-download-data-button, .pvc-export-data-button {
     visibility: hidden;
     // clear:both;
@@ -600,9 +615,21 @@
     // top: 393px;
   }
 
-.leaflet-draw-actions {
-    left: 42px !important;
-}
+  .leaflet-draw-actions {
+      left: 42px !important;
+  }
+
+  .logo {
+    width: 100%;
+  }
+
+  .app-header .cell .shrink {
+    width: 100%;
+  }
+
+  .app-divide {
+    display: none;
+  }
 
   .mobile-menu-content {
     position: fixed;
