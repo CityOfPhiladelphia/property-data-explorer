@@ -25,7 +25,7 @@
         <div :class="'address-container columns small-24 medium-12 large-12'"
         >
 
-          <div v-if="!this.address"
+          <div v-if="!this.activeAddress"
                class="default-address-text"
                :style="this.defaultAddressTextPlaceholderStyle"
           >
@@ -34,7 +34,7 @@
           <h1 class="address-header-line-1">
 
             <font-awesome-icon icon="map-marker-alt"/>
-            {{ address }}
+            {{ activeAddress }}
           <div class="columns small-24 medium-6 flex-div div-padding-and-margin hide-print">
             <a id="plans-button"
               href="#"
@@ -52,81 +52,57 @@
         </div>
       </div>
 
-      <callout
-      :slots="this.callout"
-      :options="this.callout"
-      />
+      <!-- main callout -->
+      <callout :slots="this.mainCalloutSlots" />
 
-      <vertical-table
-        :slots="this.vtableOptions"
-        :options="this.vtableOptions"
-      />
+      <!-- sale vertical table -->
+      <vertical-table :slots="this.saleVerticalTableSlots" />
 
-      <badge-custom
-        :slots="{
-          title: 'Base District'
-        }"
-        :options="this.zoningBadgeOptions"
-      />
-
-      <vertical-table
-        :slots="this.pSaleOptions"
-        :options="this.pSaleOptions"
-      />
-
+      <!-- valuation history horizontal table -->
       <horizontal-table
         v-if="this.$store.state.activeSearch.assessmentHistory.data"
         :slots="{
           title: 'Valuation History',
           items: this.$store.state.activeSearch.assessmentHistory.data
         }"
-        :options="this.activeOptions"
+        :options="this.valuationHistoryHorizontalTableOptions"
       />
 
-      <callout
-        :slots="this.propValueCallout"
-        :options="this.propValueCallout"
-      />
+      <!-- taxable and exempt land values callout -->
+      <callout :slots="this.propValueCalloutSlots" />
 
-      <vertical-table
-        :slots="this.pDetailOptions"
-        :options="this.pDetailOptions"
-      />
-
+      <!-- sales history horizontal table -->
       <horizontal-table
-      v-if="this.$store.state.activeSearch.salesHistory.data"
-      :slots="{
-        title: 'Sales History',
-        items: this.$store.state.activeSearch.salesHistory.data
+        v-if="this.$store.state.activeSearch.salesHistory.data"
+        :slots="{
+          title: 'Sales History',
+          items: this.$store.state.activeSearch.salesHistory.data
         }"
-        :options="this.activeSalesOptions"
-        />
+        :options="this.salesHistoryHorizontalTableOptions"
+      />
+
+      <!-- property details vertical table -->
+      <vertical-table :slots="this.propertyDetailsVerticalTableSlots" />
 
     </div>
   </div>
 </template>
 
 <script>
-import helpers from '../util/helpers';
-import moment from 'moment';
-import transforms from '../general/transforms';
-const titleCase = transforms.titleCase.transform;
-
-let findIdForGeocoded = function(state){
-  let result;
-  if (state.geocode.related != null && state.geocode.data._featureId != state.activeModal.featureId ) {
-    let filtered = state.geocode.related.filter(object => {
-      return object._featureId === state.activeFeature.featureId
-    })
-    result = filtered[0].properties.opa_account_num
-  } else {
-    result = state.geocode.data.properties.opa_account_num
-  }
-  return result
+let findConditionCode = function(exterior) {
+  const condition = exterior  == 0 ? 'Not Applicable' :
+                    exterior  == 2 ? 'Newer Construction / Rehabbed' :
+                    exterior  == 3 ? 'Above Average' :
+                    exterior  == 4 ? 'Average' :
+                    exterior  == 5 ? 'Below Average' :
+                    exterior  == 6 ? 'Vacant' :
+                    exterior  == 7 ? 'Sealed / Structurally Compromised, Open to the Weather' :
+                    'Not available';
+  return condition
 }
 
 export default {
-
+  name: 'Property-Card-Modal',
   components: {
     Callout: () => import(/* webpackChunkName: "pvc_pcm_Callout" */'@philly/vue-comps/src/components/Callout.vue'),
     TopicComponentGroup: () => import(/* webpackChunkName: "pvc_pcm_TopicComponentGroup" */'@philly/vue-comps/src/components/TopicComponentGroup.vue'),
@@ -134,85 +110,89 @@ export default {
     HorizontalTable: () => import(/* webpackChunkName: "pvc_pcm_HorizontalTable" */'@philly/vue-comps/src/components/HorizontalTable.vue'),
     VerticalTable: () => import(/* webpackChunkName: "pvc_pcm_VerticalTable" */'@philly/vue-comps/src/components/VerticalTable.vue'),
   },
-  name: 'Property-Card-Modal',
-
-
-
   computed: {
     activeModal() {
-      // console.log("Active Feature.....");
       return this.$store.state.activeModal;
     },
-    // this returns the address shown in the address header
-    address() {
-
-      const state = this.$store.state
-      let address =  function() {
-        if (state.geocode.status === "success"){
-          if(state.geocode.data.condo != true){
-            return titleCase(state.geocode.data.properties.street_address)
-          } else {
-            let filtered = state.geocode.related.filter(object => {
-              return object._featureId === state.activeFeature.featureId
-            })
-            // console.log('in PropertyCardModal computed "address", filtered:', filtered, 'state.activeFeature.featureId:', state.activeFeature.featureId);
-            return titleCase(filtered[0].properties.street_address)
-          }
-        } else if (state.ownerSearch.status === "success" && state.lastSearchMethod !== 'shape search') {
-          let result = state.ownerSearch.data.filter(object => {
-            return object._featureId === state.activeModal.featureId
-          });
-          return titleCase(result[0].properties.street_address)
-        } else {
-          let result = state.shapeSearch.data.rows.filter(object => {
-            return object._featureId === state.activeModal.featureId
-          });
-          return titleCase(result[0].location)
-        }
-      }
-
-      return address();
+    activeFeatureId() {
+      return this.activeModal.featureId;
     },
-    zipCode() {
-      // const geocode = this.geocode;
-      // if (!geocode) return null;
-      // const zipCode = geocode.properties.zip_code;
-      // const zip4 = geocode.properties.zip_4;
-      // const parts = [zipCode];
-      // if (zip4) parts.push(zip4);
-      // return parts.join('-');
-
-      const state = this.$store.state
-      let address =  function() {
-        if (state.geocode.status === "success"){
-          return titleCase(state.geocode.data.properties.street_address);
-        } else if (state.ownerSearch.status === "success" && state.lastSearchMethod !== 'shape search') {
-          let result = state.ownerSearch.data.filter(object => {
-            return object._featureId === state.activeModal.featureId
-          });
-          return titleCase(result[0].properties.street_address)
+    lastSearchMethod() {
+      return this.$store.state.lastSearchMethod;
+    },
+    activeFeature() {
+      let state = this.$store.state;
+      let feature;
+      if (['geocode', 'reverseGeocode'].includes(this.lastSearchMethod)) {
+        if (state.geocode.related != null && state.geocode.data._featureId != state.activeModal.featureId ) {
+          feature = state.geocode.related.filter(object => {
+            return object._featureId === state.activeFeature.featureId
+          })[0];
         } else {
-          let result = state.shapeSearch.data.rows.filter(object => {
-            return object._featureId === state.activeModal.featureId
-          });
-          return titleCase(result[0].location)
+          feature = state.geocode.data;
         }
+      } else if (state.lastSearchMethod === 'owner search') {
+        feature = state.ownerSearch.data.filter(object => {
+          return object._featureId === state.activeModal.featureId
+        })[0];
+      } else {
+        feature = state.shapeSearch.data.rows.filter(object => {
+          return object._featureId === state.activeModal.featureId
+        })[0];
       }
+      return feature;
+    },
+    activeOpaId() {
+      let feature = this.activeFeature;
+      let opaId;
+      if (['geocode', 'reverseGeocode', 'owner search'].includes(this.lastSearchMethod)) {
+        opaId = feature.properties.opa_account_num;
+      } else {
+        opaId = feature.parcel_number;
+      }
+      return opaId;
+    },
 
+    activeAddress() {
+      let feature = this.activeFeature;
+      let address;
+      if (['geocode', 'reverseGeocode', 'owner search'].includes(this.lastSearchMethod)) {
+        address = feature.properties.street_address;
+      } else {
+        address = feature.location;
+      }
       return address;
-
-
     },
-    callout() {
-      const options = {
+
+    // zipCode() {
+    //   const state = this.$store.state
+    //   // let address =  function() {
+    //     if (state.geocode.status === "success"){
+    //       return titleCase(state.geocode.data.properties.street_address);
+    //     } else if (state.lastSearchMethod === "owner search") {
+    //       let result = state.ownerSearch.data.filter(object => {
+    //         return object._featureId === state.activeModal.featureId
+    //       });
+    //       return titleCase(result[0].properties.street_address)
+    //     } else {
+    //       let result = state.shapeSearch.data.rows.filter(object => {
+    //         return object._featureId === state.activeModal.featureId
+    //       });
+    //       return titleCase(result[0].location)
+    //     }
+    //   // }
+    //   // return address;
+    // },
+
+    mainCalloutSlots() {
+      return {
         text: '\
         Property assessment and sale information for this address. Source: Office of Property Assessments (OPA). OPA was formerly a part of the Bureau of Revision of Taxes (BRT) and some City records may still use that name.\
         ',
       }
-      return options;
     },
-    propValueCallout() {
-      const options = {
+    propValueCalloutSlots() {
+      return {
         text: '\
         <small> \
         Note: Taxable and exempt land values can represent the contributory value of land in relation to the total market value, or \
@@ -221,353 +201,85 @@ export default {
         </small> \
         ',
       }
-      return options;
     },
-    pDetailOptions() {
-      const options = {
-        id: 'modalProperties',
+    propertyDetailsVerticalTableSlots() {
+      let state = this.$store.state;
+      let opaPublicData = state.sources.opa_public.targets[this.activeOpaId].data;
+      return {
+        id: 'propertyDetailsTable',
         dataSources: ['opa_public'],
-        title: "Property Details",
+        title: 'Property Details',
         fields: [
           {
             label: 'OPA Account #',
-            value: function(state) {
-              if (state.geocode.status === "success"){
-                let result = findIdForGeocoded(state);
-                return result;
-              } else if (state.ownerSearch.status === "success" && state.lastSearchMethod !== 'shape search') {
-                let result = state.ownerSearch.data.filter(object => {
-                  return object._featureId === state.activeModal.featureId
-                });
-                return result[0].properties.opa_account_num
-              } else {
-                let result = state.shapeSearch.data.rows.filter(object => {
-                  return object._featureId === state.activeModal.featureId
-                });
-                return result[0].parcel_number
-              }
-            },
+            value: this.activeOpaId,
           },
           {
             label: 'Homestead Exemption',
             value: function(state) {
-              if (state.lastSearchMethod === "geocode" || state.lastSearchMethod === "reverseGeocode"){
-                if (typeof state.geocode.data != 'undefined'){
-                  let result = findIdForGeocoded(state)
-                  return state.sources.opa_public.targets[result].data.homestead_exemption
-                  .toLocaleString('en-US', {
-                    style: "currency",
-                    currency:"USD",
-                    minimumFractionDigits: 0
-                  })
-                } else { return 0 }
-              } else if (state.lastSearchMethod === "owner search") {
-                let result = state.ownerSearch.data.filter(object => {
-                  return object._featureId === state.activeModal.featureId
-                });
-                let obj_id = result[0].properties.opa_account_num
-                return state.sources.opa_public.targets[obj_id].data.homestead_exemption
-                      .toLocaleString('en-US', {
-                        style: "currency",
-                        currency:"USD",
-                        minimumFractionDigits: 0
-                      })
-
-              } else {
-                let result = state.shapeSearch.data.rows.filter(object => {
-                  return object._featureId === state.activeModal.featureId
-                });
-                let obj_id = result[0].parcel_number
-
-                return state.sources.opa_public.targets[obj_id].data.homestead_exemption
-                      .toLocaleString('en-US', {
-                        style: "currency",
-                        currency:"USD",
-                        minimumFractionDigits: 0
-                      })
-              }
+              return opaPublicData.homestead_exemption;
             },
+            transforms: ['currency'],
           },
           {
             label: 'Building Description',
-            value: function(state) {
-              if (state.geocode.status === "success"){
-                let result = findIdForGeocoded(state);
-                return state.sources.opa_public.targets[result].data.building_code_description
-              } else if (state.ownerSearch.status === "success" && state.lastSearchMethod !== 'shape search') {
-                let result = state.ownerSearch.data.filter(object => {
-                  return object._featureId === state.activeModal.featureId
-                });
-                let obj_id = result[0].properties.opa_account_num
-                return state.sources.opa_public.targets[obj_id].data.building_code_description
-
-              } else {
-                let result = state.shapeSearch.data.rows.filter(object => {
-                  return object._featureId === state.activeModal.featureId
-                });
-                let obj_id = result[0].parcel_number
-                return state.sources.opa_public.targets[obj_id].data.building_code_description
-              }
-            },
+            value: opaPublicData.building_code_description,
           },
           {
             label: 'Building Condition',
-            value: function(state) {
-                const cond_code = function(exterior) {
-                  const condition = exterior  == 0 ? 'Not Applicable' :
-                                    exterior  == 2 ? 'Newer Construction / Rehabbed' :
-                                    exterior  == 3 ? 'Above Average' :
-                                    exterior  == 4 ? 'Average' :
-                                    exterior  == 5 ? 'Below Average' :
-                                    exterior  == 6 ? 'Vacant' :
-                                    exterior  == 7 ? 'Sealed / Structurally Compromised, Open to the Weather' :
-                                    'Not available';
-                  return condition
-                }
-              if (state.geocode.status === "success"){
-                let result = findIdForGeocoded(state);
-                return cond_code(state.sources.opa_public.targets[result].data.exterior_condition)
-              } else if (state.ownerSearch.status === "success" && state.lastSearchMethod !== 'shape search') {
-                let result = state.ownerSearch.data.filter(object => {
-                  return object._featureId === state.activeModal.featureId
-                });
-                let obj_id = result[0].properties.opa_account_num
-                return cond_code(state.sources.opa_public.targets[obj_id].data.exterior_condition)
-
-              } else {
-                let result = state.shapeSearch.data.rows.filter(object => {
-                  return object._featureId === state.activeModal.featureId
-                });
-                let obj_id = result[0].parcel_number
-                return cond_code(state.sources.opa_public.targets[obj_id].data.exterior_condition)
-              }
-            },
+            value: findConditionCode(opaPublicData.exterior_condition),
           },
           {
             label: 'Land Area (SqFt)',
-            value: function(state) {
-              if (state.geocode.status === "success"){
-                let result = findIdForGeocoded(state);
-                return state.sources.opa_public.targets[result].data.total_area
-                      .toLocaleString('en-US', {
-                        minimumFractionDigits: 0
-                      })
-              } else if (state.ownerSearch.status === "success" && state.lastSearchMethod !== 'shape search') {
-                let result = state.ownerSearch.data.filter(object => {
-                  return object._featureId === state.activeModal.featureId
-                });
-                let obj_id = result[0].properties.opa_account_num
-                return state.sources.opa_public.targets[obj_id].data.total_area
-                      .toLocaleString('en-US', {
-                        minimumFractionDigits: 0
-                      })
-              } else {
-                let result = state.shapeSearch.data.rows.filter(object => {
-                  return object._featureId === state.activeModal.featureId
-                });
-                let obj_id = result[0].parcel_number
-                return state.sources.opa_public.targets[obj_id].data.total_area
-                      .toLocaleString('en-US', {
-                        minimumFractionDigits: 0
-                      })
-              }
-            },
+            value: opaPublicData.total_area
+              .toLocaleString('en-US', {
+                minimumFractionDigits: 0
+              })
           },
           {
             label: 'Improvement Area (SqFt)',
-            value: function(state) {
-              if (state.geocode.status === "success"){
-                let result = findIdForGeocoded(state);
-                return state.sources.opa_public.targets[result].data.total_livable_area
-                      .toLocaleString('en-US', {
-                        minimumFractionDigits: 0
-                      })
-              } else if (state.ownerSearch.status === "success" && state.lastSearchMethod !== 'shape search') {
-                let result = state.ownerSearch.data.filter(object => {
-                  return object._featureId === state.activeModal.featureId
-                });
-                let obj_id = result[0].properties.opa_account_num
-                return state.sources.opa_public.targets[obj_id].data.total_livable_area
-                      .toLocaleString('en-US', {
-                        minimumFractionDigits: 0
-                      })
-              } else {
-                let result = state.shapeSearch.data.rows.filter(object => {
-                  return object._featureId === state.activeModal.featureId
-                });
-                let obj_id = result[0].parcel_number
-                return state.sources.opa_public.targets[obj_id].data.total_livable_area
-                      .toLocaleString('en-US', {
-                        minimumFractionDigits: 0
-                      })
-              }
-            },
-          },
-        ],
-      }
-      return options;
-    },
-    zoningBadgeOptions(){
-      const options = {
-        titleBackground: '#58c04d',
-        // dataSources: ['opa_public'],
-        components: [
-          {
-            type: 'horizontal-table',
-            options: {
-              downloadButton: false,
-              shouldShowFilters: false,
-              shouldShowHeaders: false,
-              id: 'baseZoning',
-              tableid: 'mmm',
-              fields: [
-                {
-                  label: 'Code',
-                  value: function(state, item){
-                    return item.data.zoning.trim()
-                  },
-                  transforms: [
-                    'nowrap',
-                    'bold'
-                  ]
-                },
-                {
-                  label: 'Description',
-                  value: function (state, item) {
-                    const code = item.data.zoning ;
-                    return helpers.ZONING_CODE_MAP[code.trim()];
-                  },
-                },
-              ], // end fields
-            },
-            slots: {
-              items(state, item) {
-                //console.log('slots items is running')
-                let id = [];
-                if (state.geocode.status === "success"){
-                  id = findIdForGeocoded(state);
-                } else if (state.ownerSearch.status === "success" && state.lastSearchMethod !== 'shape search') {
-                  let result = state.ownerSearch.data.filter(
-                    object => { return object._featureId === state.activeModal.featureId }
-                  );
-                  id =  result[0].properties.opa_account_num
-                } else {
-                  //console.log('state.shapeSearch.data:', state.shapeSearch.data)
-                  let result = state.shapeSearch.data.rows.filter(
-                    object => {
-                      //console.log('object._featureId:', object._featureId)
-                      return object._featureId === state.activeModal.featureId }
-                  );
-                  id = result[0].parcel_number
-                }
-                //console.log('id:', id)
-                item = new Array(state.sources.opa_public.targets[id])
-                //console.log('item:', item)
-                return item
-              },
-            }
-          }
-        ],
-        externalLink: {
-          action: function() {
-            return 'View more zoning Information in Atlas';
-          },
-          href: function(state) {
-            let address;
-            if (state.geocode.status === "success"){
-              if(state.geocode.data.condo != true){
-                address = titleCase(state.geocode.data.properties.street_address)
-              } else {
-                let filtered = state.geocode.related.filter(object => {
-                  return object._featureId === state.activeFeature.featureId
+            value: opaPublicData.total_livable_area
+              .toLocaleString('en-US', {
+                minimumFractionDigits: 0
               })
-                address = titleCase(filtered[0].properties.street_address)
-              }
-            } else if (state.ownerSearch.status === "success" && state.lastSearchMethod !== 'shape search') {
-              let result = state.ownerSearch.data.filter(object => {
-                return object._featureId === state.activeModal.featureId
-              });
-              address = titleCase(result[0].properties.street_address)
-            } else {
-              let result = state.shapeSearch.data.rows.filter(object => {
-                return object._featureId === state.activeModal.featureId
-              });
-              address = titleCase(result[0].location)
-            }
-            return '//atlas.phila.gov/#/' + address + '/zoning';
-          }
-        }
+          },
+        ],
       }
-      return options
     },
-    pSaleOptions() {
-      const options = {
-        id: 'modalProperties',
-        title: "Sale Details",
+    saleVerticalTableSlots() {
+      let state = this.$store.state;
+      let opaAssessmentData = state.sources.opa_assessment.targets[this.activeOpaId].data;
+      return {
+        id: 'saleTable',
+        dataSources: ['opa_public'],
         fields: [
           {
-            label: 'Sale Price',
+            label: 'Assessed Value',
             value: function(state) {
-              if (state.geocode.status === "success"){
-                let result = findIdForGeocoded(state);
-                return state.sources.opa_assessment.targets[result].data.sale_price
-                .toLocaleString('en-US', {
-                  style: "currency",
-                  currency:"USD",
-                  minimumFractionDigits: 0
-                })
-
-              } else if (state.ownerSearch.status === "success" && state.lastSearchMethod !== 'shape search') {
-                let key = state.ownerSearch.data.filter(object => {
-                  return object._featureId === state.activeModal.featureId
-                } );
-                return state.sources.opa_assessment.targets[key[0].properties.opa_account_num].data.sale_price
-                      .toLocaleString('en-US', {
-                        style: "currency",
-                        currency:"USD",
-                        minimumFractionDigits: 0
-                      })
-              } else {
-                let result = state.shapeSearch.data.rows.filter(object => {
-                  return object._featureId === state.activeModal.featureId
-                });
-                return result[0].sale_price
-                      .toLocaleString('en-US', {
-                        style: "currency",
-                        currency:"USD",
-                        minimumFractionDigits: 0
-                      })
-              }
+              return opaAssessmentData.market_value;
             },
+            transforms: ['currency'],
           },
           {
             label: 'Sale Date',
             value: function(state) {
-              if (state.geocode.status === "success"){
-                let result = findIdForGeocoded(state);
-                return moment(state.sources.opa_assessment.targets[result].data.sale_date)
-                      .format('MM/DD/YYYY')
-              } else if (state.ownerSearch.status === "success" && state.lastSearchMethod !== 'shape search') {
-                let key = state.ownerSearch.data.filter(object => {
-                  return object._featureId === state.activeModal.featureId
-                } );
-                return moment(state.sources.opa_assessment.targets[key[0].properties.opa_account_num].data.sale_date)
-                      .format('MM/DD/YYYY')
-              } else {
-                let result = state.shapeSearch.data.rows.filter(object => {
-                  return object._featureId === state.activeModal.featureId
-                });
-                return moment(result[0].sale_price)
-                      .format('MM/DD/YYYY')
-              }
+              return opaAssessmentData.sale_date;
             },
+            transforms: ['date'],
+          },
+          {
+            label: 'Sale Price',
+            value: function(state) {
+              return opaAssessmentData.sale_price;
+            },
+            transforms: ['currency'],
           },
         ],
       }
-      return options;
     },
-    activeOptions() {
-      const options = {
+
+    valuationHistoryHorizontalTableOptions() {
+      return {
         id: 'ownerProperties',
         tableid: 'ddd',
         // dataSources: ['opa'],
@@ -626,10 +338,10 @@ export default {
           order: 'desc'
         },
       }
-      return options;
     },
-    activeSalesOptions() {
-      const options = {
+
+    salesHistoryHorizontalTableOptions() {
+      return {
         id: 'salesHistory',
         tableid: 'ddd',
         // dataSources: ['opa'],
@@ -640,8 +352,9 @@ export default {
           {
             label: 'Date',
             value: function(state, item){
-              return moment(item.document_date).format('MM/DD/YYYY')
-            }
+              return item.document_date;
+            },
+            transforms: ['date'],
           },
           {
             label: 'Adjusted Total',
@@ -678,123 +391,10 @@ export default {
           order: 'desc'
         },
       }
-      return options;
     },
-    vtableOptions() {
-      const options = {
-        id: 'modalProperties',
-        fields: [
-          {
-            label: 'OPA Account #',
-            value: function(state) {
-              if (state.geocode.status === "success"){
-                let result = findIdForGeocoded(state);
-                return result
-              } else if (state.ownerSearch.status === "success" && state.lastSearchMethod !== 'shape search') {
-                let result = state.ownerSearch.data.filter(object => {
-                  return object._featureId === state.activeModal.featureId
-                });
-                return result[0].properties.opa_account_num
-              } else {
-                let result = state.shapeSearch.data.rows.filter(object => {
-                  return object._featureId === state.activeModal.featureId
-                });
-                return result[0].parcel_number
-              }
-            },
-          },
-          {
-            label: 'Owners',
-            value: function(state){
-              if (state.geocode.status === "success"){
-                if (state.geocode.related != null && state.geocode.data._featureId != state.activeModal.featureId ) {
-                  let filtered = state.geocode.related.filter(object => {
-                    return object._featureId === state.activeFeature.featureId
-                  })
-                  return titleCase(filtered[0].properties.opa_owners.toString())
-                } else {
-                  return titleCase(state.geocode.data.properties.opa_owners.toString());
-                }
-              } else if (state.ownerSearch.status === "success" && state.lastSearchMethod !== 'shape search') {
-                let result = state.ownerSearch.data.filter(object => {
-                  return object._featureId === state.activeModal.featureId
-                });
-                return titleCase(result[0].properties.opa_owners.toString())
-              } else {
-                let result = state.shapeSearch.data.rows.filter(object => {
-                  return object._featureId === state.activeModal.featureId
-                });
-                let owners = result[0].owner_2 != null ?
-                             titleCase(result[0].owner_1) + ", " + titleCase(result[0].owner_2):
-                             result[0].owner_1 != null ? titleCase(result[0].owner_1) : ""
-                return owners
-              }
-            },
-          },
-          {
-            label: 'OPA Address',
-            value: function(state) {
-              if (state.geocode.status === "success"){
-                if (state.geocode.related != null && state.geocode.data._featureId != state.activeModal.featureId ) {
-                  let filtered = state.geocode.related.filter(object => {
-                    return object._featureId === state.activeFeature.featureId
-                  })
-                  return titleCase(filtered[0].properties.street_address)
-                } else {
-                  return titleCase(state.geocode.data.properties.street_address);
-                }
-              } else if (state.ownerSearch.status === "success" && state.lastSearchMethod !== 'shape search') {
-                let result = state.ownerSearch.data.filter(object => {
-                  return object._featureId === state.activeModal.featureId
-                });
-                return titleCase(result[0].properties.street_address)
-              } else {
-                let result = state.shapeSearch.data.rows.filter(object => {
-                  return object._featureId === state.activeModal.featureId
-                });
-                return titleCase(result[0].location)
-              }
-            },
-          },
-        ],
-        externalLink: {
-          action: function() {
-            return 'View the Real Estate Tax Balance';
-          },
-          href: function(state) {
-            let address;
-            if (state.geocode.status === "success"){
-              if(state.geocode.data.condo != true){
-                address = titleCase(state.geocode.data.properties.street_address)
-              } else {
-                let filtered = state.geocode.related.filter(object => {
-                  return object._featureId === state.activeFeature.featureId
-              })
-                address = titleCase(filtered[0].properties.street_address)
-              }
-            } else if (state.ownerSearch.status === "success" && state.lastSearchMethod !== 'shape search') {
-              let result = state.ownerSearch.data.filter(object => {
-                return object._featureId === state.activeModal.featureId
-              });
-              address = titleCase(result[0].properties.street_address)
-            } else {
-              let result = state.shapeSearch.data.rows.filter(object => {
-                return object._featureId === state.activeModal.featureId
-              });
-              address = titleCase(result[0].location)
-            }
-            return '//www.phila.gov/revenue/realestatetax/#/' + address + '/property';
-          }
-          // href: function() {
-          //   return '//legacy.phila.gov/revenue/realestatetax/';
-          // }
-        },
-      }
-      return options;
-    }
   },
   methods: {
-    closeModal (state) {
+    closeModal(state) {
       this.$store.state.activeModal.featureId = null;
       this.$store.commit('setActiveFeature', null);
       this.$nextTick(() => {

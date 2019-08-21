@@ -56,7 +56,7 @@
 
 <script>
 require("sorttable")
-import moment from 'moment';
+import { format } from 'date-fns';
 import helpers from '../util/helpers';
 import transforms from '../general/transforms';
 const titleCase = transforms.titleCase.transform;
@@ -131,6 +131,7 @@ export default {
       }
       return data;
     },
+
     geocodeOptions() {
       const options = {
         id: 'ownerProperties',
@@ -198,7 +199,7 @@ export default {
                   text: 'Click to add units to results.',
                   buttonAction: this.addCondoRecords,
                   buttonFinished() {
-                    console.log("button finished running")
+                    // console.log("button finished running")
                     this.$data.showTable = true
                   },
                 },
@@ -216,24 +217,25 @@ export default {
           {
             label: 'Date of Last Sale',
             value: function(state, item) {
-              if(item.properties.opa_account_num != ""){
-                if(typeof state.sources.opa_assessment.targets[item.properties.opa_account_num] != 'undefined'){
-                  return moment(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date)
-                .format('MM/DD/YYYY')
+              if (item.properties.opa_account_num != ""){
+                if (typeof state.sources.opa_assessment.targets[item.properties.opa_account_num] != 'undefined') {
+                  return format(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date, 'MM/DD/YYYY');
                 }
               } else {
                 return "Not Applicable"
               }
             },
             customkey: function(state, item) {
-              if(item.properties.opa_account_num != "") {
-                if(typeof state.sources.opa_assessment.targets[item.properties.opa_account_num] != 'undefined'){
-                  return moment(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date).format("YYYYMMDD")
-                } else { return}
+              if (item.properties.opa_account_num != "") {
+                if (typeof state.sources.opa_assessment.targets[item.properties.opa_account_num] != 'undefined') {
+                  return format(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date, 'MM/DD/YYYY');
+                } else {
+                  return;
+                }
               } else {
                 return 0
               }
-            }
+            },
           },
           {
             label: 'Price of Last Sale',
@@ -261,6 +263,7 @@ export default {
       }
       return options;
     },
+
     ownerOptions() {
       const options = {
         id: 'ownerProperties',
@@ -311,11 +314,10 @@ export default {
           {
             label: 'Date of Last Sale',
             value: function(state, item) {
-              return moment(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date.toString())
-                    .format('MM/DD/YYYY')
+              return format(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date.toString(), 'MM/DD/YYYY');
             },
             customkey: function(state, item) {
-              return moment(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date.toString()).format("YYYYMMDD")
+              return format(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date.toString(), 'MM/DD/YYYY');
             },
           },
           {
@@ -338,6 +340,7 @@ export default {
       }
       return options;
     },
+
     shapeOptions() {
       const options = {
         id: 'ownerProperties',
@@ -412,19 +415,19 @@ export default {
           {
             label: 'Date of Last Sale',
             value: function(state, item) {
-              if (item.sale_date != ""){
-                return moment(item.sale_date).format('MM/DD/YYYY')
+              if (item.sale_date != "") {
+                return format(item.sale_date, 'MM/DD/YYYY');
               } else {
                 return "Not Applicable"
               }
             },
             customkey: function(state, item) {
               if (item.sale_date != "") {
-                return moment(item.sale_date).format("YYYYMMDD")
+                return format(item.sale_date, 'MM/DD/YYYY');
               } else {
                 return 0
               }
-            }
+            },
           },
           {
             label: 'Price of Last Sale',
