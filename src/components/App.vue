@@ -141,7 +141,7 @@
         'bottom': 2,
         hasData: false,
         isModalOpen: false,
-        // introPage: true,
+        introPage: true,
       }
     },
     mounted() {
@@ -227,9 +227,6 @@
     computed: {
       lastSearchMethod() {
         return this.$store.state.lastSearchMethod;
-      },
-      introPage() {
-        return this.$store.state.introPage;
       },
       activeModal() {
         return this.$store.state.activeModal.featureId
@@ -375,6 +372,8 @@
       },
       shouldKeepIntroPage() {
         if (this.$store.state.sources.opa_assessment.status || this.$store.state.cyclomedia.active) {
+          return false;
+        } else if (!this.$store.state.introPage) {
           return false;
         } else {
           return true;
