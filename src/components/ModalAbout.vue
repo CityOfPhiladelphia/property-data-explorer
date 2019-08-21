@@ -51,14 +51,6 @@
         <p>Half of the map panel will be taken up by the street view. If you are zoomed in far enough, circles will appear along the streets in the map.  Click on a circle to change the street view location to that point.</p>
       </div>
 
-      <div class="cell small-9 medium-3 text-center">
-          <font-awesome-icon icon="info-circle" class="fa-3x" aria-hidden="true" />
-      </div>
-      <div class="cell small-15 medium-21 text-div">
-        <p><b>Learn more about and download data.</b></p>
-        <p>Click this icon to be linked to the metadata page for any dataset.</p>
-      </div>
-
     </div>
   </div>
 </template>
