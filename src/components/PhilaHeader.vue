@@ -41,7 +41,7 @@
                 class="logo flex-child-auto"
               >
                 <img
-                  :src="appLogo()"
+                  :src="compLogo()"
                   :alt="appLogoAlt"
                   class="app-logo"
                 >
@@ -123,10 +123,10 @@ export default {
       type: String,
       default: '/',
     },
-    // appLogo: {
-    //   type: Function,
-    //   default: computedLogo,
-    // },
+    appLogo: {
+      type: String,
+      default: Logo,
+    },
     appLogoAlt: {
       type: String,
       default: 'City of Philadelphia',
@@ -222,7 +222,7 @@ export default {
       // this.$router.push({ query: startQuery });
       this.searchString = '';
     },
-    appLogo(){
+    compLogo(){
         let mobileLogo = "//cityofphiladelphia.github.io/patterns/images/city-of-philadelphia-mobile.png"
        return window.innerWidth < 750 ? mobileLogo : Logo
     },
