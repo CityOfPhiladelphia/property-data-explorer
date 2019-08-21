@@ -54,13 +54,13 @@
                 <h1 class="title">
                   {{ appTitle }}
                 </h1>
-                <div id="demo-badge">
-                  BETA
-                </div>
                 <h2 class="h6 hide-for-small-only tagline">
                   {{ appTagLine }}
                 </h2>
               </a>
+              <div id="demo-container"><div id="demo-badge">
+                BETA
+              </div></div>
             </section>
           </div>
           <!-- <div class="cell large-auto small-auto small-centered text-center">

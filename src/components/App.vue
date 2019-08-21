@@ -602,12 +602,18 @@
 
 @media screen and (max-width: 750px) {
 
-  // #demo-badge {
-  //   float: right;
-  //   position: absolute;
-  //   right: 25px;
-  //   top: 13px;
-  // }
+  #demo-badge {
+    top: 25%;
+    position: absolute;
+    width: max-content;
+  }
+
+  #demo-container {
+    padding-left: 15px;
+    position: relative;
+  }
+
+
   .pvc-download-data-button, .pvc-export-data-button {
     visibility: hidden;
     // clear:both;
@@ -628,13 +634,13 @@
     width: 100%;
   }
 
-  .app-header .title {
-    line-height: 4rem;
-  }
-
   .app-divide {
     margin-bottom: 0;
     border: none;
+  }
+
+  .app-title {
+    max-width: 150px;
   }
 
   .mobile-menu-content {
