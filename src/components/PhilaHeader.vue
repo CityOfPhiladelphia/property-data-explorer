@@ -41,7 +41,7 @@
                 class="logo flex-child-auto"
               >
                 <img
-                  :src="appLogo"
+                  :src="appLogo()"
                   :alt="appLogoAlt"
                   class="app-logo"
                 >
@@ -123,10 +123,10 @@ export default {
       type: String,
       default: '/',
     },
-    appLogo: {
-      type: String,
-      default: Logo,
-    },
+    // appLogo: {
+    //   type: Function,
+    //   default: computedLogo,
+    // },
     appLogoAlt: {
       type: String,
       default: 'City of Philadelphia',
@@ -192,9 +192,9 @@ export default {
     },
   },
   // created() {
-  //   Object.keys(this.dropdownData).forEach(item => {
-  //     if (this.$route.query[item]) {
-  //       this.searchString = this.$route.query[item];
+    //   Object.keys(this.dropdownData).forEach(item => {
+      //     if (this.$route.query[item]) {
+        //       this.searchString = this.$route.query[item];
   //       this.dropdownData[item].selected = true;
   //     }
   //   });
@@ -211,7 +211,7 @@ export default {
       this.searchString = '';
     },
     // comboSearchTriggered(query) {
-    //   // console.log('in comboSearchTriggered, query:', query, 'this.searchType:', this.searchType, '{...this.$route.query}:', { ...this.$route.query }, '{...query}:', { ...query });
+      //   // console.log('in comboSearchTriggered, query:', query, 'this.searchType:', this.searchType, '{...this.$route.query}:', { ...this.$route.query }, '{...query}:', { ...query });
     //   this.$router.push({ query: { ...this.$route.query, ...query }});
     //   this.searchString = query[this.searchType];
     // },
@@ -221,6 +221,10 @@ export default {
       delete startQuery[this.searchType];
       // this.$router.push({ query: startQuery });
       this.searchString = '';
+    },
+    appLogo(){
+        let mobileLogo = "//cityofphiladelphia.github.io/patterns/images/city-of-philadelphia-mobile.png"
+       return window.innerWidth < 750 ? mobileLogo : Logo
     },
     toggleMenu() {
       this.isOpen = !this.isOpen;

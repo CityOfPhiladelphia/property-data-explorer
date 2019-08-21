@@ -602,12 +602,12 @@
 
 @media screen and (max-width: 750px) {
 
-  #demo-badge {
-    float: right;
-    position: absolute;
-    right: 25px;
-    top: 13px;
-  }
+  // #demo-badge {
+  //   float: right;
+  //   position: absolute;
+  //   right: 25px;
+  //   top: 13px;
+  // }
   .pvc-download-data-button, .pvc-export-data-button {
     visibility: hidden;
     // clear:both;
@@ -620,15 +620,21 @@
   }
 
   .logo {
-    width: 100%;
+    margin-top: auto;
+    margin-bottom: auto;
   }
 
   .app-header .cell .shrink {
     width: 100%;
   }
 
+  .app-header .title {
+    line-height: 4rem;
+  }
+
   .app-divide {
-    display: none;
+    margin-bottom: 0;
+    border: none;
   }
 
   .mobile-menu-content {
