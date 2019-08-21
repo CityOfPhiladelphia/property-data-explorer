@@ -252,6 +252,7 @@ export default {
 
   .app-logo{
     height: 45px;
+    min-width: 37px;
   }
   .logo{
     opacity: 1;
