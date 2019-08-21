@@ -6,10 +6,14 @@
           <ul class="footer-nav">
             <li><a href="https://www.phila.gov">City of Philadelphia</a></li>
             <li>
-              <a
+              <popover-link :options="this.popoverLinkOptions"
+                            :slots="this.popoverLinkSlots"
+              />
+              <!-- :customStyle="this.customStyle" -->
+              <!-- <a
                 href=""
                 @click.prevent="$emit('howToUseLink')"
-              >How to use</a>
+              >How to use</a> -->
             </li>
             <li>
               <a
@@ -24,12 +28,38 @@
   </footer>
 </template>
 <script>
+
+import ModalAbout from './ModalAbout.vue';
+
 export default {
+  components: {
+    ModalAbout,
+    PopoverLink: () => import(/* webpackChunkName: "lblb_pvc_PopoverLink" */'@philly/vue-comps/src/components/PopoverLink.vue'),
+  },
   props: {
     feedbackLink: {
       type: String,
       default: 'https://www.phila.gov/feedback/',
     },
+  },
+  computed: {
+    popoverLinkOptions() {
+      return {
+        height: '92%',
+        customStyle: { 'color': 'white', 'border-bottom': '0px' },
+        components: [
+          {
+            type: 'modal-about'
+          }
+        ]
+      }
+    },
+    popoverLinkSlots() {
+      return {
+        shouldShowValue: false,
+        value: 'How To Use'
+      }
+    }
   },
 };
 </script>

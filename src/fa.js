@@ -7,6 +7,7 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { faBars } from '@fortawesome/free-solid-svg-icons/faBars';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons/faSpinner';
 import { faCircle } from '@fortawesome/free-solid-svg-icons/faCircle';
-library.add(faSpinner, faBars, faCircle);
+import { faHexagon } from '@fortawesome/pro-solid-svg-icons/faHexagon';
+library.add(faSpinner, faBars, faCircle, faHexagon);
 
 export default library;

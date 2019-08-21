@@ -13,7 +13,7 @@
   "dependencies": {
     "1.0.2": "^1.0.0",
     "@fortawesome/pro-solid-svg-icons": "^5.8.2",
-    "@philly/vue-comps": "https://github.com/CityOfPhiladelphia/phila-vue-comps#08be41dd9dfb6898346302a1190f631f4f5a8f9f",
+    "@philly/vue-comps": "https://github.com/CityOfPhiladelphia/phila-vue-comps#c9d522285da437047b6d214f83c30265ee10e6c0",
     "@philly/vue-datafetch": "https://github.com/CityOfPhiladelphia/phila-vue-datafetch#2634984a6f87312912f3227d0d58d114b49399b3",
     "@philly/vue-mapping": "https://github.com/CityOfPhiladelphia/phila-vue-mapping#420350427bd1fd6576f487cc1105f75aca40ef3d",
     "accounting": "^0.4.1",
