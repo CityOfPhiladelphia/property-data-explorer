@@ -151,7 +151,6 @@ export default {
             mailing: "Mailing Labels"
           }
         },
-        expandedData: this.expandedData,
         customClass: {
           table: 'sortable',
           th: function(field) {
@@ -272,17 +271,17 @@ export default {
         mapOverlay: {},
         clickEnabled: true,
         downloadButton: false,
+        expandDataDownload: true,
+        mailingFields: this.mailingFields,
+        tableSort: this.tableSort,
+        expandedData: this.expandedData,
+        rowAction: this.rowClick,
         export: {
           formatButtons: {
             csv: "Download CSV",
             mailing: "Mailing Labels"
           }
         },
-        expandDataDownload: true,
-        mailingFields: this.mailingFields,
-        tableSort: this.tableSort,
-        expandedData: this.expandedData,
-        rowAction: this.rowClick,
         customClass: {
           table: 'sortable',
           th: function(field) {

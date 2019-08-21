@@ -218,13 +218,53 @@
         if (nextShouldKeepIntroPage === false) {
           this.$data.introPage = false;
         }
+      },
+      activeModalFeature(nextActiveModalFeature) {
+        console.log('watch activeModalFeature is firing, nextActiveModalFeature:', nextActiveModalFeature);
+        this.$store.commit('setActiveModalFeature', nextActiveModalFeature);
       }
     },
     computed: {
+      lastSearchMethod() {
+        return this.$store.state.lastSearchMethod;
+      },
       introPage() {
         return this.$store.state.introPage;
       },
-       summaryOptions() {
+      activeModal() {
+        return this.$store.state.activeModal.featureId
+      },
+      activeModalFeature() {
+        if (!this.activeModal) {
+          console.log('activeModalFeature computed is running but stopping immediately');
+          return null
+        }
+        let state = this.$store.state;
+        let feature = null;
+        if (['geocode', 'reverseGeocode'].includes(this.lastSearchMethod)) {
+          if (state.geocode.related != null && state.geocode.data._featureId != state.activeModal.featureId ) {
+            console.log('first if is running');
+            feature = state.geocode.related.filter(object => {
+              return object._featureId === state.activeModal.featureId
+              // return object._featureId === state.activeFeature.featureId
+            })[0];
+          } else {
+            console.log('second if is running');
+            feature = state.geocode.data;
+          }
+        } else if (state.lastSearchMethod === 'owner search') {
+          feature = state.ownerSearch.data.filter(object => {
+            return object._featureId === state.activeModal.featureId
+          })[0];
+        } else if (['shape search', 'buffer search'].includes(state.lastSearchMethod)) {
+          feature = state.shapeSearch.data.rows.filter(object => {
+            return object._featureId === state.activeModal.featureId
+          })[0];
+        }
+        console.log('activeModalFeature computed is running, feature:', feature);
+        return feature;
+      },
+      summaryOptions() {
         const options = {
           // dataSources: ['opa_assessment'],
           descriptor: 'parcel',
@@ -315,9 +355,6 @@
       },
       fullScreenTopicsEnabled() {
         return this.$store.state.fullScreenTopicsEnabled;
-      },
-      activeModal() {
-        return this.$store.state.activeModal.featureId
       },
       mapClass() {
         return this.fullScreenMapEnabled ? 'top-full':

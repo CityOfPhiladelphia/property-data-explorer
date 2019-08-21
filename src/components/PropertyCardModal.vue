@@ -111,39 +111,21 @@ export default {
     VerticalTable: () => import(/* webpackChunkName: "pvc_pcm_VerticalTable" */'@philly/vue-comps/src/components/VerticalTable.vue'),
   },
   computed: {
+    lastSearchMethod() {
+      return this.$store.state.lastSearchMethod;
+    },
     activeModal() {
       return this.$store.state.activeModal;
     },
     activeFeatureId() {
+      console.log('PropertyCardModal activeFeatureId computed is running')
       return this.activeModal.featureId;
     },
-    lastSearchMethod() {
-      return this.$store.state.lastSearchMethod;
-    },
-    activeFeature() {
-      let state = this.$store.state;
-      let feature;
-      if (['geocode', 'reverseGeocode'].includes(this.lastSearchMethod)) {
-        if (state.geocode.related != null && state.geocode.data._featureId != state.activeModal.featureId ) {
-          feature = state.geocode.related.filter(object => {
-            return object._featureId === state.activeFeature.featureId
-          })[0];
-        } else {
-          feature = state.geocode.data;
-        }
-      } else if (state.lastSearchMethod === 'owner search') {
-        feature = state.ownerSearch.data.filter(object => {
-          return object._featureId === state.activeModal.featureId
-        })[0];
-      } else {
-        feature = state.shapeSearch.data.rows.filter(object => {
-          return object._featureId === state.activeModal.featureId
-        })[0];
-      }
-      return feature;
+    activeModalFeature() {
+      return this.$store.state.activeModalFeature;
     },
     activeOpaId() {
-      let feature = this.activeFeature;
+      let feature = this.activeModalFeature;
       let opaId;
       if (['geocode', 'reverseGeocode', 'owner search'].includes(this.lastSearchMethod)) {
         opaId = feature.properties.opa_account_num;
@@ -152,14 +134,13 @@ export default {
       }
       return opaId;
     },
-
     activeAddress() {
-      let feature = this.activeFeature;
+      let feature = this.activeModalFeature;
       let address;
       if (['geocode', 'reverseGeocode', 'owner search'].includes(this.lastSearchMethod)) {
         address = feature.properties.street_address;
       } else {
-        address = feature.location;
+        address = feature.address_std;
       }
       return address;
     },
@@ -203,6 +184,7 @@ export default {
       }
     },
     propertyDetailsVerticalTableSlots() {
+      console.log('PropertyCardModal activeFeatureId computed is running')
       let state = this.$store.state;
       let opaPublicData = state.sources.opa_public.targets[this.activeOpaId].data;
       return {
