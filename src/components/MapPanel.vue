@@ -4,7 +4,9 @@
   >
   <!-- this.mapDivClass -->
   <!-- :class="'medium-grid-frame surrounding-div ' + this.mapDivClass" -->
-    <full-screen-map-toggle-tab-vertical v-once />
+    <full-screen-map-toggle-tab-vertical v-once
+                                         v-if="!this.$store.state.introPage"
+    />
     <div :class="this.mapPanelContainerClass">
       <map_ id="map-tag"
             :center="this.$store.state.map.center"
