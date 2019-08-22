@@ -330,7 +330,6 @@ export default {
 
 .app-divide{
   display: inline-block;
-  min-height:4rem;
   margin: 0 1rem;
   vertical-align: middle;
   margin-bottom: 1rem;
