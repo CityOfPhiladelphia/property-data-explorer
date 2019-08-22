@@ -740,9 +740,9 @@
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/@nodelib/fs.stat/-/fs.stat-1.1.3.tgz#2b5a3ab3f918cca48a8c754c08168e3f03eba61b"
 
-"@philly/vue-comps@https://github.com/CityOfPhiladelphia/phila-vue-comps#2e8e5a38541d4fc7f29ea72b7b105aa83a1da510":
+"@philly/vue-comps@https://github.com/CityOfPhiladelphia/phila-vue-comps#c9d522285da437047b6d214f83c30265ee10e6c0":
   version "1.0.28"
-  resolved "https://github.com/CityOfPhiladelphia/phila-vue-comps#2e8e5a38541d4fc7f29ea72b7b105aa83a1da510"
+  resolved "https://github.com/CityOfPhiladelphia/phila-vue-comps#c9d522285da437047b6d214f83c30265ee10e6c0"
   dependencies:
     "@fortawesome/fontawesome-svg-core" "^1.2.15"
     "@fortawesome/free-regular-svg-icons" "^5.7.2"

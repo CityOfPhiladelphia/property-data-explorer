@@ -4,42 +4,6 @@
     id="app"
     class="grid-y"
   >
-    <PhilaModal
-      v-show="isModalOpen"
-      @close="closeModal"
-    >
-      <div slot="body">
-        <div class="step-group">
-          <div class="step-label">
-            1
-          </div>
-          <div class="step">
-            <div class="step-title">
-              Step 1
-            </div>
-            <div class="step-content" />
-          </div>
-          <div class="step-label">
-            2
-          </div>
-          <div class="step">
-            <div class="step-title">
-              Step 2
-            </div>
-            <div class="step-content" />
-          </div>
-          <div class="step-label">
-            3
-          </div>
-          <div class="step">
-            <div class="step-title">
-              Step 3
-            </div>
-            <div class="step-content" />
-          </div>
-        </div>
-      </div>
-    </PhilaModal>
     <PhilaHeader :class="this.openModal"
       :app-title="this.$config.app.title"
       :app-tag-line="this.$config.app.tagLine"
@@ -98,6 +62,12 @@
       @howToUseLink="toggleModal()"
     />
 
+    <popover
+      v-if="popoverOpen"
+      :options="this.popoverOptions"
+      :slots="{'text': this.popoverText}"
+    />
+
   </div>
 </template>
 
@@ -106,7 +76,6 @@
 
   import PhilaHeader from './PhilaHeader.vue';
   import PhilaFooter from './PhilaFooter.vue';
-  import PhilaModal from './PhilaModal.vue';
 
   import MapPanel from './MapPanel.vue';
   import DataPanel from './DataPanel.vue';
@@ -118,13 +87,13 @@
     components: {
       PhilaHeader,
       PhilaFooter,
-      PhilaModal,
       MapPanel,
       DataPanel,
       IntroPage,
       PropertyCardModal,
       CyclomediaWidget: () => import(/* webpackChunkName: "mbmb_pvm_CyclomediaWidget" */'@philly/vue-mapping/src/cyclomedia/Widget.vue'),
       CollectionSummary: () => import(/* webpackChunkName: "pvc_Callout" */'@philly/vue-comps/src/components/CollectionSummary.vue'),
+      Popover: () => import(/* webpackChunkName: "mbmb_pvc_Popover" */'@philly/vue-comps/src/components/Popover.vue'),
     },
 
     props: {
@@ -225,43 +194,16 @@
       }
     },
     computed: {
-      lastSearchMethod() {
-        return this.$store.state.lastSearchMethod;
+      popoverOpen() {
+        return this.$store.state.popover.open;
       },
-      activeModal() {
-        return this.$store.state.activeModal.featureId
+      popoverText() {
+        return this.$store.state.popover.text;
       },
-      activeModalFeature() {
-        if (!this.activeModal) {
-          console.log('activeModalFeature computed is running but stopping immediately');
-          return null
-        }
-        let state = this.$store.state;
-        let feature = null;
-        if (['geocode', 'reverseGeocode'].includes(this.lastSearchMethod)) {
-          if (state.geocode.related != null && state.geocode.data._featureId != state.activeModal.featureId ) {
-            console.log('first if is running');
-            feature = state.geocode.related.filter(object => {
-              return object._featureId === state.activeModal.featureId
-              // return object._featureId === state.activeFeature.featureId
-            })[0];
-          } else {
-            console.log('second if is running');
-            feature = state.geocode.data;
-          }
-        } else if (state.lastSearchMethod === 'owner search') {
-          feature = state.ownerSearch.data.filter(object => {
-            return object._featureId === state.activeModal.featureId
-          })[0];
-        } else if (['shape search', 'buffer search'].includes(state.lastSearchMethod)) {
-          feature = state.shapeSearch.data.rows.filter(object => {
-            return object._featureId === state.activeModal.featureId
-          })[0];
-        }
-        console.log('activeModalFeature computed is running, feature:', feature);
-        return feature;
+      popoverOptions() {
+        return this.$store.state.popover.options;
       },
-      summaryOptions() {
+       summaryOptions() {
         const options = {
           // dataSources: ['opa_assessment'],
           descriptor: 'parcel',

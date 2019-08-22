@@ -7,10 +7,17 @@ import opa_assessment from './data-sources/opa-assessment';
 import opa_public from './data-sources/opa-public';
 // import neighboringProperties from './data-sources/neighboring-properties';
 
+import modalAbout from './components/ModalAbout.vue';
+
+const customComps = {
+  'modal-about': modalAbout,
+};
+
 
 var BASE_CONFIG_URL = 'https://cdn.jsdelivr.net/gh/cityofphiladelphia/pde_base_config@9b3bdb4f0ad53a2d7859a2d592343fb6fb417740/config.js';
 
 let config = {
+  customComps,
   baseConfig: BASE_CONFIG_URL,
   // baseConfig: '//raw.githubusercontent.com/stevetotheizz0/atlas_base_config/master/config.js',
   gatekeeperKey: '82fe014b6575b8c38b44235580bc8b11',

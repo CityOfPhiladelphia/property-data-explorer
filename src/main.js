@@ -45,6 +45,12 @@ function initVue(config) {
   Vue.use(controllerMixin, { config, store, router });
 
   Vue.component('font-awesome-icon', FontAwesomeIcon)
+
+  const customComps = config.customComps || [];
+  // console.log('mapboard main.js, customComps:', customComps);
+  for (let key of Object.keys(customComps)) {
+    Vue.component(key, customComps[key]);
+  }
   // mount main vue
   const vm = new Vue({
     el: '#vue-app',
