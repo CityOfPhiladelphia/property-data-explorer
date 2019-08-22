@@ -1,4 +1,4 @@
-import transforms from './util/transforms';
+import transforms from './general/transforms';
 import helpers from './util/helpers';
 import map from './general/map';
 

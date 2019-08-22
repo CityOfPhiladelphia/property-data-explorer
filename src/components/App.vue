@@ -118,7 +118,8 @@
       let query = this.$route.query;
       // console.log('App.vue mounted is running, this.$route.query:', this.$route.query);
       if (query.shape) {
-        this.introPage = false;
+        // this.introPage = false;
+        this.$store.commit('setIntroPage', false);
         let shape = query.shape;
         shape = shape.slice(2, shape.length-2);
         shape = shape.split('],[')
@@ -135,17 +136,20 @@
         this.$controller.getParcelsByPoints(points);
         this.onDataChange('shapeSearch');
       } else if (query.address) {
-        this.introPage = false;
+        // this.introPage = false;
+        this.$store.commit('setIntroPage', false);
         // console.log('query.address:', query.address);
         this.$controller.handleSearchFormSubmit(query.address);
         this.onDataChange('geocode');
       } else if (query.owner) {
-        this.introPage = false;
+        // this.introPage = false;
+        this.$store.commit('setIntroPage', false);
         // console.log('query.owner:', query.owner);
         this.$controller.handleSearchFormSubmit(query.owner);
         this.onDataChange('ownerSearch');
       } else if (query.buffer) {
-        this.introPage = false;
+        // this.introPage = false;
+        this.$store.commit('setIntroPage', false);
         this.$store.commit('setBufferMode', true);
         this.$controller.handleSearchFormSubmit(query.buffer);
         this.onDataChange('bufferSearch');
@@ -183,6 +187,10 @@
         if (nextShouldKeepIntroPage === false) {
           this.$data.introPage = false;
         }
+      },
+      activeModalFeature(nextActiveModalFeature) {
+        console.log('watch activeModalFeature is firing, nextActiveModalFeature:', nextActiveModalFeature);
+        this.$store.commit('setActiveModalFeature', nextActiveModalFeature);
       }
     },
     computed: {
@@ -287,9 +295,6 @@
       fullScreenTopicsEnabled() {
         return this.$store.state.fullScreenTopicsEnabled;
       },
-      activeModal() {
-        return this.$store.state.activeModal.featureId
-      },
       mapClass() {
         return this.fullScreenMapEnabled ? 'top-full':
                this.fullScreenTopicsEnabled ? 'top-none':
@@ -309,6 +314,8 @@
       },
       shouldKeepIntroPage() {
         if (this.$store.state.sources.opa_assessment.status || this.$store.state.cyclomedia.active) {
+          return false;
+        } else if (!this.$store.state.introPage) {
           return false;
         } else {
           return true;
@@ -342,7 +349,8 @@
         // console.log('onDataChange, type:', type)
         this.$data.hasData = true;
         this.$store.commit('setFullScreenMapEnabled', false);
-        this.introPage = false;
+        // this.introPage = false;
+        this.$store.commit('setIntroPage', false);
       },
       onResize() {
         if (window.innerWidth > 749) {

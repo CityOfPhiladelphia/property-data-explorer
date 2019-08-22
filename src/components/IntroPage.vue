@@ -2,10 +2,13 @@
   <div id="intro-container"
        :class="this.widgetClass + ' introduction'"
   >
-    <h2>Property Data Explorer is your front door to the City of Philadelphia.</h2>
-    <p>Here are some things you can do with Property Data Explorer:</p>
-    <div class="callout">
-      <ul>
+    <h2>Welcome to the new Property Data Explorer for the City of Philadelphia</h2>
+    <div class="spacer"></div>
+    <!-- <p>Here are some things you can do with Property Data Explorer:</p> -->
+    <!-- <div class="callout"> -->
+    <div>
+      Search for one or more properties to
+      <ul class="padded-list">
         <li>Get the history of permits, licenses, and inspections at any address</li>
         <li>Research real estate information including property values, zoning, and document archives</li>
         <li>Get easy access to a variety of hard-to-find City resources</li>
@@ -13,11 +16,14 @@
         <li>Explore historical imagery and maps</li>
       </ul>
     </div>
-    <p>To get started, click anywhere on the map, or type an address, intersection, property assessment account number, or Department of Records Map Registry number into the search box.</p>
-    <!-- <p>To get started, click anywhere on the map, or type an address, intersection, property assessment account number, or Department of Records Map Registry number into the search box.</p>
-    <p>To get started, click anywhere on the map, or type an address, intersection, property assessment account number, or Department of Records Map Registry number into the search box.</p>
-    <p>To get started, click anywhere on the map, or type an address, intersection, property assessment account number, or Department of Records Map Registry number into the search box.</p>
-    <p>To get started, click anywhere on the map, or type an address, intersection, property assessment account number, or Department of Records Map Registry number into the search box.</p> -->
+    <div>
+      To get started, you can
+      <ul class="padded-list">
+        <li>Click anywhere on the map</li>
+        <li>Use <i class="fas fa-circle"></i> to search near a property or <i class="fas fa-hexagon"></i> to draw an area</li>
+        <li>Type an address, property account number, or Department of Records Map Registry number into the search box</li>
+      </ul>
+    </div>
   </div>
 </template>
 
@@ -64,18 +70,30 @@
 <style lang="scss">
 
 .introduction {
-  padding: 30px;
+  padding: 28px;
   /* height: 95%; */
   overflow-y: auto;
   height: calc(100vh - 122px);
 }
 
+.spacer {
+  height: 20px;
+}
+
+.padded-list {
+  padding-left: 14px;
+}
+
 @media screen and (max-width: 750px) {
   .introduction {
-    padding: 30px;
+    padding: 28px;
     height: auto;
     // height: calc(100vh - 122px);
   }
+
+  // .padded-list {
+  //   padding-left: 4px;
+  // }
 }
 
 .full-topics-open {

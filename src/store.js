@@ -17,6 +17,7 @@ function createStore(config) {
 
   const initialState = {
     isMobileOrTablet: isMobileDevice(),
+    introPage: true,
     mapViewWasSetOnAppLoad: false,
     fullScreen: {
       mapOnly: false,
@@ -39,6 +40,7 @@ function createStore(config) {
       featureId: null,
       tableId: null
     },
+    activeModalFeature: null,
     activeModal: {
       featureId: null,
     },
@@ -79,6 +81,9 @@ function createStore(config) {
       // }
     },
     mutations: {
+      setIntroPage(state, payload) {
+        state.introPage = payload;
+      },
       setMapViewWasSetOnAppLoad(state, payload) {
         state.mapViewWasSetOnAppLoad = payload;
       },
@@ -133,20 +138,10 @@ function createStore(config) {
         state.map.map = payload.map;
       },
       setMapBounds(state, payload) {
-        // const { northEast, southWest } = payload || {};
-        // state.map.bounds.northEast = northEast;
-        // state.map.bounds.southWest = southWest;
         state.map.bounds = payload;
       },
       setMapBoundsBasedOnShape(state, payload) {
         state.map.boundsBasedOnShape = payload
-      },
-      setActiveParcel(state, payload) {
-        // console.log('store setActiveParcel:', payload)
-        const { parcelLayer, activeParcel, activeAddress, activeMapreg } = payload || {};
-        state.parcels[parcelLayer].activeParcel = activeParcel;
-        state.parcels[parcelLayer].activeAddress = activeAddress;
-        state.parcels[parcelLayer].activeMapreg = activeMapreg;
       },
       setActiveFeature(state, payload) {
         const { featureId, tableId } = payload || {};
@@ -157,6 +152,9 @@ function createStore(config) {
         const { featureId } = payload || {};
         const nextActiveFeature = { featureId };
         state.activeModal = nextActiveFeature;
+      },
+      setActiveModalFeature(state, payload) {
+        state.activeModalFeature = payload;
       },
       setImageOverlay(state, payload) {
         state.map.imageOverlay = payload;
