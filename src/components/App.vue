@@ -227,7 +227,7 @@
             return object._featureId === state.activeModal.featureId
           })[0];
         }
-        console.log('activeModalFeature computed is running, feature:', feature);
+        // console.log('activeModalFeature computed is running, feature:', feature);
         return feature;
       },
       popoverOpen() {

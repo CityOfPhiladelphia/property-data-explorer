@@ -194,7 +194,7 @@ export default {
       }
     },
     propertyDetailsVerticalTableSlots() {
-      console.log('PropertyCardModal activeFeatureId computed is running')
+      // console.log('PropertyCardModal activeFeatureId computed is running')
       let state = this.$store.state;
       let opaPublicData = state.sources.opa_public.targets[this.activeOpaId].data;
       return {
