@@ -319,6 +319,29 @@ export default {
           // asc or desc
           order: 'desc'
         },
+        externalLink: {
+          forceShow: true,
+          action: function() {
+            return 'View the Real Estate Tax Balance';
+          },
+          name: '',
+          href: function(state) {
+            // var address = state.geocode.data.properties.street_address;
+
+            let feature = state.activeModalFeature;
+            let address;
+
+
+            if (['geocode', 'reverseGeocode', 'owner search'].includes(state.lastSearchMethod)) {
+              address = feature.properties.street_address;
+            } else {
+              address = feature.address_std;
+            }
+
+            let addressEncoded = encodeURIComponent(address);
+            return '//www.phila.gov/revenue/realestatetax/#/' + addressEncoded + '//property';
+          }
+        }
       }
     },
 
