@@ -47,7 +47,7 @@
           </div>
           </h1>
           <div class="address-header-line-2">
-            PHILADELPHIA, PA
+            {{ headerLineTwo }}
           </div>
         </div>
       </div>
@@ -143,6 +143,16 @@ export default {
         address = feature.address_std;
       }
       return address;
+    },
+    headerLineTwo() {
+      let feature = this.activeModalFeature;
+      let zip;
+      if (['geocode', 'reverseGeocode', 'owner search'].includes(this.lastSearchMethod)) {
+        zip = feature.properties.zip_code + '-' + feature.properties.zip_4;
+      } else {
+        zip = feature.zip_code.substring(0,5) + '-' + feature.zip_code.substring(5,10);
+      }
+      return 'PHILADELPHIA, PA ' + zip;
     },
 
     // zipCode() {
@@ -326,18 +336,13 @@ export default {
           },
           name: '',
           href: function(state) {
-            // var address = state.geocode.data.properties.street_address;
-
             let feature = state.activeModalFeature;
             let address;
-
-
             if (['geocode', 'reverseGeocode', 'owner search'].includes(state.lastSearchMethod)) {
               address = feature.properties.street_address;
             } else {
               address = feature.address_std;
             }
-
             let addressEncoded = encodeURIComponent(address);
             return '//www.phila.gov/revenue/realestatetax/#/' + addressEncoded + '//property';
           }
