@@ -156,18 +156,18 @@ export default {
     },
 
     // zipCode() {
-    //   const state = this.$store.state
+      //   const state = this.$store.state
     //   // let address =  function() {
-    //     if (state.geocode.status === "success"){
-    //       return titleCase(state.geocode.data.properties.street_address);
+      //     if (state.geocode.status === "success"){
+        //       return titleCase(state.geocode.data.properties.street_address);
     //     } else if (state.lastSearchMethod === "owner search") {
-    //       let result = state.ownerSearch.data.filter(object => {
-    //         return object._featureId === state.activeModal.featureId
+      //       let result = state.ownerSearch.data.filter(object => {
+        //         return object._featureId === state.activeModal.featureId
     //       });
     //       return titleCase(result[0].properties.street_address)
     //     } else {
-    //       let result = state.shapeSearch.data.rows.filter(object => {
-    //         return object._featureId === state.activeModal.featureId
+      //       let result = state.shapeSearch.data.rows.filter(object => {
+        //         return object._featureId === state.activeModal.featureId
     //       });
     //       return titleCase(result[0].location)
     //     }
@@ -203,6 +203,143 @@ export default {
         title: 'Property Details',
         fields: [
           {
+            label: 'Year Built',
+            value: opaPublicData.year_built + (opaPublicData.year_built_estimate ? ' (estimated)' : '')
+          },
+          {
+            label: 'Building Description',
+            value: opaPublicData.building_code_description,
+          },
+          {
+            label: 'Building Condition',
+            value: findConditionCode(opaPublicData.exterior_condition),
+          },
+          {
+            label: 'Number of Stories',
+            value: opaPublicData.number_stories.toString().length > 0 ?
+                   opaPublicData.number_stories === 0 ?
+                   opaPublicData.unit != null ? "Not Available" :
+                   opaPublicData.total_livable_area > 0 ? 'Not Available':
+                   'None' :
+                   opaPublicData.number_stories === 1 ? '1 story' :
+                  (opaPublicData.number_stories + ' stories') : '',
+          },
+          {
+            label: 'Number of Rooms',
+            value: function(state) {
+              let room = opaPublicData.number_of_rooms === 1 ? ' room ' : ' rooms '
+              let bedroom = opaPublicData.number_of_bedrooms === 1 ? opaPublicData.number_of_bedrooms +' bedroom ' : opaPublicData.number_of_bedrooms + ' bedrooms '
+              let bathroom = opaPublicData.number_of_bathrooms === 1 ? opaPublicData.number_of_bathrooms + ' bathroom ' : opaPublicData.number_of_bathrooms + ' bathrooms '
+              let total =  opaPublicData.number_of_rooms === 0 ? opaPublicData.total_livable_area > 0 ? 'Not Available':'None' :
+                           'Total of ' + opaPublicData.number_of_rooms + room + '('+ bedroom + ', ' + bathroom + ')';
+              total = opaPublicData.number_of_rooms === 0 && opaPublicData.unit != null ? "Not Available" : total
+              return total
+            },
+          },
+          {
+            label: 'Features',
+            value: function(state) {
+              let heat, basements, garages;
+              let features = []
+
+               switch (opaPublicData.fuel) {
+                case 'A' :
+                heat = 'Natural gas heating';
+                break;
+                case 'B' :
+                heat = 'Oil fuel heating'
+                break;
+                case 'C' :
+                heat = 'Electric heating'
+                break;
+                case 'D' :
+                heat = 'Coal heating'
+                case 'E' :
+                break;
+                heat = 'Solar heating'
+                case 'F' :
+                break;
+                heat = 'Woodstove heating'
+                break;
+                case 'G' :
+                heat = 'Heating source n/a'
+                break;
+                case 'H' :
+                heat = 'Heating source n/a'
+                break;
+                case null :
+                heat = 'Heating source n/a'
+                break;
+              }
+
+              switch (opaPublicData.basements) {
+                case '0' :
+                  basements= 'No basement';
+                  break;
+                case 'A':
+                  basements = 'Full Finished basement';
+                  break;
+                case 'B':
+                  basements = 'Full Semi-finished basement';
+                  break;
+                case 'C':
+                  basements = 'Full Unfinished basement';
+                  break;
+                case 'D':
+                  basements = 'Full basement';
+                  break;
+                case 'E':
+                  basements = 'Finished partial basement';
+                  break;
+                case 'F':
+                  basements = 'Semi-finished partial basement';
+                  break;
+                case 'G':
+                  basements = 'Unfinished partial basement';
+                  break;
+                case 'H':
+                  basements = 'Partial basement';
+                  break;
+                case 'I':
+                  basements = 'Finished basement';
+                  break;
+                case 'J':
+                  basements = 'Unfinished basement';
+                  break;
+              }
+
+            switch (opaPublicData.garage_type) {
+              case null :
+                garages = 'No garage';
+                break;
+              case '0' :
+                garages = 'No garage';
+                break;
+              case 'A':
+                garages = 'Basement/Built in garage';
+                break;
+              case 'B':
+                garages = 'Attached garage';
+                break;
+              case 'C':
+                garages = 'Detached garage';
+                break;
+              case 'F':
+                garages = 'Converted garage';
+                break;
+              case 'S':
+                garages = 'Self-park garage';
+                break;
+              case 'T':
+                garages = 'Attendant parking';
+                break;
+            }
+
+              features.push(heat, basements, garages)
+              return features.join('<br>')
+            },
+          },
+          {
             label: 'OPA Account #',
             value: this.activeOpaId,
           },
@@ -212,14 +349,6 @@ export default {
               return opaPublicData.homestead_exemption;
             },
             transforms: ['currency'],
-          },
-          {
-            label: 'Building Description',
-            value: opaPublicData.building_code_description,
-          },
-          {
-            label: 'Building Condition',
-            value: findConditionCode(opaPublicData.exterior_condition),
           },
           {
             label: 'Land Area (SqFt)',
@@ -269,6 +398,7 @@ export default {
         ],
       }
     },
+
 
     valuationHistoryHorizontalTableOptions() {
       return {
