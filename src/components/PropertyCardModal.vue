@@ -55,6 +55,14 @@
       <!-- main callout -->
       <callout :slots="this.mainCalloutSlots" />
 
+            <!-- owner and address horizontal table -->
+      <horizontal-table
+        :slots="{
+          items: this.opaPublicData
+        }"
+        :options="this.ownerAddressTableOptions"
+      />
+
       <!-- sale vertical table -->
       <vertical-table :slots="this.saleVerticalTableSlots" />
 
@@ -102,6 +110,8 @@ let findConditionCode = function(exterior) {
 }
 
 import helpers from '../util/helpers';
+import transforms from '../general/transforms';
+const titleCase = transforms.titleCase.transform;
 
 export default {
   name: 'Property-Card-Modal',
@@ -194,6 +204,12 @@ export default {
         </small> \
         ',
       }
+    },
+    opaPublicData() {
+      let opaData =  []
+      opaData.push(this.$store.state.sources.opa_public.targets[this.activeOpaId].data)
+      // console.log(opaData)
+      return opaData ;
     },
     propertyDetailsVerticalTableSlots() {
       // console.log('PropertyCardModal activeFeatureId computed is running')
@@ -409,13 +425,33 @@ export default {
           {
             label: 'Zoning',
             value: function(state) {
-              console.log(opaPublicData.zoning, helpers['ZONING_CODE_MAP'])
-              return opaPublicData.zoning + '-' + helpers['ZONING_CODE_MAP']["'"+opaPublicData.zoning+"'"]
+               return opaPublicData.zoning + '-' + helpers.ZONING_CODE_MAP[opaPublicData.zoning.trim()]
             }
           },
+          // {
+          //   label: 'Flood Zone',
+          //   value: function(state) {
+          //      return 'Likely / Not likely / Unclear'
+          //   }
+          // },
+          // {
+          //   label: 'Steep Slope',
+          //   value: function(state) {
+          //      return 'Likely / Not likely / Unclear'
+          //   }
+          // },
           {
             label: 'OPA Account #',
             value: this.activeOpaId,
+          },
+          {
+            label: 'OPA Address',
+            value: this.activeOpaId,
+          },
+          {
+            label: 'Most Recent Assessment Date',
+            value: this.assessment_date,
+            transforms: ['date'],
           },
           {
             label: 'Homestead Exemption',
@@ -459,6 +495,49 @@ export default {
       }
     },
 
+
+    ownerAddressTableOptions() {
+      let state = this.$store.state;
+      let opaPublicData = this.$store.state.sources.opa_public.targets[this.activeOpaId].data;
+      return {
+        id: 'ownerProperties',
+        tableid: 'ddd',
+        // dataSources: ['opa'],
+        mapOverlay: {},
+        mouseOverDisabled: true,
+        downloadButton: false,
+        customClass: {
+          table: 'owner',
+          td: function(field) {
+            let classType = field === 'Owner' ? 'big_owner':
+                            field === 'Address' ? 'small_address': ''
+            return classType
+          }
+        },
+        fields: [
+          {
+            label: 'Owner',
+            value: function(state, item) {
+              let owner;
+              owner = item.owner_2 != null ?
+                      titleCase(item.owner_1.trim()) + "\n" + titleCase(item.owner_2.trim()):
+                      titleCase(item.owner_1.trim())
+              return owner
+            },
+          },
+          {
+            label: 'Address',
+            value: function(state, item) {
+              let mailingAddress = [];
+              let addressFields = ['mailing_address_1', 'mailing_address_2', 'mailing_care_of', 'mailing_street',  'mailing_city_state', 'mailing_zip'];
+              addressFields.map( a => item[a] != null ? a === 'mailing_city_state' ?
+              mailingAddress.push(titleCase(item[a])) : mailingAddress.push(titleCase( (item[a])) + '<br>') :'')
+              return mailingAddress.join('')
+            },
+          },
+        ]
+      }
+    },
 
     valuationHistoryHorizontalTableOptions() {
       return {
@@ -611,6 +690,13 @@ export default {
 
 <style >
 
+
+.owner th, .owner tr {
+  background: white !important;
+  color: black;
+}
+
+
 @media print {
 
   * {
@@ -699,7 +785,6 @@ export default {
 
 </style>
 <style scoped>
-
 
 @media print {
 
