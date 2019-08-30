@@ -508,11 +508,13 @@ export default {
         downloadButton: false,
         customClass: {
           table: 'owner',
-          td: function(field) {
-            let classType = field === 'Owner' ? 'big_owner':
-                            field === 'Address' ? 'small_address': ''
-            return classType
-          }
+          td: 'testClass',
+          // td: function(field) {
+          //   console.log(field)
+          //   let classType = field.value === 'Owner' ? 'big_owner':
+          //                   field.value === 'Address' ? 'small_address': ''
+          //   return classType
+          // }
         },
         fields: [
           {
@@ -524,9 +526,10 @@ export default {
                       titleCase(item.owner_1.trim())
               return owner
             },
+            customClass: 'big_owner'
           },
           {
-            label: 'Address',
+            label: 'Mailing Address',
             value: function(state, item) {
               let mailingAddress = [];
               let addressFields = ['mailing_address_1', 'mailing_address_2', 'mailing_care_of', 'mailing_street',  'mailing_city_state', 'mailing_zip'];
@@ -534,6 +537,7 @@ export default {
               mailingAddress.push(titleCase(item[a])) : mailingAddress.push(titleCase( (item[a])) + '<br>') :'')
               return mailingAddress.join('')
             },
+            customClass: 'small_address'
           },
         ]
       }
@@ -690,14 +694,33 @@ export default {
 
 <style >
 
+@media (min-width: 750px) {
+  .big_owner {
+    font-size: 32px !important;
+    font-weight: 100 !important;
+    font-family: "Montserrat", sans-serif;
+  }
 
-.owner th, .owner tr {
-  background: white !important;
-  color: black;
+  .small_address {
+    font-size: 12px !important;
+    font-weight: 100 !important;
+    padding: none;
+    font-family: "Montserrat", sans-serif;
+  }
+
 }
+
+  .owner th, .owner tr {
+    background: white !important;
+    color: black;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
 
 
 @media print {
+
 
   * {
     background: none !important;
@@ -754,10 +777,28 @@ export default {
     border-style: none !important;
   }
 
+  .pvc-horizontal-table table tr:nth-child(odd) td.big_owner,
+  .pvc-horizontal-table table tr:nth-child(odd) td.small_address {
+    background: none !important;
+  }
+  .pvc-horizontal-table table tr:nth-child(odd) td.big_owner {
+    font-size: 32px !important;
+    font-weight: 100 !important;
+    font-family: "Montserrat", sans-serif;
+  }
+
+  .pvc-horizontal-table table tr:nth-child(odd) td.small_address {
+    font-size: 12px !important;
+    font-weight: 100 !important;
+    font-family: "Montserrat", sans-serif;
+    min-width: 145px;
+  }
+
   .pvc-horizontal-table table tr:nth-child(odd) td {
     background: #eee !important;
     -webkit-print-color-adjust: exact;
   }
+
 
   .pvc-horizontal-table-body, .table-container {
     page-break-inside: avoid !important;
@@ -787,6 +828,7 @@ export default {
 <style scoped>
 
 @media print {
+
 
   @page {
     size:8.5in 11in;
