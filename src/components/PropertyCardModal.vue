@@ -92,6 +92,9 @@
       <!-- property details vertical table -->
       <vertical-table :slots="this.propertyDetailsVerticalTableSlots" />
 
+      <callout :slots="this.inquiryCalloutSlots" />
+      <callout :slots="this.metadataCalloutSlots" />
+
     </div>
   </div>
 </template>
@@ -191,6 +194,26 @@ export default {
       return {
         text: '\
         Property assessment and sale information for this address. Source: Office of Property Assessments (OPA). OPA was formerly a part of the Bureau of Revision of Taxes (BRT) and some City records may still use that name.\
+        ',
+      }
+    },
+    inquiryCalloutSlots() {
+       let opaPublicData = this.$store.state.sources.opa_public.targets[this.activeOpaId].data;
+       let searchId =  opaPublicData.street_code + opaPublicData.house_number + (opaPublicData.unit != null ?  opaPublicData.unit : '') ;
+      return {
+        text: '\
+        Corrections to or questions about this property? <br>\
+        <a target="_blank" \
+          href="http://opa.phila.gov/opa.apps/Help/CitizenMain.aspx?sch=Ctrl2&s=1&url=search&id='+ searchId + ' ">\
+          <b>Submit an Official Inquiry</b></a> to the Office of Property Assessment.\
+        ',
+      }
+    },
+    metadataCalloutSlots() {
+      return {
+        text: '\
+        You can download the property assessment dataset in bulk, and get more information about this data at\
+        <a href="http://www.metadata.phila.gov"><b>metadata.phila.gov</b></a>\
         ',
       }
     },
@@ -446,7 +469,7 @@ export default {
           },
           {
             label: 'OPA Address',
-            value: this.activeOpaId,
+            value: titleCase(this.activeAddress),
           },
           {
             label: 'Most Recent Assessment Date',
@@ -522,7 +545,7 @@ export default {
             value: function(state, item) {
               let owner;
               owner = item.owner_2 != null ?
-                      titleCase(item.owner_1.trim()) + "\n" + titleCase(item.owner_2.trim()):
+                      titleCase(item.owner_1.trim()) + "<br>" + titleCase(item.owner_2.trim()):
                       titleCase(item.owner_1.trim())
               return owner
             },
@@ -534,9 +557,18 @@ export default {
               let mailingAddress = [];
               let addressFields = ['mailing_address_1', 'mailing_address_2', 'mailing_care_of', 'mailing_street',  'mailing_city_state', 'mailing_zip'];
               addressFields.map( a => item[a] != null ? a === 'mailing_city_state' ?
-              mailingAddress.push(titleCase(item[a])) : mailingAddress.push(titleCase( (item[a])) + '<br>') :'')
-              return mailingAddress.join('')
-            },
+              mailingAddress.push(titleCase(item[a]) + ' <br>' ) : mailingAddress.push(titleCase( (item[a])) + ' <br>') :'')
+              // console.log('mailingAddress', mailingAddress, item)
+
+              if(mailingAddress.length > 0 ) {
+                return mailingAddress.join('')
+              } else {
+                // console.log('activeAddress', this.activeAddress, item)
+                let zip = item.zip_code.substring(0,5) + '-' + item.zip_code.substring(5,10);
+                mailingAddress.push(titleCase( this.activeAddress), 'Philadelphia, PA', zip)
+                return mailingAddress.join('<br>')
+              }
+            }.bind(this),
             customClass: 'small_address'
           },
         ]
