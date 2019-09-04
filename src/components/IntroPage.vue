@@ -9,19 +9,19 @@
     <div>
       Search for one or more properties to
       <ul class="padded-list">
-        <li>Get the history of permits, licenses, and inspections at any address</li>
-        <li>Research real estate information including property values, zoning, and document archives</li>
-        <li>Get easy access to a variety of hard-to-find City resources</li>
-        <li>View recent activity around your address, such as crimes, 311 service requests, and more</li>
-        <li>Explore historical imagery and maps</li>
+        <li>Get information about property ownership, value, and physical characteristics.</li>
+        <li>Look up the history of sales and assessments for a property.</li>
+        <li>Quickly compare properties on a block or within a nearby area.</li>
+        <li>Generate address listings near a property or within an area of interest.</li>
+        <li> Find properties anywhere in the city owned by an individual or company.</li>
       </ul>
     </div>
     <div>
       To get started, you can
       <ul class="padded-list">
-        <li>Click anywhere on the map</li>
-        <li>Use <i class="fas fa-circle"></i> to search near a property or <i class="fas fa-hexagon"></i> to draw an area</li>
-        <li>Type an address, property account number, or Department of Records Map Registry number into the search box</li>
+        <li>Click anywhere on the map.</li>
+        <li>Use <i class="fas fa-circle"></i> to search near a property or <i class="fas fa-hexagon"></i> to draw an area.</li>
+        <li>Type an address, owner name, property account number, or Department of Records Map Registry number into the search box.</li>
       </ul>
     </div>
   </div>
