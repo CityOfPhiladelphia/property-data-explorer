@@ -439,7 +439,7 @@ export default {
           },
           {
             label: 'Frontage',
-            value: opaPublicData.frontage.toFixed(2) + ' ft'
+            value: opaPublicData.frontage.toFixed(0) + ' ft'
           },
           {
             label: 'Beginning Point',
@@ -448,8 +448,10 @@ export default {
           {
             label: 'Zoning',
             value: function(state) {
-               return opaPublicData.zoning + '-' + helpers.ZONING_CODE_MAP[opaPublicData.zoning.trim()]
-            }
+               return '<a target="_blank" \
+                        href="https://atlas.phila.gov/#/'+ this.activeAddress + '/zoning ">\
+                       <b>' + opaPublicData.zoning + '-' + helpers.ZONING_CODE_MAP[opaPublicData.zoning.trim()] + '</b></a>'
+            }.bind(this)
           },
           // {
           //   label: 'Flood Zone',
@@ -473,7 +475,7 @@ export default {
           },
           {
             label: 'Most Recent Assessment Date',
-            value: this.assessment_date,
+            value: opaPublicData.assessment_date != null  ? opaPublicData.assessment_date : 'Date not available',
             transforms: ['date'],
           },
           {
@@ -545,8 +547,8 @@ export default {
             value: function(state, item) {
               let owner;
               owner = item.owner_2 != null ?
-                      titleCase(item.owner_1.trim()) + "<br>" + titleCase(item.owner_2.trim()):
-                      titleCase(item.owner_1.trim())
+                      item.owner_1.trim() + "<br>" + item.owner_2.trim():
+                      item.owner_1.trim()
               return owner
             },
             customClass: 'big_owner'
@@ -727,17 +729,20 @@ export default {
 <style >
 
 @media (min-width: 750px) {
-  .big_owner {
+  td.big_owner {
     font-size: 32px !important;
     font-weight: 100 !important;
     font-family: "Montserrat", sans-serif;
+    vertical-align: top !important;
+    padding-top: 0 !important;
   }
 
-  .small_address {
+  td.small_address {
     font-size: 12px !important;
     font-weight: 100 !important;
-    padding: none;
     font-family: "Montserrat", sans-serif;
+    vertical-align: top !important;
+    padding-top: 0 !important;
   }
 
 }

@@ -32,7 +32,11 @@ export default {
   },
   date: {
     transform: function (value, globals) {
-      return format(value, 'MM/DD/YYYY');
+      if (format(value, 'MM/DD/YYYY') === 'Invalid Date' ) {
+        return value
+      } else {
+        return format(value, 'MM/DD/YYYY');
+      }
     },
   },
   dayofweek: {
