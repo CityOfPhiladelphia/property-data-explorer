@@ -213,7 +213,7 @@ export default {
       return {
         text: '\
         You can download the property assessment dataset in bulk, and get more information about this data at\
-        <a href="http://www.metadata.phila.gov"><b>metadata.phila.gov</b></a>\
+        <a href="https://metadata.phila.gov"><b>metadata.phila.gov</b></a>\
         ',
       }
     },
@@ -439,7 +439,7 @@ export default {
           },
           {
             label: 'Frontage',
-            value: opaPublicData.frontage + ' ft'
+            value: opaPublicData.frontage.toFixed(2) + ' ft'
           },
           {
             label: 'Beginning Point',
