@@ -205,7 +205,7 @@ export default {
         Corrections to or questions about this property? <br>\
         <a target="_blank" \
           href="http://opa.phila.gov/opa.apps/Help/CitizenMain.aspx?sch=Ctrl2&s=1&url=search&id='+ searchId + ' ">\
-          <b>Submit an Official Inquiry</b></a> to the Office of Property Assessment.\
+          <b>Submit an Official Inquiry</b>  </b><i class="fa fa-external-link-alt"></i></a></a> to the Office of Property Assessment.\
         ',
       }
     },
@@ -213,7 +213,8 @@ export default {
       return {
         text: '\
         You can download the property assessment dataset in bulk, and get more information about this data at\
-        <a href="https://metadata.phila.gov"><b>metadata.phila.gov</b></a>\
+        <a target="_blank" \
+           href="https://metadata.phila.gov"><b>metadata.phila.gov </b><i class="fa fa-external-link-alt"></i></a>\
         ',
       }
     },
@@ -450,7 +451,9 @@ export default {
             value: function(state) {
                return '<a target="_blank" \
                         href="https://atlas.phila.gov/#/'+ this.activeAddress + '/zoning ">\
-                       <b>' + opaPublicData.zoning + '-' + helpers.ZONING_CODE_MAP[opaPublicData.zoning.trim()] + '</b></a>'
+                       <b>' + opaPublicData.zoning + '-' + helpers.ZONING_CODE_MAP[opaPublicData.zoning.trim()] + '</b>\
+                       </b> <i class="fa fa-external-link-alt"></i></a>\
+                       </a>'
             }.bind(this)
           },
           // {
