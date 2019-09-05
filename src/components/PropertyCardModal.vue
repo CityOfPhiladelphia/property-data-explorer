@@ -246,7 +246,11 @@ export default {
         fields: [
           {
             label: 'Year Built',
-            value: opaPublicData.year_built + (opaPublicData.year_built_estimate ? ' (estimated)' : '')
+            value: function() {
+              return opaPublicData.year_built === '0000'? 'Not Available' :
+                     opaPublicData.year_built === null? 'Not Available' :
+                     opaPublicData.year_built + (opaPublicData.year_built_estimate ? ' (estimated)' : '')
+              }.bind(this)
           },
           {
             label: 'Building Description',
@@ -258,9 +262,9 @@ export default {
           },
           {
             label: 'Number of Stories',
-            value: opaPublicData.number_stories.toString().length > 0 ?
+            value: opaPublicData.unit === null ? "Not Available" :
+                   opaPublicData.number_stories.toString().length > 0 ?
                    opaPublicData.number_stories === 0 ?
-                   opaPublicData.unit != null ? "Not Available" :
                    opaPublicData.total_livable_area > 0 ? 'Not Available':
                    'None' :
                    opaPublicData.number_stories === 1 ? '1 story' :
@@ -433,14 +437,16 @@ export default {
           },
           {
             label: 'Improvement Area',
-            value: opaPublicData.total_livable_area
+            value: opaPublicData.total_livable_area === null ? 'Not Available ' :
+              opaPublicData.total_livable_area
               .toLocaleString('en-US', {
                 minimumFractionDigits: 0
               }) + ' sq ft'
           },
           {
             label: 'Frontage',
-            value: opaPublicData.frontage.toFixed(0) + ' ft'
+            value: opaPublicData.frontage === null ? 'Not Available ' :
+                   opaPublicData.frontage.toFixed(0) + ' ft'
           },
           {
             label: 'Beginning Point',
@@ -478,7 +484,7 @@ export default {
           },
           {
             label: 'Most Recent Assessment Date',
-            value: opaPublicData.assessment_date != null  ? opaPublicData.assessment_date : 'Date not available',
+            value: opaPublicData.assessment_date != null  ? opaPublicData.assessment_date : 'Date Not Available',
             transforms: ['date'],
           },
           {
