@@ -274,6 +274,7 @@ export default {
             label: 'Number of Rooms',
             value: function(state) {
               let room = opaPublicData.number_of_rooms === 1 ? ' room ' : ' rooms '
+
               let bedroom =   opaPublicData.number_of_bedrooms === 0 | opaPublicData.number_of_bedrooms === null  ? '' :
                               opaPublicData.number_of_bedrooms === 1 ? '(' + opaPublicData.number_of_bedrooms +' bedroom' : '(' + opaPublicData.number_of_bedrooms + ' bedrooms'
 
@@ -285,11 +286,14 @@ export default {
                               opaPublicData.number_of_bedrooms === 0 | opaPublicData.number_of_bedrooms === null  ? '' : ')' :
                               opaPublicData.number_of_bathrooms === 1 ? BrBaCheck  + opaPublicData.number_of_bathrooms + ' bathroom)' :
                               BrBaCheck  + opaPublicData.number_of_bathrooms + ' bathrooms)'
+
               let total =  opaPublicData.number_of_rooms === 0 ? opaPublicData.total_livable_area > 0 ? 'Not Available':'None' :
                            'Total of ' + opaPublicData.number_of_rooms + room + bedroom + bathroom ;
+
               total = opaPublicData.number_of_rooms === 0 && opaPublicData.unit != null ? "Not Available" :
                       opaPublicData.number_of_rooms === null ? "Not Available" :
                       total
+
               return total
             },
           },
@@ -372,15 +376,16 @@ export default {
               }
 
 
-              buildings = opaPublicData.other_building === 'Y' ? 'Additional building(s) on site' :
-                                                                 'No additional buildings on site'
+              // buildings = opaPublicData.other_building === 'Y' ? 'Additional building(s) on site' :
+              //                                                    'No additional buildings on site'
 
               garages = opaPublicData.garage_spaces === 1 ?
                         garages + ' (' + opaPublicData.garage_spaces + ' space)' :
                         opaPublicData.garage_spaces === 0 | opaPublicData.garage_spaces === null ? garages :
                         garages + ' (' + opaPublicData.garage_spaces + ' spaces)'
 
-              features.push(basements, fireplaces, garages, buildings, view)
+              // features.push(basements, fireplaces, garages, buildings, view)
+              features.push(basements, fireplaces, garages, view)
               return features.join('<br>')
 
             },
