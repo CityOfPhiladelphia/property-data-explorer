@@ -47,13 +47,21 @@
           </div>
           </h1>
           <div class="address-header-line-2">
-            PHILADELPHIA, PA
+            {{ headerLineTwo }}
           </div>
         </div>
       </div>
 
       <!-- main callout -->
       <callout :slots="this.mainCalloutSlots" />
+
+            <!-- owner and address horizontal table -->
+      <horizontal-table
+        :slots="{
+          items: this.opaPublicData
+        }"
+        :options="this.ownerAddressTableOptions"
+      />
 
       <!-- sale vertical table -->
       <vertical-table :slots="this.saleVerticalTableSlots" />
@@ -84,6 +92,9 @@
       <!-- property details vertical table -->
       <vertical-table :slots="this.propertyDetailsVerticalTableSlots" />
 
+      <callout :slots="this.inquiryCalloutSlots" />
+      <callout :slots="this.metadataCalloutSlots" />
+
     </div>
   </div>
 </template>
@@ -100,6 +111,10 @@ let findConditionCode = function(exterior) {
                     'Not available';
   return condition
 }
+
+import helpers from '../util/helpers';
+import transforms from '../general/transforms';
+const titleCase = transforms.titleCase.transform;
 
 export default {
   name: 'Property-Card-Modal',
@@ -144,20 +159,30 @@ export default {
       }
       return address;
     },
+    headerLineTwo() {
+      let feature = this.activeModalFeature;
+      let zip;
+      if (['geocode', 'reverseGeocode', 'owner search'].includes(this.lastSearchMethod)) {
+        zip = feature.properties.zip_code + '-' + feature.properties.zip_4;
+      } else {
+        zip = feature.zip_code.substring(0,5) + '-' + feature.zip_code.substring(5,10);
+      }
+      return 'PHILADELPHIA, PA ' + zip;
+    },
 
     // zipCode() {
-    //   const state = this.$store.state
+      //   const state = this.$store.state
     //   // let address =  function() {
-    //     if (state.geocode.status === "success"){
-    //       return titleCase(state.geocode.data.properties.street_address);
+      //     if (state.geocode.status === "success"){
+        //       return titleCase(state.geocode.data.properties.street_address);
     //     } else if (state.lastSearchMethod === "owner search") {
-    //       let result = state.ownerSearch.data.filter(object => {
-    //         return object._featureId === state.activeModal.featureId
+      //       let result = state.ownerSearch.data.filter(object => {
+        //         return object._featureId === state.activeModal.featureId
     //       });
     //       return titleCase(result[0].properties.street_address)
     //     } else {
-    //       let result = state.shapeSearch.data.rows.filter(object => {
-    //         return object._featureId === state.activeModal.featureId
+      //       let result = state.shapeSearch.data.rows.filter(object => {
+        //         return object._featureId === state.activeModal.featureId
     //       });
     //       return titleCase(result[0].location)
     //     }
@@ -172,6 +197,26 @@ export default {
         ',
       }
     },
+    inquiryCalloutSlots() {
+       let opaPublicData = this.$store.state.sources.opa_public.targets[this.activeOpaId].data;
+       let searchId =  opaPublicData.street_code + opaPublicData.house_number + (opaPublicData.unit != null ?  opaPublicData.unit : '') ;
+      return {
+        text: '\
+        Corrections to or questions about this property? <br>\
+        <a target="_blank" \
+          href="http://opa.phila.gov/opa.apps/Help/CitizenMain.aspx?sch=Ctrl2&s=1&url=search&id='+ searchId + ' ">\
+          <b>Submit an Official Inquiry</b></a> to the Office of Property Assessment.\
+        ',
+      }
+    },
+    metadataCalloutSlots() {
+      return {
+        text: '\
+        You can download the property assessment dataset in bulk, and get more information about this data at\
+        <a href="https://metadata.phila.gov"><b>metadata.phila.gov</b></a>\
+        ',
+      }
+    },
     propValueCalloutSlots() {
       return {
         text: '\
@@ -183,8 +228,14 @@ export default {
         ',
       }
     },
+    opaPublicData() {
+      let opaData =  []
+      opaData.push(this.$store.state.sources.opa_public.targets[this.activeOpaId].data)
+      // console.log(opaData)
+      return opaData ;
+    },
     propertyDetailsVerticalTableSlots() {
-      console.log('PropertyCardModal activeFeatureId computed is running')
+      // console.log('PropertyCardModal activeFeatureId computed is running')
       let state = this.$store.state;
       let opaPublicData = state.sources.opa_public.targets[this.activeOpaId].data;
       return {
@@ -193,15 +244,8 @@ export default {
         title: 'Property Details',
         fields: [
           {
-            label: 'OPA Account #',
-            value: this.activeOpaId,
-          },
-          {
-            label: 'Homestead Exemption',
-            value: function(state) {
-              return opaPublicData.homestead_exemption;
-            },
-            transforms: ['currency'],
+            label: 'Year Built',
+            value: opaPublicData.year_built + (opaPublicData.year_built_estimate ? ' (estimated)' : '')
           },
           {
             label: 'Building Description',
@@ -212,18 +256,234 @@ export default {
             value: findConditionCode(opaPublicData.exterior_condition),
           },
           {
-            label: 'Land Area (SqFt)',
+            label: 'Number of Stories',
+            value: opaPublicData.number_stories.toString().length > 0 ?
+                   opaPublicData.number_stories === 0 ?
+                   opaPublicData.unit != null ? "Not Available" :
+                   opaPublicData.total_livable_area > 0 ? 'Not Available':
+                   'None' :
+                   opaPublicData.number_stories === 1 ? '1 story' :
+                  (opaPublicData.number_stories + ' stories') : '',
+          },
+          {
+            label: 'Number of Rooms',
+            value: function(state) {
+              let room = opaPublicData.number_of_rooms === 1 ? ' room ' : ' rooms '
+              let bedroom = opaPublicData.number_of_bedrooms === 1 ? opaPublicData.number_of_bedrooms +' bedroom ' : opaPublicData.number_of_bedrooms + ' bedrooms '
+              let bathroom = opaPublicData.number_of_bathrooms === 1 ? opaPublicData.number_of_bathrooms + ' bathroom ' : opaPublicData.number_of_bathrooms + ' bathrooms '
+              let total =  opaPublicData.number_of_rooms === 0 ? opaPublicData.total_livable_area > 0 ? 'Not Available':'None' :
+                           'Total of ' + opaPublicData.number_of_rooms + room + '('+ bedroom + ', ' + bathroom + ')';
+              total = opaPublicData.number_of_rooms === 0 && opaPublicData.unit != null ? "Not Available" : total
+              return total
+            },
+          },
+          {
+            label: 'Features',
+            value: function(state) {
+              let basements, fireplaces, garages, buildings, view;
+              let features = []
+
+              switch (opaPublicData.basements) {
+                case null: basements= 'No basement';
+                  break;
+                case '0': basements= 'No basement';
+                  break;
+                case 'A': basements = 'Full Finished basement';
+                  break;
+                case 'B': basements = 'Full Semi-finished basement';
+                  break;
+                case 'C': basements = 'Full Unfinished basement';
+                  break;
+                case 'D': basements = 'Full basement';
+                  break;
+                case 'E': basements = 'Finished partial basement';
+                  break;
+                case 'F': basements = 'Semi-finished partial basement';
+                  break;
+                case 'G': basements = 'Unfinished partial basement';
+                  break;
+                case 'H': basements = 'Partial basement';
+                  break;
+                case 'I': basements = 'Finished basement';
+                  break;
+                case 'J': basements = 'Unfinished basement';
+                  break;
+              }
+
+              fireplaces = opaPublicData.fireplaces === 1 ?
+                        opaPublicData.fireplaces + ' fireplace' :
+                        opaPublicData.fireplaces === 0 | opaPublicData.fireplaces === null ? 'No fireplace' :
+                        opaPublicData.fireplaces + ' fireplaces '
+
+              switch (opaPublicData.garage_type) {
+                case null : garages = 'No garage';
+                  break;
+                case '0' : garages = 'No garage';
+                  break;
+                case 'A': garages = 'Basement/Built in garage';
+                  break;
+                case 'B': garages = 'Attached garage';
+                  break;
+                case 'C': garages = 'Detached garage';
+                  break;
+                case 'F': garages = 'Converted garage';
+                  break;
+                case 'S': garages = 'Self-park garage';
+                  break;
+                case 'T': garages = 'Attendant parking';
+                  break;
+              }
+
+              switch (opaPublicData.view_type) {
+                case '0': view = '';
+                 break;
+                case 'A': view = 'View of cityscape/skyline';
+                 break;
+                case 'B': view = 'View of river/creek';
+                 break;
+                case 'C': view = 'View of park/green area';
+                 break;
+                case 'D': view = 'View of commercial area';
+                 break;
+                case 'E': view = 'View of industrial area';
+                 break;
+                case 'H': view = 'View of historic edifice or landmark';
+                 break;
+                case 'I': view = '';
+                 break;
+                case null : view = '';
+                 break;
+              }
+
+
+              buildings = opaPublicData.other_building === 'Y' ? 'Additional building(s) on site' :
+                                                                 'No additional buildings on site'
+
+              garages = opaPublicData.garage_spaces === 1 ?
+                        garages + ' (' + opaPublicData.garage_spaces + ' space)' :
+                        opaPublicData.garage_spaces === 0 | opaPublicData.garage_spaces === null ? garages :
+                        garages + ' (' + opaPublicData.garage_spaces + ' spaces)'
+
+              features.push(basements, fireplaces, garages, buildings, view)
+              return features.join('<br>')
+
+            },
+          },
+          {
+            label: 'Heating and Utilities',
+            value: function(state) {
+              let heat = []
+
+              switch (opaPublicData.fuel) {
+                case 'A' : heat.push('Natural gas heating');
+                  break;
+                case 'B' : heat.push('Oil fuel heating');
+                  break;
+                case 'C' : heat.push('Electric heating');
+                  break;
+                case 'D' : heat.push('Coal heating');
+                  break;
+                case 'E' : heat.push('Solar heating');
+                  break;
+                case 'F' : heat.push('Woodstove heating');
+                  break;
+                case 'G' : heat.push('Heating source n/a');
+                  break;
+                case 'H' : heat.push('Heating source n/a');
+                  break;
+                case null : heat.push('Heating source n/a');
+                  break;
+              }
+
+              switch (opaPublicData.type_heater) {
+                case 'A' : heat.push('Duct (heated air) heaters');
+                  break;
+                case 'B' : heat.push('Radiator/baseboard (heated water) heaters');
+                  break;
+                case 'C' : heat.push('Baseboard (electric) heaters');
+                  break;
+                case 'D' : heat.push('Heater type n/a');
+                  break;
+                case 'E' : heat.push('Heater type n/a');
+                  break;
+                case 'F' : heat.push('Woodstove heating');
+                  break;
+                case 'G' : heat.push('Radiant heaters');
+                  break;
+                case 'H' : heat.push('Heater type n/a');
+                  break;
+                case null : heat.push('Heater type n/a');
+                  break;
+              }
+
+              heat.push( opaPublicData.central_air === 'Y' ? 'Has central air' : 'No central air')
+
+              heat.push( opaPublicData.sewer === 'Y' ? 'City sewer' : 'Sewer type n/a')
+
+              return heat.join('<br>')
+            }
+          },
+          {
+            label: 'Lot Size',
             value: opaPublicData.total_area
               .toLocaleString('en-US', {
                 minimumFractionDigits: 0
-              })
+              }) + ' sq ft'
           },
           {
-            label: 'Improvement Area (SqFt)',
+            label: 'Improvement Area',
             value: opaPublicData.total_livable_area
               .toLocaleString('en-US', {
                 minimumFractionDigits: 0
-              })
+              }) + ' sq ft'
+          },
+          {
+            label: 'Frontage',
+            value: opaPublicData.frontage.toFixed(0) + ' ft'
+          },
+          {
+            label: 'Beginning Point',
+            value: opaPublicData.beginning_point
+          },
+          {
+            label: 'Zoning',
+            value: function(state) {
+               return '<a target="_blank" \
+                        href="https://atlas.phila.gov/#/'+ this.activeAddress + '/zoning ">\
+                       <b>' + opaPublicData.zoning + '-' + helpers.ZONING_CODE_MAP[opaPublicData.zoning.trim()] + '</b></a>'
+            }.bind(this)
+          },
+          // {
+          //   label: 'Flood Zone',
+          //   value: function(state) {
+          //      return 'Likely / Not likely / Unclear'
+          //   }
+          // },
+          // {
+          //   label: 'Steep Slope',
+          //   value: function(state) {
+          //      return 'Likely / Not likely / Unclear'
+          //   }
+          // },
+          {
+            label: 'OPA Account #',
+            value: this.activeOpaId,
+          },
+          {
+            label: 'OPA Address',
+            value: titleCase(this.activeAddress),
+          },
+          {
+            label: 'Most Recent Assessment Date',
+            value: opaPublicData.assessment_date != null  ? opaPublicData.assessment_date : 'Date not available',
+            transforms: ['date'],
+          },
+          {
+            label: 'Homestead Exemption',
+            value: function(state) {
+              return opaPublicData.homestead_exemption;
+            },
+            transforms: ['currency'],
           },
         ],
       }
@@ -257,6 +517,63 @@ export default {
             transforms: ['currency'],
           },
         ],
+      }
+    },
+
+
+    ownerAddressTableOptions() {
+      let state = this.$store.state;
+      let opaPublicData = this.$store.state.sources.opa_public.targets[this.activeOpaId].data;
+      return {
+        id: 'ownerProperties',
+        tableid: 'ddd',
+        // dataSources: ['opa'],
+        mapOverlay: {},
+        mouseOverDisabled: true,
+        downloadButton: false,
+        customClass: {
+          table: 'owner',
+          td: 'testClass',
+          // td: function(field) {
+          //   console.log(field)
+          //   let classType = field.value === 'Owner' ? 'big_owner':
+          //                   field.value === 'Address' ? 'small_address': ''
+          //   return classType
+          // }
+        },
+        fields: [
+          {
+            label: 'Owner',
+            value: function(state, item) {
+              let owner;
+              owner = item.owner_2 != null ?
+                      item.owner_1.trim() + "<br>" + item.owner_2.trim():
+                      item.owner_1.trim()
+              return owner
+            },
+            customClass: 'big_owner'
+          },
+          {
+            label: 'Mailing Address',
+            value: function(state, item) {
+              let mailingAddress = [];
+              let addressFields = ['mailing_address_1', 'mailing_address_2', 'mailing_care_of', 'mailing_street',  'mailing_city_state', 'mailing_zip'];
+              addressFields.map( a => item[a] != null ? a === 'mailing_city_state' ?
+              mailingAddress.push(titleCase(item[a]) + ' <br>' ) : mailingAddress.push(titleCase( (item[a])) + ' <br>') :'')
+              // console.log('mailingAddress', mailingAddress, item)
+
+              if(mailingAddress.length > 0 ) {
+                return mailingAddress.join('')
+              } else {
+                // console.log('activeAddress', this.activeAddress, item)
+                let zip = item.zip_code.substring(0,5) + '-' + item.zip_code.substring(5,10);
+                mailingAddress.push(titleCase( this.activeAddress), 'Philadelphia, PA', zip)
+                return mailingAddress.join('<br>')
+              }
+            }.bind(this),
+            customClass: 'small_address'
+          },
+        ]
       }
     },
 
@@ -319,6 +636,24 @@ export default {
           // asc or desc
           order: 'desc'
         },
+        externalLink: {
+          forceShow: true,
+          action: function() {
+            return 'View the Real Estate Tax Balance';
+          },
+          name: '',
+          href: function(state) {
+            let feature = state.activeModalFeature;
+            let address;
+            if (['geocode', 'reverseGeocode', 'owner search'].includes(state.lastSearchMethod)) {
+              address = feature.properties.street_address;
+            } else {
+              address = feature.address_std;
+            }
+            let addressEncoded = encodeURIComponent(address);
+            return '//www.phila.gov/revenue/realestatetax/#/' + addressEncoded + '//property';
+          }
+        }
       }
     },
 
@@ -393,7 +728,36 @@ export default {
 
 <style >
 
+@media (min-width: 750px) {
+  td.big_owner {
+    font-size: 32px !important;
+    font-weight: 100 !important;
+    font-family: "Montserrat", sans-serif;
+    vertical-align: top !important;
+    padding-top: 0 !important;
+  }
+
+  td.small_address {
+    font-size: 12px !important;
+    font-weight: 100 !important;
+    font-family: "Montserrat", sans-serif;
+    vertical-align: top !important;
+    padding-top: 0 !important;
+  }
+
+}
+
+  .owner th, .owner tr {
+    background: white !important;
+    color: black;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+
+
 @media print {
+
 
   * {
     background: none !important;
@@ -450,10 +814,28 @@ export default {
     border-style: none !important;
   }
 
+  .pvc-horizontal-table table tr:nth-child(odd) td.big_owner,
+  .pvc-horizontal-table table tr:nth-child(odd) td.small_address {
+    background: none !important;
+  }
+  .pvc-horizontal-table table tr:nth-child(odd) td.big_owner {
+    font-size: 32px !important;
+    font-weight: 100 !important;
+    font-family: "Montserrat", sans-serif;
+  }
+
+  .pvc-horizontal-table table tr:nth-child(odd) td.small_address {
+    font-size: 12px !important;
+    font-weight: 100 !important;
+    font-family: "Montserrat", sans-serif;
+    min-width: 145px;
+  }
+
   .pvc-horizontal-table table tr:nth-child(odd) td {
     background: #eee !important;
     -webkit-print-color-adjust: exact;
   }
+
 
   .pvc-horizontal-table-body, .table-container {
     page-break-inside: avoid !important;
@@ -482,8 +864,8 @@ export default {
 </style>
 <style scoped>
 
-
 @media print {
+
 
   @page {
     size:8.5in 11in;

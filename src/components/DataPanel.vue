@@ -252,9 +252,9 @@ export default {
             label: 'Owner',
             value: function(state, item){
               if (item.properties.opa_owners != '') {
-                return titleCase(item.properties.opa_owners.join(', '));
+                return item.properties.opa_owners.join(', ');
               } else {
-                return titleCase(item.properties.usps_bldgfirm);
+                return item.properties.usps_bldgfirm;
               }
             },
           },
@@ -329,9 +329,9 @@ export default {
             label: 'Owner',
             value: function(state, item){
               if (item.properties.opa_owners != '') {
-                return titleCase(item.properties.opa_owners.join(', '));
+                return item.properties.opa_owners.join(', ');
               } else {
-                return titleCase(item.properties.usps_bldgfirm);
+                return item.properties.usps_bldgfirm;
               }
             }
           },
@@ -443,8 +443,8 @@ export default {
             value: function(state, item){
               if (item.owner_1 != "") {
                 let owners = item.owner_2 != null ?
-                             titleCase(item.owner_1.trim()) + ", " + titleCase(item.owner_2.trim()):
-                             titleCase(item.owner_1.trim())
+                             item.owner_1.trim() + ", " + item.owner_2.trim():
+                             item.owner_1.trim()
 
                 return owners
               } else {
