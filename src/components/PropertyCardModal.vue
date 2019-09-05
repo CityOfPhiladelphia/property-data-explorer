@@ -325,7 +325,7 @@ export default {
                   break;
                 case '0' : garages = 'No garage';
                   break;
-                case 'A': garages = 'Basement/Built in garage';
+                case 'A': garages = 'Built-in/Basement  garage';
                   break;
                 case 'B': garages = 'Attached garage';
                   break;
