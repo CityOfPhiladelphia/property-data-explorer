@@ -274,11 +274,16 @@ export default {
             label: 'Number of Rooms',
             value: function(state) {
               let room = opaPublicData.number_of_rooms === 1 ? ' room ' : ' rooms '
-              let bedroom = opaPublicData.number_of_bedrooms === 1 ? opaPublicData.number_of_bedrooms +' bedroom ' : opaPublicData.number_of_bedrooms + ' bedrooms '
-              let bathroom = opaPublicData.number_of_bathrooms === 1 ? opaPublicData.number_of_bathrooms + ' bathroom ' : opaPublicData.number_of_bathrooms + ' bathrooms '
+              let bedroom =   opaPublicData.number_of_bedrooms === 0 | opaPublicData.number_of_bedrooms === null  ? '' :
+                              opaPublicData.number_of_bedrooms === 1 ? '(' + opaPublicData.number_of_bedrooms +' bedroom' : '(' + opaPublicData.number_of_bedrooms + ' bedrooms'
+              let bathroom =  opaPublicData.number_of_bathrooms === 0 | opaPublicData.number_of_bathrooms === null  ? ')' :
+                              opaPublicData.number_of_bathrooms === 1 ? opaPublicData.number_of_bathrooms + ', bathroom)' :
+                              opaPublicData.number_of_bathrooms + ', bathrooms)'
               let total =  opaPublicData.number_of_rooms === 0 ? opaPublicData.total_livable_area > 0 ? 'Not Available':'None' :
-                           'Total of ' + opaPublicData.number_of_rooms + room + '('+ bedroom + ', ' + bathroom + ')';
-              total = opaPublicData.number_of_rooms === 0 && opaPublicData.unit != null ? "Not Available" : total
+                           'Total of ' + opaPublicData.number_of_rooms + room + bedroom + bathroom ;
+              total = opaPublicData.number_of_rooms === 0 && opaPublicData.unit != null ? "Not Available" :
+                      opaPublicData.number_of_rooms === null ? "Not Available" :
+                      total
               return total
             },
           },
