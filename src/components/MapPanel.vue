@@ -20,7 +20,7 @@
       >
         <!-- loading mask -->
         <div v-show="isGeocoding" class="mb-map-loading-mask">
-          <div class="mb-map-loading-mask-inner">
+          <div :class="this.loadingMaskLeft">
             <i class="fa fa-spinner fa-4x spin"></i>
             <h1>Finding address...</h1>
           </div>
@@ -482,6 +482,13 @@
           return 'small-24 medium-12'
         } else {
           return 'small-24  medium-24'
+        }
+      },
+      loadingMaskLeft() {
+        if (this.$store.state.cyclomedia.active) {
+          return 'mb-map-loading-mask-inner left-fifteen'
+        } else {
+          return 'mb-map-loading-mask-inner left-forty'
         }
       },
       // mapPanelContainerClass() {
@@ -993,10 +1000,17 @@
     vertical-align: middle;
   }
 
+  .left-fifteen {
+    left: 15%;
+  }
+
+  .left-forty {
+    left: 40%;
+  }
+
   .mb-map-loading-mask-inner {
     position: absolute;
     top: 40%;
-    left: 40%;
   }
 
   /*small retina*/
