@@ -39,7 +39,7 @@ export default {
   props: {
     feedbackLink: {
       type: String,
-      default: 'https://www.phila.gov/feedback/',
+      default: 'https://forms.gle/ENd9gx9u8xA13RKKA',
     },
   },
   computed: {
