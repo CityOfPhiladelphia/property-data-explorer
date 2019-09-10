@@ -382,7 +382,7 @@
         );
       }
 
-      console.log('MapPanel.vue created, this.isMobileOrTablet:', this.isMobileOrTablet);
+      // console.log('MapPanel.vue created, this.isMobileOrTablet:', this.isMobileOrTablet);
       if (this.isMobileOrTablet) {
         this.$data.buttonDimensions = {
           'barHeight': '30px',
