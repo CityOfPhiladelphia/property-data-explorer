@@ -39,15 +39,15 @@
         id="results-summary"
         :class="this.summaryClass"
       >
-        <collection-summary
-          v-if="this.anySearchStatus === 'success'"
-          :options="this.summaryOptions"
-          :slots="this.summaryOptions.slots"
-        />
 
         <!-- error -->
         <div v-html="this.errorMessage"
              v-show="this.currentErrorType !== null"
+        />
+        <collection-summary
+          v-if="this.anySearchStatus === 'success'"
+          :options="this.summaryOptions"
+          :slots="this.summaryOptions.slots"
         />
       </div>
 
@@ -290,12 +290,17 @@
           error = 'search'
         } else if (this.$store.state.shapeSearch.status === 'too many') {
           error = 'too_many'
+        } else if ( typeof this.$store.state.geocode.data != 'undefined' &&
+                    this.$store.state.geocode.data != null &&
+                    this.$store.state.geocode.data.ais_feature_type === 'intersection') {
+          error = 'intersection'
         }
         return error;
       },
       errorMessage() {
         let error = this.currentErrorType;
-        if (error === 'search') {
+        // console.log('error: ', error)
+        if (error === 'search' | error === 'intersection') {
           return '<h3>Could not locate records for that address.<h3>';
         } else if (error === 'too_many') {
           return '<h3>Too many parcels selected.  Try again.<h3>';
