@@ -506,9 +506,8 @@ export default {
           {
             label: 'Homestead Exemption',
             value: function(state) {
-              return opaPublicData.homestead_exemption;
+              return opaPublicData.homestead_exemption > 0 ? 'Yes' : 'No';
             },
-            transforms: ['currency'],
           },
         ],
       }

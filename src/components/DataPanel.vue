@@ -169,10 +169,12 @@ export default {
               if( state.lastSearchMethod === "buffer search") {
                 return titleCase(item.address_std)
               } else {
-                if(item.properties.opa_address != "" ) {
+                if(item.properties.opa_address != "" && item.properties.opa_address != null) {
                   return titleCase(item.properties.opa_address)
-                } else {
+                } else if (typeof item.properties.street_address != 'undefined') {
                   return titleCase(item.properties.street_address)
+                } else {
+                  return
                 }
               }
             },
@@ -251,7 +253,7 @@ export default {
           {
             label: 'Owner',
             value: function(state, item){
-              if (item.properties.opa_owners != '') {
+              if (item.properties.opa_owners != '' && typeof item.properties.opa_owners != 'undefined') {
                 return item.properties.opa_owners.join(', ');
               } else {
                 return item.properties.usps_bldgfirm;
