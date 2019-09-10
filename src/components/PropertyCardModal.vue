@@ -64,9 +64,27 @@
       />
 
       <!-- sale vertical table -->
+      <div class="spinner-div small-12 cell"
+           v-if="!this.$store.state.sources.opa_public.targets[this.activeOpaId].data"
+      >
+        <font-awesome-icon icon="spinner"
+                           class="fa-4x"
+                           aria-hidden="true"
+        />
+        <h3>Loading Sale Data</h3>
+      </div>
       <vertical-table :slots="this.saleVerticalTableSlots" />
 
       <!-- valuation history horizontal table -->
+      <div class="spinner-div small-12 cell"
+           v-if="!this.$store.state.activeSearch.assessmentHistory.data"
+      >
+        <font-awesome-icon icon="spinner"
+                           class="fa-4x"
+                           aria-hidden="true"
+        />
+        <h3>Loading Valuation History</h3>
+      </div>
       <horizontal-table
         v-if="this.$store.state.activeSearch.assessmentHistory.data"
         :slots="{
@@ -80,6 +98,15 @@
       <callout :slots="this.propValueCalloutSlots" />
 
       <!-- sales history horizontal table -->
+      <div class="spinner-div small-12 cell"
+           v-if="!this.$store.state.activeSearch.salesHistory.data"
+      >
+        <font-awesome-icon icon="spinner"
+                           class="fa-4x"
+                           aria-hidden="true"
+        />
+        <h3>Loading Sales History</h3>
+      </div>
       <horizontal-table
         v-if="this.$store.state.activeSearch.salesHistory.data"
         :slots="{
@@ -90,6 +117,15 @@
       />
 
       <!-- property details vertical table -->
+      <div class="spinner-div small-12 cell"
+           v-if="!this.$store.state.sources.opa_public.targets[this.activeOpaId].data"
+      >
+        <font-awesome-icon icon="spinner"
+                           class="fa-4x"
+                           aria-hidden="true"
+        />
+        <h3>Loading Property Details</h3>
+      </div>
       <vertical-table :slots="this.propertyDetailsVerticalTableSlots" />
 
       <callout :slots="this.inquiryCalloutSlots" />
