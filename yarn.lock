@@ -773,9 +773,9 @@
     vue "^2.6.9"
     vuex "^3.0.1"
 
-"@philly/vue-mapping@https://github.com/CityOfPhiladelphia/phila-vue-mapping#803bf2f3bee7fbc0d0ef459d1107e70d07b07f32":
+"@philly/vue-mapping@https://github.com/CityOfPhiladelphia/phila-vue-mapping#420350427bd1fd6576f487cc1105f75aca40ef3d":
   version "1.0.29"
-  resolved "https://github.com/CityOfPhiladelphia/phila-vue-mapping#803bf2f3bee7fbc0d0ef459d1107e70d07b07f32"
+  resolved "https://github.com/CityOfPhiladelphia/phila-vue-mapping#420350427bd1fd6576f487cc1105f75aca40ef3d"
   dependencies:
     "@fortawesome/fontawesome-svg-core" "^1.2.15"
     "@fortawesome/free-regular-svg-icons" "^5.7.2"
@@ -796,7 +796,7 @@
     lodash-es "^4.17.11"
     phila-standards "^1.0.2"
     proj4 "^2.5.0"
-    sdleafletdraw "https://github.com/CityOfPhiladelphia/SDLeafletDraw#b825fd6bdfe84b0a01cc3872a8a3ece0f81fb900"
+    sdleafletdraw "1.3.0"
     vue "^2.6.9"
     vuex "^3.0.1"
 
@@ -7865,9 +7865,10 @@ scss-tokenizer@^0.2.3:
     js-base64 "^2.1.8"
     source-map "^0.4.2"
 
-"sdleafletdraw@https://github.com/CityOfPhiladelphia/SDLeafletDraw#b825fd6bdfe84b0a01cc3872a8a3ece0f81fb900":
+sdleafletdraw@1.3.0:
   version "1.3.0"
-  resolved "https://github.com/CityOfPhiladelphia/SDLeafletDraw#b825fd6bdfe84b0a01cc3872a8a3ece0f81fb900"
+  resolved "https://registry.yarnpkg.com/sdleafletdraw/-/sdleafletdraw-1.3.0.tgz#6098142733db6869fc92d9ec47be2d33d1711151"
+  integrity sha512-cVxHmqPR31yRZ50oyT/M1jnGF4aM9Fd5CSLEUV8j67CFMDKX0iJgZnpX8JNNT0lbzrJCJj3MZ2aoa0i24eL8zw==
   dependencies:
     leaflet "^1.3.1"
 
