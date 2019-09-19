@@ -599,7 +599,7 @@ export default {
                 }
               } else {
                 let obj_id = item.parcel_number;
-                if (obj_id != "") {
+                if (obj_id != "" && typeof state.sources.opa_public.targets[obj_id] != 'undefined') {
                   return state.sources.opa_public.targets[obj_id].data.total_livable_area
                   .toLocaleString('en-US', {
                     minimumFractionDigits: 0
@@ -633,7 +633,7 @@ export default {
                 }
               } else {
                 let obj_id = item.parcel_number;
-                if (obj_id != "") {
+                if (obj_id != ""&& typeof state.sources.opa_public.targets[obj_id] != 'undefined') {
                   return state.sources.opa_public.targets[obj_id].data.total_area
                   .toLocaleString('en-US', {
                     minimumFractionDigits: 0
@@ -672,7 +672,7 @@ export default {
                 }
               } else {
                 let obj_id = item.parcel_number;
-                if (obj_id != "") {
+                if (obj_id != "" && typeof state.sources.opa_public.targets[obj_id] != 'undefined') {
                   return cond_code(state.sources.opa_public.targets[obj_id].data.exterior_condition)
                 } else { return ""}
               }
@@ -693,7 +693,7 @@ export default {
                 return state.sources.opa_public.targets[obj_id].data.building_code_description
               } else {
                 let obj_id = item.parcel_number
-                if (typeof obj_id != 'undefined' && obj_id != "") {
+                if (typeof obj_id != 'undefined' && obj_id != "" && typeof state.sources.opa_public.targets[obj_id] != 'undefined') {
                   return state.sources.opa_public.targets[obj_id].data.building_code_description
                 } else {return ""}
               }
@@ -728,7 +728,7 @@ export default {
                 }
               } else {
                 let obj_id = item.parcel_number
-                if(typeof obj_id != 'undefined' && obj_id != "") {
+                if(typeof obj_id != 'undefined' && obj_id != "" && typeof state.sources.opa_public.targets[obj_id] != 'undefined') {
                   if(state.sources.opa_public.targets[obj_id].data.homestead_exemption != null) {
                     return state.sources.opa_public.targets[obj_id].data.homestead_exemption != null ?
                            state.sources.opa_public.targets[obj_id].data.homestead_exemption.toLocaleString('en-US', {
@@ -760,7 +760,7 @@ export default {
               state.geocode.status === "success"?  id =  item.properties.opa_account_num :
               state.ownerSearch.status === "success" ? id =  item.properties.opa_account_num :
               id = item.parcel_number
-              if (typeof id != 'undefined' && id != "") {
+              if (typeof id != 'undefined' && id != "" && typeof state.sources.opa_public.targets[id] != 'undefined') {
                 return state.sources.opa_public.targets[id].data.zoning.trim()
               } else {return ""}
             },
@@ -772,7 +772,7 @@ export default {
               state.geocode.status === "success"?  id =  item.properties.opa_account_num :
               state.ownerSearch.status === "success" ? id =  item.properties.opa_account_num :
               id = item.parcel_number
-              if (typeof id != 'undefined' && id != "") {
+              if (typeof id != 'undefined' && id != "" && typeof state.sources.opa_public.targets[id] != 'undefined') {
                 const code = state.sources.opa_public.targets[id].data.zoning ;
                 return helpers.ZONING_CODE_MAP[code.trim()];
               } else { return "" }

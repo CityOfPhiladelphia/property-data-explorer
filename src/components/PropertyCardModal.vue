@@ -278,13 +278,17 @@ export default {
                   return object._featureId === state.activeModal.featureId
                 });
                 let obj_id = result[0].parcel_number
-
-                return state.sources.opa_public.targets[obj_id].data.homestead_exemption
-                      .toLocaleString('en-US', {
-                        style: "currency",
-                        currency:"USD",
-                        minimumFractionDigits: 0
-                      })
+                // console.log("result: ", result[0])
+                if( typeof state.sources.opa_public.targets[obj_id] != 'undefined') {
+                  return state.sources.opa_public.targets[obj_id].data.homestead_exemption
+                        .toLocaleString('en-US', {
+                          style: "currency",
+                          currency:"USD",
+                          minimumFractionDigits: 0
+                        })
+                } else {
+                  return ''
+                }
               }
             },
           },
@@ -306,7 +310,8 @@ export default {
                   return object._featureId === state.activeModal.featureId
                 });
                 let obj_id = result[0].parcel_number
-                return state.sources.opa_public.targets[obj_id].data.building_code_description
+                return typeof state.sources.opa_public.targets[obj_id] != 'undefined' ?
+                        state.sources.opa_public.targets[obj_id].data.building_code_description : ''
               }
             },
           },
@@ -339,7 +344,8 @@ export default {
                   return object._featureId === state.activeModal.featureId
                 });
                 let obj_id = result[0].parcel_number
-                return cond_code(state.sources.opa_public.targets[obj_id].data.exterior_condition)
+                return typeof state.sources.opa_public.targets[obj_id] != 'undefined' ?
+                        cond_code(state.sources.opa_public.targets[obj_id].data.exterior_condition) : ''
               }
             },
           },
@@ -366,10 +372,12 @@ export default {
                   return object._featureId === state.activeModal.featureId
                 });
                 let obj_id = result[0].parcel_number
-                return state.sources.opa_public.targets[obj_id].data.total_area
+                if(typeof state.sources.opa_public.targets[obj_id] != 'undefined') {
+                   return state.sources.opa_public.targets[obj_id].data.total_area
                       .toLocaleString('en-US', {
                         minimumFractionDigits: 0
                       })
+                } else { return ''}
               }
             },
           },
@@ -396,10 +404,12 @@ export default {
                   return object._featureId === state.activeModal.featureId
                 });
                 let obj_id = result[0].parcel_number
+                if(typeof state.sources.opa_public.targets[obj_id] != 'undefined') {
                 return state.sources.opa_public.targets[obj_id].data.total_livable_area
                       .toLocaleString('en-US', {
                         minimumFractionDigits: 0
                       })
+                } else { return ''}
               }
             },
           },
@@ -442,7 +452,6 @@ export default {
             },
             slots: {
               items(state, item) {
-                //console.log('slots items is running')
                 let id = [];
                 if (state.geocode.status === "success"){
                   id = findIdForGeocoded(state);
@@ -452,18 +461,14 @@ export default {
                   );
                   id =  result[0].properties.opa_account_num
                 } else {
-                  //console.log('state.shapeSearch.data:', state.shapeSearch.data)
                   let result = state.shapeSearch.data.rows.filter(
                     object => {
-                      //console.log('object._featureId:', object._featureId)
                       return object._featureId === state.activeModal.featureId }
                   );
                   id = result[0].parcel_number
                 }
-                //console.log('id:', id)
                 item = new Array(state.sources.opa_public.targets[id])
-                //console.log('item:', item)
-                return item
+                return typeof item[0] != 'undefined' ? item : ''
               },
             }
           }
