@@ -283,6 +283,7 @@ export default {
 
     #demo-badge{
       /*text-transform: capitalize;*/
+      white-space: nowrap;
       display: inline-block;
       font-size: 12px;
       font-family: Arial, Helvetica, sans-serif;
