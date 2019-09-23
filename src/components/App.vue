@@ -408,6 +408,7 @@
         this.$store.commit('setIntroPage', false);
       },
       clearResults(){
+        this.$controller.handleSearchFormSubmit('', 'owner')
         console.log("Clear Results", this)
       },
       onResize() {
