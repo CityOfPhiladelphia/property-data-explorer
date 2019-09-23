@@ -44,12 +44,6 @@
         <div v-html="this.errorMessage"
              v-show="this.currentErrorType !== null"
         ></div>
-        <collection-summary
-          v-if="this.anySearchStatus === 'success'"
-          id="collection-summary"
-          :options="this.summaryOptions"
-          :slots="this.summaryOptions.slots"
-        />
         <div v-if="this.anySearchStatus === 'success'"
              id="clear-results"
              @click="clearResults"
@@ -58,6 +52,12 @@
             <i class="fa fa-times-circle"></i>
           </a>
         </div>
+        <collection-summary
+          v-if="this.anySearchStatus === 'success'"
+          id="collection-summary"
+          :options="this.summaryOptions"
+          :slots="this.summaryOptions.slots"
+        />
 
       </div>
 
@@ -410,6 +410,11 @@
       clearResults(){
         this.$controller.handleSearchFormSubmit('')
         // console.log("Clear Results", this)
+        const prevFullScreenMapEnabled = this.$store.state.FullScreenMapEnabled;
+        const nextFullScreenMapEnabled = !prevFullScreenMapEnabled;
+        this.$store.commit('setFullScreenMapEnabled', nextFullScreenMapEnabled);
+
+
       },
       onResize() {
         if (window.innerWidth > 749) {
@@ -514,7 +519,7 @@
 
 #clear-results {
   display: inline-block !important;
-  margin-left: 10px;
+  margin-right: 10px;
 }
 
 #collection-summary {
@@ -559,11 +564,6 @@
   width: auto;
 }
 
-.fa-times-circle{
-  margin-bottom: 2px;
-}
-
-
 .bottom-full {
   overflow-y: auto;
   flex: 1;
@@ -587,6 +587,10 @@
   font-family: "Open Sans", Helvetica, Roboto, Arial, sans-serif;
   font-weight: 600;
   padding: 10.5px 0 10.5px 0;
+}
+
+.fa-times-circle{
+  margin-bottom: 2px;
 }
 
 .leaflet-top, .leaflet-bottom {
