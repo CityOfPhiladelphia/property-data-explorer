@@ -43,12 +43,22 @@
         <!-- error -->
         <div v-html="this.errorMessage"
              v-show="this.currentErrorType !== null"
-        />
+        ></div>
         <collection-summary
           v-if="this.anySearchStatus === 'success'"
+          id="collection-summary"
           :options="this.summaryOptions"
           :slots="this.summaryOptions.slots"
         />
+        <div v-if="this.anySearchStatus === 'success'"
+             id="clear-results"
+             @click="clearResults"
+        >
+          <a>
+            <i class="fa fa-times-circle"></i>
+          </a>
+        </div>
+
       </div>
 
       <div :class="this.tableClass + this.openModal">
@@ -247,12 +257,16 @@
           // includeZeroes: true,
           getValue: function(item) {
             if(item){
-            return 1;
+              return 1;
             }
           },
           context: {
-            singular: function(list){ return 'Showing ' + list + ' result'},
-            plural: function(list){ return 'Showing ' + list + ' results'},
+            singular: function(list) {
+              return 'Showing ' + list + ' result'
+              },
+            plural: function(list) {
+              return 'Showing ' + list + ' results'
+              },
             pluralizeList: false
           },
           types: [
@@ -274,10 +288,10 @@
                   state.geocode.related.map(a => geocodeArray.push(a))
                   return geocodeArray
                 } else {
-                return geocodeArray
+                  return geocodeArray
                 }
               } else if (state.ownerSearch.data != null) {
-                  return state.ownerSearch.data
+                return state.ownerSearch.data
               }
             }
           }
@@ -293,7 +307,7 @@
         } else if ( typeof this.$store.state.geocode.data != 'undefined' &&
                     this.$store.state.geocode.data != null &&
                     this.$store.state.geocode.data.ais_feature_type === 'intersection') {
-          error = 'intersection'
+                      error = 'intersection'
         }
         return error;
       },
@@ -393,6 +407,10 @@
         // this.introPage = false;
         this.$store.commit('setIntroPage', false);
       },
+      clearResults(){
+        this.$controller.handleSearchFormSubmit('')
+        // console.log("Clear Results", this)
+      },
       onResize() {
         if (window.innerWidth > 749) {
           this.$data.isMapVisible = true;
@@ -491,7 +509,16 @@
 }
 
 #app {
-  height: 100%
+  height: 100%;
+}
+
+#clear-results {
+  display: inline-block !important;
+  margin-left: 10px;
+}
+
+#collection-summary {
+  display: inline-block !important;
 }
 
 #data-panel-container .pvc-horizontal-table .pvc-horizontal-table-body .stack>thead>tr>th {
@@ -530,6 +557,10 @@
   line-height: 4em;
   padding-left: 10px;
   width: auto;
+}
+
+.fa-times-circle{
+  margin-bottom: 2px;
 }
 
 
