@@ -50,7 +50,8 @@
           :options="this.summaryOptions"
           :slots="this.summaryOptions.slots"
         />
-        <div id="clear-results"
+        <div v-if="this.anySearchStatus === 'success'"
+             id="clear-results"
              @click="clearResults"
         >
           <a>
