@@ -559,6 +559,10 @@
   width: auto;
 }
 
+.fa-times-circle{
+  margin-bottom: 2px;
+}
+
 
 .bottom-full {
   overflow-y: auto;
