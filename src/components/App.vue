@@ -409,7 +409,7 @@
       },
       clearResults(){
         this.$controller.handleSearchFormSubmit('')
-        console.log("Clear Results", this)
+        // console.log("Clear Results", this)
       },
       onResize() {
         if (window.innerWidth > 749) {
