@@ -154,9 +154,9 @@ export default {
         customClass: {
           table: 'sortable',
           th: function(field) {
-            let classType = field === 'Price of Last Sale' ? 'sorttable_numeric':
-                            field === 'Market Value' ? 'sorttable_numeric':
-                            field === 'Date of Last Sale' ? 'sorttable_ddmm': ''
+            let classType = field === 'Price of Last Sale' ? 'sorttable_numeric pointer':
+                            field === 'Market Value' ? 'sorttable_numeric pointer':
+                            field === 'Date of Last Sale' ? 'sorttable_ddmm': 'pointer'
             return classType
 
           },
@@ -287,9 +287,9 @@ export default {
         customClass: {
           table: 'sortable',
           th: function(field) {
-            let classType = field === 'Price of Last Sale' ? 'sorttable_numeric':
-                            field === 'Market Value' ? 'sorttable_numeric':
-                            field === 'Date of Last Sale' ? 'sorttable_ddmmyyyy': ''
+            let classType = field === 'Price of Last Sale' ? 'sorttable_numeric pointer':
+                            field === 'Market Value' ? 'sorttable_numeric pointer':
+                            field === 'Date of Last Sale' ? 'sorttable_ddmmyyyy pointer': 'pointer'
             return classType
 
           },
@@ -364,8 +364,8 @@ export default {
         customClass: {
           table: 'sortable',
           th: function(field) {
-            let classType = field === 'Price of Last Sale' ? 'sorttable_numeric':
-                            field === 'Market Value' ? 'sorttable_numeric': ''
+            let classType = field === 'Price of Last Sale' ? 'sorttable_numeric pointer':
+                            field === 'Market Value' ? 'sorttable_numeric pointer': 'pointer'
 
             return classType
 
