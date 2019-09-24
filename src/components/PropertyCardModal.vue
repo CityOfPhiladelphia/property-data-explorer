@@ -15,7 +15,7 @@
       </div>
     </header>
     <div @click="closeModal" class="openmaps-modal-close hide-print">
-      <span class="button-state state-unnamed-state unnamed-state-active">
+      <span class="button-state state-unnamed-state unnamed-state-active pointer">
         <font-awesome-icon icon="times" class="fa-lg" aria-hidden="true" />
       </span>
     </div>
