@@ -415,7 +415,7 @@
         if (this.isMobileOrTablet) {
           return 'mobile-button';
         } else {
-          return 'non-mobile-button';
+          return 'non-mobile-button pointer';
         }
       },
       lastSearchMethod() {
