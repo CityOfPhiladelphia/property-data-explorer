@@ -185,6 +185,7 @@
           <location-control v-once
                             v-if="this.geolocationEnabled"
                             :position="'almostbottomleft'"
+                            :title="'Locate me'"
           />
         </div>
 
@@ -414,7 +415,7 @@
         if (this.isMobileOrTablet) {
           return 'mobile-button';
         } else {
-          return 'non-mobile-button';
+          return 'non-mobile-button pointer';
         }
       },
       lastSearchMethod() {

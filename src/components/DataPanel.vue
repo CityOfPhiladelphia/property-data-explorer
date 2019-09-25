@@ -153,6 +153,7 @@ export default {
         },
         customClass: {
           table: 'sortable',
+          title: 'Sort results',
           th: function(field) {
             let classType = field === 'Price of Last Sale' ? 'sorttable_numeric pointer':
                             field === 'Market Value' ? 'sorttable_numeric pointer':
@@ -286,6 +287,7 @@ export default {
         },
         customClass: {
           table: 'sortable',
+          title: 'Sort results',
           th: function(field) {
             let classType = field === 'Price of Last Sale' ? 'sorttable_numeric pointer':
                             field === 'Market Value' ? 'sorttable_numeric pointer':
@@ -363,6 +365,7 @@ export default {
         },
         customClass: {
           table: 'sortable',
+          title: 'Sort results',
           th: function(field) {
             let classType = field === 'Price of Last Sale' ? 'sorttable_numeric pointer':
                             field === 'Market Value' ? 'sorttable_numeric pointer': 'pointer'
