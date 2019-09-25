@@ -185,6 +185,7 @@
           <location-control v-once
                             v-if="this.geolocationEnabled"
                             :position="'almostbottomleft'"
+                            :title="'Locate me'"
           />
         </div>
 
