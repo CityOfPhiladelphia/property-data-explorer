@@ -664,6 +664,19 @@
 
 @media screen and (max-width: 750px) {
 
+  .pl-alert {
+    height: 100% !important;
+  }
+
+  .pl-alert-body {
+    width: 100% !important;
+  }
+
+  .pl-alert-close-button {
+  color: lightgrey !important;
+
+  }
+
   #demo-badge {
     top: 25%;
     position: absolute;
