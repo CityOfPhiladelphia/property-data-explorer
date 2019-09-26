@@ -348,4 +348,37 @@ export default {
   min-height: 5px;
   background: white;
 }
+
+@media screen and (max-width: 750px) {
+
+  .app-header .title-container .title {
+    text-align: center !important;
+  }
+
+  .mobile-menu-content {
+    top: 15%
+  }
+  .mobile-menu-content>a>.app-logo {
+    display: none;
+  }
+  .footer-nav>li {
+    display: block;
+    width: 100%;
+    border-left: none !important;
+    border-right: none !important;
+  }
+
+  .footer-nav>li, .footer-nav>li>a, .footer-nav>li>div>a  {
+    padding-top: 20px !important;
+    font-size: 1.4285714286rem;
+    font-family: "Montserrat", sans-serif;
+    font-style: normal;
+    font-weight: normal !important;
+  }
+
+
+}
+
+
+
 </style>

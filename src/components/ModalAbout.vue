@@ -92,4 +92,12 @@ export default {
     height: 60px;
   }
 
+  @media screen and (max-width: 750px) {
+
+    .background {
+      height: 80% !important;
+    }
+
+  }
+
 </style>
