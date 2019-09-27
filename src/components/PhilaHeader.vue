@@ -38,7 +38,7 @@
             <section class="title-container flex-child-auto">
               <a
                 :href="appLogoLink"
-                class="logo flex-child-auto"
+                :class="this.logoLinkClass"
               >
                 <img
                   :src="compLogo()"
@@ -179,6 +179,11 @@ export default {
     searchType() {
       return this.$store.state.searchType;
     },
+    logoLinkClass() {
+        console.log("logoLinkClass: ", this.isOpen)
+        // return this.activeModal != null ? 'modal-opacity' : ""
+        return this.isOpen ? "logo flex-child-auto disabled"  : "logo flex-child-auto"
+      },
   },
   watch: {
     address(nextAddress) {
@@ -350,6 +355,11 @@ export default {
 }
 
 @media screen and (max-width: 750px) {
+
+  a.disabled {
+    pointer-events: none;
+    cursor: default;
+  }
 
   .app-header .title-container .title {
     text-align: center !important;
