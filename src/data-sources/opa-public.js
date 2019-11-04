@@ -5,7 +5,7 @@ export default {
   targets: {
     runOnce: true,
     get: function(state) {
-      // console.log("opa_public get running")
+      // console.log('opa-public get is running');
       if (state.lastSearchMethod === 'owner search') {
         return state.ownerSearch.data
       } else if (state.lastSearchMethod === 'shape search' || state.lastSearchMethod === 'buffer search') {
@@ -25,6 +25,7 @@ export default {
       }
     },
     getTargetId: function(target) {
+      // console.log('opa-public getTargetId is running:', target);
       if(target.properties){
         return target.properties.opa_account_num;
       } else if(target.parcel_number === null) {
@@ -37,9 +38,10 @@ export default {
   options: {
     params: {
       q: function(input){
-        // var inputEncoded = Object.keys(input).map(k => "'" + input[k] + "'").join(",");
+        console.log('opa-public.js, input:', input);
         return "select * from opa_properties_public where parcel_number IN("+ input +")"
       }
+      // var inputEncoded = Object.keys(input).map(k => "'" + input[k] + "'").join(",");
     },
     success: function(data) {
       return data.rows;

@@ -312,6 +312,7 @@
 
 
   export default {
+    name: 'MapPanel',
     mixins: [
       markersMixin,
       cyclomediaMixin,
@@ -651,6 +652,7 @@
         }
       },
       geojsonParcels(nextGeojson) {
+        console.log('watch geojsonParcels is running')
         if (!this.$store.state.mapViewWasSetOnAppLoad && this.lastSearchMethod === 'shape search') {
           // console.log('watch geojsonParcels is affecting things');
           this.setMapToBounds();
@@ -693,7 +695,7 @@
       },
 
       setMapToBounds() {
-        // console.log('setMapToBounds is running, this.geojsonParcels:', this.geojsonParcels)
+        console.log('setMapToBounds is running, this.geojsonParcels:', this.geojsonParcels)
         let featureArray = []
         for (let geojsonFeature of this.geojsonParcels) {
           featureArray.push(GeoJSON(geojsonFeature))

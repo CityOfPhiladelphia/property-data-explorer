@@ -740,9 +740,9 @@
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/@nodelib/fs.stat/-/fs.stat-1.1.3.tgz#2b5a3ab3f918cca48a8c754c08168e3f03eba61b"
 
-"@philly/vue-comps@https://github.com/CityOfPhiladelphia/phila-vue-comps#373a081bd63cd38fa540928a19d3d397068bf84d":
+"@philly/vue-comps@https://github.com/CityOfPhiladelphia/phila-vue-comps#472a4bc29a679eca5c58724d1c680222b6ba758c":
   version "1.0.28"
-  resolved "https://github.com/CityOfPhiladelphia/phila-vue-comps#373a081bd63cd38fa540928a19d3d397068bf84d"
+  resolved "https://github.com/CityOfPhiladelphia/phila-vue-comps#472a4bc29a679eca5c58724d1c680222b6ba758c"
   dependencies:
     "@fortawesome/fontawesome-svg-core" "^1.2.15"
     "@fortawesome/free-regular-svg-icons" "^5.7.2"
@@ -760,22 +760,23 @@
     vue "^2.6.9"
     vuex "^3.0.1"
 
-"@philly/vue-datafetch@https://github.com/CityOfPhiladelphia/phila-vue-datafetch#7690b84d4f36c76a25b04d107eb20cc618b601bd":
-  version "0.0.16"
-  resolved "https://github.com/CityOfPhiladelphia/phila-vue-datafetch#7690b84d4f36c76a25b04d107eb20cc618b601bd"
+"@philly/vue-datafetch@https://github.com/CityOfPhiladelphia/phila-vue-datafetch#2bf2375ae58abf6782f3671a0768f5b0b12598c7":
+  version "0.0.29"
+  resolved "https://github.com/CityOfPhiladelphia/phila-vue-datafetch#2bf2375ae58abf6782f3671a0768f5b0b12598c7"
   dependencies:
     "@turf/turf" "^5.1.6"
     axios "^0.19.0"
-    date-fns "^1.30.1"
+    date-fns "^2.5.1"
     esri-leaflet "^2.2.3"
+    https-proxy-agent "^3.0.0"
     leaflet "^1.4.0"
     proj4 "^2.5.0"
-    vue "^2.6.9"
-    vuex "^3.0.1"
+    vue "^2.6.10"
+    vuex "^3.1.1"
 
-"@philly/vue-mapping@https://github.com/CityOfPhiladelphia/phila-vue-mapping#420350427bd1fd6576f487cc1105f75aca40ef3d":
+"@philly/vue-mapping@https://github.com/CityOfPhiladelphia/phila-vue-mapping#66a3461e15c82c014e387ce0746d571334995f08":
   version "1.0.29"
-  resolved "https://github.com/CityOfPhiladelphia/phila-vue-mapping#420350427bd1fd6576f487cc1105f75aca40ef3d"
+  resolved "https://github.com/CityOfPhiladelphia/phila-vue-mapping#66a3461e15c82c014e387ce0746d571334995f08"
   dependencies:
     "@fortawesome/fontawesome-svg-core" "^1.2.15"
     "@fortawesome/free-regular-svg-icons" "^5.7.2"
@@ -788,7 +789,7 @@
     blueimp-md5 "^2.10.0"
     esri-leaflet "^2.2.3"
     esri-leaflet-legend "https://github.com/CityOfPhiladelphia/esri-leaflet-legend#8d42cbc1ed71c630fd8f9c6795877b5f7498b49f"
-    leaflet "^1.4.0"
+    leaflet "^1.5.1"
     leaflet-easybutton "^2.3.0"
     leaflet-measure "https://github.com/CityOfPhiladelphia/leaflet-measure#b70886af342f19597dc2937d79d64bad6bab07c6"
     leaflet-rotatedmarker "^0.2.0"
@@ -796,7 +797,7 @@
     lodash-es "^4.17.11"
     phila-standards "^1.0.2"
     proj4 "^2.5.0"
-    sdleafletdraw "1.3.0"
+    sdleafletdraw "https://github.com/CityOfPhiladelphia/SDLeafletDraw#a0e54633bc22c342ab89668e4ca4288c8d2dc68f"
     vue "^2.6.9"
     vuex "^3.0.1"
 
@@ -2296,6 +2297,13 @@ address@^1.0.3:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/address/-/address-1.1.0.tgz#ef8e047847fcd2c5b6f50c16965f924fd99fe709"
 
+agent-base@^4.3.0:
+  version "4.3.0"
+  resolved "https://registry.yarnpkg.com/agent-base/-/agent-base-4.3.0.tgz#8165f01c436009bccad0b1d122f05ed770efc6ee"
+  integrity sha512-salcGninV0nPrwpGNn4VTXBb1SOuXQBiqbrNXoeizJsHrsL6ERFM2Ne3JUSBWRE6aeNJI2ROP/WEEIDUiDe3cg==
+  dependencies:
+    es6-promisify "^5.0.0"
+
 ajv-errors@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/ajv-errors/-/ajv-errors-1.0.1.tgz#f35986aceb91afadec4102fbd85014950cefa64d"
@@ -3678,6 +3686,11 @@ date-fns@^1.30.1:
   version "1.30.1"
   resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-1.30.1.tgz#2e71bf0b119153dbb4cc4e88d9ea5acfb50dc05c"
 
+date-fns@^2.5.1:
+  version "2.6.0"
+  resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.6.0.tgz#a5bc82e6a4c3995ae124b0ba1a71aec7b8cbd666"
+  integrity sha512-F55YxqRdEfP/eYQmQjLN798v0AwLjmZ8nMBjdQvNwEE3N/zWVrlkkqT+9seBlPlsbkybG4JmWg3Ee3dIV9BcGQ==
+
 date-now@^0.1.4:
   version "0.1.4"
   resolved "https://registry.yarnpkg.com/date-now/-/date-now-0.1.4.tgz#eaf439fd4d4848ad74e5cc7dbef200672b9e345b"
@@ -3698,9 +3711,10 @@ debug@=3.1.0:
   dependencies:
     ms "2.0.0"
 
-debug@^3.2.5, debug@^3.2.6:
+debug@^3.1.0, debug@^3.2.5, debug@^3.2.6:
   version "3.2.6"
   resolved "https://registry.yarnpkg.com/debug/-/debug-3.2.6.tgz#e83d17de16d8a7efb7717edbe5fb10135eee629b"
+  integrity sha512-mel+jf7nrtEl5Pn1Qx46zARXKDpBbvzezse7p7LqINmdoIk8PYP5SySaxEmYv6TZ0JyEKA1hsCId6DIhgITtWQ==
   dependencies:
     ms "^2.1.1"
 
@@ -4081,6 +4095,18 @@ es6-map@^0.1.5:
     es6-set "~0.1.5"
     es6-symbol "~3.1.1"
     event-emitter "~0.3.5"
+
+es6-promise@^4.0.3:
+  version "4.2.8"
+  resolved "https://registry.yarnpkg.com/es6-promise/-/es6-promise-4.2.8.tgz#4eb21594c972bc40553d276e510539143db53e0a"
+  integrity sha512-HJDGx5daxeIvxdBxvG2cb9g4tEvwIk3i8+nhX0yGrYmZUzbkdg8QbDevheDB8gd0//uPj4c1EQua8Q+MViT0/w==
+
+es6-promisify@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/es6-promisify/-/es6-promisify-5.0.0.tgz#5109d62f3e56ea967c4b63505aef08291c8a5203"
+  integrity sha1-UQnWLz5W6pZ8S2NQWu8IKRyKUgM=
+  dependencies:
+    es6-promise "^4.0.3"
 
 es6-set@^0.1.5, es6-set@~0.1.5:
   version "0.1.5"
@@ -5032,6 +5058,14 @@ https-browserify@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/https-browserify/-/https-browserify-1.0.0.tgz#ec06c10e0a34c0f2faf199f7fd7fc78fffd03c73"
 
+https-proxy-agent@^3.0.0:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/https-proxy-agent/-/https-proxy-agent-3.0.1.tgz#b8c286433e87602311b01c8ea34413d856a4af81"
+  integrity sha512-+ML2Rbh6DAuee7d07tYGEKOEi2voWPUGan+ExdPbPW6Z3svq+JCqr0v8WmKPOkz1vOVykPCBSuobe7G8GJUtVg==
+  dependencies:
+    agent-base "^4.3.0"
+    debug "^3.1.0"
+
 iconv-lite@0.4.24, iconv-lite@^0.4.13, iconv-lite@^0.4.4, iconv-lite@^0.4.5:
   version "0.4.24"
   resolved "https://registry.yarnpkg.com/iconv-lite/-/iconv-lite-0.4.24.tgz#2022b4b25fbddc21d2f524974a474aafe733908b"
@@ -5678,7 +5712,7 @@ leaflet.heat@^0.1.3:
   version "0.1.3"
   resolved "https://registry.yarnpkg.com/leaflet.heat/-/leaflet.heat-0.1.3.tgz#ad798d8db69d49873bfcbe7116a22158ed7c7076"
 
-leaflet@^1.0.0, leaflet@^1.0.0-beta.1, leaflet@^1.0.0-rc.3, leaflet@^1.0.1, leaflet@^1.3.1, leaflet@^1.4.0:
+leaflet@^1.0.0, leaflet@^1.0.0-beta.1, leaflet@^1.0.0-rc.3, leaflet@^1.0.1, leaflet@^1.3.1, leaflet@^1.4.0, leaflet@^1.5.1:
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/leaflet/-/leaflet-1.5.1.tgz#9afb9d963d66c870066b1342e7a06f92840f46bf"
 
@@ -7865,12 +7899,11 @@ scss-tokenizer@^0.2.3:
     js-base64 "^2.1.8"
     source-map "^0.4.2"
 
-sdleafletdraw@1.3.0:
+"sdleafletdraw@https://github.com/CityOfPhiladelphia/SDLeafletDraw#a0e54633bc22c342ab89668e4ca4288c8d2dc68f":
   version "1.3.0"
-  resolved "https://registry.yarnpkg.com/sdleafletdraw/-/sdleafletdraw-1.3.0.tgz#6098142733db6869fc92d9ec47be2d33d1711151"
-  integrity sha512-cVxHmqPR31yRZ50oyT/M1jnGF4aM9Fd5CSLEUV8j67CFMDKX0iJgZnpX8JNNT0lbzrJCJj3MZ2aoa0i24eL8zw==
+  resolved "https://github.com/CityOfPhiladelphia/SDLeafletDraw#a0e54633bc22c342ab89668e4ca4288c8d2dc68f"
   dependencies:
-    leaflet "^1.3.1"
+    leaflet "^1.5.1"
 
 select-hose@^2.0.0:
   version "2.0.0"
@@ -8963,11 +8996,11 @@ vue-template-es2015-compiler@^1.9.0:
   version "1.9.1"
   resolved "https://registry.yarnpkg.com/vue-template-es2015-compiler/-/vue-template-es2015-compiler-1.9.1.tgz#1ee3bc9a16ecbf5118be334bb15f9c46f82f5825"
 
-vue@^2.6.9:
+vue@^2.6.10, vue@^2.6.9:
   version "2.6.10"
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.10.tgz#a72b1a42a4d82a721ea438d1b6bf55e66195c637"
 
-vuex@^3.0.1:
+vuex@^3.0.1, vuex@^3.1.1:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/vuex/-/vuex-3.1.1.tgz#0c264bfe30cdbccf96ab9db3177d211828a5910e"
 

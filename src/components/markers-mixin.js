@@ -132,7 +132,7 @@ export default {
       let features;
       if(this.pwdParcel){
         let props = {};
-        // console.log("this.pwdParcel: ", this.pwdParcel)
+        console.log("this.pwdParcel: ", this.pwdParcel)
         features = this.pwdParcel;
         props.color = 'blue';
         props.fillColor = 'blue';

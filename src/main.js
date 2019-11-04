@@ -18,7 +18,9 @@ import config from './config.js';
 import * as faAll from './fa.js';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
-import controllerMixin from '@philly/vue-datafetch/src/controller/index.js';
+import controllerMixin from '@philly/vue-datafetch/src/controller.js';
+
+// console.log('in pde main.js, createStore:', createStore, 'controllerMixin:', controllerMixin);
 
 const clientConfig = config;
 const baseConfigUrl = config.baseConfig;
@@ -36,13 +38,17 @@ import router from './router';
 import App from './components/App.vue';
 
 function initVue(config) {
-  const store = createStore(config);
 
   // make config accessible from each component via this.$config
   Vue.use(configMixin, config);
 
+  const store = createStore(config);
+  let opts = { config, store };
+
+  // console.log('in initVue, config:', config, 'store:', store, 'router:', router);
   // mix in controller
-  Vue.use(controllerMixin, { config, store, router });
+  // Vue.use(controllerMixin, { config, store, router });
+  Vue.use(controllerMixin, { config, store });
 
   Vue.component('font-awesome-icon', FontAwesomeIcon)
 
@@ -70,6 +76,7 @@ if (baseConfigUrl) {
 
     // deep merge base config and client config
     const config = mergeDeep(baseConfig, clientConfig);
+    console.log('in axios, about to call initVue, config:', config);
 
     initVue(config);
   }).catch(err => {

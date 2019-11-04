@@ -133,6 +133,7 @@ let config = {
   parcels: {
     pwd: {
       multipleAllowed: true,
+      mapregStuff: false,
       geocodeFailAttemptParcel: null,
       clearStateOnError: false,
       wipeOutOtherParcelsOnReverseGeocodeOnly: true,
