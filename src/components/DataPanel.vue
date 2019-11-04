@@ -485,7 +485,7 @@ export default {
         // console.log("Not shape search, input: ", input)
 
         this.$controller.dataManager.resetData();
-        const input = this.$store.state.parcels.pwd.properties.ADDRESS;
+        const input = this.$store.state.parcels.pwd[0].properties.ADDRESS;
         this.$controller.dataManager.clients.condoSearch.fetch(input)
 
         unitData = mapUnitIds(item._featureId);

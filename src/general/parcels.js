@@ -1,6 +1,6 @@
 export default {
   pwd: {
-    multipleAllowed: false,
+    multipleAllowed: true,
     geocodeFailAttemptParcel: null,
     clearStateOnError: false,
     wipeOutOtherParcelsOnReverseGeocodeOnly: true,
