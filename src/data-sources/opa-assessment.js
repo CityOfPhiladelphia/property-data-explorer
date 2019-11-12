@@ -19,6 +19,7 @@ export default {
           }
         }
         if (state.geocode.data.condo != null && state.geocode.data.condo == true) {
+          // opa.push(state.geocode.data);
           opa.push(state.condoUnits.units[Number(state.parcels.pwd[0].properties.PARCELID)][0]);
         }
         return opa;

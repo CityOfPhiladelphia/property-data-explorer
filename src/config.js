@@ -18,6 +18,17 @@ var BASE_CONFIG_URL = 'https://cdn.jsdelivr.net/gh/cityofphiladelphia/pde_base_c
 
 let config = {
   customComps,
+  geocoder: {
+    url: function (input) {
+      var inputEncoded = encodeURIComponent(input);
+      return '//api.phila.gov/ais/v1/search/' + inputEncoded;
+    },
+    params: {
+      gatekeeperKey: '82fe014b6575b8c38b44235580bc8b11',
+      include_units: true,
+      opa_only: true,
+    },
+  },
   baseConfig: BASE_CONFIG_URL,
   // baseConfig: '//raw.githubusercontent.com/stevetotheizz0/atlas_base_config/master/config.js',
   gatekeeperKey: '82fe014b6575b8c38b44235580bc8b11',

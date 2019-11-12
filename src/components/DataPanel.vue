@@ -121,16 +121,51 @@ export default {
     },
     geocodeItems() {
       let data = [];
-      if (this.geocode.data) {
-        data.push(this.geocode.data);
+      if (this.geocode.data && this.$store.state.condoUnits.units)
+      {
+        const parentCondo = this.geocode.data;
+        parentCondo.properties.opa_owners = ["Condominium (" + this.$store.state.condoUnits.units.length + " Units)"];
+        parentCondo.properties.street_address = this.$store.state.parcels.pwd.properties.ADDRESS;
+        parentCondo.properties.opa_address = this.$store.state.parcels.pwd.properties.ADDRESS;
+        parentCondo.properties.pwd_parcel_id = this.$store.state.parcels.pwd.properties.PARCELID;
+        parentCondo._featureId = this.$store.state.parcels.pwd.properties.PARCELID;
+        parentCondo.condo = true;
+        data.push(parentCondo);
       }
-      if (this.geocode.related) {
-        for (let related of this.geocode.related) {
-          data.push(related);
+      else {
+        if (this.geocode.data) {
+          data.push(this.geocode.data);
+        }
+        if (this.geocode.related) {
+          for (let related of this.geocode.related) {
+            data.push(related);
+          }
         }
       }
       return data;
     },
+
+    // geocodeItems() {
+    //   let data = [];
+    //   if (this.geocode.related && this.geocode.related.length > 0) {
+    //     // This means this is a condo.
+    //     // Manipulate the parent entry
+    //     var condoSummary = this.geocode.data;
+    //     condoSummary.properties.opa_owners = ["Condominium (" + this.geocode.related.length + ") Units"];
+    //     condoSummary.condo = true;
+    //     console.log('geocodeItems computing, condoSummary:', condoSummary);
+    //     data.push(condoSummary);
+    //   }
+    //   else {
+    //     data.push(this.geocode.data);
+    //   }
+    //   // if (this.geocode.related) {
+    //   //   for (let related of this.geocode.related) {
+    //   //     data.push(related);
+    //   //   }
+    //   // }
+    //   return data;
+    // },
 
     geocodeOptions() {
       const options = {
