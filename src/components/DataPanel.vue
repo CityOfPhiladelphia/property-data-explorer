@@ -84,6 +84,7 @@ export default {
     return {
       'showTable': false,
       'loadingData': false,
+      'condoExpanded': false,
     }
   },
   watch: {
@@ -92,6 +93,7 @@ export default {
         this.$data.showTable = true;
         this.$data.loadingData = false;
       } else if (nextOpaStatus === 'waiting') {
+        this.$data.condoExpanded = false;
         this.$data.loadingData = true;
       } else {
         this.$data.loadingData = false;
@@ -106,12 +108,9 @@ export default {
       return this.$store.state.sources.opa_assessment;
     },
     opaStatus() {
-      if (this.opa) {
-        if (this.opa.status) {
+      // return this.$store.state.sources.opa_assessment.status;
+      if (this.opa && this.opa.status) {
           return this.opa.status
-        } else{
-          return null;
-        }
       } else {
         return null;
       }
@@ -121,18 +120,23 @@ export default {
     },
     geocodeItems() {
       let data = [];
-      if (this.geocode.data && this.$store.state.condoUnits.units)
+      if (!this.$data.condoExpanded && this.geocode.data && this.$store.state.condoUnits.units && this.$store.state.parcels.pwd && this.$store.state.parcels.pwd[0].properties && this.$store.state.lastSearchMethod === 'geocode')
       {
+        // console.log('in geocodeItems, in if');
         const parentCondo = this.geocode.data;
-        parentCondo.properties.opa_owners = ["Condominium (" + this.$store.state.condoUnits.units.length + " Units)"];
-        parentCondo.properties.street_address = this.$store.state.parcels.pwd.properties.ADDRESS;
-        parentCondo.properties.opa_address = this.$store.state.parcels.pwd.properties.ADDRESS;
-        parentCondo.properties.pwd_parcel_id = this.$store.state.parcels.pwd.properties.PARCELID;
-        parentCondo._featureId = this.$store.state.parcels.pwd.properties.PARCELID;
+        for (let i in parentCondo.properties) {
+          parentCondo.properties[i] = "";
+        }
+        parentCondo.properties.opa_owners = ["Condominium (" + this.$store.state.condoUnits.units[this.$store.state.parcels.pwd[0].properties.PARCELID].length + " Units)"];
+        parentCondo.properties.street_address = this.$store.state.parcels.pwd[0].properties.ADDRESS;
+        parentCondo.properties.opa_address = this.$store.state.parcels.pwd[0].properties.ADDRESS;
+        parentCondo.properties.pwd_parcel_id = this.$store.state.parcels.pwd[0].properties.PARCELID;
+        parentCondo._featureId = this.$store.state.parcels.pwd[0].properties.PARCELID;
         parentCondo.condo = true;
         data.push(parentCondo);
       }
       else {
+        // console.log('in geocodeItems, in else, this.geocode.data:', this.geocode.data, 'this.geocode.related:', this.geocode.related);
         if (this.geocode.data) {
           data.push(this.geocode.data);
         }
@@ -242,10 +246,10 @@ export default {
                 },
                 options: {
                   class: function (state, item) {
-                    return state.sources.opa_assessment.targets[item.properties.opa_account_num] ? "" : 'condo-button'
+                    return state.sources.opa_assessment.targets[item.properties.opa_account_num] ? "" : 'condo-button';
                   },
                   style: function (state, item) {
-                    return state.sources.opa_assessment.targets[item.properties.opa_account_num] ? { display: 'none' } : ""
+                    return state.sources.opa_assessment.targets[item.properties.opa_account_num] ? { display: 'none' } : "";
                   },
                 }
               }
@@ -499,10 +503,11 @@ export default {
   },
   methods: {
     addCondoRecords(state, item) {
-      console.log('addCondoRecords is running');
+      console.log('addCondoRecords is running, item:', item);
+
       this.$data.showTable = false;
       let mapUnitIds = function(id) {
-        // console.log('running mapUnitIds');
+        console.log('running mapUnitIds, id:', id);
         let unitsToAdd = this.$store.state.condoUnits.units[id]
         unitsToAdd.map(
           (item, index) => {
@@ -516,7 +521,15 @@ export default {
       mapUnitIds = mapUnitIds.bind(this)
       // console.log('after mapUnitIds');
       let unitData;
-      if(this.$store.state.lastSearchMethod === "geocode" || this.$store.state.lastSearchMethod === "reverseGeocode") {
+      if(this.$store.state.lastSearchMethod === "geocode") {
+        this.$data.condoExpanded = true;
+        // this.$controller.dataManager.resetData();
+        // const input = this.$store.state.parcels.pwd[0].properties.ADDRESS;
+        // this.$controller.dataManager.clients.condoSearch.fetch(input)
+
+        // unitData = mapUnitIds(item._featureId);
+        // this.$store.commit('setGeocodeRelated', unitData);
+      } else if(this.$store.state.lastSearchMethod === "reverseGeocode") {
         // console.log("Not shape search, input: ", input)
 
         this.$controller.dataManager.resetData();
