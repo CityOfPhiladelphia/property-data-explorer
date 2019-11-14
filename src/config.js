@@ -43,7 +43,7 @@ let config = {
   transforms,
   geolocation: {
     enabled: true,
-    icon: ['far', 'dot-circle']
+    icon: [ 'far', 'dot-circle' ],
   },
   cyclomedia: {
     enabled: true,
@@ -60,10 +60,10 @@ let config = {
       params: {
         q: function(input){
           var inputEncoded = Object.keys(input).map(k => "'" + input[k] + "'").join(",");
-          return "select * from opa_properties_public_test where pwd_parcel_id IN("+ inputEncoded +")"
-        }
+          return "select * from opa_properties_public_test where pwd_parcel_id IN("+ inputEncoded +")";
+        },
       },
-    }
+    },
   },
   ownerSearch: {
     url: function (input) {
@@ -81,21 +81,21 @@ let config = {
     assessmentHistory: {
       type: 'http-get',
       url: 'https://phl.carto.com/api/v2/sql',
-        options: {
-          params: {
-            q: function(input){
-              if (typeof input === 'string') {
-                return "select * from assessments where parcel_number IN('"+ input +"')"
-              } else {
-                var inputEncoded = "'" + input.join("','") + "'";
-                return "select * from assessments where parcel_number IN("+ inputEncoded +")"
-              }
-            }
+      options: {
+        params: {
+          q: function(input){
+            if (typeof input === 'string') {
+              return "select * from assessments where parcel_number IN('"+ input +"')";
+            } 
+            var inputEncoded = "'" + input.join("','") + "'";
+            return "select * from assessments where parcel_number IN("+ inputEncoded +")";
+              
           },
-          success: function(data) {
-            return data.rows;
-          }
-        }
+        },
+        success: function(data) {
+          return data.rows;
+        },
+      },
     },
     salesHistory: {
       type: 'http-get',
@@ -104,18 +104,18 @@ let config = {
         params: {
           q: function(input){
             if (typeof input === 'string') {
-              return "select * from RTT_SUMMARY where opa_account_num = '"+ input +"' AND document_type = 'DEED'"
-            } else {
-              var inputEncoded = "'" + input.join("','") + "'";
-              return "select * from RTT_SUMMARY where opa_account_num IN("+ inputEncoded +") AND document_type = 'DEED'"
-            }
-          }
+              return "select * from RTT_SUMMARY where opa_account_num = '"+ input +"' AND document_type = 'DEED'";
+            } 
+            var inputEncoded = "'" + input.join("','") + "'";
+            return "select * from RTT_SUMMARY where opa_account_num IN("+ inputEncoded +") AND document_type = 'DEED'";
+            
+          },
         },
         success: function(data) {
           return data.rows;
-        }
-      }
-    }
+        },
+      },
+    },
   },
   pictometry: {
     enabled: true,
@@ -130,7 +130,7 @@ let config = {
       color: '#blue',
       weight: 2,
       opacity: 1,
-      fillOpacity: 0.3
+      fillOpacity: 0.3,
     },
     hoverStyle: {
       // radius: 6,
@@ -138,8 +138,8 @@ let config = {
       color: 'yellow',
       weight: 2,
       opacity: 1,
-      fillOpacity: 0.3
-    }
+      fillOpacity: 0.3,
+    },
   },
   parcels: {
     pwd: {
@@ -150,14 +150,14 @@ let config = {
       wipeOutOtherParcelsOnReverseGeocodeOnly: true,
       geocodeField: 'PARCELID',
       parcelIdInGeocoder: 'pwd_parcel_id',
-      getByLatLngIfIdFails: false
+      getByLatLngIfIdFails: false,
     },
   },
   dataSources: {
     opa_public,
     opa_assessment,
     // neighboringProperties,
-  }
-}
+  },
+};
 
 export default config;

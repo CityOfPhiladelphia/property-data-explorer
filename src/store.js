@@ -38,7 +38,7 @@ function createStore(config) {
     // horizontalTableGroups: createHorizontalTableGroups(config),
     activeFeature: {
       featureId: null,
-      tableId: null
+      tableId: null,
     },
     activeModalFeature: null,
     activeModal: {
@@ -54,7 +54,17 @@ function createStore(config) {
       // keys: config.modals,
       open: '',
     },
-    map: {}
+    map: {},
+    bufferSearch: {
+      status: null,
+      data: null,
+      input: null
+    },
+    shapeSearch: {
+      status: null,
+      data: null,
+      input: null,
+    },
   };
 
   const mb = {
@@ -124,11 +134,13 @@ function createStore(config) {
         const { tableId, data } = payload;
 
         // check for not-null table id
-        if (!tableId) return;
+        if (!tableId) {
+          return;
+        }
         state.horizontalTables.filteredData[tableId] = data;
       },
       setHorizontalTableMouseover(state, payload) {
-        state.horizontalTables.mouseover = payload
+        state.horizontalTables.mouseover = payload;
       },
       setMapFilters(state, payload) {
         state.map.filters = payload;
@@ -141,7 +153,7 @@ function createStore(config) {
         state.map.bounds = payload;
       },
       setMapBoundsBasedOnShape(state, payload) {
-        state.map.boundsBasedOnShape = payload
+        state.map.boundsBasedOnShape = payload;
       },
       setActiveFeature(state, payload) {
         const { featureId, tableId } = payload || {};
@@ -162,12 +174,6 @@ function createStore(config) {
       setImageOverlayOpacity(state, payload) {
         state.map.imageOverlayOpacity = payload;
       },
-      setCandidates(state, payload) {
-        state.candidates = payload;
-      },
-      setAddressEntered(state, payload) {
-        state.addressEntered = payload;
-      },
 
       setPropertyBalance(state, payload) {
         state.appData.propertyBalance = payload;
@@ -178,8 +184,34 @@ function createStore(config) {
         // state.modals[name].open = open === null ? !state.modals[name].open : open
         state.modals.open = name;
       },
-    }
-  }
+
+      setShapeSearchStatus(state, payload) {
+        //console.log('setShapeSearchStatus is running, payload:', payload);
+        state.shapeSearch.status = payload;
+      },
+      setShapeSearchInput(state, payload) {
+        state.shapeSearch.input = payload;
+      },
+      setShapeSearchData(state, payload) {
+        state.shapeSearch.data = payload;
+      },
+      setBufferSearchStatus(state, payload) {
+        //console.log('setBufferSearchStatus is running, payload:', payload);
+        state.bufferSearch.status = payload;
+      },
+      setBufferSearchInput(state, payload) {
+        state.bufferSearch.input = payload;
+      },
+      setBufferSearchData(state, payload) {
+        state.bufferSearch.data = payload;
+      },
+      setShapeSearchDataPush(state, payload) {
+        let objIndex = parseInt(payload.objIndex)
+        delete payload.objIndex
+        state.shapeSearch.data.rows.splice(objIndex + 1, 0, ...payload);
+      },
+    },
+  };
 
   // let mergeStore = mb;
   let mergeStore = mergeDeep(pvcStore, pvdStore.store);
@@ -199,7 +231,7 @@ function createStore(config) {
   return new Vuex.Store({
     state: mergeStore.state,
     getters: mergeStore.getters,
-    mutations: mergeStore.mutations
+    mutations: mergeStore.mutations,
   });
 }
 

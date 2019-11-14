@@ -1,10 +1,10 @@
 <template>
-
   <div
     id="app"
     class="grid-y"
   >
-    <PhilaHeader :class="this.openModal"
+    <PhilaHeader
+      :class="openModal"
       :app-title="this.$config.app.title"
       :app-tag-line="this.$config.app.tagLine"
       :app-logo="appLogo"
@@ -16,10 +16,10 @@
         />
       </div>
     </PhilaHeader>
-    <property-card-modal></property-card-modal>
+    <property-card-modal />
 
-    <div :class="'cell medium-auto medium-cell-block-container main-content ' + this.openModal">
-      <div :class="this.mapClass">
+    <div :class="'cell medium-auto medium-cell-block-container main-content ' + openModal">
+      <div :class="mapClass">
         <map-panel>
           <intro-page
             v-if="introPage"
@@ -27,7 +27,7 @@
             screen-percent="2"
           />
           <cyclomedia-widget
-            v-if="this.shouldLoadCyclomediaWidget"
+            v-if="shouldLoadCyclomediaWidget"
             v-show="cyclomediaActive"
             slot="cycloWidget"
             screen-percent="2"
@@ -37,34 +37,33 @@
 
       <div
         id="results-summary"
-        :class="this.summaryClass"
+        :class="summaryClass"
       >
-
         <!-- error -->
-        <div v-html="this.errorMessage"
-             v-show="this.currentErrorType !== null"
-        ></div>
-        <div v-if="this.anySearchStatus === 'success'"
-             id="clear-results"
-             @click="clearResults"
+        <div
+          v-show="currentErrorType !== null"
+          v-html="errorMessage"
+        />
+        <div
+          v-if="anySearchStatus === 'success'"
+          id="clear-results"
+          @click="clearResults"
         >
           <a>
-            <i class="fa fa-times-circle"></i>
+            <i class="fa fa-times-circle" />
           </a>
         </div>
         <collection-summary
-          v-if="this.anySearchStatus === 'success'"
+          v-if="anySearchStatus === 'success'"
           id="collection-summary"
-          :options="this.summaryOptions"
-          :slots="this.summaryOptions.slots"
+          :options="summaryOptions"
+          :slots="summaryOptions.slots"
         />
-
       </div>
 
-      <div :class="this.tableClass + this.openModal">
+      <div :class="tableClass + openModal">
         <data-panel />
       </div>
-
     </div>
 
     <PhilaFooter
@@ -74,375 +73,376 @@
 
     <popover
       v-if="popoverOpen"
-      :options="this.popoverOptions"
-      :slots="{'text': this.popoverText}"
+      :options="popoverOptions"
+      :slots="{'text': popoverText}"
     />
-
   </div>
 </template>
 
 <script>
-  import { LatLng } from 'leaflet';
+import { LatLng } from 'leaflet';
 
-  import PhilaHeader from './PhilaHeader.vue';
-  import PhilaFooter from './PhilaFooter.vue';
+import PhilaHeader from './PhilaHeader.vue';
+import PhilaFooter from './PhilaFooter.vue';
 
-  import MapPanel from './MapPanel.vue';
-  import DataPanel from './DataPanel.vue';
-  import IntroPage from './IntroPage.vue';
-  import PropertyCardModal from './PropertyCardModal.vue';
-  import Logo from '@/assets/city-of-philadelphia-logo.png';
+import MapPanel from './MapPanel.vue';
+import DataPanel from './DataPanel.vue';
+import IntroPage from './IntroPage.vue';
+import PropertyCardModal from './PropertyCardModal.vue';
+import Logo from '@/assets/city-of-philadelphia-logo.png';
 
-  export default {
-    components: {
-      PhilaHeader,
-      PhilaFooter,
-      MapPanel,
-      DataPanel,
-      IntroPage,
-      PropertyCardModal,
-      CyclomediaWidget: () => import(/* webpackChunkName: "mbmb_pvm_CyclomediaWidget" */'@philly/vue-mapping/src/cyclomedia/Widget.vue'),
-      CollectionSummary: () => import(/* webpackChunkName: "pvc_Callout" */'@philly/vue-comps/src/components/CollectionSummary.vue'),
-      Popover: () => import(/* webpackChunkName: "mbmb_pvc_Popover" */'@philly/vue-comps/src/components/Popover.vue'),
-    },
+export default {
+  components: {
+    PhilaHeader,
+    PhilaFooter,
+    MapPanel,
+    DataPanel,
+    IntroPage,
+    PropertyCardModal,
+    CyclomediaWidget: () => import(/* webpackChunkName: "mbmb_pvm_CyclomediaWidget" */'@philly/vue-mapping/src/cyclomedia/Widget.vue'),
+    CollectionSummary: () => import(/* webpackChunkName: "pvc_Callout" */'@philly/vue-comps/src/components/CollectionSummary.vue'),
+    Popover: () => import(/* webpackChunkName: "mbmb_pvc_Popover" */'@philly/vue-comps/src/components/Popover.vue'),
+  },
 
-    props: {
-      appLogo: {
-        type: String,
-        default: Logo,
+  props: {
+    appLogo: {
+      type: String,
+      default: Logo,
+    },
+  },
+  data() {
+    return {
+      publicPath: '@/assets/',
+      isLarge: true,
+      'top': 3,
+      'bottom': 2,
+      hasData: false,
+      isModalOpen: false,
+      introPage: true,
+    };
+  },
+  computed: {
+    lastSearchMethod() {
+      return this.$store.state.lastSearchMethod;
+    },
+    activeModal() {
+      return this.$store.state.activeModal.featureId;
+    },
+    activeModalFeature() {
+      if (!this.activeModal) {
+        // console.log('activeModalFeature computed is running but stopping immediately');
+        return null;
       }
-    },
-    data() {
-      return {
-        publicPath: '@/assets/',
-        isLarge: true,
-        'top': 3,
-        'bottom': 2,
-        hasData: false,
-        isModalOpen: false,
-        introPage: true,
+      let state = this.$store.state;
+      let feature = null;
+      if ([ 'geocode', 'reverseGeocode' ].includes(this.lastSearchMethod)) {
+        if (state.geocode.related != null && state.geocode.data._featureId != state.activeModal.featureId ) {
+          // console.log('first if is running');
+          feature = state.geocode.related.filter(object => {
+            return object._featureId === state.activeModal.featureId;
+            // return object._featureId === state.activeFeature.featureId
+          })[0];
+        } else {
+          // console.log('second if is running');
+          feature = state.geocode.data;
+        }
+      } else if (state.lastSearchMethod === 'owner search') {
+        feature = state.ownerSearch.data.filter(object => {
+          return object._featureId === state.activeModal.featureId;
+        })[0];
+      } else if ([ 'shape search', 'buffer search' ].includes(state.lastSearchMethod)) {
+        feature = state.shapeSearch.data.rows.filter(object => {
+          return object._featureId === state.activeModal.featureId;
+        })[0];
       }
+      // console.log('activeModalFeature computed is running, feature:', feature);
+      return feature;
     },
-    mounted() {
-      this.onResize();
-      this.$store.commit('setActiveParcelLayer', 'pwd');
-      let query = this.$route.query;
-      // console.log('App.vue mounted is running, this.$route.query:', this.$route.query);
-      if (query.shape) {
-        // this.introPage = false;
-        this.$store.commit('setIntroPage', false);
-        let shape = query.shape;
-        shape = shape.slice(2, shape.length-2);
-        shape = shape.split('],[')
-        let test = []
-        for (let point of shape) {
-          test.push(point.split(','))
-        }
-        let _latlngs = []
-        for (let item of test) {
-          let latlng = new LatLng(parseFloat(item[0]), parseFloat(item[1]))
-          _latlngs.push(latlng)
-        }
-        const points = { _latlngs }
-        this.$controller.getParcelsByPoints(points);
-        this.onDataChange('shapeSearch');
-      } else if (query.address) {
-        // this.introPage = false;
-        this.$store.commit('setIntroPage', false);
-        // console.log('query.address:', query.address);
-        this.$controller.handleSearchFormSubmit(query.address);
-        this.onDataChange('geocode');
-      } else if (query.owner) {
-        // this.introPage = false;
-        this.$store.commit('setIntroPage', false);
-        // console.log('query.owner:', query.owner);
-        this.$controller.handleSearchFormSubmit(query.owner);
-        this.onDataChange('ownerSearch');
-      } else if (query.buffer) {
-        // this.introPage = false;
-        this.$store.commit('setIntroPage', false);
-        this.$store.commit('setBufferMode', true);
-        this.$controller.handleSearchFormSubmit(query.buffer);
-        this.onDataChange('bufferSearch');
-        this.$store.commit('setLastSearchMethod', 'buffer search');
-      }
+    popoverOpen() {
+      return this.$store.state.popover.open;
     },
-    created() {
-      window.addEventListener('resize', this.onResize);
+    popoverText() {
+      return this.$store.state.popover.text;
     },
-    beforeDestroy() {
-      window.removeEventListener('resize', this.onResize);
+    popoverOptions() {
+      return this.$store.state.popover.options;
     },
-    watch: {
-      activeModal() {
-        this.$controller.activeFeatureChange();
-      },
-      drawShape(nextDrawShape) {
-        if (nextDrawShape !== null) {
-          this.onDataChange('shapeSearch');
-          this.$controller.getParcelsByDrawnShape();
-          this.$store.commit('setShapeSearchStatus', 'waiting');
-        }
-      },
-      geocodeStatus(nextGeocodeStatus) {
-        if (nextGeocodeStatus === 'waiting') {
-          this.onDataChange('geocode');
-        }
-      },
-      ownerSearchStatus(nextOwnerSearchStatus) {
-        if (nextOwnerSearchStatus === 'waiting') {
-          this.onDataChange('ownerSearch');
-        }
-      },
-      shouldKeepIntroPage(nextShouldKeepIntroPage) {
-        if (nextShouldKeepIntroPage === false) {
-          this.$data.introPage = false;
-        }
-      },
-      activeModalFeature(nextActiveModalFeature) {
-        // console.log('watch activeModalFeature is firing, nextActiveModalFeature:', nextActiveModalFeature);
-        this.$store.commit('setActiveModalFeature', nextActiveModalFeature);
-      }
-    },
-    computed: {
-      lastSearchMethod() {
-        return this.$store.state.lastSearchMethod;
-      },
-      activeModal() {
-        return this.$store.state.activeModal.featureId
-      },
-      activeModalFeature() {
-        if (!this.activeModal) {
-          // console.log('activeModalFeature computed is running but stopping immediately');
-          return null
-        }
-        let state = this.$store.state;
-        let feature = null;
-        if (['geocode', 'reverseGeocode'].includes(this.lastSearchMethod)) {
-          if (state.geocode.related != null && state.geocode.data._featureId != state.activeModal.featureId ) {
-            // console.log('first if is running');
-            feature = state.geocode.related.filter(object => {
-              return object._featureId === state.activeModal.featureId
-              // return object._featureId === state.activeFeature.featureId
-            })[0];
-          } else {
-            // console.log('second if is running');
-            feature = state.geocode.data;
+    summaryOptions() {
+      const options = {
+        // dataSources: ['opa_assessment'],
+        descriptor: 'parcel',
+        // this will include zero quantities
+        // includeZeroes: true,
+        getValue: function(item) {
+          if(item){
+            return 1;
           }
-        } else if (state.lastSearchMethod === 'owner search') {
-          feature = state.ownerSearch.data.filter(object => {
-            return object._featureId === state.activeModal.featureId
-          })[0];
-        } else if (['shape search', 'buffer search'].includes(state.lastSearchMethod)) {
-          feature = state.shapeSearch.data.rows.filter(object => {
-            return object._featureId === state.activeModal.featureId
-          })[0];
-        }
-        // console.log('activeModalFeature computed is running, feature:', feature);
-        return feature;
-      },
-      popoverOpen() {
-        return this.$store.state.popover.open;
-      },
-      popoverText() {
-        return this.$store.state.popover.text;
-      },
-      popoverOptions() {
-        return this.$store.state.popover.options;
-      },
-      summaryOptions() {
-        const options = {
-          // dataSources: ['opa_assessment'],
-          descriptor: 'parcel',
-          // this will include zero quantities
-          // includeZeroes: true,
-          getValue: function(item) {
-            if(item){
-              return 1;
-            }
+        },
+        context: {
+          singular: function(list) {
+            return 'Showing ' + list + ' result';
           },
-          context: {
-            singular: function(list) {
-              return 'Showing ' + list + ' result'
-              },
-            plural: function(list) {
-              return 'Showing ' + list + ' results'
-              },
-            pluralizeList: false
+          plural: function(list) {
+            return 'Showing ' + list + ' results';
           },
-          types: [
-            {
-              value: 1,
-              label: ''
-            },
-          ],
-          slots: {
-            items: function(state) {
-              // return state.dorParcels.data;
-              // return state.parcels.dor.data;
-              if(state.shapeSearch.data != null) {
-                return state.shapeSearch.data.rows
-              } else if (state.geocode.data != null && state.geocode.data != "") {
-                let geocodeArray = []
-                geocodeArray.push(state.geocode.data.properties)
-                if(state.geocode.related != null ) {
-                  state.geocode.related.map(a => geocodeArray.push(a))
-                  return geocodeArray
-                } else {
-                  return geocodeArray
-                }
-              } else if (state.ownerSearch.data != null) {
-                return state.ownerSearch.data
+          pluralizeList: false,
+        },
+        types: [
+          {
+            value: 1,
+            label: '',
+          },
+        ],
+        slots: {
+          items: function(state) {
+            // return state.dorParcels.data;
+            // return state.parcels.dor.data;
+            if(state.shapeSearch.data != null) {
+              return state.shapeSearch.data.rows;
+            } else if (state.geocode.data != null && state.geocode.data != "") {
+              let geocodeArray = [];
+              geocodeArray.push(state.geocode.data.properties);
+              if(state.geocode.related != null ) {
+                state.geocode.related.map(a => geocodeArray.push(a));
+                return geocodeArray;
               }
+              return geocodeArray;
+
+            } else if (state.ownerSearch.data != null) {
+              return state.ownerSearch.data;
             }
-          }
-        }
-        return options
-      },
-      currentErrorType() {
-        let error = null
-        if (this.anySearchStatus === 'error'){
-          error = 'search'
-        } else if (this.$store.state.shapeSearch.status === 'too many') {
-          error = 'too_many'
-        } else if ( typeof this.$store.state.geocode.data != 'undefined' &&
+          },
+        },
+      };
+      return options;
+    },
+    currentErrorType() {
+      let error = null;
+      if (this.anySearchStatus === 'error'){
+        error = 'search';
+      } else if (this.$store.state.shapeSearch.status === 'too many') {
+        error = 'too_many';
+      } else if ( typeof this.$store.state.geocode.data != 'undefined' &&
                     this.$store.state.geocode.data != null &&
                     this.$store.state.geocode.data.ais_feature_type === 'intersection') {
-                      error = 'intersection'
-        }
-        return error;
-      },
-      errorMessage() {
-        let error = this.currentErrorType;
-        // console.log('error: ', error)
-        if (error === 'search' | error === 'intersection') {
-          return '<h3>Could not locate records for that address.<h3>';
-        } else if (error === 'too_many') {
-          return '<h3>Too many parcels selected.  Try again.<h3>';
-        }
-      },
-      drawShape() {
-        return this.$store.state.drawShape;
-      },
-      geocodeStatus() {
-        return this.$store.state.geocode.status;
-      },
-      ownerSearchStatus() {
-        return this.$store.state.ownerSearch.status;
-      },
-      shapeSearchStatus() {
-        return this.$store.state.shapeSearch.status;
-      },
-      anySearchStatus() {
-        let statusArray = [this.geocodeStatus, this.ownerSearchStatus, this.shapeSearchStatus];
-        let status;
-        if (statusArray.includes('waiting')) {
-          status = 'waiting';
-        } else if (statusArray.includes('success')) {
-          status = 'success';
-        } else if (statusArray.includes('error')) {
-          status = 'error';
-        }
-        return status
-      },
-      fullScreenMapEnabled() {
-        return this.$store.state.fullScreenMapEnabled;
-      },
-      fullScreenTopicsEnabled() {
-        return this.$store.state.fullScreenTopicsEnabled;
-      },
-      mapClass() {
-        return this.fullScreenMapEnabled ? 'top-full':
-               this.fullScreenTopicsEnabled ? 'top-none':
-               'top-half';
-      },
-      tableClass() {
-        return this.fullScreenMapEnabled ? 'bottom-none':
-               this.fullScreenTopicsEnabled? 'bottom-full':
-               'bottom-half';
-      },
-      summaryClass() {
-        return this.fullScreenMapEnabled ? 'bottom-none': ""
-      },
-      openModal() {
-        // console.log("openModal: ", this.activeModal)
-        return this.activeModal != null ? 'modal-opacity' : ""
-      },
-      shouldKeepIntroPage() {
-        if (this.$store.state.sources.opa_assessment.status || this.$store.state.cyclomedia.active) {
-          return false;
-        } else if (!this.$store.state.introPage) {
-          return false;
-        } else {
-          return true;
-        }
-      },
-      shouldLoadCyclomediaWidget() {
-        return this.$config.cyclomedia.enabled;
-        // return this.$config.cyclomedia.enabled && !this.isMobileOrTablet;
-      },
-      cyclomediaActive() {
-        return this.$store.state.cyclomedia.active;
-      },
-      cycloLatlng() {
-        if (this.$store.state.cyclomedia.orientation.xyz !== null) {
-          const xyz = this.$store.state.cyclomedia.orientation.xyz;
-          return [ xyz[1], xyz[0] ];
-        }
-        const center = this.$config.map.center;
-        return center;
-
-      },
-      cycloRotationAngle() {
-        return this.$store.state.cyclomedia.orientation.yaw * (180/3.14159265359);
-      },
-      cycloHFov() {
-        return this.$store.state.cyclomedia.orientation.hFov;
-      },
+        error = 'intersection';
+      }
+      return error;
     },
-    methods: {
-      onDataChange(type) {
-        // console.log('onDataChange, type:', type)
-        this.$data.hasData = true;
-        this.$store.commit('setFullScreenMapEnabled', false);
-        // this.introPage = false;
-        this.$store.commit('setIntroPage', false);
-      },
-      clearResults(){
-        this.$controller.handleSearchFormSubmit('')
-        // console.log("Clear Results", this)
-        const prevFullScreenMapEnabled = this.$store.state.FullScreenMapEnabled;
-        const nextFullScreenMapEnabled = !prevFullScreenMapEnabled;
-        this.$store.commit('setFullScreenMapEnabled', nextFullScreenMapEnabled);
+    errorMessage() {
+      let error = this.currentErrorType;
+      let returnValue;
+      // console.log('error: ', error)
+      if (error === 'search' | error === 'intersection') {
+        returnValue = '<h3>Could not locate records for that address.<h3>';
+      } else if (error === 'too_many') {
+        returnValue = '<h3>Too many parcels selected.  Try again.<h3>';
+      }
+      return returnValue;
+    },
+    drawShape() {
+      return this.$store.state.drawShape;
+    },
+    geocodeStatus() {
+      return this.$store.state.geocode.status;
+    },
+    ownerSearchStatus() {
+      return this.$store.state.ownerSearch.status;
+    },
+    shapeSearchStatus() {
+      return this.$store.state.shapeSearch.status;
+    },
+    anySearchStatus() {
+      let statusArray = [ this.geocodeStatus, this.ownerSearchStatus, this.shapeSearchStatus ];
+      let status;
+      if (statusArray.includes('waiting')) {
+        status = 'waiting';
+      } else if (statusArray.includes('success')) {
+        status = 'success';
+      } else if (statusArray.includes('error')) {
+        status = 'error';
+      }
+      return status;
+    },
+    fullScreenMapEnabled() {
+      return this.$store.state.fullScreenMapEnabled;
+    },
+    fullScreenTopicsEnabled() {
+      return this.$store.state.fullScreenTopicsEnabled;
+    },
+    mapClass() {
+      return this.fullScreenMapEnabled ? 'top-full':
+        this.fullScreenTopicsEnabled ? 'top-none':
+          'top-half';
+    },
+    tableClass() {
+      return this.fullScreenMapEnabled ? 'bottom-none':
+        this.fullScreenTopicsEnabled? 'bottom-full':
+          'bottom-half';
+    },
+    summaryClass() {
+      return this.fullScreenMapEnabled ? 'bottom-none': "";
+    },
+    openModal() {
+      // console.log("openModal: ", this.activeModal)
+      return this.activeModal != null ? 'modal-opacity' : "";
+    },
+    shouldKeepIntroPage() {
+      if (this.$store.state.sources.opa_assessment.status || this.$store.state.cyclomedia.active) {
+        return false;
+      } else if (!this.$store.state.introPage) {
+        return false;
+      }
+      return true;
 
+    },
+    shouldLoadCyclomediaWidget() {
+      return this.$config.cyclomedia.enabled;
+      // return this.$config.cyclomedia.enabled && !this.isMobileOrTablet;
+    },
+    cyclomediaActive() {
+      return this.$store.state.cyclomedia.active;
+    },
+    cycloLatlng() {
+      if (this.$store.state.cyclomedia.orientation.xyz !== null) {
+        const xyz = this.$store.state.cyclomedia.orientation.xyz;
+        return [ xyz[1], xyz[0] ];
+      }
+      const center = this.$config.map.center;
+      return center;
 
-      },
-      onResize() {
-        if (window.innerWidth > 749) {
-          this.$data.isMapVisible = true;
-          this.$data.isLarge = true;
-        } else {
-          this.$data.isLarge = false;
-        }
-      },
-      toggleModal() {
-        this.isModalOpen = !this.isModalOpen;
-        this.toggleBodyClass('no-scroll');
-      },
-      showModal() {
-        this.isModalOpen = true;
-        this.toggleBodyClass('no-scroll');
-      },
-      closeModal() {
-        this.isModalOpen = false;
-        this.toggleBodyClass('no-scroll');
-      },
-      toggleBodyClass(className) {
-        const el = document.body;
-        return this.isOpen ? el.classList.add(className) : el.classList.remove(className);
-      },
+    },
+    cycloRotationAngle() {
+      return this.$store.state.cyclomedia.orientation.yaw * (180/3.14159265359);
+    },
+    cycloHFov() {
+      return this.$store.state.cyclomedia.orientation.hFov;
+    },
+  },
+  watch: {
+    activeModal() {
+      this.$controller.activeFeatureChange();
+    },
+    drawShape(nextDrawShape) {
+      if (nextDrawShape !== null) {
+        this.onDataChange('shapeSearch');
+        this.$controller.getParcelsByDrawnShape();
+        this.$store.commit('setShapeSearchStatus', 'waiting');
+      }
+    },
+    geocodeStatus(nextGeocodeStatus) {
+      if (nextGeocodeStatus === 'waiting') {
+        this.onDataChange('geocode');
+      }
+    },
+    ownerSearchStatus(nextOwnerSearchStatus) {
+      if (nextOwnerSearchStatus === 'waiting') {
+        this.onDataChange('ownerSearch');
+      }
+    },
+    shouldKeepIntroPage(nextShouldKeepIntroPage) {
+      if (nextShouldKeepIntroPage === false) {
+        this.$data.introPage = false;
+      }
+    },
+    activeModalFeature(nextActiveModalFeature) {
+      // console.log('watch activeModalFeature is firing, nextActiveModalFeature:', nextActiveModalFeature);
+      this.$store.commit('setActiveModalFeature', nextActiveModalFeature);
+    },
+  },
+  mounted() {
+    this.onResize();
+    this.$store.commit('setActiveParcelLayer', 'pwd');
+    let query = this.$route.query;
+    // console.log('App.vue mounted is running, this.$route.query:', this.$route.query);
+    if (query.shape) {
+      // this.introPage = false;
+      this.$store.commit('setIntroPage', false);
+      let shape = query.shape;
+      shape = shape.slice(2, shape.length-2);
+      shape = shape.split('],[');
+      let test = [];
+      for (let point of shape) {
+        test.push(point.split(','));
+      }
+      let _latlngs = [];
+      for (let item of test) {
+        let latlng = new LatLng(parseFloat(item[0]), parseFloat(item[1]));
+        _latlngs.push(latlng);
+      }
+      const points = { _latlngs };
+      this.$controller.getParcelsByPoints(points);
+      this.onDataChange('shapeSearch');
+    } else if (query.address) {
+      // this.introPage = false;
+      this.$store.commit('setIntroPage', false);
+      // console.log('query.address:', query.address);
+      this.$controller.handleSearchFormSubmit(query.address);
+      this.onDataChange('geocode');
+    } else if (query.owner) {
+      // this.introPage = false;
+      this.$store.commit('setIntroPage', false);
+      // console.log('query.owner:', query.owner);
+      this.$controller.handleSearchFormSubmit(query.owner);
+      this.onDataChange('ownerSearch');
+    } else if (query.buffer) {
+      // this.introPage = false;
+      this.$store.commit('setIntroPage', false);
+      this.$store.commit('setBufferMode', true);
+      this.$controller.handleSearchFormSubmit(query.buffer);
+      this.onDataChange('bufferSearch');
+      this.$store.commit('setLastSearchMethod', 'buffer search');
     }
-  };
+  },
+  created() {
+    window.addEventListener('resize', this.onResize);
+  },
+  beforeDestroy() {
+    window.removeEventListener('resize', this.onResize);
+  },
+  methods: {
+    onDataChange(type) {
+      // console.log('onDataChange, type:', type)
+      this.$data.hasData = true;
+      this.$store.commit('setFullScreenMapEnabled', false);
+      // this.introPage = false;
+      this.$store.commit('setIntroPage', false);
+    },
+    clearResults(){
+      this.$controller.handleSearchFormSubmit('');
+      // console.log("Clear Results", this)
+      const prevFullScreenMapEnabled = this.$store.state.FullScreenMapEnabled;
+      const nextFullScreenMapEnabled = !prevFullScreenMapEnabled;
+      this.$store.commit('setFullScreenMapEnabled', nextFullScreenMapEnabled);
+
+
+    },
+    onResize() {
+      if (window.innerWidth > 749) {
+        this.$data.isMapVisible = true;
+        this.$data.isLarge = true;
+      } else {
+        this.$data.isLarge = false;
+      }
+    },
+    toggleModal() {
+      this.isModalOpen = !this.isModalOpen;
+      this.toggleBodyClass('no-scroll');
+    },
+    showModal() {
+      this.isModalOpen = true;
+      this.toggleBodyClass('no-scroll');
+    },
+    closeModal() {
+      this.isModalOpen = false;
+      this.toggleBodyClass('no-scroll');
+    },
+    toggleBodyClass(className) {
+      const el = document.body;
+      return this.isOpen ? el.classList.add(className) : el.classList.remove(className);
+    },
+  },
+};
 
 </script>
 

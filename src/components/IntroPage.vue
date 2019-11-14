@@ -1,9 +1,10 @@
 <template>
-  <div id="intro-container"
-       :class="this.widgetClass + ' introduction'"
+  <div
+    id="intro-container"
+    :class="widgetClass + ' introduction'"
   >
     <h2>Welcome to the new Property Data Explorer for the City of Philadelphia</h2>
-    <div class="spacer"></div>
+    <div class="spacer" />
     <!-- <p>Here are some things you can do with Property Data Explorer:</p> -->
     <!-- <div class="callout"> -->
     <div>
@@ -20,7 +21,7 @@
       To get started, you can
       <ul class="padded-list">
         <li>Click anywhere on the map.</li>
-        <li>Use <i class="fas fa-circle"></i> to search near a property or <i class="fas fa-hexagon"></i> to draw an area.</li>
+        <li>Use <i class="fas fa-circle" /> to search near a property or <i class="fas fa-hexagon" /> to draw an area.</li>
         <li>Type an address, owner name, property account number, or Department of Records Map Registry number into the search box.</li>
       </ul>
     </div>
@@ -29,41 +30,41 @@
 
 <script>
 
-  export default {
-    destroyed() {
-      // console.log('intro page destroyed is running');
-      this.map.invalidateSize();
+export default {
+  computed: {
+    map() {
+      return this.$store.state.map.map;
     },
-    computed: {
-      map() {
-        return this.$store.state.map.map;
-      },
-      isMobileOrTablet() {
-        return this.$store.state.isMobileOrTablet;
-      },
-      // fullScreenMapEnabled() {
-      //   return this.$store.state.fullScreenMapEnabled;
-      // },
-      // fullScreenTopicsEnabled() {
-      //   return this.$store.state.fullScreenTopicsEnabled;
-      // },
-      widgetClass() {
-        // if (this.fullScreenTopicsEnabled) {
-        //   return 'medium-12 small-24 full-topics-open'
-        // } else {
-          return 'medium-12 small-24'
-        // }
-      },
+    isMobileOrTablet() {
+      return this.$store.state.isMobileOrTablet;
     },
-    watch: {
-      // fullScreenMapEnabled() {
-      //   this.setDivWidth();
-      // },
-      // fullScreenTopicsEnabled() {
-      //   console.log('IntroPage.vue watch fullScreenTopicEnabled is firing');
-      // },
-    }
-  }
+    // fullScreenMapEnabled() {
+    //   return this.$store.state.fullScreenMapEnabled;
+    // },
+    // fullScreenTopicsEnabled() {
+    //   return this.$store.state.fullScreenTopicsEnabled;
+    // },
+    widgetClass() {
+      // if (this.fullScreenTopicsEnabled) {
+      //   return 'medium-12 small-24 full-topics-open'
+      // } else {
+      return 'medium-12 small-24';
+      // }
+    },
+  },
+  watch: {
+    // fullScreenMapEnabled() {
+    //   this.setDivWidth();
+    // },
+    // fullScreenTopicsEnabled() {
+    //   console.log('IntroPage.vue watch fullScreenTopicEnabled is firing');
+    // },
+  },
+  destroyed() {
+    // console.log('intro page destroyed is running');
+    this.map.invalidateSize();
+  },
+};
 
 </script>
 

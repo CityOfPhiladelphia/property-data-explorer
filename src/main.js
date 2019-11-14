@@ -50,7 +50,7 @@ function initVue(config) {
   // Vue.use(controllerMixin, { config, store, router });
   Vue.use(controllerMixin, { config, store });
 
-  Vue.component('font-awesome-icon', FontAwesomeIcon)
+  Vue.component('font-awesome-icon', FontAwesomeIcon);
 
   const customComps = config.customComps || [];
   // console.log('mapboard main.js, customComps:', customComps);
@@ -62,7 +62,7 @@ function initVue(config) {
     el: '#vue-app',
     render: h => h(App),
     router,
-    store
+    store,
   });
 }
 

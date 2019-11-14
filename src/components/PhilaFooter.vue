@@ -6,8 +6,9 @@
           <ul class="footer-nav">
             <li><a href="https://www.phila.gov">City of Philadelphia</a></li>
             <li>
-              <popover-link :options="this.popoverLinkOptions"
-                            :slots="this.popoverLinkSlots"
+              <popover-link
+                :options="popoverLinkOptions"
+                :slots="popoverLinkSlots"
               />
               <!-- :customStyle="this.customStyle" -->
               <!-- <a
@@ -49,17 +50,17 @@ export default {
         customStyle: { 'color': 'white', 'border-bottom': '0px' },
         components: [
           {
-            type: 'modal-about'
-          }
-        ]
-      }
+            type: 'modal-about',
+          },
+        ],
+      };
     },
     popoverLinkSlots() {
       return {
         shouldShowValue: false,
-        value: 'How To Use'
-      }
-    }
+        value: 'How To Use',
+      };
+    },
   },
 };
 </script>
