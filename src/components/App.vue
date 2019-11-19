@@ -326,7 +326,7 @@ export default {
     drawShape(nextDrawShape) {
       if (nextDrawShape !== null) {
         this.onDataChange('shapeSearch');
-        this.$controller.getParcelsByDrawnShape();
+        this.$controller.handleDrawnShape();
         this.$store.commit('setShapeSearchStatus', 'waiting');
       }
     },

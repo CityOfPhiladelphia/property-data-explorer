@@ -55,16 +55,6 @@ function createStore(config) {
       open: '',
     },
     map: {},
-    bufferSearch: {
-      status: null,
-      data: null,
-      input: null
-    },
-    shapeSearch: {
-      status: null,
-      data: null,
-      input: null,
-    },
   };
 
   const mb = {
@@ -183,32 +173,6 @@ function createStore(config) {
         // console.log('setDidToggleModal, name:', name);
         // state.modals[name].open = open === null ? !state.modals[name].open : open
         state.modals.open = name;
-      },
-
-      setShapeSearchStatus(state, payload) {
-        //console.log('setShapeSearchStatus is running, payload:', payload);
-        state.shapeSearch.status = payload;
-      },
-      setShapeSearchInput(state, payload) {
-        state.shapeSearch.input = payload;
-      },
-      setShapeSearchData(state, payload) {
-        state.shapeSearch.data = payload;
-      },
-      setBufferSearchStatus(state, payload) {
-        //console.log('setBufferSearchStatus is running, payload:', payload);
-        state.bufferSearch.status = payload;
-      },
-      setBufferSearchInput(state, payload) {
-        state.bufferSearch.input = payload;
-      },
-      setBufferSearchData(state, payload) {
-        state.bufferSearch.data = payload;
-      },
-      setShapeSearchDataPush(state, payload) {
-        let objIndex = parseInt(payload.objIndex)
-        delete payload.objIndex
-        state.shapeSearch.data.rows.splice(objIndex + 1, 0, ...payload);
       },
     },
   };

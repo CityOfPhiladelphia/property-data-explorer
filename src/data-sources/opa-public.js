@@ -10,7 +10,10 @@ export default {
         return state.ownerSearch.data;
       } else if (state.lastSearchMethod === 'shape search' || state.lastSearchMethod === 'buffer search') {
         return state.shapeSearch.data.rows;
-      } 
+      }
+      // } else if (state.lastSearchMethod === 'buffer search') {
+      //   return state.bufferSearch.data.rows;
+      // }
       let opa = [];
       opa.push(state.geocode.data);
       if (state.geocode.related != null){
@@ -23,7 +26,7 @@ export default {
         opa.push(state.condoUnits.units[Number(state.parcels.pwd[0].properties.PARCELID)][0]);
       }
       return opa;
-      
+
     },
     getTargetId: function(target) {
       // console.log('opa-public getTargetId is running:', target);
@@ -31,9 +34,9 @@ export default {
         return target.properties.opa_account_num;
       } else if(target.parcel_number === null) {
         return;
-      } 
+      }
       return target.parcel_number;
-      
+
     },
   },
   options: {

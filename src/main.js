@@ -26,7 +26,7 @@ const clientConfig = config;
 const baseConfigUrl = config.baseConfig;
 
 // import '../node_modules/phila-standards/dist/css/phila-app.min.css';
-import helpers from './util/helpers';
+// import helpers from './util/helpers';
 import 'phila-standards/dist/css/phila-app.min.css';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-easybutton/src/easy-button.css';
