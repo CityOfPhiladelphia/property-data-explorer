@@ -547,7 +547,7 @@ export default {
 
         this.$controller.dataManager.fetchData();
       } else {
-        // console.log('last search method is not geocode')
+        console.log('last search method is not geocode')
         let result = this.$store.state.shapeSearch.data.rows.filter(
           row => row._featureId === item._featureId,
         );
@@ -568,6 +568,7 @@ export default {
 
         // console.log('this.$controller.dataManager.resetData() is about to run');
         this.$controller.dataManager.resetData();
+        this.$controller.dataManager.fetchData();
         // console.log('this.$controller.dataManager.didShapeSearch() is about to run');
         // this.$controller.dataManager.didShapeSearch();
       }

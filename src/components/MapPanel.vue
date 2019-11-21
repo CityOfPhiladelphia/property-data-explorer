@@ -99,7 +99,9 @@
           v-if="currentBuffer !== null"
           :latlngs="currentBuffer"
         />
-        <!-- :color="'red'" -->
+        <!-- :fillColor="'green'" -->
+        <!-- :color="'red'"
+        :weight="2" -->
         <!-- :fillColor="geojsonFeature.properties.fillColor"
         :weight="geojsonFeature.properties.weight"
         :opacity="geojsonFeature.properties.opacity"

@@ -133,6 +133,7 @@ export default {
     // returns geojson parcels to be rendered on the map along with
     // necessary props.
     geojsonParcels() {
+      console.log('recalculating geojsonParcels');
       let features;
       if(this.pwdParcel){
         let props = {};
@@ -348,7 +349,7 @@ export default {
     identifyMarker(feature) {
       // console.log('identifyMarker starting: feature.featureId', feature.featureId, 'feature.featureId.toString().slice(0,6):', feature.featureId.toString().slice(0,6));
       let featureId;
-      if (this.$store.state.geocode.status === "success" && this.$store.state.lastSearchMethod !== 'shape search') {
+      if (this.$store.state.geocode.status === "success" && this.$store.state.lastSearchMethod !== 'shape search' && this.$store.state.lastSearchMethod !== 'buffer search') {
         const geocodeId = this.$store.state.geocode.data._featureId;
         // console.log('identifyMarker, geocode.status is success, geocodeId:', geocodeId);
         // featureId = this.$store.state.geocode.data._featureId === parseInt(feature.featureId.toString().slice(0,6)) ?
@@ -361,7 +362,7 @@ export default {
         // Number(this.$store.state.geocode.data.properties.pwd_parcel_id) : null
 
 
-      } else if (this.$store.state.ownerSearch.status === "success" ) {
+      } else if (this.$store.state.ownerSearch.status === "success") {
         let result = this.$store.state.ownerSearch.data.filter( function(object) {
           return object._featureId === feature.featureId;
         });
@@ -377,7 +378,7 @@ export default {
         if(typeof result[0] != 'undefined'){
           featureId = Number(result[0].pwd_parcel_id);
         } else {
-          return; 
+          return;
         }
       } else {
         featureId = null;
@@ -388,13 +389,13 @@ export default {
     identifyRow(featureId) {
       // console.log("identifyRow starting", featureId)
       let rowId;
-      if (this.$store.state.geocode.status === "success" && this.$store.state.lastSearchMethod !== 'shape search') {
+      if (this.$store.state.geocode.status === "success" && this.$store.state.lastSearchMethod !== 'shape search' && this.$store.state.lastSearchMethod !== 'buffer search') {
         // console.log(this.$store.state.geocode.data)
         let pwd_parcel_id = Number(this.$store.state.geocode.data.properties.pwd_parcel_id);
         // console.log("opa_account_num: ", pwd_parcel_id, "featureId: ", featureId)
         rowId = pwd_parcel_id === featureId ? this.$store.state.geocode.data._featureId : null;
-        // console.log("rowId from geocode success: ", rowId)
-      } else if (this.$store.state.ownerSearch.status === "success" && this.$store.state.lastSearchMethod !== 'shape search') {
+        console.log("rowId from geocode success: ", rowId)
+      } else if (this.$store.state.ownerSearch.status === "success" && this.$store.state.lastSearchMethod !== 'shape search' && this.$store.state.lastSearchMethod !== 'buffer search') {
         let result = this.$store.state.ownerSearch.data.filter( function(object) {
           // console.log("object.properties.pwd_parcel_id: ", object.properties.pwd_parcel_id, "featureId: ", featureId)
           return Number(object.properties.pwd_parcel_id) === featureId;
