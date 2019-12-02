@@ -45,8 +45,17 @@ let config = {
     enabled: true,
     icon: [ 'far', 'dot-circle' ],
   },
+  addressInput: {
+    width: 415,
+    mapWidth: 300,
+    position: 'right',
+    autocompleteEnabled: false,
+    autocompleteMax: 15,
+    placeholder: 'Search the map',
+  },
   cyclomedia: {
     enabled: true,
+    orientation: 'vertical',
     measurementAllowed: false,
     popoutAble: true,
     recordingsUrl: 'https://atlas.cyclomedia.com/Recordings/wfs',

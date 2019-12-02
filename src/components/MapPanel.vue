@@ -226,7 +226,7 @@
           <map-address-input
             :position="'topleft'"
             :placeholder="addressInputPlaceholder"
-            width-from-config="300"
+            :width-from-config="addressInputWidth"
             @handle-search-form-submit="handleSearchFormSubmit"
           />
 
@@ -451,6 +451,12 @@ export default {
       //   return 'topnearleft'
       // }
     },
+    addressInputWidth() {
+      if (this.$config.addressInput) {
+        return this.$config.addressInput.mapWidth;
+      }
+      return 300;
+    },
     addressInputPlaceholder() {
       if (this.$config.addressInput) {
         return this.$config.addressInput.placeholder;
@@ -657,13 +663,6 @@ export default {
         this.setMapToBounds();
         this.$store.commit('setMapViewWasSetOnAppLoad', true);
       }
-    },
-    picOrCycloActive() {
-      if (this.cyclomediaActive) {
-        return true;
-      }
-      return false;
-
     },
     cyclomediaActive(value) {
       this.$nextTick(() => {

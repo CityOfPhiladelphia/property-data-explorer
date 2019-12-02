@@ -31,7 +31,7 @@
             v-show="cyclomediaActive"
             slot="cycloWidget"
             screen-percent="2"
-            :orientation="'vertical'"
+            :orientation="this.$config.cyclomedia.orientation"
           />
         </map-panel>
       </div>
