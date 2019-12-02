@@ -227,6 +227,7 @@
             :position="'topleft'"
             :placeholder="addressInputPlaceholder"
             width-from-config="300"
+            @handle-search-form-submit="handleSearchFormSubmit"
           />
 
           <buffer-control
@@ -705,6 +706,10 @@ export default {
     const map = this.$store.state.map.map;
   },
   methods: {
+    handleSearchFormSubmit(value) {
+      // console.log('MapPanel.vue handleSearchFormSubmit is running');
+      this.$controller.handleSearchFormSubmit(value);
+    },
     handleBufferClick() {
       console.log('handleBufferClick is running');
     },

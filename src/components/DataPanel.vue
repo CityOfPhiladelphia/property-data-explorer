@@ -171,6 +171,11 @@ export default {
         tableSort: this.tableSort,
         expandedData: this.expandedData,
         rowAction: this.rowClick,
+        colSpan: {
+          condition: 'condo',
+          column: 'Market Value',
+          span: 3,
+        },
         export: {
           formatButtons: {
             csv: "Download CSV",
@@ -206,6 +211,7 @@ export default {
 
             },
             customStyle: { float: 'left', 'padding-right': '5px' },
+            customClass: "testtest",
             mobileIcon: "info-circle",
             hideMobileIcon: (state, item) => typeof state.sources.opa_assessment.targets[item.properties.opa_account_num] != 'undefined' ? true : false ,
           },
@@ -227,12 +233,13 @@ export default {
                   text: 'Click to add units to results.',
                   buttonAction: this.addCondoRecords,
                   buttonFinished() {
-                    // console.log("button finished running")
+                    console.log("button finished running")
                     this.$data.showTable = true;
                   },
                 },
                 options: {
                   class: function (state, item) {
+                    console.log('calculating button-comp class');
                     return state.sources.opa_assessment.targets[item.properties.opa_account_num] ? "" : 'condo-button';
                   },
                   style: function (state, item) {
@@ -254,7 +261,7 @@ export default {
                 return "Not Applicable";
               }
             },
-            customkey: function(state, item) {
+            customKey: function(state, item) {
               if (item.properties.opa_account_num != "") {
                 if (typeof state.sources.opa_assessment.targets[item.properties.opa_account_num] != 'undefined') {
                   return format(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date, 'MM/DD/YYYY');
@@ -307,6 +314,11 @@ export default {
         tableSort: this.tableSort,
         expandedData: this.expandedData,
         rowAction: this.rowClick,
+        colSpan: {
+          condition: 'condo',
+          column: 'Market Value',
+          span: 3,
+        },
         export: {
           formatButtons: {
             csv: "Download CSV",
@@ -348,7 +360,7 @@ export default {
               return format(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date.toString(), 'MM/DD/YYYY');
               // return format(parseISO(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date.toString()), 'MM/dd/yyyy');
             },
-            customkey: function(state, item) {
+            customKey: function(state, item) {
               return format(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date.toString(), 'MM/DD/YYYY');
               // return format(parseISO(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date.toString()), 'MM/dd/yyyy');
             },
@@ -386,6 +398,11 @@ export default {
         mailingFields: this.mailingFields,
         tableSort: this.tableSort,
         expandedData: this.expandedData,
+        colSpan: {
+          condition: 'condo',
+          column: 'Market Value',
+          span: 3,
+        },
         rowAction: this.rowClick,
         export: {
           formatButtons: {
@@ -456,7 +473,7 @@ export default {
               return "Not Applicable";
 
             },
-            customkey: function(state, item) {
+            customKey: function(state, item) {
               if (item.sale_date != "") {
                 return format(item.sale_date, 'MM/DD/YYYY');
                 // return format(parseISO(item.sale_date), 'MM/dd/yyyy');
