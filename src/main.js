@@ -48,7 +48,7 @@ function initVue(config) {
   // console.log('in initVue, config:', config, 'store:', store, 'router:', router);
   // mix in controller
   // Vue.use(controllerMixin, { config, store, router });
-  Vue.use(controllerMixin, { config, store });
+  Vue.use(controllerMixin, { config, store, router });
 
   Vue.component('font-awesome-icon', FontAwesomeIcon);
 

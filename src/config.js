@@ -34,6 +34,7 @@ let config = {
   gatekeeperKey: process.env.VUE_APP_GATEKEEPER_KEY,
   router: {
     enabled: true,
+    type: 'vue',
   },
   app: {
     title: 'Property Data Explorer',

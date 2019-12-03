@@ -358,21 +358,22 @@ export default {
     // console.log('App.vue mounted is running, this.$route.query:', this.$route.query);
     if (query.shape) {
       // this.introPage = false;
-      this.$store.commit('setIntroPage', false);
-      let shape = query.shape;
-      shape = shape.slice(2, shape.length-2);
-      shape = shape.split('],[');
-      let test = [];
-      for (let point of shape) {
-        test.push(point.split(','));
-      }
-      let _latlngs = [];
-      for (let item of test) {
-        let latlng = new LatLng(parseFloat(item[0]), parseFloat(item[1]));
-        _latlngs.push(latlng);
-      }
-      const points = { _latlngs };
-      this.$controller.getParcelsByPoints(points);
+      // this.$store.commit('setIntroPage', false);
+      // let shape = query.shape;
+      // shape = shape.slice(2, shape.length-2);
+      // shape = shape.split('],[');
+      // let test = [];
+      // for (let point of shape) {
+      //   test.push(point.split(','));
+      // }
+      // let _latlngs = [];
+      // for (let item of test) {
+      //   let latlng = new LatLng(parseFloat(item[0]), parseFloat(item[1]));
+      //   _latlngs.push(latlng);
+      // }
+      // const points = { _latlngs };
+      this.$controller.handleDrawnShape();
+      // this.$controller.getParcelsByPoints(points);
       this.onDataChange('shapeSearch');
     } else if (query.address) {
       // this.introPage = false;

@@ -56,7 +56,7 @@
 </template>
 
 <script>
-require("sorttable");
+require('sorttable');
 import { format } from 'date-fns';
 // import { format, parseISO } from 'date-fns';
 import helpers from '../util/helpers';
@@ -526,11 +526,11 @@ export default {
   },
   methods: {
     addCondoRecords(state, item) {
-      console.log('addCondoRecords is running, item:', item);
+      // console.log('addCondoRecords is running, item:', item);
 
       this.$data.showTable = false;
       let mapUnitIds = function(id) {
-        console.log('running mapUnitIds, id:', id);
+        // console.log('running mapUnitIds, id:', id);
         let unitsToAdd = this.$store.state.condoUnits.units[id];
         unitsToAdd.map(
           (item, index) => {
@@ -564,7 +564,7 @@ export default {
 
         this.$controller.dataManager.fetchData();
       } else {
-        console.log('last search method is not geocode')
+        // console.log('last search method is not geocode')
         let result = this.$store.state.shapeSearch.data.rows.filter(
           row => row._featureId === item._featureId,
         );
@@ -584,10 +584,10 @@ export default {
         this.$store.commit('setShapeSearchDataPush', units);
 
         // console.log('this.$controller.dataManager.resetData() is about to run');
-        this.$controller.dataManager.resetData();
+        // this.$controller.dataManager.resetData();
         this.$controller.dataManager.fetchData();
         // console.log('this.$controller.dataManager.didShapeSearch() is about to run');
-        // this.$controller.dataManager.didShapeSearch();
+        // this.$controller.router.didShapeSearch();
       }
       // this.closeModal(state);
     },

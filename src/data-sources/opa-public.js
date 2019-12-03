@@ -9,7 +9,9 @@ export default {
       if (state.lastSearchMethod === 'owner search') {
         return state.ownerSearch.data;
       } else if (state.lastSearchMethod === 'shape search' || state.lastSearchMethod === 'buffer search') {
-        return state.shapeSearch.data.rows;
+        if (state.shapeSearch.data) {
+          return state.shapeSearch.data.rows || [];
+        }
       }
       // } else if (state.lastSearchMethod === 'buffer search') {
       //   return state.bufferSearch.data.rows;

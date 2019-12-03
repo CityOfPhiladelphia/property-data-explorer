@@ -9,8 +9,10 @@ export default {
       if (state.lastSearchMethod === 'owner search') {
         return state.ownerSearch.data;
       } else if (state.lastSearchMethod === 'shape search' || state.lastSearchMethod === 'buffer search') {
-        return state.shapeSearch.data.rows;
-      } 
+        if (state.shapeSearch.data) {
+          return state.shapeSearch.data.rows || [];
+        }
+      }
       let opa = [];
       opa.push(state.geocode.data);
       if (state.geocode.related != null){
@@ -23,15 +25,15 @@ export default {
         opa.push(state.condoUnits.units[Number(state.parcels.pwd[0].properties.PARCELID)][0]);
       }
       return opa;
-      
+
     },
     getTargetId: function(target) {
       // console.log('opa-assessment getTargetId is running');
       if(target.properties){
         return target.properties.opa_account_num;
-      } 
+      }
       return target.parcel_number;
-      
+
     },
   },
   options: {
