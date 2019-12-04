@@ -357,12 +357,12 @@ export default {
           {
             label: 'Date of Last Sale',
             value: function(state, item) {
-              return format(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date.toString(), 'MM/DD/YYYY');
-              // return format(parseISO(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date.toString()), 'MM/dd/yyyy');
+              // return format(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date.toString(), 'MM/DD/YYYY');
+              return format(parseISO(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date.toString()), 'MM/dd/yyyy');
             },
             customKey: function(state, item) {
-              return format(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date.toString(), 'MM/DD/YYYY');
-              // return format(parseISO(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date.toString()), 'MM/dd/yyyy');
+              // return format(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date.toString(), 'MM/DD/YYYY');
+              return format(parseISO(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date.toString()), 'MM/dd/yyyy');
             },
           },
           {
@@ -467,16 +467,16 @@ export default {
             label: 'Date of Last Sale',
             value: function(state, item) {
               if (item.sale_date != "") {
-                return format(item.sale_date, 'MM/DD/YYYY');
-                // return format(parseISO(item.sale_date), 'MM/dd/yyyy');
+                // return format(item.sale_date, 'MM/DD/YYYY');
+                return format(parseISO(item.sale_date), 'MM/dd/yyyy');
               }
               return "Not Applicable";
 
             },
             customKey: function(state, item) {
               if (item.sale_date != "") {
-                return format(item.sale_date, 'MM/DD/YYYY');
-                // return format(parseISO(item.sale_date), 'MM/dd/yyyy');
+                // return format(item.sale_date, 'MM/DD/YYYY');
+                return format(parseISO(item.sale_date), 'MM/dd/yyyy');
               }
               return 0;
 
