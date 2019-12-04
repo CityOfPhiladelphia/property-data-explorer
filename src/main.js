@@ -7,6 +7,7 @@ _____________  ____ ______   ____________/  |_ ___.__. _______   ____\_ |__   __
 |__|                |__|        \/             \/                   \/    \/
 */
 
+
 import Vue from 'vue';
 import axios from 'axios';
 import createStore from './store';
