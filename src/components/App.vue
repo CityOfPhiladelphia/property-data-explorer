@@ -416,8 +416,6 @@ export default {
       const prevFullScreenMapEnabled = this.$store.state.FullScreenMapEnabled;
       const nextFullScreenMapEnabled = !prevFullScreenMapEnabled;
       this.$store.commit('setFullScreenMapEnabled', nextFullScreenMapEnabled);
-
-
     },
     onResize() {
       if (window.innerWidth > 749) {
