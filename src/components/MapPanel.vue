@@ -516,8 +516,8 @@ export default {
       return this.$config.legendControls || {};
     },
     activeBasemap() {
-      const shouldShowImagery = this.$store.state.map.shouldShowImagery;
-      if (shouldShowImagery) {
+      const shouldShowBasemapSelectControl = this.$store.state.map.shouldShowBasemapSelectControl;
+      if (shouldShowBasemapSelectControl) {
         return this.$store.state.map.imagery;
       }
       const defaultBasemap = this.$config.map.defaultBasemap;
@@ -527,7 +527,6 @@ export default {
     tiledLayers() {
       const activeBasemap = this.activeBasemap;
       const activeBasemapConfig = this.configForBasemap(activeBasemap);
-
       return activeBasemapConfig.tiledLayers || [];
     },
     // activeTiledOverlays() {
