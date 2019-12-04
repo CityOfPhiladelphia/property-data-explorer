@@ -654,6 +654,10 @@ export default {
       console.log('watch geocodeResult is running, nextGeocodeResult:', nextGeocodeResult);
       if (Object.keys(nextGeocodeResult).length > 0) {
         this.lastGeocodeResult = nextGeocodeResult;
+        if (nextGeocodeResult._featureId) {
+          this.$store.commit('setMapCenter', nextGeocodeResult.geometry.coordinates);
+          this.$store.commit('setMapZoom', this.geocodeZoom);
+        }
       }
     },
     geojsonParcels(nextGeojson) {
