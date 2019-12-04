@@ -1,5 +1,6 @@
 import accounting from 'accounting';
-import { format } from 'date-fns';
+// import { format } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 
 accounting.settings.currency.precision = 0;
 
@@ -31,12 +32,25 @@ export default {
     },
   },
   date: {
-    transform: function (value, globals) {
-      if (format(value, 'MM/DD/YYYY') === 'Invalid Date' ) {
-        return value;
+    // transform: function (value, globals) {
+    //   console.log('in date transform, value:', value)
+    //   if (format(parseISO(value), 'MM/dd/yyyy') === 'Invalid Date' ) {
+    //     return value;
+    //   }
+    //   return format(parseISO(value), 'MM/dd/yyyy');
+    //
+    // },
+    transform: function (value) {
+      let valueTransformed;
+      console.log('date transform running, value:', value, 'typeof value:', typeof value);
+      if (value === 'Date Not Available') {
+        valueTransformed = value;
+      } else if (typeof value === 'string') {
+        valueTransformed = format(parseISO(value), 'MM/dd/yyyy');
+      } else {
+        valueTransformed = format(value, 'MM/dd/yyyy');
       }
-      return format(value, 'MM/DD/YYYY');
-
+      return valueTransformed;
     },
   },
   dayofweek: {

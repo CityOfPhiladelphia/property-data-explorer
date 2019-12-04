@@ -57,8 +57,8 @@
 
 <script>
 require('sorttable');
-import { format } from 'date-fns';
-// import { format, parseISO } from 'date-fns';
+// import { format } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 import helpers from '../util/helpers';
 import transforms from '../general/transforms';
 const titleCase = transforms.titleCase.transform;
@@ -254,8 +254,8 @@ export default {
             value: function(state, item) {
               if (item.properties.opa_account_num != ""){
                 if (typeof state.sources.opa_assessment.targets[item.properties.opa_account_num] != 'undefined') {
-                  return format(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date, 'MM/DD/YYYY');
-                  // return format(parseISO(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date), 'MM/dd/yyyy');
+                  // return format(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date, 'MM/DD/YYYY');
+                  return format(parseISO(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date), 'MM/dd/yyyy');
                 }
               } else {
                 return "Not Applicable";
@@ -264,8 +264,8 @@ export default {
             customKey: function(state, item) {
               if (item.properties.opa_account_num != "") {
                 if (typeof state.sources.opa_assessment.targets[item.properties.opa_account_num] != 'undefined') {
-                  return format(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date, 'MM/DD/YYYY');
-                  // return format(parseISO(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date), 'MM/dd/yyyy');
+                  // return format(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date, 'MM/DD/YYYY');
+                  return format(parseISO(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date), 'MM/dd/yyyy');
                 }
                 return;
 

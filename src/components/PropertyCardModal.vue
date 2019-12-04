@@ -88,6 +88,7 @@
         />
         <h3>Loading Sale Data</h3>
       </div>
+
       <vertical-table :slots="saleVerticalTableSlots" />
 
       <!-- valuation history horizontal table -->
@@ -585,6 +586,7 @@ export default {
           {
             label: 'Sale Date',
             value: function(state) {
+              console.log('Sale Date, opaAssessmentData.sale_date:', opaAssessmentData.sale_date);
               return opaAssessmentData.sale_date;
             },
             transforms: [ 'date' ],
