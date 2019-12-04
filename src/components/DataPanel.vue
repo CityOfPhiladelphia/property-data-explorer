@@ -556,6 +556,7 @@ export default {
         // console.log("Not shape search, input: ", input)
 
         this.$controller.dataManager.resetData();
+        this.$controller.dataManager.resetShape();
         const input = this.$store.state.parcels.pwd[0].properties.ADDRESS;
         this.$controller.dataManager.clients.condoSearch.fetch(input);
 
@@ -564,10 +565,10 @@ export default {
 
         this.$controller.dataManager.fetchData();
       } else {
-        // console.log('last search method is not geocode')
         let result = this.$store.state.shapeSearch.data.rows.filter(
           row => row._featureId === item._featureId,
         );
+        console.log('addCondoRecords is running, last search method is not geocode, result:', result);
 
         function arrayObjectIndexOf(myArray, searchTerm, property) {
           for(let i = 0, len = myArray.length; i < len; i++) {
@@ -584,7 +585,7 @@ export default {
         this.$store.commit('setShapeSearchDataPush', units);
 
         // console.log('this.$controller.dataManager.resetData() is about to run');
-        // this.$controller.dataManager.resetData();
+        this.$controller.dataManager.resetData();
         this.$controller.dataManager.fetchData();
         // console.log('this.$controller.dataManager.didShapeSearch() is about to run');
         // this.$controller.router.didShapeSearch();
