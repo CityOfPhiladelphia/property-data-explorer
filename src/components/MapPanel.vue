@@ -226,9 +226,11 @@
           <map-address-input
             :position="'topleft'"
             :placeholder="addressInputPlaceholder"
-            :width-from-config="addressInputWidth"
+            width-from-config="addressInputWidth"
+            static="true"
             @handle-search-form-submit="handleSearchFormSubmit"
           />
+          <!-- :width-from-config="addressInputWidth" -->
 
           <buffer-control
             :bar-height="'49px'"
