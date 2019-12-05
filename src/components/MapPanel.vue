@@ -226,7 +226,7 @@
           <map-address-input
             :position="'topleft'"
             :placeholder="addressInputPlaceholder"
-            width-from-config="addressInputWidth"
+            :width-from-config="addressInputWidth"
             static="true"
             @handle-search-form-submit="handleSearchFormSubmit"
           />
