@@ -830,23 +830,23 @@
     vue "^2.6.10"
     vuex "^3.1.2"
 
-"@philly/vue-datafetch@https://github.com/CityOfPhiladelphia/phila-vue-datafetch#9184359ddd4cf09ba06d332157e552395816b8fa":
+"@philly/vue-datafetch@https://github.com/CityOfPhiladelphia/phila-vue-datafetch#565be6fdcfa3c96625b27fead9d5742351fbb69e":
   version "0.0.31"
-  resolved "https://github.com/CityOfPhiladelphia/phila-vue-datafetch#9184359ddd4cf09ba06d332157e552395816b8fa"
+  resolved "https://github.com/CityOfPhiladelphia/phila-vue-datafetch#565be6fdcfa3c96625b27fead9d5742351fbb69e"
   dependencies:
     "@turf/turf" "^5.1.6"
     axios "^0.19.0"
     date-fns "^2.8.1"
     esri-leaflet "^2.3.1"
     https-proxy-agent "^3.0.1"
-    leaflet "^1.5.1"
+    leaflet "1.5.1"
     proj4 "^2.6.0"
     vue "^2.6.10"
     vuex "^3.1.2"
 
-"@philly/vue-mapping@https://github.com/CityOfPhiladelphia/phila-vue-mapping#cacfb767f9375f8403d1960f53dc06e5d46d94bf":
+"@philly/vue-mapping@https://github.com/CityOfPhiladelphia/phila-vue-mapping#5703de96d5f1f4cf4db5e730241b6238be34ca11":
   version "1.0.47"
-  resolved "https://github.com/CityOfPhiladelphia/phila-vue-mapping#cacfb767f9375f8403d1960f53dc06e5d46d94bf"
+  resolved "https://github.com/CityOfPhiladelphia/phila-vue-mapping#5703de96d5f1f4cf4db5e730241b6238be34ca11"
   dependencies:
     "@fortawesome/fontawesome-svg-core" "^1.2.15"
     "@fortawesome/free-regular-svg-icons" "^5.7.2"
@@ -861,7 +861,7 @@
     esri-leaflet "^2.3.1"
     esri-leaflet-legend "https://github.com/CityOfPhiladelphia/esri-leaflet-legend#8d42cbc1ed71c630fd8f9c6795877b5f7498b49f"
     esri-leaflet-renderers "^2.0.6"
-    leaflet "^1.5.1"
+    leaflet "1.5.1"
     leaflet-easybutton "^2.3.0"
     leaflet-measure "https://github.com/CityOfPhiladelphia/leaflet-measure#b70886af342f19597dc2937d79d64bad6bab07c6"
     leaflet-omnivore "https://github.com/CityOfPhiladelphia/leaflet-omnivore#f072195b03f7930690d9cbccb9375f0eda50fd41"
@@ -6539,6 +6539,11 @@ leaflet-virtual-grid@^1.0.7:
   integrity sha512-sJxWYPcIKwMTewE+z8OFzfZHsbZcniQgTcreVdIQnxSRf+1XpMp+c4QKAWRKTBRmWOhEGyQO0Z90CLANJ9jRUQ==
   dependencies:
     leaflet "^1.0.0"
+
+leaflet@1.5.1:
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/leaflet/-/leaflet-1.5.1.tgz#9afb9d963d66c870066b1342e7a06f92840f46bf"
+  integrity sha512-ekM9KAeG99tYisNBg0IzEywAlp0hYI5XRipsqRXyRTeuU8jcuntilpp+eFf5gaE0xubc9RuSNIVtByEKwqFV0w==
 
 leaflet@^1.0.0, leaflet@^1.0.0-rc.3, leaflet@^1.0.1, leaflet@^1.3.1, leaflet@^1.4.0, leaflet@^1.5.1:
   version "1.6.0"
