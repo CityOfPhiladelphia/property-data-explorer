@@ -316,12 +316,16 @@
 </template>
 
 <script>
-import * as L from 'leaflet';
+// import * as L from 'leaflet';
+import { featureGroup, geoJSON, marker } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
-const FeatureGroup = L.default.featureGroup;
-const GeoJSON = L.default.geoJSON;
-const Lmarker = L.default.marker;
+const FeatureGroup = featureGroup;
+const GeoJSON = geoJSON;
+const Lmarker = marker;
+// const FeatureGroup = L.default.featureGroup;
+// const GeoJSON = L.default.geoJSON;
+// const Lmarker = L.default.marker;
 
 // mixins
 import markersMixin from './markers-mixin';

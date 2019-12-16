@@ -13,25 +13,25 @@
   "dependencies": {
     "1.0.2": "^1.0.0",
     "@fortawesome/pro-solid-svg-icons": "^5.8.2",
-    "@philly/vue-comps": "https://github.com/CityOfPhiladelphia/phila-vue-comps#72d998090cefd632676310f6ef5062c2ba61e308",
-    "@philly/vue-datafetch": "https://github.com/CityOfPhiladelphia/phila-vue-datafetch#64b1e2fdeabdf074fb3c9bb9abdca70d0b492e68",
-    "@philly/vue-mapping": "https://github.com/CityOfPhiladelphia/phila-vue-mapping#b5b75c9a1f480fe5268617f387e25b136104971c",
+    "@philly/vue-comps": "https://github.com/CityOfPhiladelphia/phila-vue-comps#0aed51502575633b82b6e298c45eb7430a841478",
+    "@philly/vue-datafetch": "https://github.com/CityOfPhiladelphia/phila-vue-datafetch#9184359ddd4cf09ba06d332157e552395816b8fa",
+    "@philly/vue-mapping": "https://github.com/CityOfPhiladelphia/phila-vue-mapping#cacfb767f9375f8403d1960f53dc06e5d46d94bf",
     "accounting": "^0.4.1",
-    "lodash.chunk": "^4.2.0",
-    "lodash.debounce": "^4.0.8",
+    "core-js": "^3.4.7",
+    "leaflet-vector-icon": "https://github.com/CityOfPhiladelphia/leaflet-vector-icon#c37571e92c66ce0003f22058f2d246b31d3941a5",
     "sorttable": "^1.0.2",
-    "vue": "^2.6.9",
+    "vue": "^2.6.10",
     "vue-router": "^3.0.6",
-    "vuex": "^3.0.1"
+    "vuex": "^3.1.2"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.4.0",
-    "@vue/cli-service": "^3.4.0",
+    "@vue/cli-plugin-babel": "^4.1.1",
+    "@vue/cli-service": "^4.1.1",
     "babel-runtime": "^6.26.0",
     "node-sass": "^4.12.0",
     "sass": "^1.21.0",
     "sass-loader": "^7.1.0",
-    "vue-template-compiler": "^2.6.9",
+    "vue-template-compiler": "^2.6.10",
     "webpack-visualizer-plugin": "^0.1.11"
   },
   "postcss": {

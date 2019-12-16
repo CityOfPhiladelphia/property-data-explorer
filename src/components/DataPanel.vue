@@ -56,7 +56,7 @@
 </template>
 
 <script>
-require('sorttable');
+require("sorttable");
 // import { format } from 'date-fns';
 import { format, parseISO } from 'date-fns';
 import helpers from '../util/helpers';
@@ -615,7 +615,7 @@ export default {
         "Zip Code",
         "Street Address",
         "Owner",
-        "OPA Account #",
+        "OPA Account Number",
       ];
 
       for ( let sortLabel of tableReorder) {
@@ -828,7 +828,7 @@ export default {
           },
         },
         {
-          label: 'OPA Account #',
+          label: 'OPA Account Number',
           value: function(state, item) {
             if (state.geocode.status === "success"){
               return item.properties.opa_account_num;

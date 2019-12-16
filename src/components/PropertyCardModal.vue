@@ -548,7 +548,7 @@ export default {
           //   }
           // },
           {
-            label: 'OPA Account #',
+            label: 'OPA Account Number',
             value: this.activeOpaId,
           },
           {
