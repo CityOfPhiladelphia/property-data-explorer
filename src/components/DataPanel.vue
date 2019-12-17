@@ -207,8 +207,6 @@ export default {
                 return titleCase(item.properties.street_address);
               }
               return;
-
-
             },
             customStyle: { float: 'left', 'padding-right': '5px' },
             customClass: "testtest",

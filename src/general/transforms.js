@@ -27,6 +27,7 @@ export default {
     globals: [ 'accounting' ],
     // this is the function that gets called to perform the transform
     transform: function (value, globals) {
+      // console.log('currency transform, value:', value);
       // var accounting = globals.accounting;
       return accounting.formatMoney(value);
     },

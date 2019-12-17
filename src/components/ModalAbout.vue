@@ -41,10 +41,9 @@
       </div>
 
       <div class="cell small-9 medium-3 text-center">
-        <font-awesome-icon
-          icon="hexagon"
-          class="fa-3x"
-          aria-hidden="true"
+        <img
+          class="pentagon-image"
+          :src="'images/pentagon.png'"
         />
       </div>
       <div class="cell small-15 medium-21 text-div">
@@ -113,6 +112,11 @@ export default {
   .street-view-image {
     width: 50px;
     height: 60px;
+  }
+
+  .pentagon-image {
+    width: 80px;
+    height: 80px;
   }
 
   @media screen and (max-width: 750px) {

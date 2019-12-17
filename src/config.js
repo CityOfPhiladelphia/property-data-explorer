@@ -41,6 +41,7 @@ let config = {
     tagLine: 'Explore Property Data',
     logoAlt: 'logo',
   },
+  dataPanelWidth: 'whole',
   transforms,
   geolocation: {
     enabled: true,
