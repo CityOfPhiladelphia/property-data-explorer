@@ -18,13 +18,15 @@ import config from './config.js';
 import * as faAll from './fa.js';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
-import controllerMixin from '@philly/vue-datafetch/src/controller/index.js';
+import controllerMixin from '@philly/vue-datafetch/src/controller.js';
+
+// console.log('in pde main.js, createStore:', createStore, 'controllerMixin:', controllerMixin);
 
 const clientConfig = config;
 const baseConfigUrl = config.baseConfig;
 
 // import '../node_modules/phila-standards/dist/css/phila-app.min.css';
-import helpers from './util/helpers';
+// import helpers from './util/helpers';
 import 'phila-standards/dist/css/phila-app.min.css';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-easybutton/src/easy-button.css';
@@ -36,15 +38,19 @@ import router from './router';
 import App from './components/App.vue';
 
 function initVue(config) {
-  const store = createStore(config);
 
   // make config accessible from each component via this.$config
   Vue.use(configMixin, config);
 
+  const store = createStore(config);
+  let opts = { config, store };
+
+  // console.log('in initVue, config:', config, 'store:', store, 'router:', router);
   // mix in controller
+  // Vue.use(controllerMixin, { config, store, router });
   Vue.use(controllerMixin, { config, store, router });
 
-  Vue.component('font-awesome-icon', FontAwesomeIcon)
+  Vue.component('font-awesome-icon', FontAwesomeIcon);
 
   const customComps = config.customComps || [];
   // console.log('mapboard main.js, customComps:', customComps);
@@ -56,7 +62,7 @@ function initVue(config) {
     el: '#vue-app',
     render: h => h(App),
     router,
-    store
+    store,
   });
 }
 
@@ -70,6 +76,7 @@ if (baseConfigUrl) {
 
     // deep merge base config and client config
     const config = mergeDeep(baseConfig, clientConfig);
+    console.log('in axios, about to call initVue, config:', config);
 
     initVue(config);
   }).catch(err => {

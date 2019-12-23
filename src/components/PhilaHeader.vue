@@ -46,11 +46,11 @@
                   class="app-logo"
                 >
               </a>
-              <div class="app-divide"></div>
+              <div class="app-divide" />
               <a
                 class="app-title"
               >
-              <!-- :to="appLink" -->
+                <!-- :to="appLink" -->
                 <h1 class="title">
                   {{ appTitle }}
                 </h1>
@@ -58,9 +58,11 @@
                   {{ appTagLine }}
                 </h2>
               </a>
-              <div id="demo-container"><div id="demo-badge">
-                BETA
-              </div></div>
+              <div id="demo-container">
+                <div id="demo-badge">
+                  BETA
+                </div>
+              </div>
             </section>
           </div>
           <!-- <div class="cell large-auto small-auto small-centered text-center">
@@ -192,9 +194,9 @@ export default {
     },
   },
   // created() {
-    //   Object.keys(this.dropdownData).forEach(item => {
-      //     if (this.$route.query[item]) {
-        //       this.searchString = this.$route.query[item];
+  //   Object.keys(this.dropdownData).forEach(item => {
+  //     if (this.$route.query[item]) {
+  //       this.searchString = this.$route.query[item];
   //       this.dropdownData[item].selected = true;
   //     }
   //   });
@@ -211,7 +213,7 @@ export default {
       this.searchString = '';
     },
     // comboSearchTriggered(query) {
-      //   // console.log('in comboSearchTriggered, query:', query, 'this.searchType:', this.searchType, '{...this.$route.query}:', { ...this.$route.query }, '{...query}:', { ...query });
+    //   // console.log('in comboSearchTriggered, query:', query, 'this.searchType:', this.searchType, '{...this.$route.query}:', { ...this.$route.query }, '{...query}:', { ...query });
     //   this.$router.push({ query: { ...this.$route.query, ...query }});
     //   this.searchString = query[this.searchType];
     // },
@@ -223,8 +225,8 @@ export default {
       this.searchString = '';
     },
     compLogo(){
-        let mobileLogo = "//cityofphiladelphia.github.io/patterns/images/city-of-philadelphia-mobile.png"
-       return window.innerWidth < 750 ? mobileLogo : Logo
+      let mobileLogo = "//cityofphiladelphia.github.io/patterns/images/city-of-philadelphia-mobile.png";
+      return window.innerWidth < 750 ? mobileLogo : Logo;
     },
     toggleMenu() {
       this.isOpen = !this.isOpen;

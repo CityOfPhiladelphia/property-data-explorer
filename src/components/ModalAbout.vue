@@ -1,10 +1,15 @@
 <template>
   <div class="background">
-    <h2 class="text-center "><b>How to use Property Data Explorer</b></h2>
+    <h2 class="text-center ">
+      <b>How to use Property Data Explorer</b>
+    </h2>
     <div class="grid-x align-center-middle">
-
       <div class="cell small-9 medium-3 text-center">
-          <font-awesome-icon icon="search" class="fa-3x" aria-hidden="true" />
+        <font-awesome-icon
+          icon="search"
+          class="fa-3x"
+          aria-hidden="true"
+        />
       </div>
       <div class="cell small-15 medium-21 text-div">
         <p><b>Search for a single address, property account number, or Department of Records Map Registry number</b></p>
@@ -12,7 +17,11 @@
       </div>
 
       <div class="cell small-9 medium-3 text-center">
-          <font-awesome-icon icon="search" class="fa-3x" aria-hidden="true" />
+        <font-awesome-icon
+          icon="search"
+          class="fa-3x"
+          aria-hidden="true"
+        />
       </div>
       <div class="cell small-15 medium-21 text-div">
         <p><b>Search for a person's name</b></p>
@@ -20,7 +29,11 @@
       </div>
 
       <div class="cell small-9 medium-3 text-center">
-          <font-awesome-icon icon="circle" class="fa-3x" aria-hidden="true" />
+        <font-awesome-icon
+          icon="circle"
+          class="fa-3x"
+          aria-hidden="true"
+        />
       </div>
       <div class="cell small-15 medium-21 text-div">
         <p><b>Search by buffer</b></p>
@@ -28,7 +41,10 @@
       </div>
 
       <div class="cell small-9 medium-3 text-center">
-          <font-awesome-icon icon="hexagon" class="fa-3x" aria-hidden="true" />
+        <img
+          class="pentagon-image"
+          :src="'images/pentagon.png'"
+        />
       </div>
       <div class="cell small-15 medium-21 text-div">
         <p><b>Draw a shape on the map</b></p>
@@ -36,7 +52,11 @@
       </div>
 
       <div class="cell small-9 medium-3 text-center">
-        <font-awesome-icon icon="map-marker-alt" class="fa-3x" aria-hidden="true" />
+        <font-awesome-icon
+          icon="map-marker-alt"
+          class="fa-3x"
+          aria-hidden="true"
+        />
       </div>
       <div class="cell small-15 medium-21 text-div">
         <p><b>The single property found or a buffer search will mark the property</b></p>
@@ -44,13 +64,15 @@
       </div>
 
       <div class="cell small-9 medium-3 text-center">
-        <img class="street-view-image" :src="'images/cyclomedia_blue.png'">
+        <img
+          class="street-view-image"
+          :src="'images/cyclomedia_blue.png'"
+        >
       </div>
       <div class="cell small-15 medium-21 text-div">
         <p><b>Toggle on and off street view</b></p>
         <p>Half of the map panel will be taken up by the street view. If you are zoomed in far enough, circles will appear along the streets in the map.  Click on a circle to change the street view location to that point.</p>
       </div>
-
     </div>
   </div>
 </template>
@@ -59,7 +81,7 @@
 
 export default {
   name: 'ModalAbout',
-}
+};
 </script>
 
 <style scoped>
@@ -90,6 +112,11 @@ export default {
   .street-view-image {
     width: 50px;
     height: 60px;
+  }
+
+  .pentagon-image {
+    width: 80px;
+    height: 80px;
   }
 
   @media screen and (max-width: 750px) {

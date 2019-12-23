@@ -14,11 +14,11 @@ export default {
       const layers = Object.values(layerMap);
 
       let updateFeaturePrev,
-          updateFeatureNext,
-          featureIdPrev,
-          featureIdNext,
-          matchingLayerNext,
-          matchingLayerPrev;
+        updateFeatureNext,
+        featureIdPrev,
+        featureIdNext,
+        matchingLayerNext,
+        matchingLayerPrev;
 
       if (prevActiveFeature && prevActiveFeature.featureId) {
         // console.log('first');
@@ -28,7 +28,9 @@ export default {
           const options = layer.options || {};
           const data = options.data;
           // console.log("data: ", data)
-          if (!data) return;
+          if (!data) {
+            return;
+          }
           const layerFeatureId = data.PARCELID;
           // console.log("layerFeatureId: ", layerFeatureId, "featureIdPrev: ", featureIdPrev)
           return layerFeatureId === featureIdPrev;
@@ -45,7 +47,9 @@ export default {
           const options = layer.options || {};
           const data = options.data;
           // console.log("data: ", data)
-          if (!data) return;
+          if (!data) {
+            return;
+          }
           // console.log(layer)
           const layerFeatureId = layer.options.data.PARCELID;
           // const layerFeatureId = layer.feature.properties.PARCELID;
@@ -67,7 +71,7 @@ export default {
       return this.$store.state.bufferShape;
     },
     locationMarker() {
-      const latlngArray = [this.$store.state.map.location.lat, this.$store.state.map.location.lng]
+      const latlngArray = [ this.$store.state.map.location.lat, this.$store.state.map.location.lng ];
       const marker = {
         latlng: latlngArray,
         radius: 6,
@@ -75,8 +79,8 @@ export default {
         color: '#ff0000',
         weight: 1,
         opacity: 1,
-        fillOpacity: 1.0
-      }
+        fillOpacity: 1.0,
+      };
       return marker;
     },
 
@@ -88,7 +92,7 @@ export default {
       // geocoded address marker
       const geocodeGeom = this.geocodeGeom;
       if (this.identifyFeature === 'address-marker' && geocodeGeom) {
-        const latlng = [...geocodeGeom.coordinates].reverse();
+        const latlng = [ ...geocodeGeom.coordinates ].reverse();
         const key = this.geocodeResult.properties.street_address;
         const color = '#2176d2';
         const markerType = 'geocode';
@@ -97,8 +101,8 @@ export default {
           icon: 'map-marker-alt',
           shadow: true,
           size: 50,
-        }
-        const addressMarker = {latlng, key, color, markerType, icon};
+        };
+        const addressMarker = { latlng, key, color, markerType, icon };
         markers.push(addressMarker);
       }
       return markers;
@@ -110,7 +114,7 @@ export default {
       // geocoded address marker
       const geocodeGeom = this.lastGeocodeGeom;
       if (this.identifyFeature === 'address-marker' && Object.keys(geocodeGeom).length > 0) {
-        const latlng = [...geocodeGeom.coordinates].reverse();
+        const latlng = [ ...geocodeGeom.coordinates ].reverse();
         const key = this.lastGeocodeResult.properties.street_address;
         const color = '#2176d2';
         const markerType = 'geocode';
@@ -119,8 +123,8 @@ export default {
           icon: 'map-marker-alt',
           shadow: true,
           size: 50,
-        }
-        const addressMarker = {latlng, key, color, markerType, icon};
+        };
+        const addressMarker = { latlng, key, color, markerType, icon };
         markers.push(addressMarker);
       }
       return markers;
@@ -129,10 +133,11 @@ export default {
     // returns geojson parcels to be rendered on the map along with
     // necessary props.
     geojsonParcels() {
+      console.log('recalculating geojsonParcels');
       let features;
       if(this.pwdParcel){
         let props = {};
-        // console.log("this.pwdParcel: ", this.pwdParcel)
+        console.log("this.pwdParcel: ", this.pwdParcel);
         features = this.pwdParcel;
         props.color = 'blue';
         props.fillColor = 'blue';
@@ -144,10 +149,10 @@ export default {
         } else if (typeof features[0] !== 'undefined') {
           // console.log("features:", features)
           Object.assign(features[0].properties, props);
-          features = [features[0]]
+          features = [ features[0] ];
         } else {
           Object.assign(features.properties, props);
-          features = [features]
+          features = [ features ];
         }
       }
       // console.log("feature from geojsonParcels: ", features)
@@ -164,13 +169,13 @@ export default {
         const topicData = topicMarkers.data(state);
         if (topicData !== null) {
 
-            const latlng = [topicData[topicMarkers.lat], topicData[topicMarkers.lng]];
-            const key = topicData[topicMarkers.key];
-            const color = topicMarkers.color || 'green';
-            const markerType = 'overlay';
-            const icon = topicMarkers.icon;
-            const markerObject = {latlng, key, color, markerType, icon};
-            markers.push(markerObject);
+          const latlng = [ topicData[topicMarkers.lat], topicData[topicMarkers.lng] ];
+          const key = topicData[topicMarkers.key];
+          const color = topicMarkers.color || 'green';
+          const markerType = 'overlay';
+          const icon = topicMarkers.icon;
+          const markerObject = { latlng, key, color, markerType, icon };
+          markers.push(markerObject);
           // }
         }
       }
@@ -211,10 +216,10 @@ export default {
 
           // TODO - get geometry field name from config
           if (item.geometry) {
-            const [x, y] = item.geometry.coordinates;
-            latlng = [y, x];
+            const [ x, y ] = item.geometry.coordinates;
+            latlng = [ y, x ];
           } else if (item.lat) {
-            latlng = [item.lat, item.lng]
+            latlng = [ item.lat, item.lng ];
             // if (item.point_x) {
             //   latlng = [item.point_y, item.point_x];
             // } else if (item.geocode_x) {
@@ -268,10 +273,10 @@ export default {
 
           // TODO - get geometry field name from config
           if (item.geometry) {
-            const [x, y] = item.geometry.coordinates;
-            latlng = [y, x];
+            const [ x, y ] = item.geometry.coordinates;
+            latlng = [ y, x ];
           } else if (item.lat) {
-            latlng = [item.lat, item.lng]
+            latlng = [ item.lat, item.lng ];
             // if (item.point_x) {
             //   latlng = [item.point_y, item.point_x];
             // } else if (item.geocode_x) {
@@ -303,7 +308,7 @@ export default {
           for (let geojson of topicData) {
             let props = Object.assign({}, topicGeojson.style);
             props.key = geojson[topicGeojson.key];
-            props.geojson = geojson
+            props.geojson = geojson;
             features.push(props);
           }
         }
@@ -344,7 +349,7 @@ export default {
     identifyMarker(feature) {
       // console.log('identifyMarker starting: feature.featureId', feature.featureId, 'feature.featureId.toString().slice(0,6):', feature.featureId.toString().slice(0,6));
       let featureId;
-      if (this.$store.state.geocode.status === "success" && this.$store.state.lastSearchMethod !== 'shape search') {
+      if (this.$store.state.geocode.status === "success" && this.$store.state.lastSearchMethod !== 'shape search' && this.$store.state.lastSearchMethod !== 'buffer search') {
         const geocodeId = this.$store.state.geocode.data._featureId;
         // console.log('identifyMarker, geocode.status is success, geocodeId:', geocodeId);
         // featureId = this.$store.state.geocode.data._featureId === parseInt(feature.featureId.toString().slice(0,6)) ?
@@ -357,12 +362,12 @@ export default {
         // Number(this.$store.state.geocode.data.properties.pwd_parcel_id) : null
 
 
-      } else if (this.$store.state.ownerSearch.status === "success" ) {
+      } else if (this.$store.state.ownerSearch.status === "success") {
         let result = this.$store.state.ownerSearch.data.filter( function(object) {
           return object._featureId === feature.featureId;
         });
         // console.log(result)
-        featureId = result.length > 0 ? Number(result[0].properties.pwd_parcel_id) : null
+        featureId = result.length > 0 ? Number(result[0].properties.pwd_parcel_id) : null;
 
 
       } else if (this.$store.state.shapeSearch.status === "success") {
@@ -371,45 +376,47 @@ export default {
           return object._featureId === feature.featureId;
         });
         if(typeof result[0] != 'undefined'){
-          featureId = Number(result[0].pwd_parcel_id)
-        } else { return }
+          featureId = Number(result[0].pwd_parcel_id);
+        } else {
+          return;
+        }
       } else {
-        featureId = null
+        featureId = null;
       }
       // console.log('end of identifyMarker, featureId:', featureId);
-      return featureId
+      return featureId;
     },
     identifyRow(featureId) {
       // console.log("identifyRow starting", featureId)
       let rowId;
-      if (this.$store.state.geocode.status === "success" && this.$store.state.lastSearchMethod !== 'shape search') {
+      if (this.$store.state.geocode.status === "success" && this.$store.state.lastSearchMethod !== 'shape search' && this.$store.state.lastSearchMethod !== 'buffer search') {
         // console.log(this.$store.state.geocode.data)
         let pwd_parcel_id = Number(this.$store.state.geocode.data.properties.pwd_parcel_id);
         // console.log("opa_account_num: ", pwd_parcel_id, "featureId: ", featureId)
         rowId = pwd_parcel_id === featureId ? this.$store.state.geocode.data._featureId : null;
-        // console.log("rowId from geocode success: ", rowId)
-      } else if (this.$store.state.ownerSearch.status === "success" && this.$store.state.lastSearchMethod !== 'shape search') {
-          let result = this.$store.state.ownerSearch.data.filter( function(object) {
-            // console.log("object.properties.pwd_parcel_id: ", object.properties.pwd_parcel_id, "featureId: ", featureId)
-          return Number(object.properties.pwd_parcel_id) === featureId
+        console.log("rowId from geocode success: ", rowId)
+      } else if (this.$store.state.ownerSearch.status === "success" && this.$store.state.lastSearchMethod !== 'shape search' && this.$store.state.lastSearchMethod !== 'buffer search') {
+        let result = this.$store.state.ownerSearch.data.filter( function(object) {
+          // console.log("object.properties.pwd_parcel_id: ", object.properties.pwd_parcel_id, "featureId: ", featureId)
+          return Number(object.properties.pwd_parcel_id) === featureId;
         });
-        rowId = result[0]._featureId
+        rowId = result[0]._featureId;
       } else if (this.$store.state.shapeSearch.status === "success") {
         let result = this.$store.state.shapeSearch.data.rows.filter( function(object){
-          return object.pwd_parcel_id === featureId
+          return object.pwd_parcel_id === featureId;
         });
         if(typeof result[0] != 'undefined') {
-          rowId = result[0]._featureId
+          rowId = result[0]._featureId;
         } else {
           // console.log("rowId = null")
-          rowId = null
+          rowId = null;
         }
       } else {
         // console.log("rowId = null")
-        rowId = null
+        rowId = null;
       }
       // console.log("rowId: ", rowId)
-      return rowId
+      return rowId;
     },
     getTableFromComps(comps, tableId) {
       const matchingComps = comps.filter(comp => {
@@ -429,7 +436,9 @@ export default {
         // try outer comps
         const table = this.getTableFromComps(comps, tableId);
 
-        if (table) return table;
+        if (table) {
+          return table;
+        }
 
         // try inner comps
         for (let comp of comps) {
@@ -441,7 +450,9 @@ export default {
             const innerTable = this.getTableFromComps(innerComps, tableId);
             // console.log('table on 2nd try', innerTable, innerComps);
 
-            if (innerTable) return innerTable;
+            if (innerTable) {
+              return innerTable;
+            }
           }
         }
       }
@@ -459,23 +470,23 @@ export default {
     },
     // handleMarkerMouseover(e) {
     handleMarkerMouseover: throttle(function (e) {
-        // console.log('handleMarkerMouseover is starting');
-        if (!this.isMobileOrTablet) {
-          // console.log('handleMarkerMouseover actions are running, e.target.options:', e.target.options);
-          const { target } = e;
-          // console.log('PARCEL ID target:', target);
-          const featureId  = this.identifyRow(target.options.data.PARCELID);
-          // console.log('featureId: ', featureId, "target: ", target);
-          this.$store.commit('setActiveFeature',  {featureId} );
-        }
-      }, 200
+      // console.log('handleMarkerMouseover is starting');
+      if (!this.isMobileOrTablet) {
+        // console.log('handleMarkerMouseover actions are running, e.target.options:', e.target.options);
+        const { target } = e;
+        // console.log('PARCEL ID target:', target);
+        const featureId  = this.identifyRow(target.options.data.PARCELID);
+        // console.log('featureId: ', featureId, "target: ", target);
+        this.$store.commit('setActiveFeature',  { featureId } );
+      }
+    }, 200,
     ),
     handleMarkerMouseout(e) {
       // console.log('handleMarkerMouseout is starting');
       // if (!this.isMobileOrTablet) {
-        // console.log('handleMarkerMouseout actions are running');
-        const { target } = e;
-        this.$store.commit('setActiveFeature', null);
+      // console.log('handleMarkerMouseout actions are running');
+      const { target } = e;
+      this.$store.commit('setActiveFeature', null);
       // }
     },
     updateMarkerFillColor(marker) {
@@ -514,5 +525,5 @@ export default {
 
       return curStyle;
     },
-  }
+  },
 };

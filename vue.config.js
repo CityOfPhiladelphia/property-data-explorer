@@ -4,11 +4,11 @@ module.exports = {
   publicPath: '/',
   configureWebpack: {
     plugins: [
-      new Visualizer({ filename: './statistics.html' })
+      new Visualizer({ filename: './statistics.html' }),
     ],
   },
   chainWebpack: (config) => {
-    config.plugins.delete('prefetch')
+    config.plugins.delete('prefetch');
   },
   css: {
     loaderOptions: {
@@ -24,5 +24,5 @@ module.exports = {
     '@philly/vue-mapping',
     '@philly/vue-datafetch',
     // /other-dep/
-  ]
-}
+  ],
+};

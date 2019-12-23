@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import isMobileDevice from './util/is-mobile-device';
-import pvdStore from '@philly/vue-datafetch/src/controller/store';
+import pvdStore from '@philly/vue-datafetch/src/store';
 import pvmStore from '@philly/vue-mapping/src/store';
 import pvcStore from '@philly/vue-comps/src/store';
 import mergeDeep from './util/merge-deep';
@@ -38,7 +38,7 @@ function createStore(config) {
     // horizontalTableGroups: createHorizontalTableGroups(config),
     activeFeature: {
       featureId: null,
-      tableId: null
+      tableId: null,
     },
     activeModalFeature: null,
     activeModal: {
@@ -54,7 +54,7 @@ function createStore(config) {
       // keys: config.modals,
       open: '',
     },
-    map: {}
+    map: {},
   };
 
   const mb = {
@@ -124,11 +124,13 @@ function createStore(config) {
         const { tableId, data } = payload;
 
         // check for not-null table id
-        if (!tableId) return;
+        if (!tableId) {
+          return;
+        }
         state.horizontalTables.filteredData[tableId] = data;
       },
       setHorizontalTableMouseover(state, payload) {
-        state.horizontalTables.mouseover = payload
+        state.horizontalTables.mouseover = payload;
       },
       setMapFilters(state, payload) {
         state.map.filters = payload;
@@ -141,7 +143,7 @@ function createStore(config) {
         state.map.bounds = payload;
       },
       setMapBoundsBasedOnShape(state, payload) {
-        state.map.boundsBasedOnShape = payload
+        state.map.boundsBasedOnShape = payload;
       },
       setActiveFeature(state, payload) {
         const { featureId, tableId } = payload || {};
@@ -162,12 +164,6 @@ function createStore(config) {
       setImageOverlayOpacity(state, payload) {
         state.map.imageOverlayOpacity = payload;
       },
-      setCandidates(state, payload) {
-        state.candidates = payload;
-      },
-      setAddressEntered(state, payload) {
-        state.addressEntered = payload;
-      },
 
       setPropertyBalance(state, payload) {
         state.appData.propertyBalance = payload;
@@ -178,8 +174,8 @@ function createStore(config) {
         // state.modals[name].open = open === null ? !state.modals[name].open : open
         state.modals.open = name;
       },
-    }
-  }
+    },
+  };
 
   // let mergeStore = mb;
   let mergeStore = mergeDeep(pvcStore, pvdStore.store);
@@ -199,7 +195,7 @@ function createStore(config) {
   return new Vuex.Store({
     state: mergeStore.state,
     getters: mergeStore.getters,
-    mutations: mergeStore.mutations
+    mutations: mergeStore.mutations,
   });
 }
 

@@ -14,28 +14,50 @@ const customComps = {
 };
 
 
-var BASE_CONFIG_URL = 'https://cdn.jsdelivr.net/gh/cityofphiladelphia/pde_base_config@9b3bdb4f0ad53a2d7859a2d592343fb6fb417740/config.js';
+var BASE_CONFIG_URL = 'https://cdn.jsdelivr.net/gh/cityofphiladelphia/pde_base_config@3cb644750f4db8619a5b41f5369d1e280678f7bb/config.js';
 
 let config = {
   customComps,
+  geocoder: {
+    url: function (input) {
+      var inputEncoded = encodeURIComponent(input);
+      return '//api.phila.gov/ais-pde/v1/search/' + inputEncoded;
+    },
+    params: {
+      gatekeeperKey: process.env.VUE_APP_GATEKEEPER_KEY,
+      include_units: true,
+      opa_only: true,
+    },
+  },
   baseConfig: BASE_CONFIG_URL,
   // baseConfig: '//raw.githubusercontent.com/stevetotheizz0/atlas_base_config/master/config.js',
-  gatekeeperKey: '82fe014b6575b8c38b44235580bc8b11',
+  gatekeeperKey: process.env.VUE_APP_GATEKEEPER_KEY,
   router: {
     enabled: true,
+    type: 'vue',
   },
   app: {
     title: 'Property Data Explorer',
     tagLine: 'Explore Property Data',
     logoAlt: 'logo',
   },
+  dataPanelWidth: 'whole',
   transforms,
   geolocation: {
     enabled: true,
-    icon: ['far', 'dot-circle']
+    icon: [ 'far', 'dot-circle' ],
+  },
+  addressInput: {
+    width: 415,
+    mapWidth: 300,
+    position: 'right',
+    autocompleteEnabled: false,
+    autocompleteMax: 15,
+    placeholder: 'Search the map',
   },
   cyclomedia: {
     enabled: true,
+    orientation: 'vertical',
     measurementAllowed: false,
     popoutAble: true,
     recordingsUrl: 'https://atlas.cyclomedia.com/Recordings/wfs',
@@ -49,18 +71,18 @@ let config = {
       params: {
         q: function(input){
           var inputEncoded = Object.keys(input).map(k => "'" + input[k] + "'").join(",");
-          return "select * from opa_properties_public_test where pwd_parcel_id IN("+ inputEncoded +")"
-        }
+          return "select * from opa_properties_public_test where pwd_parcel_id IN("+ inputEncoded +")";
+        },
       },
-    }
+    },
   },
   ownerSearch: {
     url: function (input) {
       var inputEncoded = encodeURIComponent(input);
-      return '//api.phila.gov/ais/v1/owner/' + inputEncoded;
+      return '//api.phila.gov/ais-pde/v1/owner/' + inputEncoded;
     },
     params: {
-      gatekeeperKey: '82fe014b6575b8c38b44235580bc8b11',
+      gatekeeperKey: process.env.VUE_APP_GATEKEEPER_KEY,
       include_units: false,
       opa_only: true,
       page: 1,
@@ -70,21 +92,21 @@ let config = {
     assessmentHistory: {
       type: 'http-get',
       url: 'https://phl.carto.com/api/v2/sql',
-        options: {
-          params: {
-            q: function(input){
-              if (typeof input === 'string') {
-                return "select * from assessments where parcel_number IN('"+ input +"')"
-              } else {
-                var inputEncoded = "'" + input.join("','") + "'";
-                return "select * from assessments where parcel_number IN("+ inputEncoded +")"
-              }
+      options: {
+        params: {
+          q: function(input){
+            if (typeof input === 'string') {
+              return "select * from assessments where parcel_number IN('"+ input +"')";
             }
+            var inputEncoded = "'" + input.join("','") + "'";
+            return "select * from assessments where parcel_number IN("+ inputEncoded +")";
+
           },
-          success: function(data) {
-            return data.rows;
-          }
-        }
+        },
+        success: function(data) {
+          return data.rows;
+        },
+      },
     },
     salesHistory: {
       type: 'http-get',
@@ -93,18 +115,18 @@ let config = {
         params: {
           q: function(input){
             if (typeof input === 'string') {
-              return "select * from RTT_SUMMARY where opa_account_num = '"+ input +"' AND document_type = 'DEED'"
-            } else {
-              var inputEncoded = "'" + input.join("','") + "'";
-              return "select * from RTT_SUMMARY where opa_account_num IN("+ inputEncoded +") AND document_type = 'DEED'"
+              return "select * from RTT_SUMMARY where opa_account_num = '"+ input +"' AND document_type = 'DEED'";
             }
-          }
+            var inputEncoded = "'" + input.join("','") + "'";
+            return "select * from RTT_SUMMARY where opa_account_num IN("+ inputEncoded +") AND document_type = 'DEED'";
+
+          },
         },
         success: function(data) {
           return data.rows;
-        }
-      }
-    }
+        },
+      },
+    },
   },
   pictometry: {
     enabled: true,
@@ -119,7 +141,7 @@ let config = {
       color: '#blue',
       weight: 2,
       opacity: 1,
-      fillOpacity: 0.3
+      fillOpacity: 0.3,
     },
     hoverStyle: {
       // radius: 6,
@@ -127,25 +149,26 @@ let config = {
       color: 'yellow',
       weight: 2,
       opacity: 1,
-      fillOpacity: 0.3
-    }
+      fillOpacity: 0.3,
+    },
   },
   parcels: {
     pwd: {
       multipleAllowed: true,
+      mapregStuff: false,
       geocodeFailAttemptParcel: null,
       clearStateOnError: false,
       wipeOutOtherParcelsOnReverseGeocodeOnly: true,
       geocodeField: 'PARCELID',
       parcelIdInGeocoder: 'pwd_parcel_id',
-      getByLatLngIfIdFails: false
+      getByLatLngIfIdFails: false,
     },
   },
   dataSources: {
     opa_public,
     opa_assessment,
     // neighboringProperties,
-  }
-}
+  },
+};
 
 export default config;
