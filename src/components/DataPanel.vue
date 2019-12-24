@@ -136,28 +136,6 @@ export default {
       return data;
     },
 
-    // geocodeItems() {
-    //   let data = [];
-    //   if (this.geocode.related && this.geocode.related.length > 0) {
-    //     // This means this is a condo.
-    //     // Manipulate the parent entry
-    //     var condoSummary = this.geocode.data;
-    //     condoSummary.properties.opa_owners = ["Condominium (" + this.geocode.related.length + ") Units"];
-    //     condoSummary.condo = true;
-    //     console.log('geocodeItems computing, condoSummary:', condoSummary);
-    //     data.push(condoSummary);
-    //   }
-    //   else {
-    //     data.push(this.geocode.data);
-    //   }
-    //   // if (this.geocode.related) {
-    //   //   for (let related of this.geocode.related) {
-    //   //     data.push(related);
-    //   //   }
-    //   // }
-    //   return data;
-    // },
-
     geocodeOptions() {
       const options = {
         id: 'ownerProperties',
@@ -544,12 +522,6 @@ export default {
       let unitData;
       if(this.$store.state.lastSearchMethod === "geocode") {
         this.$data.condoExpanded = true;
-        // this.$controller.dataManager.resetData();
-        // const input = this.$store.state.parcels.pwd[0].properties.ADDRESS;
-        // this.$controller.dataManager.clients.condoSearch.fetch(input)
-
-        // unitData = mapUnitIds(item._featureId);
-        // this.$store.commit('setGeocodeRelated', unitData);
       } else if(this.$store.state.lastSearchMethod === "reverseGeocode") {
         // console.log("Not shape search, input: ", input)
 
@@ -585,10 +557,7 @@ export default {
         // console.log('this.$controller.dataManager.resetData() is about to run');
         this.$controller.dataManager.resetData();
         this.$controller.dataManager.fetchData();
-        // console.log('this.$controller.dataManager.didShapeSearch() is about to run');
-        // this.$controller.router.didShapeSearch();
       }
-      // this.closeModal(state);
     },
     tableSort(fields){
 
