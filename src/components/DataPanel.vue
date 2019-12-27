@@ -501,6 +501,23 @@ export default {
     },
   },
   methods: {
+    activeOpaId(state, item) {
+      let opaId;
+      if(item.condo) {
+        opaId = "";
+        } else {
+          if (![ 'geocode', 'reverseGeocode', 'owner search' ].includes(this.lastSearchMethod)) {
+            opaId = item.parcel_number;
+          } else {
+            opaId = item.properties.opa_account_num;
+          }
+      }
+      return opaId;
+    },
+    opaPublicData(state, item) {
+      return typeof state.sources.opa_public.targets[this.activeOpaId(state, item)] === 'undefined' ? "" :
+             state.sources.opa_public.targets[this.activeOpaId(state, item)].data;
+    },
     addCondoRecords(state, item) {
       // console.log('addCondoRecords is running, item:', item);
 
@@ -538,7 +555,6 @@ export default {
         let result = this.$store.state.shapeSearch.data.rows.filter(
           row => row._featureId === item._featureId,
         );
-        console.log('addCondoRecords is running, last search method is not geocode, result:', result);
 
         function arrayObjectIndexOf(myArray, searchTerm, property) {
           for(let i = 0, len = myArray.length; i < len; i++) {
@@ -553,8 +569,6 @@ export default {
         units.objIndex = arrayObjectIndexOf(this.$store.state.shapeSearch.data.rows, item._featureId, "_featureId" );
 
         this.$store.commit('setShapeSearchDataPush', units);
-
-        // console.log('this.$controller.dataManager.resetData() is about to run');
         this.$controller.dataManager.resetData();
         this.$controller.dataManager.fetchData();
       }
@@ -606,6 +620,7 @@ export default {
     },
     expandedData() {
       let modalComputed = PropertyCardModal.computed;
+      let opaPublicData = this.opaPublicData;
 
       return [
         {
@@ -630,69 +645,27 @@ export default {
         {
           label: 'Improvement Area (SqFt)',
           value: function(state, item) {
-            if (state.geocode.status === "success"){
-              let obj_id = item.properties.opa_account_num;
-              if (item.properties.opa_account_num === ""){
-                return "";
-              }
-              return state.sources.opa_public.targets[obj_id].data.total_livable_area
-                .toLocaleString('en-US', {
-                  minimumFractionDigits: 0,
-                });
-
-            } else if (state.ownerSearch.status === "success") {
-              let obj_id = item.properties.opa_account_num;
-              if (item.properties.opa_account_num === ""){
-                return "";
-              }
-              return state.sources.opa_public.targets[obj_id].data.total_livable_area
-                .toLocaleString('en-US', {
-                  minimumFractionDigits: 0,
-                });
-
+            let livable_area = opaPublicData(state, item).total_livable_area
+            if (typeof livable_area === 'undefined' | livable_area === ""){
+              return "";
+            } else {
+               return livable_area.toLocaleString('en-US', {
+                        maximumFractionDigits: 0,
+                      });;
             }
-            let obj_id = item.parcel_number;
-            if (obj_id != "") {
-              return state.sources.opa_public.targets[obj_id].data.total_livable_area
-                .toLocaleString('en-US', {
-                  minimumFractionDigits: 0,
-                });
-            } return "";
-
           },
         },
         {
           label: 'Land Area (SqFt)',
           value: function(state, item) {
-            if (state.geocode.status === "success"){
-              let obj_id = item.properties.opa_account_num;
-              if (item.properties.opa_account_num === ""){
-                return "";
-              }
-              return state.sources.opa_public.targets[obj_id].data.total_area
-                .toLocaleString('en-US', {
-                  minimumFractionDigits: 0,
-                });
-
-            } else if (state.ownerSearch.status === "success") {
-              let obj_id = item.properties.opa_account_num;
-              if (item.properties.opa_account_num === ""){
-                return "";
-              }
-              return state.sources.opa_public.targets[obj_id].data.total_area
-                .toLocaleString('en-US', {
-                  minimumFractionDigits: 0,
-                });
-
+            let total_area = opaPublicData(state, item).total_area
+            if (typeof total_area === 'undefined' | total_area === ""){
+              return "";
+            } else {
+               return total_area.toLocaleString('en-US', {
+                        maximumFractionDigits: 0,
+                      });;
             }
-            let obj_id = item.parcel_number;
-            if (obj_id != "") {
-              return state.sources.opa_public.targets[obj_id].data.total_area
-                .toLocaleString('en-US', {
-                  minimumFractionDigits: 0,
-                });
-            }  return "";
-
           },
         },
         {
@@ -709,89 +682,33 @@ export default {
                             'Not available';
               return condition;
             };
-            if (state.geocode.status === "success"){
-              let obj_id = item.properties.opa_account_num;
-              if (item.properties.opa_account_num === ""){
-                return "";
-              }
-              return cond_code(state.sources.opa_public.targets[obj_id].data.exterior_condition);
-
-            } else if (state.ownerSearch.status === "success") {
-              let obj_id = item.properties.opa_account_num;
-              if (item.properties.opa_account_num === ""){
-                return "";
-              }
-              return cond_code(state.sources.opa_public.targets[obj_id].data.exterior_condition);
-
-            }
-            let obj_id = item.parcel_number;
-            if (obj_id != "") {
-              return cond_code(state.sources.opa_public.targets[obj_id].data.exterior_condition);
-            }  return "";
-
+            let exterior = opaPublicData(state, item).exterior_condition
+            if (typeof exterior != 'undefined' && exterior != "") {
+              return cond_code(exterior);
+            } return "";
           },
         },
         {
           label: 'Building Description',
           value: function(state, item) {
-            if (state.geocode.status === "success"){
-              let obj_id = item.properties.opa_account_num;
-              if (item.properties.opa_account_num === ""){
-                return "";
-              }
-              return state.sources.opa_public.targets[obj_id].data.building_code_description;
-
-            } else if (state.ownerSearch.status === "success") {
-              let obj_id = item.properties.opa_account_num;
-              return state.sources.opa_public.targets[obj_id].data.building_code_description;
-            }
-            let obj_id = item.parcel_number;
-            if (typeof obj_id != 'undefined' && obj_id != "") {
-              return state.sources.opa_public.targets[obj_id].data.building_code_description;
+            let description = opaPublicData(state, item).building_code_description
+            if (typeof description != 'undefined' && description != "") {
+              return description;
             } return "";
-
           },
         },
         {
           label: 'Homestead Exemption',
           value: function(state, item) {
-            if (state.geocode.status === "success"){
-              let obj_id = item.properties.opa_account_num;
-              if (item.properties.opa_account_num === ""){
-                return "";
-              }
-              return state.sources.opa_public.targets[obj_id].data.homestead_exemption != null ?
-                state.sources.opa_public.targets[obj_id].data.homestead_exemption.toLocaleString('en-US', {
-                  style: "currency",
-                  currency:"USD",
-                  minimumFractionDigits: 0,
-                }) : 0;
-
-            } else if (state.ownerSearch.status === "success") {
-              let obj_id = item.properties.opa_account_num;
-              if (item.properties.opa_account_num === "") {
-                return "";
-              }
-              return state.sources.opa_public.targets[obj_id].data.homestead_exemption != null ?
-                state.sources.opa_public.targets[obj_id].data.homestead_exemption.toLocaleString('en-US', {
-                  style: "currency",
-                  currency:"USD",
-                  minimumFractionDigits: 0,
-                }) : 0;
-
-            }
-            let obj_id = item.parcel_number;
-            if(typeof obj_id != 'undefined' && obj_id != "") {
-              if(state.sources.opa_public.targets[obj_id].data.homestead_exemption != null) {
-                return state.sources.opa_public.targets[obj_id].data.homestead_exemption != null ?
-                  state.sources.opa_public.targets[obj_id].data.homestead_exemption.toLocaleString('en-US', {
-                    style: "currency",
-                    currency:"USD",
-                    minimumFractionDigits: 0,
-                  }) : 0;
-              }   return "";
-            }  return "";
-
+            let homestead = opaPublicData(state, item).homestead_exemption
+            if (typeof homestead != 'undefined' && homestead != "" ) {
+              return homestead != null ?
+                      homestead.toLocaleString('en-US', {
+                        style: "currency",
+                        currency:"USD",
+                        minimumFractionDigits: 0,
+                      }) : "";
+            } return ""
           },
         },
         {
@@ -807,13 +724,233 @@ export default {
           },
         },
         {
+          label: 'Year Built',
+          value: function(state, item){
+              let yearBuilt = opaPublicData(state, item).year_built;
+              if(typeof yearBuilt != 'undefined' && yearBuilt != ""){
+                yearBuilt = yearBuilt === '0000'? 'Not Available' :
+                            yearBuilt === null? 'Not Available' :
+                            yearBuilt + (opaPublicData(state, item).year_built_estimate ? ' (estimated)' : '');
+                return yearBuilt
+              } return ''
+          },
+        },
+        {
+          label: 'Number of Stories',
+          value: function(state, item){
+            let opaPublicDataResult = opaPublicData(state, item);
+            if(typeof opaPublicDataResult != 'undefined' && opaPublicDataResult != ""){
+              return  opaPublicDataResult.number_stories === null ? "Not Available" :
+                      opaPublicDataResult.number_stories.toString().length > 0 ?
+                      opaPublicDataResult.number_stories === 0 ?
+                      opaPublicDataResult.total_livable_area > 0 ? 'Not Available':
+                      'None' :
+                      opaPublicDataResult.number_stories === 1 ? '1 story' :
+                      (opaPublicDataResult.number_stories + ' stories') : ''
+            } return ''
+          },
+        },
+        {
+          label: 'Rooms',
+          value: function(state, item){
+            let rooms = opaPublicData(state, item).number_of_rooms;
+            rooms = !(opaPublicData(state, item).total_livable_area > 0) ? 'None' :
+                       typeof rooms === 'undefined' | rooms === null  ? 'Not Available' :
+                       rooms;
+            return rooms
+            },
+        },
+        {
+          label: 'Bedrooms',
+          value: function(state, item){
+            let bedrooms = opaPublicData(state, item).number_of_bedrooms;
+            bedrooms = !(opaPublicData(state, item).total_livable_area > 0) ? 'None' :
+                       typeof bedrooms === 'undefined' | bedrooms === null  ? 'Not Available' :
+                       bedrooms;
+            return bedrooms
+            },
+        },
+        {
+          label: 'Bathrooms',
+          value: function(state, item){
+            let bathrooms = opaPublicData(state, item).number_of_bathrooms;
+            bathrooms = !(opaPublicData(state, item).total_livable_area > 0) ? 'None' :
+                        typeof bathrooms === 'undefined' | bathrooms === null  ? 'Not Available' :
+                bathrooms;
+            return bathrooms
+          },
+        },
+        {
+            label: 'Features',
+            value: function(state, item) {
+              let basements, fireplaces, garages, buildings, view;
+              let features = [];
+
+              switch (opaPublicData(state, item).basements) {
+              case null: basements= null;
+                break;
+              case '0': basements= null;
+                break;
+              case 'A': basements = 'Full Finished basement';
+                break;
+              case 'B': basements = 'Full Semi-finished basement';
+                break;
+              case 'C': basements = 'Full Unfinished basement';
+                break;
+              case 'D': basements = 'Full basement';
+                break;
+              case 'E': basements = 'Finished partial basement';
+                break;
+              case 'F': basements = 'Semi-finished partial basement';
+                break;
+              case 'G': basements = 'Unfinished partial basement';
+                break;
+              case 'H': basements = 'Partial basement';
+                break;
+              case 'I': basements = 'Finished basement';
+                break;
+              case 'J': basements = 'Unfinished basement';
+                break;
+              }
+
+              fireplaces = opaPublicData(state, item).fireplaces === 1 ?
+                opaPublicData(state, item).fireplaces + ' fireplace' :
+                opaPublicData(state, item).fireplaces === 0 | opaPublicData(state, item).fireplaces === null ? null :
+                  opaPublicData(state, item).fireplaces + ' fireplaces ';
+
+              switch (opaPublicData(state, item).garage_type) {
+              case null : garages = null;
+                break;
+              case '0' : garages = null;
+                break;
+              case 'A': garages = 'Built-in/Basement garage';
+                break;
+              case 'B': garages = 'Attached garage';
+                break;
+              case 'C': garages = 'Detached garage';
+                break;
+              case 'F': garages = 'Converted garage';
+                break;
+              case 'S': garages = 'Self-park garage';
+                break;
+              case 'T': garages = 'Attendant parking';
+                break;
+              }
+
+              switch (opaPublicData(state, item).view_type) {
+              case '0': view = null;
+                break;
+              case 'A': view = 'View of cityscape/skyline';
+                break;
+              case 'B': view = 'View of river/creek';
+                break;
+              case 'C': view = 'View of park/green area';
+                break;
+              case 'D': view = 'View of commercial area';
+                break;
+              case 'E': view = 'View of industrial area';
+                break;
+              case 'H': view = 'View of historic edifice or landmark';
+                break;
+              case 'I': view = null;
+                break;
+              case null : view = null;
+                break;
+              }
+
+              garages = opaPublicData(state, item).garage_spaces === 1 ?
+                garages + ' (' + opaPublicData(state, item).garage_spaces + ' space)' :
+                opaPublicData(state, item).garage_spaces === 0 | opaPublicData(state, item).garage_spaces === null ? garages :
+                  garages + ' (' + opaPublicData(state, item).garage_spaces + ' spaces)';
+
+              let toPush = [basements, fireplaces, garages, view];
+              toPush.map(a => a != null ? features.push(a):'');
+              return features.length === 0 ? 'None' : features.length === 1 ? features : features.join(', ');
+          },
+        },
+        {
+          label: 'Heating and Utilities',
+          value: function(state, item){
+
+
+              let heat = [];
+
+              switch (opaPublicData(state, item).fuel) {
+              case 'A' : heat.push('Natural gas heating');
+                break;
+              case 'B' : heat.push('Oil fuel heating');
+                break;
+              case 'C' : heat.push('Electric heating');
+                break;
+              case 'D' : heat.push('Coal heating');
+                break;
+              case 'E' : heat.push('Solar heating');
+                break;
+              case 'F' : heat.push('Woodstove heating');
+                break;
+              case 'G' : null;
+                break;
+              case 'H' : null;
+                break;
+              case null : null;
+                break;
+              }
+
+              switch (opaPublicData(state, item).type_heater) {
+              case 'A' : heat.push('Duct (heated air) heaters');
+                break;
+              case 'B' : heat.push('Radiator/baseboard (heated water) heaters');
+                break;
+              case 'C' : heat.push('Baseboard (electric) heaters');
+                break;
+              case 'D' : null;
+                break;
+              case 'E' : null;
+                break;
+              case 'F' : heat.push('Woodstove heating');
+                break;
+              case 'G' : heat.push('Radiant heaters');
+                break;
+              case 'H' : null;
+                break;
+              case null : null;
+                break;
+              }
+
+              opaPublicData(state, item).central_air === 'Y' ? heat.push('Has central air') : null;
+              opaPublicData(state, item).sewer === 'Y' ? heat.push( 'City sewer') : null;
+
+              let heatOutput = [];
+              heat.map(a => a != null ? heatOutput.push(a):'');
+              return heatOutput.length === 0 ? '' : heatOutput.length === 1 ? heatOutput : heatOutput.join(', ');
+
+              return heat.join('<br>');
+
+          },
+        },
+        {
+          label: 'Frontage',
+          value: function(state, item) {
+            let frontage =  opaPublicData(state, item).frontage === null ? 'Not Available ' :
+                    opaPublicData(state, item).frontage.toFixed(0) + ' ft';
+            return frontage
+          },
+        },
+        {
+          label: 'Beginning Point',
+          value: function(state, item) {
+            let point = opaPublicData(state, item).beginning_point;
+            return point.replace(/"/g, '""').trim()
+          },
+        },
+        {
           label: 'Zoning Code',
           value: function(state, item){
             let id = [];
             state.geocode.status === "success"?  id =  item.properties.opa_account_num :
               state.ownerSearch.status === "success" ? id =  item.properties.opa_account_num :
                 id = item.parcel_number;
-            if (typeof id != 'undefined' && id != "") {
+            if (typeof state.sources.opa_public.targets[id] != 'undefined' && id != "") {
               return state.sources.opa_public.targets[id].data.zoning.trim();
             } return "";
           },
@@ -825,7 +962,7 @@ export default {
             state.geocode.status === "success"?  id =  item.properties.opa_account_num :
               state.ownerSearch.status === "success" ? id =  item.properties.opa_account_num :
                 id = item.parcel_number;
-            if (typeof id != 'undefined' && id != "") {
+            if (typeof state.sources.opa_public.targets[id] != 'undefined' && id != "") {
               const code = state.sources.opa_public.targets[id].data.zoning ;
               return helpers.ZONING_CODE_MAP[code.trim()];
             }  return "";

@@ -199,10 +199,10 @@ export default {
     activeOpaId() {
       let feature = this.activeModalFeature;
       let opaId;
-      if ([ 'geocode', 'reverseGeocode', 'owner search' ].includes(this.lastSearchMethod)) {
-        opaId = feature.properties.opa_account_num;
-      } else {
+      if (![ 'geocode', 'reverseGeocode', 'owner search' ].includes(this.lastSearchMethod)) {
         opaId = feature.parcel_number;
+      } else {
+        opaId = feature.properties.opa_account_num;
       }
       return opaId;
     },
@@ -289,7 +289,6 @@ export default {
     opaPublicData() {
       let opaData =  [];
       opaData.push(this.$store.state.sources.opa_public.targets[this.activeOpaId].data);
-      // console.log(opaData)
       return opaData ;
     },
     propertyDetailsVerticalTableSlots() {
@@ -319,7 +318,7 @@ export default {
           },
           {
             label: 'Number of Stories',
-            value: opaPublicData.unit === null ? "Not Available" :
+            value: opaPublicData.number_stories === null ? "Not Available" :
               opaPublicData.number_stories.toString().length > 0 ?
                 opaPublicData.number_stories === 0 ?
                   opaPublicData.total_livable_area > 0 ? 'Not Available':
