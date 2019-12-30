@@ -556,11 +556,6 @@ export default {
             value: titleCase(this.activeAddress),
           },
           {
-            label: 'Most Recent Assessment Date',
-            value: opaPublicData.assessment_date != null  ? opaPublicData.assessment_date : 'Date Not Available',
-            transforms: [ 'date' ],
-          },
-          {
             label: 'Homestead Exemption',
             value: function(state) {
               return opaPublicData.homestead_exemption > 0 ? 'Yes' : 'No';
