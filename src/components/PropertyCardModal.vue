@@ -65,11 +65,10 @@
         </div>
       </div>
 
-      <!-- main callout -->
-      <callout :slots="mainCalloutSlots" />
 
       <!-- owner and address horizontal table -->
       <horizontal-table
+        class="print-padding"
         :slots="{
           items: opaPublicData
         }"
@@ -89,7 +88,16 @@
         <h3>Loading Sale Data</h3>
       </div>
 
-      <vertical-table :slots="saleVerticalTableSlots" />
+      <vertical-table
+        class="print-padding"
+        :slots="saleVerticalTableSlots"
+      />
+
+      <!-- main callout -->
+      <callout
+        class="print-padding"
+        :slots="mainCalloutSlots"
+      />
 
       <!-- valuation history horizontal table -->
       <div
@@ -113,7 +121,10 @@
       />
 
       <!-- taxable and exempt land values callout -->
-      <callout :slots="propValueCalloutSlots" />
+      <callout
+        class="print-padding"
+        :slots="propValueCalloutSlots"
+      />
 
       <!-- sales history horizontal table -->
       <div
@@ -148,10 +159,17 @@
         />
         <h3>Loading Property Details</h3>
       </div>
-      <vertical-table :slots="propertyDetailsVerticalTableSlots" />
+      <vertical-table
+        :slots="propertyDetailsVerticalTableSlots"
+      />
 
-      <callout :slots="inquiryCalloutSlots" />
-      <callout :slots="metadataCalloutSlots" />
+      <callout
+        class="padding-top break-avoid"
+        :slots="inquiryCalloutSlots"
+      />
+      <callout
+        :slots="metadataCalloutSlots"
+      />
     </div>
   </div>
 </template>
@@ -226,27 +244,6 @@ export default {
       }
       return 'PHILADELPHIA, PA ' + zip;
     },
-
-    // zipCode() {
-    //   const state = this.$store.state
-    //   // let address =  function() {
-    //     if (state.geocode.status === "success"){
-    //       return titleCase(state.geocode.data.properties.street_address);
-    //     } else if (state.lastSearchMethod === "owner search") {
-    //       let result = state.ownerSearch.data.filter(object => {
-    //         return object._featureId === state.activeModal.featureId
-    //       });
-    //       return titleCase(result[0].properties.street_address)
-    //     } else {
-    //       let result = state.shapeSearch.data.rows.filter(object => {
-    //         return object._featureId === state.activeModal.featureId
-    //       });
-    //       return titleCase(result[0].location)
-    //     }
-    //   // }
-    //   // return address;
-    // },
-
     mainCalloutSlots() {
       return {
         text: '\
@@ -535,18 +532,6 @@ export default {
                        </a>';
             }.bind(this),
           },
-          // {
-          //   label: 'Flood Zone',
-          //   value: function(state) {
-          //      return 'Likely / Not likely / Unclear'
-          //   }
-          // },
-          // {
-          //   label: 'Steep Slope',
-          //   value: function(state) {
-          //      return 'Likely / Not likely / Unclear'
-          //   }
-          // },
           {
             label: 'OPA Account Number',
             value: this.activeOpaId,
@@ -611,12 +596,6 @@ export default {
         customClass: {
           table: 'owner',
           td: 'testClass',
-          // td: function(field) {
-          //   console.log(field)
-          //   let classType = field.value === 'Owner' ? 'big_owner':
-          //                   field.value === 'Address' ? 'small_address': ''
-          //   return classType
-          // }
         },
         fields: [
           {
@@ -891,6 +870,17 @@ export default {
     border-style: none !important;
   }
 
+  .padding-top {
+    padding-top: 50px;
+  }
+  .break-avoid {
+    page-break-inside: avoid !important;
+  }
+  .print-padding {
+    page-break-inside: avoid !important;
+    padding: 20px 0;
+  }
+
   .pvc-horizontal-table table tr:nth-child(odd) td.big_owner,
   .pvc-horizontal-table table tr:nth-child(odd) td.small_address {
     background: none !important;
@@ -913,7 +903,6 @@ export default {
     -webkit-print-color-adjust: exact;
   }
 
-
   .pvc-horizontal-table-body, .table-container {
     page-break-inside: avoid !important;
   }
@@ -921,7 +910,6 @@ export default {
   .pvc-download-data-button, .pvc-export-data-button {
     visibility: hidden;
   }
-
 
   .table-container[data-v-42075018] {
     padding-top: 1rem !important;
