@@ -12,7 +12,7 @@
       <ul class="padded-list">
         <li>Get information about property ownership, value, and physical characteristics.</li>
         <li>Look up the history of sales and assessments for a property.</li>
-        <li>Quickly compare properties on a block or within a nearby area.</li>
+        <li>Quickly gather data for properties on a block or within a nearby area.</li>
         <li>Generate address listings near a property or within an area of interest.</li>
         <li> Find properties anywhere in the city owned by an individual or company.</li>
       </ul>
