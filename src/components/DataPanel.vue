@@ -413,8 +413,8 @@ export default {
           title: 'Sort results',
           th: function(field) {
             let classType = field === 'Price of Last Sale' ? 'sorttable_numeric pointer':
-              field === 'Market Value' ? 'sorttable_numeric pointer': 'pointer';
-
+              field === 'Market Value' ? 'sorttable_numeric pointer':
+                field === 'Date of Last Sale' ? 'sorttable_numeric pointer': 'pointer';
             return classType;
 
           },
@@ -474,7 +474,7 @@ export default {
             customKey: function(state, item) {
               if (item.sale_date != "") {
                 // return format(item.sale_date, 'MM/DD/YYYY');
-                return format(parseISO(item.sale_date), 'MM/dd/yyyy');
+                return format(parseISO(item.sale_date), 'yyyymmdd');
               }
               return 0;
 
