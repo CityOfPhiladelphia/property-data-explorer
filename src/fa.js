@@ -9,6 +9,7 @@ import { faSpinner } from '@fortawesome/free-solid-svg-icons/faSpinner';
 import { faCircle } from '@fortawesome/free-solid-svg-icons/faCircle';
 import { faHexagon } from '@fortawesome/pro-solid-svg-icons/faHexagon';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons/faInfoCircle';
-library.add(faSpinner, faBars, faCircle, faHexagon, faInfoCircle);
+import { faLocationArrow } from '@fortawesome/pro-solid-svg-icons/faLocationArrow';
+library.add(faSpinner, faBars, faCircle, faHexagon, faInfoCircle, faLocationArrow);
 
 export default library;

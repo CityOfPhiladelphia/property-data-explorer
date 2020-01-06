@@ -135,7 +135,6 @@ export default {
       }
       return data;
     },
-
     geocodeOptions() {
       const options = {
         id: 'ownerProperties',
@@ -276,8 +275,8 @@ export default {
       };
       return options;
     },
-
     ownerOptions() {
+      const rowClick = this.rowClick;
       const options = {
         id: 'ownerProperties',
         tableid: 'bbb',
@@ -354,8 +353,20 @@ export default {
                 return item.properties.opa_owners.join(', ');
               }
               return item.properties.usps_bldgfirm;
-
             },
+            components: [
+              {
+                type: 'button-comp',
+                slots: {
+                  buttonAction(state, item) {event.stopPropagation(), rowClick(state, item) },
+                  text: '<i class="fas fa-location-arrow"></i>',
+                },
+                options: {
+                  stopClickedChange: true,
+                  class: "owner-locate-button",
+                },
+              },
+            ],
           },
         ],
       };
@@ -607,6 +618,7 @@ export default {
 
     },
     rowClick(state, item) {
+      console.log("Row Click")
       let coords = [];
       if( typeof this.geocodeItems[0] != 'undefined') {
         Array.prototype.push.apply(coords, [ this.geocodeItems[0].geometry.coordinates[0],this.geocodeItems[0].geometry.coordinates[1] ]);
@@ -1017,6 +1029,13 @@ export default {
   #data-panel-container {
     display: none;
   }
+}
+
+a.button.owner-locate-button {
+  float: right;
+  color: #444;
+  background-color: transparent;
+  padding: 2px 3px 2px 5px;
 }
 
 .data-panel.container {
