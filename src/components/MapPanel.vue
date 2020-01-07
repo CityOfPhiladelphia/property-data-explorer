@@ -656,7 +656,7 @@ export default {
       }
     },
     geocodeResult(nextGeocodeResult) {
-      console.log('watch geocodeResult is running, nextGeocodeResult:', nextGeocodeResult);
+      // console.log('watch geocodeResult is running, nextGeocodeResult:', nextGeocodeResult);
       if (Object.keys(nextGeocodeResult).length > 0) {
         this.lastGeocodeResult = nextGeocodeResult;
         if (nextGeocodeResult._featureId) {
@@ -666,7 +666,7 @@ export default {
       }
     },
     geojsonParcels(nextGeojson) {
-      console.log('watch geojsonParcels is running');
+      // console.log('watch geojsonParcels is running');
       if (!this.$store.state.mapViewWasSetOnAppLoad && this.lastSearchMethod === 'shape search') {
         // console.log('watch geojsonParcels is affecting things');
         this.setMapToBounds();
@@ -719,10 +719,10 @@ export default {
       this.$controller.handleSearchFormSubmit(value);
     },
     handleBufferClick() {
-      console.log('handleBufferClick is running');
+      // console.log('handleBufferClick is running');
     },
     handleDrawControlClick() {
-      console.log('handleDrawControlClick is running');
+      // console.log('handleDrawControlClick is running');
     },
     fillColorForOverlayMarker(markerId, activeFeature) {
       // get map overlay style and hover style for table
@@ -740,7 +740,7 @@ export default {
     },
 
     setMapToBounds() {
-      console.log('setMapToBounds is running, this.geojsonParcels:', this.geojsonParcels);
+      // console.log('setMapToBounds is running, this.geojsonParcels:', this.geojsonParcels);
       let featureArray = [];
       for (let geojsonFeature of this.geojsonParcels) {
         featureArray.push(GeoJSON(geojsonFeature));

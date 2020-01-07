@@ -208,13 +208,13 @@ export default {
                   text: 'Click to add units to results.',
                   buttonAction: this.addCondoRecords,
                   buttonFinished() {
-                    console.log("button finished running")
+                    // console.log("button finished running")
                     this.$data.showTable = true;
                   },
                 },
                 options: {
                   class: function (state, item) {
-                    console.log('calculating button-comp class');
+                    // console.log('calculating button-comp class');
                     return state.sources.opa_assessment.targets[item.properties.opa_account_num] ? "" : 'condo-button';
                   },
                   style: function (state, item) {
@@ -618,7 +618,7 @@ export default {
 
     },
     rowClick(state, item) {
-      console.log("Row Click")
+      // console.log("Row Click")
       let coords = [];
       if( typeof this.geocodeItems[0] != 'undefined') {
         Array.prototype.push.apply(coords, [ this.geocodeItems[0].geometry.coordinates[0],this.geocodeItems[0].geometry.coordinates[1] ]);

@@ -43,7 +43,7 @@ export default {
     // },
     transform: function (value) {
       let valueTransformed;
-      console.log('date transform running, value:', value, 'typeof value:', typeof value);
+      // console.log('date transform running, value:', value, 'typeof value:', typeof value);
       if (value === 'Date Not Available') {
         valueTransformed = value;
       } else if (typeof value === 'string') {
