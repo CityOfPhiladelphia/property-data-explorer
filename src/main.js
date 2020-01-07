@@ -76,11 +76,11 @@ if (baseConfigUrl) {
 
     // deep merge base config and client config
     const config = mergeDeep(baseConfig, clientConfig);
-    console.log('in axios, about to call initVue, config:', config);
+    // console.log('in axios, about to call initVue, config:', config);
 
     initVue(config);
   }).catch(err => {
-    console.error('Error loading base config:', err);
+    // console.error('Error loading base config:', err);
   });
 
 } else {
