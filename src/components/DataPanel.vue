@@ -827,8 +827,10 @@ export default {
 
               fireplaces = opaPublicData(state, item).fireplaces === 1 ?
                 opaPublicData(state, item).fireplaces + ' fireplace' :
-                opaPublicData(state, item).fireplaces === 0 | opaPublicData(state, item).fireplaces === null ? null :
-                  opaPublicData(state, item).fireplaces + ' fireplaces ';
+                opaPublicData(state, item).fireplaces === 0 |
+                opaPublicData(state, item).fireplaces === null |
+                typeof opaPublicData(state, item).fireplaces === 'undefined' ? null :
+                opaPublicData(state, item).fireplaces + ' fireplaces ';
 
               switch (opaPublicData(state, item).garage_type) {
               case null : garages = null;
@@ -872,7 +874,9 @@ export default {
 
               garages = opaPublicData(state, item).garage_spaces === 1 ?
                 garages + ' (' + opaPublicData(state, item).garage_spaces + ' space)' :
-                opaPublicData(state, item).garage_spaces === 0 | opaPublicData(state, item).garage_spaces === null ? garages :
+                opaPublicData(state, item).garage_spaces === 0 |
+                opaPublicData(state, item).garage_spaces === null |
+                typeof opaPublicData(state, item).garage_spaces === 'undefined'? null :
                   garages + ' (' + opaPublicData(state, item).garage_spaces + ' spaces)';
 
               let toPush = [basements, fireplaces, garages, view];
@@ -944,7 +948,8 @@ export default {
           label: 'Frontage',
           value: function(state, item) {
             let frontage =  opaPublicData(state, item).frontage === null ? 'Not Available ' :
-                    opaPublicData(state, item).frontage.toFixed(0) + ' ft';
+              typeof opaPublicData(state, item).frontage === 'undefined' ? 'Not Available ' :
+              opaPublicData(state, item).frontage.toFixed(0) + ' ft';
             return frontage
           },
         },
@@ -952,7 +957,9 @@ export default {
           label: 'Beginning Point',
           value: function(state, item) {
             let point = opaPublicData(state, item).beginning_point;
-            return point.replace(/"/g, '""').trim()
+            return point === null ? "":
+              typeof point === 'undefined' ? "":
+                point.replace(/"/g, '""').trim()
           },
         },
         {
