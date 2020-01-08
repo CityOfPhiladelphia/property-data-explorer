@@ -321,6 +321,10 @@ export default {
     },
   },
   watch: {
+    '$route': function(route) {
+      // return route.fullPath === '/' ? this.$store.commit('setIntroPage', true) : "";
+      return route.fullPath === '/' ? this.openIntroPage(true) : this.openIntroPage(false);
+    },
     activeModal() {
       this.$controller.activeFeatureChange();
     },
@@ -403,6 +407,12 @@ export default {
     window.removeEventListener('resize', this.onResize);
   },
   methods: {
+    openIntroPage(value){
+      this.$data.introPage = value
+      this.$store.commit('setFullScreenMapEnabled', value);
+      value = true ? this.$store.commit('setCyclomediaActive', false ): "";
+      return this.$store.commit('setIntroPage', value)
+    },
     onDataChange(type) {
       // console.log('onDataChange, type:', type)
       this.$data.hasData = true;
