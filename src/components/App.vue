@@ -16,6 +16,7 @@
         />
       </div>
     </PhilaHeader>
+    <owner-search-modal />
     <property-card-modal />
 
     <div :class="'cell medium-auto medium-cell-block-container main-content ' + openModal">
@@ -89,6 +90,7 @@ import PhilaFooter from './PhilaFooter.vue';
 import MapPanel from './MapPanel.vue';
 import DataPanel from './DataPanel.vue';
 import IntroPage from './IntroPage.vue';
+import OwnerSearchModal from './OwnerSearchModal.vue';
 import PropertyCardModal from './PropertyCardModal.vue';
 import Logo from '@/assets/city-of-philadelphia-logo.png';
 
@@ -99,6 +101,7 @@ export default {
     MapPanel,
     DataPanel,
     IntroPage,
+    OwnerSearchModal,
     PropertyCardModal,
     CyclomediaWidget: () => import(/* webpackChunkName: "mbmb_pvm_CyclomediaWidget" */'@philly/vue-mapping/src/cyclomedia/Widget.vue'),
     CollectionSummary: () => import(/* webpackChunkName: "pvc_Callout" */'@philly/vue-comps/src/components/CollectionSummary.vue'),
@@ -250,6 +253,9 @@ export default {
     ownerSearchStatus() {
       return this.$store.state.ownerSearch.status;
     },
+    ownerSearchTotal() {
+      return this.$store.state.ownerSearch.total_size
+    },
     shapeSearchStatus() {
       return this.$store.state.shapeSearch.status;
     },
@@ -334,6 +340,11 @@ export default {
     geocodeStatus(nextGeocodeStatus) {
       if (nextGeocodeStatus === 'waiting') {
         this.onDataChange('geocode');
+      }
+    },
+    ownerSearchTotal(newValue) {
+      if( newValue > this.$store.state.ownerSearch.data.length ){
+        this.$store.commit('setOwnerSearchModal', true);
       }
     },
     ownerSearchStatus(nextOwnerSearchStatus) {
