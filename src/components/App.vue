@@ -235,7 +235,7 @@ export default {
       let returnValue;
       // console.log('error: ', error)
       if (error === 'search' | error === 'intersection') {
-        returnValue = '<h3>Could not locate records for that address.<h3>';
+        returnValue = '<h3>No account found matching that address or owner.<h3>';
       } else if (error === 'too_many') {
         returnValue = '<h3>Too many parcels selected.  Try again.<h3>';
       }
