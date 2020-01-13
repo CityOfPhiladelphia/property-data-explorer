@@ -565,7 +565,6 @@ export default {
           {
             label: 'Sale Date',
             value: function(state) {
-              console.log('Sale Date, opaAssessmentData.sale_date:', opaAssessmentData.sale_date);
               return opaAssessmentData.sale_date;
             },
             transforms: [ 'date' ],
