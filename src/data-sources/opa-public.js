@@ -23,7 +23,9 @@ export default {
           opa.push(relate);
         }
       }
+      // console.log('opa-public, state.geocode.data.condo:', state.geocode.data.condo, 'state.condoUnits.units[Number(state.parcels.pwd[0].properties.PARCELID)][0]:', state.condoUnits.units[Number(state.parcels.pwd[0].properties.PARCELID)][0]);
       if (state.geocode.data.condo != null && state.geocode.data.condo == true) {
+        // console.log('opa-public in if condo is running');
         // opa.push(state.geocode.related[0]);
         opa.push(state.condoUnits.units[Number(state.parcels.pwd[0].properties.PARCELID)][0]);
       }
@@ -37,6 +39,7 @@ export default {
       } else if(target.parcel_number === null) {
         return;
       }
+      // console.log('opa-public getTargetId is running, target.parcel_number:', target.parcel_number);
       return target.parcel_number;
 
     },
