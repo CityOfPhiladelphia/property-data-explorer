@@ -162,12 +162,11 @@
       <vertical-table
         :slots="propertyDetailsVerticalTableSlots"
       />
-
       <callout
-        class="padding-top break-avoid"
         :slots="inquiryCalloutSlots"
       />
       <callout
+        class="break-avoid"
         :slots="metadataCalloutSlots"
       />
     </div>
@@ -256,10 +255,10 @@ export default {
       let searchId =  opaPublicData.street_code + opaPublicData.house_number + (opaPublicData.unit != null ?  opaPublicData.unit : '') ;
       return {
         text: '\
-        Corrections to or questions about this property? <br>\
-        <a target="_blank" \
-          href="http://opa.phila.gov/opa.apps/Help/CitizenMain.aspx?sch=Ctrl2&s=1&url=search&id='+ searchId + ' ">\
-          <b>Submit an Official Inquiry</b>  </b><i class="fa fa-external-link-alt"></i></a></a> to the Office of Property Assessment.\
+      Property characteristics described above are included for convenience, but may not reflect the most recent conditions \
+      at the property.  Corrections to or questions about this property? \
+      <a target="_blank" href="http://opa.phila.gov/opa.apps/Help/CitizenMain.aspx?sch=Ctrl2&s=1&url=search&id='+ searchId + ' ">\
+      <b>Submit an Official Inquiry</b>  </b><i class="fa fa-external-link-alt"></i></a></a> to the Office of Property Assessment.\
         ',
       };
     },
@@ -901,9 +900,9 @@ export default {
     -webkit-print-color-adjust: exact;
   }
 
-  .pvc-horizontal-table-body, .table-container {
+  /* .pvc-horizontal-table-body, .table-container {
     page-break-inside: avoid !important;
-  }
+  } */
 
   .pvc-download-data-button, .pvc-export-data-button {
     visibility: hidden;
