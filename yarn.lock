@@ -734,9 +734,9 @@
     vue "^2.6.10"
     vuex "^3.1.2"
 
-"@philly/vue-datafetch@https://github.com/CityOfPhiladelphia/phila-vue-datafetch#c936e7dcdf8e4f578054b7e53013c3505deb4446":
+"@philly/vue-datafetch@https://github.com/CityOfPhiladelphia/phila-vue-datafetch#21d1d9df08c7715a658941438b48d40c4c1375ac":
   version "1.0.2"
-  resolved "https://github.com/CityOfPhiladelphia/phila-vue-datafetch#c936e7dcdf8e4f578054b7e53013c3505deb4446"
+  resolved "https://github.com/CityOfPhiladelphia/phila-vue-datafetch#21d1d9df08c7715a658941438b48d40c4c1375ac"
   dependencies:
     "@turf/turf" "^5.1.6"
     axios "^0.19.0"
