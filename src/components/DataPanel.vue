@@ -107,10 +107,15 @@ export default {
     geocode() {
       return this.$store.state.geocode;
     },
+    geocodeStatus() {
+      return this.$store.state.geocode.status;
+    },
     geocodeItems() {
       let data = [];
-      if (!this.$data.condoExpanded && this.geocode.data && this.$store.state.condoUnits.units && this.$store.state.parcels.pwd && this.$store.state.parcels.pwd[0].properties && this.$store.state.lastSearchMethod === 'geocode') {
-        // console.log('in geocodeItems, in if');
+      // if (!this.$data.condoExpanded && this.geocode.data && this.$store.state.condoUnits.units && this.$store.state.parcels.pwd && this.$store.state.parcels.pwd[0].properties && this.$store.state.lastSearchMethod === 'geocode') {
+      if (!this.$data.condoExpanded && this.geocode.data && this.$store.state.condoUnits.units && this.$store.state.parcels.pwd && this.$store.state.parcels.pwd[0].properties) {
+      // if (this.geocode.data && this.$store.state.condoUnits.units && this.$store.state.parcels.pwd && this.$store.state.parcels.pwd[0].properties) {
+        console.log('in geocodeItems, in if');
         const parentCondo = this.geocode.data;
         for (let i in parentCondo.properties) {
           parentCondo.properties[i] = "";
@@ -123,7 +128,7 @@ export default {
         parentCondo.condo = true;
         data.push(parentCondo);
       } else {
-        // console.log('in geocodeItems, in else, this.geocode.data:', this.geocode.data, 'this.geocode.related:', this.geocode.related);
+        console.log('in geocodeItems, in else, this.geocode.data:', this.geocode.data, 'this.geocode.related:', this.geocode.related);
         if (this.geocode.data) {
           data.push(this.geocode.data);
         }
@@ -214,11 +219,21 @@ export default {
                 },
                 options: {
                   class: function (state, item) {
-                    // console.log('calculating button-comp class');
-                    return state.sources.opa_assessment.targets[item.properties.opa_account_num] ? "" : 'condo-button';
+                    // console.log('calculating button-comp class, item.properties.opa_account_num:', item.properties.opa_account_num, typeof state.sources.opa_assessment.targets[item.properties.opa_account_num]);
+                    // return state.sources.opa_assessment.targets[item.properties.opa_account_num] ? "" : 'condo-button';
+                    if (typeof state.sources.opa_assessment.targets[item.properties.opa_account_num] != 'undefined') {
+                      return '';
+                    } else {
+                      return 'condo-button';
+                    }
                   },
                   style: function (state, item) {
-                    return state.sources.opa_assessment.targets[item.properties.opa_account_num] ? { display: 'none' } : "";
+                    // return state.sources.opa_assessment.targets[item.properties.opa_account_num] ? { display: 'none' } : "";
+                    if (typeof state.sources.opa_assessment.targets[item.properties.opa_account_num] != 'undefined') {
+                      return { display: 'none' };
+                    } else {
+                      return '';
+                    }
                   },
                 },
               },
@@ -504,12 +519,17 @@ export default {
         this.$data.showTable = true;
         this.$data.loadingData = false;
       } else if (nextOpaStatus === 'waiting') {
-        this.$data.condoExpanded = false;
+        // this.$data.condoExpanded = false;
         this.$data.loadingData = true;
       } else {
         this.$data.loadingData = false;
       }
     },
+    geocodeStatus(nextGeocodeStatus) {
+      if (nextGeocodeStatus === 'waiting') {
+        this.$data.condoExpanded = false;
+      }
+    }
   },
   methods: {
     activeOpaId(state, item) {
@@ -530,11 +550,12 @@ export default {
              state.sources.opa_public.targets[this.activeOpaId(state, item)].data;
     },
     addCondoRecords(state, item) {
-      // console.log('addCondoRecords is running, item:', item);
+      console.log('addCondoRecords is running, item:', item);
 
       this.$data.showTable = false;
+      this.$data.condoExpanded = true;
       let mapUnitIds = function(id) {
-        // console.log('running mapUnitIds, id:', id);
+        console.log('running mapUnitIds, id:', id);
         let unitsToAdd = this.$store.state.condoUnits.units[id];
         unitsToAdd.map(
           (item, index) => {
@@ -548,9 +569,17 @@ export default {
       mapUnitIds = mapUnitIds.bind(this);
       // console.log('after mapUnitIds');
       let unitData;
-      if(this.$store.state.lastSearchMethod === "geocode") {
+      if (this.$store.state.lastSearchMethod === 'geocode') {
+        this.$controller.dataManager.resetData();
         this.$data.condoExpanded = true;
-      } else if(this.$store.state.lastSearchMethod === "reverseGeocode") {
+        const input = this.$store.state.parcels.pwd[0].properties.ADDRESS;
+        this.$controller.dataManager.clients.condoSearch.fetch(input);
+        unitData = mapUnitIds(item._featureId);
+        console.log('in addCondoRecords, lastSearchMethod = geocode');
+        this.$store.commit('setGeocodeRelated', unitData);
+        this.$controller.dataManager.fetchData();
+      } else if (this.$store.state.lastSearchMethod === 'reverseGeocode') {
+      // if (this.$store.state.lastSearchMethod === 'reverseGeocode' || this.$store.state.lastSearchMethod === 'geocode') {
         // console.log("Not shape search, input: ", input)
 
         this.$controller.dataManager.resetData();
