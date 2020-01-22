@@ -5,7 +5,7 @@ export default {
   targets: {
     runOnce: true,
     get: function(state) {
-      console.log('opa-public get is running');
+      // console.log('opa-public get is running');
       if (state.lastSearchMethod === 'owner search') {
         return state.ownerSearch.data;
       } else if (state.lastSearchMethod === 'shape search' || state.lastSearchMethod === 'buffer search') {
@@ -26,7 +26,7 @@ export default {
       // console.log('opa-public, state.geocode.data.condo:', state.geocode.data.condo, 'state.condoUnits.units[Number(state.parcels.pwd[0].properties.PARCELID)][0]:', state.condoUnits.units[Number(state.parcels.pwd[0].properties.PARCELID)][0]);
 
       // if (state.geocode.data.condo != null && state.geocode.data.condo == true && state.condoUnits.units[Number(state.parcels.pwd[0].properties.PARCELID)].length) {
-      console.log('in opa-public.js, state.geocode.data.condo:', state.geocode.data.condo, 'state.geocode.related:', state.geocode.related);
+      // console.log('in opa-public.js, state.geocode.data.condo:', state.geocode.data.condo, 'state.geocode.related:', state.geocode.related);
       // if (state.geocode.related && state.geocode.related.length) {
       if (state.geocode.data.condo != null && state.geocode.data.condo == true) {
       // if (state.geocode.data.condo != null && state.geocode.data.condo == true || typeof state.geocode.data.condo !== undefined && state.geocode.data.condo == true) {
