@@ -358,6 +358,7 @@ export default {
     },
     shouldKeepIntroPage(nextShouldKeepIntroPage) {
       if (nextShouldKeepIntroPage === false) {
+        // console.log('in watch shouldKeepIntroPage if, next:', nextShouldKeepIntroPage);
         this.$data.introPage = false;
       }
     },
@@ -419,6 +420,7 @@ export default {
   },
   methods: {
     openIntroPage(value){
+      // console.log('App.vue openIntroPage is running, value:', value);
       this.$data.introPage = value
       this.$store.commit('setFullScreenMapEnabled', value);
       value = true ? this.$store.commit('setCyclomediaActive', false ): "";

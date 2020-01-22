@@ -161,7 +161,7 @@ let config = {
       wipeOutOtherParcelsOnReverseGeocodeOnly: true,
       geocodeField: 'PARCELID',
       parcelIdInGeocoder: 'pwd_parcel_id',
-      getByLatLngIfIdFails: false,
+      getByLatLngIfIdFails: true,
     },
   },
   dataSources: {

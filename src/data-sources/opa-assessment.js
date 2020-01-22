@@ -20,7 +20,9 @@ export default {
           opa.push(relate);
         }
       }
+      // if (state.geocode.related && state.geocode.related.length) {
       if (state.geocode.data.condo != null && state.geocode.data.condo == true) {
+        // console.log('opa-assessment in if condo is running');
         // opa.push(state.geocode.data);
         opa.push(state.condoUnits.units[Number(state.parcels.pwd[0].properties.PARCELID)][0]);
       }
@@ -28,10 +30,10 @@ export default {
 
     },
     getTargetId: function(target) {
-      // console.log('opa-assessment getTargetId is running');
       if(target.properties){
         return target.properties.opa_account_num;
       }
+      // console.log('opa-assessment getTargetId is running, target.parcel_number:', target.parcel_number);
       return target.parcel_number;
 
     },
