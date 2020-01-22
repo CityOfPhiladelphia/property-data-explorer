@@ -133,11 +133,11 @@ export default {
     // returns geojson parcels to be rendered on the map along with
     // necessary props.
     geojsonParcels() {
-      console.log('recalculating geojsonParcels');
+      // console.log('recalculating geojsonParcels');
       let features;
       if(this.pwdParcel){
         let props = {};
-        console.log("this.pwdParcel: ", this.pwdParcel);
+        // console.log("this.pwdParcel: ", this.pwdParcel);
         features = this.pwdParcel;
         props.color = 'blue';
         props.fillColor = 'blue';
@@ -394,7 +394,7 @@ export default {
         let pwd_parcel_id = Number(this.$store.state.geocode.data.properties.pwd_parcel_id);
         // console.log("opa_account_num: ", pwd_parcel_id, "featureId: ", featureId)
         rowId = pwd_parcel_id === featureId ? this.$store.state.geocode.data._featureId : null;
-        console.log("rowId from geocode success: ", rowId)
+        // console.log("rowId from geocode success: ", rowId)
       } else if (this.$store.state.ownerSearch.status === "success" && this.$store.state.lastSearchMethod !== 'shape search' && this.$store.state.lastSearchMethod !== 'buffer search') {
         let result = this.$store.state.ownerSearch.data.filter( function(object) {
           // console.log("object.properties.pwd_parcel_id: ", object.properties.pwd_parcel_id, "featureId: ", featureId)

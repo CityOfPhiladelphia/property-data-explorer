@@ -48,6 +48,8 @@
               </a>
               <div class="app-divide" />
               <a
+                href="/"
+                onclick="location.reload()"
                 class="app-title"
               >
                 <!-- :to="appLink" -->

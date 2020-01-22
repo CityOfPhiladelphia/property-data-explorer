@@ -89,7 +89,7 @@
       </div>
 
       <vertical-table
-        class="print-padding"
+        class="print-padding sale-info"
         :slots="saleVerticalTableSlots"
       />
 
@@ -162,12 +162,11 @@
       <vertical-table
         :slots="propertyDetailsVerticalTableSlots"
       />
-
       <callout
-        class="padding-top break-avoid"
         :slots="inquiryCalloutSlots"
       />
       <callout
+        class="break-avoid"
         :slots="metadataCalloutSlots"
       />
     </div>
@@ -247,7 +246,9 @@ export default {
     mainCalloutSlots() {
       return {
         text: '\
-        Property assessment and sale information for this address. Source: Office of Property Assessments (OPA). OPA was formerly a part of the Bureau of Revision of Taxes (BRT) and some City records may still use that name.\
+        Property assessment and sale information for this address. Source: Office of Property Assessments (OPA). \
+        OPA was formerly a part of the Bureau of Revision of Taxes (BRT) and some City records may still use that name.\
+        Total in Sales History is the adjusted value.\
         ',
       };
     },
@@ -256,10 +257,10 @@ export default {
       let searchId =  opaPublicData.street_code + opaPublicData.house_number + (opaPublicData.unit != null ?  opaPublicData.unit : '') ;
       return {
         text: '\
-        Corrections to or questions about this property? <br>\
-        <a target="_blank" \
-          href="http://opa.phila.gov/opa.apps/Help/CitizenMain.aspx?sch=Ctrl2&s=1&url=search&id='+ searchId + ' ">\
-          <b>Submit an Official Inquiry</b>  </b><i class="fa fa-external-link-alt"></i></a></a> to the Office of Property Assessment.\
+      Property characteristics described above are included for convenience, but may not reflect the most recent conditions \
+      at the property.  Corrections to or questions about this property? \
+      <a target="_blank" href="http://opa.phila.gov/opa.apps/Help/CitizenMain.aspx?sch=Ctrl2&s=1&url=search&id='+ searchId + ' ">\
+      <b>Submit an Official Inquiry</b>  </b><i class="fa fa-external-link-alt"></i></a></a> to the Office of Property Assessment.\
         ',
       };
     },
@@ -275,11 +276,9 @@ export default {
     propValueCalloutSlots() {
       return {
         text: '\
-        <small> \
         Note: Taxable and exempt land values can represent the contributory value of land in relation to the total market value, or \
         were no structure is present, the value of vacant land. (Consistent with International Association of Assessing Officers (IAAO) standards, \
         the value of an improved parcel is separated into the portion of value attributed to the improvement and the portion of value attributed to the land.)\
-        </small> \
         ',
       };
     },
@@ -613,7 +612,7 @@ export default {
               let mailingAddress = [];
               let addressFields = [ 'mailing_address_1', 'mailing_address_2', 'mailing_care_of', 'mailing_street',  'mailing_city_state', 'mailing_zip' ];
               addressFields.map( a => item[a] != null ? a === 'mailing_city_state' ?
-                mailingAddress.push(titleCase(item[a]) + ' <br>' ) : mailingAddress.push(titleCase( (item[a])) + ' <br>') :'');
+                mailingAddress.push(titleCase(item[a]) + ' ' ) : mailingAddress.push(titleCase( (item[a])) + ' <br>') :'');
               // console.log('mailingAddress', mailingAddress, item)
 
               if(mailingAddress.length > 0 ) {
@@ -728,7 +727,7 @@ export default {
             transforms: [ 'date' ],
           },
           {
-            label: 'Adjusted Total',
+            label: 'Total',
             value: function(state, item){
               return item.adjusted_total_consideration;
             },
@@ -747,7 +746,7 @@ export default {
             },
           },
           {
-            label: 'Document Id',
+            label: 'Doc Id',
             value: function(state, item){
               return item.document_id;
             },
@@ -782,13 +781,13 @@ export default {
 
 <style >
 
-@media (min-width: 750px) {
-  td.big_owner {
-    font-size: 32px !important;
-    font-weight: 100 !important;
+@media screen and (min-width: 750px) {
+  tr > td.big_owner {
+    font-size: 32px;
+    font-weight: 100;
     font-family: "Montserrat", sans-serif;
-    vertical-align: top !important;
-    padding-top: 0 !important;
+    vertical-align: top;
+    padding-top: 0;
   }
 
   td.small_address {
@@ -820,21 +819,65 @@ export default {
   a {
     color: #0f4d90 !important;
     font-weight: 300 !important;
+    font-size: 10px;
+  }
+
+  #ownerProperties div.external-link, #salesHistory div.external-link {
+    padding-top: 0;
   }
 
   h4 {
-    font-weight: 525;
+    font-weight: 425;
+  }
+
+  #ownerProperties {
+    margin: 0;
+  }
+
+  .pvc-horizontal-table-body h4, .pvc-horizontal-table-body h4 {
+    font-size: 15px;
+    margin-bottom: 0rem;
+  }
+
+  #ownerProperties th, #salesHistory th {
+    font-size: 14px;
+    padding-bottom: 4px;
+  }
+  #ownerProperties td, #salesHistory td {
+    font-size: 12px;
+    padding-top: 0.371429rem;
+    padding-right: 0.714286rem;
+    padding-bottom: 0.414286rem;
+    padding-left: 0.714286rem;
   }
 
   #components-root, .bottom-half {
     visibility: hidden;
   }
 
+  .owner td {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  div.table-container.print-padding, .openmaps-modal-content div.pvc-horizontal-table {
+    margin-bottom: 0 !important;
+  }
+
+
   .address-header[data-v-14c63728] {
-    background: #DAEDFC !important;
+    /* background: #DAEDFC !important; */
     -webkit-print-color-adjust: exact;
     color: #0f4d90 !important;
     -webkit-print-color-adjust: exact;
+  }
+
+  div.callout {
+    /* margin-top: 0; */
+    font-size: 10px;
+    margin: 10px 0;
+    padding-top: 0;
+    padding-bottom: 0;
   }
 
   .external-link svg {
@@ -868,59 +911,59 @@ export default {
     border-style: none !important;
   }
 
-  .padding-top {
+  /* .padding-top {
     padding-top: 50px;
+  } */
+
+  .sale-info tbody th , .sale-info tbody td {
+    font-size: 14px;
+    padding-top: 0;
+    padding-bottom: 0;
   }
+
   .break-avoid {
     page-break-inside: avoid !important;
   }
-  .print-padding {
+  /* .print-padding {
     page-break-inside: avoid !important;
     padding: 20px 0;
-  }
+  } */
 
   .pvc-horizontal-table table tr:nth-child(odd) td.big_owner,
   .pvc-horizontal-table table tr:nth-child(odd) td.small_address {
     background: none !important;
   }
-  .pvc-horizontal-table table tr:nth-child(odd) td.big_owner {
-    font-size: 32px !important;
-    font-weight: 100 !important;
+  .pvc-horizontal-table table tr:nth-child(odd) td.big_owner,
+  .pvc-horizontal-table table tr:nth-child(odd) td.small_address {
+
     font-family: "Montserrat", sans-serif;
   }
 
-  .pvc-horizontal-table table tr:nth-child(odd) td.small_address {
+  /* .pvc-horizontal-table table tr:nth-child(odd) td.small_address {
     font-size: 12px !important;
     font-weight: 100 !important;
     font-family: "Montserrat", sans-serif;
     min-width: 145px;
-  }
+  } */
 
   .pvc-horizontal-table table tr:nth-child(odd) td {
     background: #eee !important;
     -webkit-print-color-adjust: exact;
   }
 
-  .pvc-horizontal-table-body, .table-container {
+  /* .pvc-horizontal-table-body, .table-container {
     page-break-inside: avoid !important;
-  }
+  } */
 
   .pvc-download-data-button, .pvc-export-data-button {
     visibility: hidden;
   }
 
-  .table-container[data-v-42075018] {
+  /* .table-container[data-v-42075018] {
     padding-top: 1rem !important;
     padding-bottom: 1rem !important;
     margin-bottom: 10px !important;
-  }
-
-  .table-container table {
-    margin: 1em 0;
-    border: 0.3px #ddd solid;
-    -webkit-print-color-adjust: exact;
-    border-collapse: unset;
-  }
+  } */
 
 }
 
@@ -932,12 +975,16 @@ export default {
 
   @page {
     size:8.5in 11in;
-    margin-top: 2cm
+    margin-top: .5in;
+  }
+
+  h1.address-header-line-1 {
+    font-size: 14px;
   }
 
   header.modal {
     visibility: visible !important;
-    margin: 5px 20px 40px 20px;
+    margin: 0px 20px 20px 20px;
     background: #2176d2;
     display: block !important;
   }
@@ -984,6 +1031,28 @@ export default {
   }
 }
 
+@media screen {
+
+  .address-container {
+    height: 100%;
+    width: 100%;
+    align-items: flex-start;
+    padding-left: 20px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+
+  h1.address-header-line-1 {
+    margin-bottom: 0;
+    margin-top: 0;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-right: 8px;
+    padding-left: 8px;
+  }
+
+}
+
 #plans-button{
   padding: 10.5px 25px 10.5px;
   float: right;
@@ -994,14 +1063,6 @@ header {
   display: none;
 }
 
-.address-container {
-  height: 100%;
-  width: 100%;
-  align-items: flex-start;
-  padding-left: 20px;
-  padding-top: 20px;
-  padding-bottom: 20px;
-}
 
 .address-header {
   background: #daedfe;
@@ -1014,15 +1075,6 @@ header {
   -moz-box-shadow: 0px 5px 7px -2px rgba(0,0,0,0.18);
   box-shadow: 0px 5px 7px -2px rgba(0,0,0,0.18);
   display: inline-block;
-}
-
-.address-header-line-1 {
-  margin-bottom: 0;
-  margin-top: 0;
-  padding-top: 0px !important;
-  padding-bottom: 0px !important;
-  padding-right: 8px !important;
-  padding-left: 8px !important;
 }
 
 .address-header-line-2 {
@@ -1079,7 +1131,7 @@ header {
 .openmaps-modal-content{
   width: 95%;
   height: 85%;
-  margin: 20px auto;
+  margin: 0 20px;
 }
 
 .openmaps-modal-close{
