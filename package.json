@@ -14,7 +14,7 @@
     "1.0.2": "^1.0.0",
     "@fortawesome/pro-solid-svg-icons": "^5.8.2",
     "@philly/vue-comps": "^2.0.4",
-    "@philly/vue-datafetch": "https://github.com/CityOfPhiladelphia/phila-vue-datafetch#f8c52914784f33c197abdfcce46c55cb7e21be8a",
+    "@philly/vue-datafetch": "^1.1.1",
     "@philly/vue-mapping": "^2.0.2",
     "accounting": "^0.4.1",
     "core-js": "^3.4.7",
