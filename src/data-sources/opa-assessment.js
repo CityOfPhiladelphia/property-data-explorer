@@ -20,6 +20,7 @@ export default {
           opa.push(relate);
         }
       }
+      // if (state.geocode.related && state.geocode.related.length) {
       if (state.geocode.data.condo != null && state.geocode.data.condo == true) {
         // console.log('opa-assessment in if condo is running');
         // opa.push(state.geocode.data);

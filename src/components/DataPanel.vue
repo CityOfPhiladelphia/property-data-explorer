@@ -120,12 +120,14 @@ export default {
         for (let i in parentCondo.properties) {
           parentCondo.properties[i] = "";
         }
-        parentCondo.properties.opa_owners = [ "Condominium (" + this.$store.state.condoUnits.units[this.$store.state.parcels.pwd[0].properties.PARCELID].length + " Units)" ];
+        if (this.$store.state.condoUnits.units[this.$store.state.parcels.pwd[0].properties.PARCELID]) {
+          parentCondo.properties.opa_owners = [ "Condominium (" + this.$store.state.condoUnits.units[this.$store.state.parcels.pwd[0].properties.PARCELID].length + " Units)" ];
+        }
         parentCondo.properties.street_address = this.$store.state.parcels.pwd[0].properties.ADDRESS;
         parentCondo.properties.opa_address = this.$store.state.parcels.pwd[0].properties.ADDRESS;
         parentCondo.properties.pwd_parcel_id = this.$store.state.parcels.pwd[0].properties.PARCELID;
         parentCondo._featureId = this.$store.state.parcels.pwd[0].properties.PARCELID;
-        parentCondo.condo = true;
+        // parentCondo.condo = true;
         data.push(parentCondo);
       } else {
         console.log('in geocodeItems, in else, this.geocode.data:', this.geocode.data, 'this.geocode.related:', this.geocode.related);
