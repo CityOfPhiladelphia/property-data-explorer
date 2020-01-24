@@ -716,9 +716,10 @@
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/@nodelib/fs.stat/-/fs.stat-1.1.3.tgz#2b5a3ab3f918cca48a8c754c08168e3f03eba61b"
 
-"@philly/vue-comps@^2.0.4":
-  version "2.0.4"
-  resolved "https://registry.yarnpkg.com/@philly/vue-comps/-/vue-comps-2.0.4.tgz#0a274432f3f08ead6a7f37f2f4eab4365097f55e"
+"@philly/vue-comps@^2.0.7":
+  version "2.0.7"
+  resolved "https://registry.yarnpkg.com/@philly/vue-comps/-/vue-comps-2.0.7.tgz#0fa368948754e6e133858868f800de730ef1be3e"
+  integrity sha512-D9odVAIiUR24CjC/XWOmxOhmDy0b7RsVgoCuiGKv6rk1F+lIDWjZRpPFdyPAzm5LQOpatL6xKXLG4EMuuiLq6A==
   dependencies:
     "@fortawesome/fontawesome-svg-core" "^1.2.15"
     "@fortawesome/free-regular-svg-icons" "^5.7.2"
@@ -734,10 +735,10 @@
     vue "^2.6.10"
     vuex "^3.1.2"
 
-"@philly/vue-datafetch@^1.1.1":
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/@philly/vue-datafetch/-/vue-datafetch-1.1.1.tgz#154176c519869cedac6b3ca7b0d2253f48381b4a"
-  integrity sha512-JHao+o5Xvv7EDF5iCnn4KDFTinhVg03pZiqAl6+I9Fu6ra1Q3SjaGBVNUAwCX6ckRDTuRl4gPlEDL7VPJvtQjg==
+"@philly/vue-datafetch@^1.1.3":
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/@philly/vue-datafetch/-/vue-datafetch-1.1.3.tgz#9450e4a3801ebc8c04fca45816fcb1376d8cfa4f"
+  integrity sha512-k05zhFvs1okMS1SJyoL9lTQ9MN75YUQuOYgRaSURgjDX3fgYUTFsoLfcJIWlVNB2SQXZYupNuVr89AmHfAp83g==
   dependencies:
     "@turf/turf" "^5.1.6"
     axios "^0.19.0"

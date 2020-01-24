@@ -230,6 +230,8 @@ export default {
                     this.$store.state.geocode.data != null &&
                     this.$store.state.geocode.data.ais_feature_type === 'intersection') {
         error = 'intersection';
+      } else if (this.anySearchStatus === 'condoWaiting') {
+        error = 'condoWaiting';
       }
       return error;
     },
@@ -241,6 +243,8 @@ export default {
         returnValue = '<h3>No account found matching that address or owner.<h3>';
       } else if (error === 'too_many') {
         returnValue = '<h3>Too many parcels selected.  Try again.<h3>';
+      } else if (error === 'condoWaiting') {
+        returnValue = '<h3>Collecting condo data.  Please wait.<h3>';
       }
       return returnValue;
     },
@@ -249,6 +253,9 @@ export default {
     },
     geocodeStatus() {
       return this.$store.state.geocode.status;
+    },
+    condoStatus() {
+      return this.$store.state.condoUnits.status;
     },
     ownerSearchStatus() {
       return this.$store.state.ownerSearch.status;
@@ -260,10 +267,14 @@ export default {
       return this.$store.state.shapeSearch.status;
     },
     anySearchStatus() {
-      let statusArray = [ this.geocodeStatus, this.ownerSearchStatus, this.shapeSearchStatus ];
+      let statusArray = [ this.geocodeStatus, this.ownerSearchStatus, this.shapeSearchStatus, this.condoStatus ];
       let status;
       if (statusArray.includes('waiting')) {
-        status = 'waiting';
+        if (this.condoStatus === 'waiting') {
+          status = 'condoWaiting'
+        } else {
+          status = 'waiting';
+        }
       } else if (statusArray.includes('success')) {
         status = 'success';
       } else if (statusArray.includes('error')) {
