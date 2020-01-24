@@ -303,7 +303,7 @@ export default {
     },
     openModal() {
       // console.log("openModal: ", this.activeModal)
-      return this.activeModal != null ? 'modal-opacity' : "";
+      return this.activeModal != null ? ' modal-opacity' : "";
     },
     shouldKeepIntroPage() {
       if (this.$store.state.sources.opa_assessment.status || this.$store.state.cyclomedia.active) {
