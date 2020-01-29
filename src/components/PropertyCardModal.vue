@@ -1,5 +1,6 @@
 <template>
   <div
+    id="main"
     v-if="this.$store.state.activeModal.featureId"
     :class="['openmaps-about', 'openmaps-modal']"
   >
@@ -160,6 +161,7 @@
         <h3>Loading Property Details</h3>
       </div>
       <vertical-table
+        class="break-avoid"
         :slots="propertyDetailsVerticalTableSlots"
       />
       <callout
@@ -248,7 +250,6 @@ export default {
         text: '\
         Property assessment and sale information for this address. Source: Office of Property Assessments (OPA). \
         OPA was formerly a part of the Bureau of Revision of Taxes (BRT) and some City records may still use that name.\
-        Total in Sales History is the adjusted value.\
         ',
       };
     },
@@ -727,7 +728,7 @@ export default {
             transforms: [ 'date' ],
           },
           {
-            label: 'Total',
+            label: 'Adjusted Total',
             value: function(state, item){
               return item.adjusted_total_consideration;
             },
@@ -810,7 +811,6 @@ export default {
 
 
 @media print {
-
 
   * {
     background: none !important;
@@ -971,12 +971,6 @@ export default {
 <style scoped>
 
 @media print {
-
-
-  @page {
-    size:8.5in 11in;
-    margin-top: .5in;
-  }
 
   h1.address-header-line-1 {
     font-size: 14px;
