@@ -15,11 +15,11 @@ deploy:
       branch: production
     local_dir: dist
     skip_cleanup: true
-  # - provider: s3
-  #   access_key_id: $AWS_ACCESS_KEY_ID_OIT
-  #   secret_access_key: $AWS_SECRET_ACCESS_KEY_OIT
-  #   bucket: 'property-data-explorer'
-  #   on:
-  #     branch: pvd-merge
-  #   local_dir: dist
-  #   skip_cleanup: true
+  - provider: s3
+    access_key_id: $AWS_ACCESS_KEY_ID_OIT
+    secret_access_key: $AWS_SECRET_ACCESS_KEY_OIT
+    bucket: 'property-data-explorer'
+    on:
+      branch: master
+    local_dir: dist
+    skip_cleanup: true
