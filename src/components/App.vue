@@ -694,6 +694,12 @@ export default {
   #results-summary {
     display: none;
   }
+
+  @page {
+    margin-top: .5in;
+    size: 8.5in 11in;
+  }
+
 }
 
 
