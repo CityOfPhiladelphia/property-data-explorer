@@ -184,10 +184,10 @@ export default {
         },
         context: {
           singular: function(list) {
-            return 'Showing ' + list + ' result';
+            return list + ' result. Select address for details.';
           },
           plural: function(list) {
-            return 'Showing ' + list + ' results';
+            return list + ' results. Select address for details.';
           },
           pluralizeList: false,
         },
