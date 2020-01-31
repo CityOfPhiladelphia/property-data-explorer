@@ -23,7 +23,9 @@
     </header>
     <div
       class="openmaps-modal-close hide-print"
+      :tabindex="1"
       @click="closeModal"
+      v-on:keydown.enter="closeModal"
     >
       <span class="button-state state-unnamed-state unnamed-state-active pointer">
         <font-awesome-icon
