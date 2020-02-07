@@ -521,16 +521,16 @@ export default {
             label: 'Beginning Point',
             value: opaPublicData.beginning_point,
           },
-          {
-            label: 'Zoning',
-            value: function(state) {
-              return '<a target="_blank" \
-                        href="https://atlas.phila.gov/#/'+ this.activeAddress + '/zoning ">\
-                       <b>' + opaPublicData.zoning + '-' + helpers.ZONING_CODE_MAP[opaPublicData.zoning.trim()] + '</b>\
-                       </b> <i class="fa fa-external-link-alt"></i></a>\
-                       </a>';
-            }.bind(this),
-          },
+          // {
+          //   label: 'Zoning',
+          //   value: function(state) {
+          //     return '<a target="_blank" \
+          //               href="https://atlas.phila.gov/#/'+ this.activeAddress + '/zoning ">\
+          //              <b>' + opaPublicData.zoning + '-' + helpers.ZONING_CODE_MAP[opaPublicData.zoning.trim()] + '</b>\
+          //              </b> <i class="fa fa-external-link-alt"></i></a>\
+          //              </a>';
+          //   }.bind(this),
+          // },
           {
             label: 'OPA Account Number',
             value: this.activeOpaId,
