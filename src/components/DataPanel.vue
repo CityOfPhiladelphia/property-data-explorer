@@ -993,31 +993,31 @@ export default {
                 point.replace(/"/g, '""').trim()
           },
         },
-        {
-          label: 'Zoning Code',
-          value: function(state, item){
-            let id = [];
-            state.geocode.status === "success"?  id =  item.properties.opa_account_num :
-              state.ownerSearch.status === "success" ? id =  item.properties.opa_account_num :
-                id = item.parcel_number;
-            if (typeof state.sources.opa_public.targets[id] != 'undefined' && id != "") {
-              return state.sources.opa_public.targets[id].data.zoning.trim();
-            } return "";
-          },
-        },
-        {
-          label: 'Zoning Description',
-          value: function (state, item) {
-            let id = [];
-            state.geocode.status === "success"?  id =  item.properties.opa_account_num :
-              state.ownerSearch.status === "success" ? id =  item.properties.opa_account_num :
-                id = item.parcel_number;
-            if (typeof state.sources.opa_public.targets[id] != 'undefined' && id != "") {
-              const code = state.sources.opa_public.targets[id].data.zoning ;
-              return helpers.ZONING_CODE_MAP[code.trim()];
-            }  return "";
-          },
-        },
+        // {
+        //   label: 'Zoning Code',
+        //   value: function(state, item){
+        //     let id = [];
+        //     state.geocode.status === "success"?  id =  item.properties.opa_account_num :
+        //       state.ownerSearch.status === "success" ? id =  item.properties.opa_account_num :
+        //         id = item.parcel_number;
+        //     if (typeof state.sources.opa_public.targets[id] != 'undefined' && id != "") {
+        //       return state.sources.opa_public.targets[id].data.zoning.trim();
+        //     } return "";
+        //   },
+        // },
+        // {
+        //   label: 'Zoning Description',
+        //   value: function (state, item) {
+        //     let id = [];
+        //     state.geocode.status === "success"?  id =  item.properties.opa_account_num :
+        //       state.ownerSearch.status === "success" ? id =  item.properties.opa_account_num :
+        //         id = item.parcel_number;
+        //     if (typeof state.sources.opa_public.targets[id] != 'undefined' && id != "") {
+        //       const code = state.sources.opa_public.targets[id].data.zoning ;
+        //       return helpers.ZONING_CODE_MAP[code.trim()];
+        //     }  return "";
+        //   },
+        // },
       ];
     },
     mailingFields(state, item, thisDef) {
