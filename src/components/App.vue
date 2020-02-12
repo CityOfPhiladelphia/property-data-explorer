@@ -17,7 +17,9 @@
       </div>
     </PhilaHeader>
     <owner-search-modal />
-    <property-card-modal />
+    <property-card-modal
+      :tabindex="0"
+    />
 
     <div :class="'cell medium-auto medium-cell-block-container main-content ' + openModal">
       <div :class="mapClass">
@@ -379,6 +381,12 @@ export default {
     },
   },
   mounted() {
+
+  //Adding this function as an event listener so that it can be used to clear when property modal errors on open as well.
+  window.addEventListener("keydown", function(e) {
+    return e.keyCode === 27 ? this.closePropertyModal() : "";
+    }.bind(this), false);
+
     this.onResize();
     this.$store.commit('setActiveParcelLayer', 'pwd');
     let query = this.$route.query;
@@ -430,6 +438,13 @@ export default {
     window.removeEventListener('resize', this.onResize);
   },
   methods: {
+    closePropertyModal() {
+      this.$store.state.activeModal.featureId = null;
+      this.$store.commit('setActiveFeature', null);
+      this.$nextTick(() => {
+        this.$store.state.map.map.invalidateSize();
+      });
+    },
     openIntroPage(value){
       // console.log('App.vue openIntroPage is running, value:', value);
       this.$data.introPage = value
