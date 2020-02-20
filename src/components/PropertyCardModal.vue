@@ -547,6 +547,13 @@ export default {
               return opaPublicData.homestead_exemption > 0 ? 'Yes' : 'No';
             },
           },
+          {
+            label: 'Political Divisions',
+            value: function(state) {
+              return "View this property on <a href='http://atlas.phila.gov/#/"+this.activeAddress+"/voting' target='_blank'>\
+                      Atlas <i class='fa fa-external-link-alt'></i></a> for Ward and Council District Information";
+            }.bind(this),
+          },
         ],
       };
     },
