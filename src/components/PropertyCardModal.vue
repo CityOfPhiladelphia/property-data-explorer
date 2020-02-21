@@ -566,6 +566,20 @@ export default {
                       Atlas <i class='fa fa-external-link-alt'></i></a> for Ward and Council District Information";
             }.bind(this),
           },
+          {
+            label: 'School Catchment',
+            value: function() {
+              return "Visit <a href='https://webapps1.philasd.org/school_finder/' target='_blank'>\
+                      Philly School Finder <i class='fa fa-external-link-alt'></i></a> for school district info.";
+            }.bind(this),
+          },
+          {
+            label: 'Police District',
+            value: function() {
+              return "Visit the <a href='https://webapps1.philasd.org/school_finder/' target='_blank'>\
+                      Phila Police <i class='fa fa-external-link-alt'></i></a> for police district info.";
+            }.bind(this),
+          },
         ],
       };
     },
