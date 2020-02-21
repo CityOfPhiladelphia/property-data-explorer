@@ -173,6 +173,9 @@
         class="break-avoid"
         :slots="metadataCalloutSlots"
       />
+      <callout
+        :slots="openMapsCalloutSlots"
+      />
     </div>
   </div>
 </template>
@@ -273,6 +276,15 @@ export default {
         You can download the property assessment dataset in bulk, and get more information about this data at\
         <a target="_blank" \
            href="https://metadata.phila.gov"><b>metadata.phila.gov </b><i class="fa fa-external-link-alt"></i></a>\
+        ',
+      };
+    },
+    openMapsCalloutSlots() {
+      return {
+        text: '\
+        Additional information such as trash & recycling day, and districts for highway, traffic and sanitation can be found at\
+        <a target="_blank" \
+          href="https://openmaps.phila.gov/#/'+this.activeAddress+'"><b>OpenMaps </b><i class="fa fa-external-link-alt"></i></a>\
         ',
       };
     },
