@@ -1,9 +1,9 @@
-name: Build, Check And Deploy to Dev
+name: Build, Check And Deploy to Prod
 
 on:
   push:
     branches:
-      - master
+      - production
 
 jobs:
   build:
@@ -22,7 +22,7 @@ jobs:
       run: |
         printf "@fortawesome:registry=https://npm.fontawesome.com/\n//npm.fontawesome.com/:_authToken=${FONTAWESOME_NPM_AUTH_TOKEN}" >> ~/.npmrc
         npm install
-        npm run dev-build
+        npm run build
       env:
         FONTAWESOME_NPM_AUTH_TOKEN: ${{ secrets.FONTAWESOME_NPM_AUTH_TOKEN }}
         VUE_APP_CYCLOMEDIA_API_KEY: ${{ secrets.VUE_APP_CYCLOMEDIA_API_KEY }}
@@ -30,20 +30,20 @@ jobs:
         VUE_APP_CYCLOMEDIA_USERNAME: ${{ secrets.VUE_APP_CYCLOMEDIA_USERNAME }}
         VUE_APP_GATEKEEPER_KEY: ${{ secrets.VUE_APP_GATEKEEPER_KEY }}
 
-    - name: Deploy to Dev s3
+    - name: Deploy to Prod s3
       run: |
         aws s3 sync dist s3://$AWS_S3_BUCKET --region us-east-1 --delete
       env:
         AWS_DEFAULT_REGION: 'us-east-1'
-        AWS_S3_BUCKET: property-data-explorer
+        AWS_S3_BUCKET: property-bulk
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-    - name: Notify Slack (UI Dev Deployment Completed)
+    - name: Notify Slack (UI Prod Deployment Completed)
       uses: rtCamp/action-slack-notify@master
       env:
         SLACK_CHANNEL: prj-property-data
         SLACK_USERNAME: deployBot
         SLACK_ICON: ":scream:"
         SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
-        SLACK_TITLE: "Completed deployment to UI dev and deploy:"
+        SLACK_TITLE: "Completed deployment to UI prod and deploy:"
