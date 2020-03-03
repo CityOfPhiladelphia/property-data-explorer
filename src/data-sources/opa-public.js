@@ -53,7 +53,7 @@ export default {
     params: {
       q: function(input){
         // console.log('opa-public.js, input:', input);
-        return "select * from opa_properties_public_ped where parcel_number IN("+ input +")";
+        return "select * from opa_properties_public_pde where parcel_number IN("+ input +")";
       },
       // var inputEncoded = Object.keys(input).map(k => "'" + input[k] + "'").join(",");
     },
