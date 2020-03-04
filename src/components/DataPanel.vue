@@ -757,12 +757,20 @@ export default {
         {
           label: 'OPA Account Number',
           value: function(state, item) {
-            if (state.geocode.status === "success"){
-              return item.properties.opa_account_num;
-            } else if (state.ownerSearch.status === "success") {
-              return item.properties.opa_account_num;
+            console.log("line 761 item: ", item.parcel_number)
+            if(typeof item.parcel_number != undefined) {
+              return item.parcel_number
+            } else {
+              return item.properties.opa_account_num
             }
-            return item.parcel_number;
+
+            // if (state.geocode.status === "success"){
+            //   console.log("line 761 item: ", item)
+            //   return item.properties.opa_account_num;
+            // } else if (state.ownerSearch.status === "success") {
+            //   return item.properties.opa_account_num;
+            // }
+            // return item.parcel_number;
 
           },
         },
@@ -997,9 +1005,14 @@ export default {
           label: 'Zoning Code',
           value: function(state, item){
             let id = [];
-            state.geocode.status === "success"?  id =  item.properties.opa_account_num :
-              state.ownerSearch.status === "success" ? id =  item.properties.opa_account_num :
-                id = item.parcel_number;
+            if(typeof item.parcel_number != undefined) {
+              id = item.parcel_number
+            } else {
+              id =  item.properties.opa_account_num
+            }
+            // state.geocode.status === "success"?  id =  item.properties.opa_account_num :
+            //   state.ownerSearch.status === "success" ? id =  item.properties.opa_account_num :
+            //     id = item.parcel_number;
             if (typeof state.sources.opa_public.targets[id] != 'undefined' && id != "") {
               return state.sources.opa_public.targets[id].data.zoning.trim();
             } return "";
@@ -1009,9 +1022,14 @@ export default {
           label: 'Zoning Description',
           value: function (state, item) {
             let id = [];
-            state.geocode.status === "success"?  id =  item.properties.opa_account_num :
-              state.ownerSearch.status === "success" ? id =  item.properties.opa_account_num :
-                id = item.parcel_number;
+         if(typeof item.parcel_number != undefined) {
+              id = item.parcel_number
+            } else {
+              id =  item.properties.opa_account_num
+            }
+            // state.geocode.status === "success"?  id =  item.properties.opa_account_num :
+            //   state.ownerSearch.status === "success" ? id =  item.properties.opa_account_num :
+            //     id = item.parcel_number;
             if (typeof state.sources.opa_public.targets[id] != 'undefined' && id != "") {
               const code = state.sources.opa_public.targets[id].data.zoning ;
               return helpers.ZONING_CODE_MAP[code.trim()];
