@@ -196,6 +196,7 @@ let findConditionCode = function(exterior) {
 import helpers from '../util/helpers';
 import transforms from '../general/transforms';
 const titleCase = transforms.titleCase.transform;
+const nth = transforms.nth.transform;
 
 export default {
   name: 'PropertyCardModal',
@@ -559,27 +560,30 @@ export default {
               return opaPublicData.homestead_exemption > 0 ? 'Yes' : 'No';
             },
           },
-          {
-            label: 'Political Divisions',
-            value: function(state) {
-              return "View this property on <a href='http://atlas.phila.gov/#/"+this.activeAddress+"/voting' target='_blank'>\
-                      Atlas <i class='fa fa-external-link-alt'></i></a> for Ward and Council District Information";
-            }.bind(this),
-          },
-          {
-            label: 'School Catchment',
-            value: function() {
-              return "Visit <a href='https://webapps1.philasd.org/school_finder/' target='_blank'>\
-                      Philly School Finder <i class='fa fa-external-link-alt'></i></a> for school district info.";
-            }.bind(this),
-          },
-          {
-            label: 'Police District',
-            value: function() {
-              return "Visit the <a href='https://webapps1.philasd.org/school_finder/' target='_blank'>\
-                      Phila Police <i class='fa fa-external-link-alt'></i></a> for police district info.";
-            }.bind(this),
-          },
+          // {
+          //   label: 'Political Divisions',
+          //   value: function(state) {
+          //     return "<a href='http://atlas.phila.gov/#/"+this.activeAddress+"/voting' target='_blank'>\
+          //             Ward Division: "+nth(opaPublicData.political_ward)+" | Council District: "+ nth(opaPublicData.council_district_2016) +" \
+          //             <i class='fa fa-external-link-alt'></i></a>";
+          //   }.bind(this),
+          // },
+          // {
+          //   label: 'School Catchment',
+          //   value: function() {
+          //     return "<a href='https://webapps1.philasd.org/school_finder/' target='_blank'>\
+          //             Elementary: "+opaPublicData.elementary_school+" | Middle: "+opaPublicData.middle_school+" | HS: "+opaPublicData.high_school+" |\
+          //             <i class='fa fa-external-link-alt'></i></a>";
+          //   }.bind(this),
+          // },
+          // {
+          //   label: 'Police District',
+          //   value: function() {
+          //     return "<a href='https://webapps1.philasd.org/school_finder/' target='_blank'>\
+          //             " + nth(opaPublicData.police_district) + " District\
+          //             <i class='fa fa-external-link-alt'></i></a>";
+          //   }.bind(this),
+          // },
         ],
       };
     },

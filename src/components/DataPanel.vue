@@ -1018,6 +1018,48 @@ export default {
             }  return "";
           },
         },
+        {
+          label: 'Ward',
+          value: function(state, item) {
+            return opaPublicData(state, item).political_ward;
+          },
+        },
+        {
+          label: 'Ward Division',
+          value: function(state, item) {
+            return opaPublicData(state, item).political_division;
+          },
+        },
+        {
+          label: 'Council District',
+          value: function(state, item) {
+            return opaPublicData(state, item).council_district_2016;
+          },
+        },
+        {
+          label: 'Elementary School',
+          value: function(state, item) {
+            return opaPublicData(state, item).elementary_school;
+          },
+        },
+        {
+          label: 'Middle School',
+          value: function(state, item) {
+            return opaPublicData(state, item).middle_school;
+          },
+        },
+        {
+          label: 'High School',
+          value: function(state, item) {
+            return opaPublicData(state, item).high_school;
+          },
+        },
+        {
+          label: 'Police District',
+          value: function(state, item) {
+            return opaPublicData(state, item).police_district;
+          },
+        },
       ];
     },
     mailingFields(state, item, thisDef) {
