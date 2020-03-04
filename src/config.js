@@ -71,7 +71,7 @@ let config = {
       params: {
         q: function(input){
           var inputEncoded = Object.keys(input).map(k => "'" + input[k] + "'").join(",");
-          return "select * from opa_properties_public_test where pwd_parcel_id IN("+ inputEncoded +")";
+          return "select * from opa_properties_public_pde where pwd_parcel_id IN("+ inputEncoded +")";
         },
       },
     },
