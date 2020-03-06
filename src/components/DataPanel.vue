@@ -1027,7 +1027,7 @@ export default {
         {
           label: 'Ward Division',
           value: function(state, item) {
-            return opaPublicData(state, item).political_division;
+            return opaPublicData(state, item).political_district;
           },
         },
         {
