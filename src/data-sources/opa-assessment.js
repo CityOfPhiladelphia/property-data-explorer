@@ -41,7 +41,7 @@ export default {
   options: {
     params: {
       q: function(feature) {
-        return "SELECT parcel_number, market_value, sale_date, sale_price FROM opa_properties_public WHERE parcel_number IN (" + feature + ")";
+        return "SELECT parcel_number, market_value, sale_date, sale_price FROM opa_properties_public_pde WHERE parcel_number IN (" + feature + ")";
       },
     },
     success: function(data) {
