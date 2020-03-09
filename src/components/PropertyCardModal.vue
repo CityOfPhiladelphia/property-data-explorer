@@ -173,6 +173,9 @@
         class="break-avoid"
         :slots="metadataCalloutSlots"
       />
+      <callout
+        :slots="openMapsCalloutSlots"
+      />
     </div>
   </div>
 </template>
@@ -193,6 +196,7 @@ let findConditionCode = function(exterior) {
 import helpers from '../util/helpers';
 import transforms from '../general/transforms';
 const titleCase = transforms.titleCase.transform;
+const nth = transforms.nth.transform;
 
 export default {
   name: 'PropertyCardModal',
@@ -273,6 +277,15 @@ export default {
         You can download the property assessment dataset in bulk, and get more information about this data at\
         <a target="_blank" \
            href="https://metadata.phila.gov"><b>metadata.phila.gov </b><i class="fa fa-external-link-alt"></i></a>\
+        ',
+      };
+    },
+    openMapsCalloutSlots() {
+      return {
+        text: '\
+        Additional information such as trash & recycling day, and districts for highway, traffic and sanitation can be found at\
+        <a target="_blank" \
+          href="https://openmaps.phila.gov/#/'+this.activeAddress+'"><b>OpenMaps </b><i class="fa fa-external-link-alt"></i></a>\
         ',
       };
     },
@@ -546,6 +559,30 @@ export default {
             value: function(state) {
               return opaPublicData.homestead_exemption > 0 ? 'Yes' : 'No';
             },
+          },
+          {
+            label: 'Political Divisions',
+            value: function(state) {
+              return "<a href='http://atlas.phila.gov/#/"+this.activeAddress+"/voting' target='_blank'>\
+                      Ward Division: "+nth(opaPublicData.political_ward)+" | Council District: "+ nth(opaPublicData.council_district_2016) +" \
+                      <i class='fa fa-external-link-alt'></i></a>";
+            }.bind(this),
+          },
+          {
+            label: 'School Catchment',
+            value: function() {
+              return "<a href='https://webapps1.philasd.org/school_finder/' target='_blank'>\
+                      Elementary: "+opaPublicData.elementary_school+" | Middle: "+opaPublicData.middle_school+" | HS: "+opaPublicData.high_school+" |\
+                      <i class='fa fa-external-link-alt'></i></a>";
+            }.bind(this),
+          },
+          {
+            label: 'Police District',
+            value: function() {
+              return "<a href='https://webapps1.philasd.org/school_finder/' target='_blank'>\
+                      " + nth(opaPublicData.police_district) + " District\
+                      <i class='fa fa-external-link-alt'></i></a>";
+            }.bind(this),
           },
         ],
       };
