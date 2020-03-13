@@ -3,26 +3,36 @@
     id="intro-container"
     :class="widgetClass + ' introduction'"
   >
-    <h2>Welcome to the new Property Data Explorer for the City of Philadelphia</h2>
+    <div class="intro-blue">
+        <i>Use the Property Data Explorer to get information about a property's ownership,<br>
+        sales history, value, and physical characteristics. You can also generate address<br>
+        listings near a property or within an area of interest.</i>
+    </div>
+    <h2>To get started, you can: </h2>
     <div class="spacer" />
     <!-- <p>Here are some things you can do with Property Data Explorer:</p> -->
     <!-- <div class="callout"> -->
     <div>
-      Search for one or more properties to
       <ul class="padded-list">
-        <li>Get information about property ownership, value, and physical characteristics.</li>
-        <li>Look up the history of sales and assessments for a property.</li>
-        <li>Quickly gather data for properties on a block or within a nearby area.</li>
-        <li>Generate address listings near a property or within an area of interest.</li>
-        <li> Find properties anywhere in the city owned by an individual or company.</li>
-      </ul>
-    </div>
-    <div>
-      To get started, you can
-      <ul class="padded-list">
-        <li>Click anywhere on the map.</li>
-        <li>Use <i class="fas fa-circle" /> to search near a property or <i class="fas fa-hexagon" /> to draw an area.</li>
-        <li>Type an address, owner name, property account number, or Department of Records Map Registry number into the search box.</li>
+        <li>
+          <h4>Select a location on the map</h4>
+          Click or tap on a specific property to view details about it.
+        </li>
+        <li>
+          <h4>Search on property information</h4>
+          type an address, owner name, property account number, or
+          Department of Records registry map number into the search box.
+        </li>
+        <li>
+          <h4>View Properties within a selected radius</h4>
+          Use this tool to select a point on the map and view details about all
+          properties within a 250-foot radius.
+        </li>
+        <li>
+          <h4>Select a location on the map</h4>
+          Use this tool to draw a shape on the map and view details about all
+          properties within its boundaries.
+        </li>
       </ul>
     </div>
   </div>
@@ -48,7 +58,7 @@ export default {
       // if (this.fullScreenTopicsEnabled) {
       //   return 'medium-12 small-24 full-topics-open'
       // } else {
-      return 'medium-12 small-24';
+      return 'medium-24 small-24';
       // }
     },
   },
@@ -77,12 +87,41 @@ export default {
   height: calc(100vh - 122px);
 }
 
+.intro-blue {
+  background: #daedfe;
+  padding: 10px;
+}
+
 .spacer {
   height: 20px;
 }
 
 .padded-list {
   padding-left: 14px;
+  li {
+    padding: 10px 20px 0 0;
+  }
+  li:nth-child(1){
+    list-style-image:url(https://cdn1.iconfinder.com/data/icons/mimiGlyphs/16/envelope_mail.png)
+    }
+  li:nth-child(2){
+    list-style-image:url(https://cdn1.iconfinder.com/data/icons/mimiGlyphs/16/envelope_mail.png)
+    }
+  li:nth-child(3){
+    list-style-image:url(https://cdn1.iconfinder.com/data/icons/mimiGlyphs/16/envelope_mail.png)
+    }
+  li:nth-child(4){
+    list-style-image:url(https://cdn1.iconfinder.com/data/icons/mimiGlyphs/16/envelope_mail.png)
+    }
+}
+
+@media screen and (min-width: 750px) {
+  .introduction {
+    margin: 30px 40px 0 40px;
+    .intro-blue {
+        margin: 0 0 35px 0;
+    }
+  }
 }
 
 @media screen and (max-width: 750px) {
