@@ -10,3 +10,8 @@ package-lock.json
 main_old.js
 .npmrc
 .env
+
+** Testing ignore***
+Test/node_modules
+Test/screenshots/*
+Test/reports/*
