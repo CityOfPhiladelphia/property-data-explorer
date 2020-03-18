@@ -9,7 +9,7 @@ export default class HomePage {
   feedbackButton: Selector = Selector(".app-footer:nth-child(4) li:nth-child(3) > a");
   searchMap: Selector = Selector("input[placeholder='Search the map']");
   searchmapButton: Selector = Selector("svg[data-icon= 'search']");
-  table: Selector = Selector("table")
+  table: Selector = Selector('table');
   mailingLables: Selector = Selector("a[class='button mailing pvc-export-data-button']");
   downloadCSV: Selector = Selector("a[class='button csv pvc-export-data-button']");
 
@@ -25,7 +25,7 @@ export default class HomePage {
     await t.wait(2000);
     await t.click(this.downloadCSV);
     await t.click(this.mailingLables);
-    await t.wait(2000);
+    await t.wait(4000);
     const tableValues = await this.table.innerText;
     await t.expect(tableValues).contains(buildingAddressData.address)
     var tablecount = await this.table.count;
