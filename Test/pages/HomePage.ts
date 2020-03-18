@@ -22,18 +22,15 @@ export default class HomePage {
     await t.click(this.closeHowtouseButton);
     await t.typeText(this.searchMap,  buildingAddressData.address);
     await t.click(this.searchmapButton);
-    debugger;
-    await t.wait(2000);
     await t.click(this.downloadCSV);
     await t.click(this.mailingLables);
-    await t.wait(4000);
+    await t.wait(2000);
     const tableValues = await this.table.innerText;
-    console.log(tableValues);
-    await t.expect(tableValues).contains(buildingAddressData.address)
+    await t.expect(tableValues).contains(buildingAddressData.opaAddress)
     var tablecount = await this.table.count;
     for (var i=0; i < tablecount; i++)
     await t.click(this.table.nth(i))
-    await t.expect(tableValues).contains(buildingAddressData.address);
+    await t.expect(tableValues).contains(buildingAddressData.opaAddress);
    
   }
 }

@@ -31,7 +31,7 @@ class SearchData {
 // enter the search data of Market Address.
 export const buildingAddressData: SearchData = {
   address: "1234 Market St",
-  opaAddress: "OPA Address",
+  opaAddress: "Street Address",
   opaAccount: "OPA Account #",
   opaAccountValue: "883309050",
   opaAddressValue: "1234 MARKET ST",
