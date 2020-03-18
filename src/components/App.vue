@@ -698,7 +698,7 @@ export default {
 }
 
 .mailing {
-  right: 137px !important;
+  right: 165px !important;
 }
 
 // .mailing {
