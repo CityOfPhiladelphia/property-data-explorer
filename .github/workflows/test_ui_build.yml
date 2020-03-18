@@ -23,7 +23,7 @@ jobs:
         printf "@fortawesome:registry=https://npm.fontawesome.com/\n//npm.fontawesome.com/:_authToken=${FONTAWESOME_NPM_AUTH_TOKEN}" >> ~/.npmrc
         npm install
         npm run build
-        npm run serve
+        npm run serve &
         cd Test
         npm install
         npm run test-local
