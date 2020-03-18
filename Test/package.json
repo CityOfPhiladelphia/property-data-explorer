@@ -1,7 +1,7 @@
 {
   "name": "test",
   "version": "1.0.0",
-  "description": "Atlas Test Service",
+  "description": "PropertyData Test Service",
   "dependencies": {
     "dotenv": "^8.0.0"
   },
@@ -9,7 +9,6 @@
     "testcafe": "^1.4.1"
   },
   "scripts": {
-    "docker-test": "npm install && docker-compose up --force-recreate",
     "test-local": "testcafe"
   },
   "author": "",
