@@ -688,23 +688,6 @@ export default {
   top: 93px;
 }
 
-.pvc-export-data-button {
-  position: fixed;
-  float: right !important;
-}
-
-.csv {
-  right: 5px !important;
-}
-
-.mailing {
-  right: 165px !important;
-}
-
-// .mailing {
-//   left: 125px;
-// }
-
 @media print {
   #results-summary {
     display: none;
