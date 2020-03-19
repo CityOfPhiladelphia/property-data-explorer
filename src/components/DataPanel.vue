@@ -313,9 +313,8 @@ export default {
         },
         export: {
           formatButtons: {
-            icon: 'envelope',
-            csv: ' Download CSV',
-            mailing: "Mailing Labels",
+            csv: {text: ' Download CSV', icon: 'download'},
+            mailing: {text: "Mailing Labels", icon: 'envelope'}
           },
         },
         customClass: {
@@ -411,8 +410,8 @@ export default {
         rowAction: this.rowClick,
         export: {
           formatButtons: {
-            csv: '<i class="fas fa-envelope"/> Download CSV',
-            mailing: "Mailing Labels",
+            csv: {text: ' Download CSV', icon: 'download'},
+            mailing: {text: "Mailing Labels", icon: 'envelope'}
           },
         },
         customClass: {
