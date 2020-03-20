@@ -73,14 +73,14 @@ import PropertyCardModal from './PropertyCardModal.vue';
 
 export default {
   components: {
-    Callout: () => import(/* webpackChunkName: "pvc_Callout" */'@philly/vue-comps/src/components/Callout.vue'),
-    Badge: () => import(/* webpackChunkName: "pvc_Badge" */'@philly/vue-comps/src/components/Badge.vue'),
-    BadgeCustom: () => import(/* webpackChunkName: "pvc_BadgeCustom" */'@philly/vue-comps/src/components/BadgeCustom.vue'),
-    CollectionSummary: () => import(/* webpackChunkName: "pvc_CollectionSummary" */'@philly/vue-comps/src/components/CollectionSummary.vue'),
-    ExternalLink: () => import(/* webpackChunkName: "pvc_ExternalLink" */'@philly/vue-comps/src/components/ExternalLink.vue'),
-    FullScreenTopicsToggleTabVertical: () => import(/* webpackChunkName: "pvc_FullScreenTopicsToggleTabVertical" */'@philly/vue-comps/src/components/FullScreenTopicsToggleTabVertical.vue'),
-    HorizontalTable: () => import(/* webpackChunkName: "pvc_HorizontalTable" */'@philly/vue-comps/src/components/HorizontalTable.vue'),
-    VerticalTable: () => import(/* webpackChunkName: "pvc_VerticalTable" */'@philly/vue-comps/src/components/VerticalTable.vue'),
+    Callout: () => import(/* webpackChunkName: "pvc_Callout" */'@phila/vue-comps/src/components/Callout.vue'),
+    Badge: () => import(/* webpackChunkName: "pvc_Badge" */'@phila/vue-comps/src/components/Badge.vue'),
+    BadgeCustom: () => import(/* webpackChunkName: "pvc_BadgeCustom" */'@phila/vue-comps/src/components/BadgeCustom.vue'),
+    CollectionSummary: () => import(/* webpackChunkName: "pvc_CollectionSummary" */'@phila/vue-comps/src/components/CollectionSummary.vue'),
+    ExternalLink: () => import(/* webpackChunkName: "pvc_ExternalLink" */'@phila/vue-comps/src/components/ExternalLink.vue'),
+    FullScreenTopicsToggleTabVertical: () => import(/* webpackChunkName: "pvc_FullScreenTopicsToggleTabVertical" */'@phila/vue-comps/src/components/FullScreenTopicsToggleTabVertical.vue'),
+    HorizontalTable: () => import(/* webpackChunkName: "pvc_HorizontalTable" */'@phila/vue-comps/src/components/HorizontalTable.vue'),
+    VerticalTable: () => import(/* webpackChunkName: "pvc_VerticalTable" */'@phila/vue-comps/src/components/VerticalTable.vue'),
   },
   data() {
     return {
@@ -162,8 +162,8 @@ export default {
         },
         export: {
           formatButtons: {
-            csv: "Download CSV",
-            mailing: "Mailing Labels",
+            csv: {text: ' Download CSV', icon: 'download'},
+            mailing: {text: "Mailing Labels", icon: 'envelope'}
           },
         },
         customClass: {
@@ -313,8 +313,8 @@ export default {
         },
         export: {
           formatButtons: {
-            csv: "Download CSV",
-            mailing: "Mailing Labels",
+            csv: {text: ' Download CSV', icon: 'download'},
+            mailing: {text: "Mailing Labels", icon: 'envelope'}
           },
         },
         customClass: {
@@ -410,8 +410,8 @@ export default {
         rowAction: this.rowClick,
         export: {
           formatButtons: {
-            csv: "Download CSV",
-            mailing: "Mailing Labels",
+            csv: {text: ' Download CSV', icon: 'download'},
+            mailing: {text: "Mailing Labels", icon: 'envelope'}
           },
         },
         customClass: {
