@@ -28,11 +28,7 @@
       v-on:keydown.enter="closeModal"
     >
       <span class="button-state state-unnamed-state unnamed-state-active pointer">
-        <font-awesome-icon
-          icon="times"
-          class="fa-lg"
-          aria-hidden="true"
-        />
+        <a>Back to results</a>
       </span>
     </div>
     <div class="openmaps-modal-content">
@@ -1159,9 +1155,6 @@ header {
   z-index:1000;
   margin: auto;
   max-width: 1200px;
-  border-style: solid;
-  border-width: 4px;
-  border-color: #8a8a8a;
 }
 
 .openmaps-modal-content{
@@ -1171,11 +1164,16 @@ header {
 }
 
 .openmaps-modal-close{
-  position: fixed;
   background: transparent;
   height: 30px;
   width: 30px;
   z-index: 999;
+}
+
+.button-state.state-unnamed-state {
+  right: 20px;
+  position: absolute;
+  padding-top: 5px;
 }
 
 .openmaps-modal.openmaps-modal--open{
