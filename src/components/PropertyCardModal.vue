@@ -1151,15 +1151,14 @@ header {
 
 .openmaps-modal {
   color: rgb(15, 77, 144);
-  height: calc(100% - 44px) ;
-  padding: 20px;
+  height: 100% ;
+  width: 100%;
+  position: absolute;
   overflow-y: auto;
   background: white;
   z-index:1000;
   margin: auto;
   max-width: 1200px;
-  left: 2%;
-  right: 2%;
   border-style: solid;
   border-width: 4px;
   border-color: #8a8a8a;
