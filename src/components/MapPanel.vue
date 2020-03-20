@@ -9,6 +9,10 @@
       v-if="!this.$store.state.introPage"
       v-once
     />
+    <slot
+      class="widget-slot"
+      name="introPage"
+    />
     <div :class="mapPanelContainerClass">
       <map_
         id="map-tag"
@@ -304,10 +308,6 @@
         />
       </map_>
     </div>
-    <slot
-      class="widget-slot"
-      name="introPage"
-    />
     <slot
       class="widget-slot"
       name="cycloWidget"
