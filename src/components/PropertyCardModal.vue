@@ -1154,7 +1154,6 @@ header {
   height: calc(100% - 44px) ;
   padding: 20px;
   overflow-y: auto;
-  position: fixed;
   background: white;
   z-index:1000;
   margin: auto;

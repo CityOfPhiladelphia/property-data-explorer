@@ -4,7 +4,6 @@
     class="grid-y"
   >
     <PhilaHeader
-      :class="openModal"
       :app-title="this.$config.app.title"
       :app-tag-line="this.$config.app.tagLine"
       :app-logo="appLogo"
@@ -17,11 +16,8 @@
       </div>
     </PhilaHeader>
     <owner-search-modal />
-    <property-card-modal
-      :tabindex="0"
-    />
 
-    <div :class="'cell medium-auto medium-cell-block-container main-content ' + openModal">
+    <div :class="'cell medium-auto medium-cell-block-container main-content '">
       <div :class="mapClass">
         <map-panel>
           <intro-page
@@ -65,7 +61,7 @@
         />
       </div>
 
-      <div :class="tableClass + openModal">
+      <div :class="tableClass">
         <data-panel />
       </div>
     </div>
@@ -88,12 +84,10 @@ import { LatLng } from 'leaflet';
 
 import PhilaHeader from './PhilaHeader.vue';
 import PhilaFooter from './PhilaFooter.vue';
-
 import MapPanel from './MapPanel.vue';
 import DataPanel from './DataPanel.vue';
 import IntroPage from './IntroPage.vue';
 import OwnerSearchModal from './OwnerSearchModal.vue';
-import PropertyCardModal from './PropertyCardModal.vue';
 import Logo from '@/assets/city-of-philadelphia-logo.png';
 
 export default {
@@ -303,10 +297,6 @@ export default {
     summaryClass() {
       return this.fullScreenMapEnabled ? 'bottom-none': "";
     },
-    openModal() {
-      // console.log("openModal: ", this.activeModal)
-      return this.activeModal != null ? ' modal-opacity' : "";
-    },
     shouldKeepIntroPage() {
       if (this.$store.state.sources.opa_assessment.status || this.$store.state.cyclomedia.active) {
         return false;
@@ -346,6 +336,7 @@ export default {
     },
     activeModal() {
       this.$controller.activeFeatureChange();
+      this.$store.state.activeModal.featureId !== null ? this.openIntroPage(true): this.openIntroPage(false);
     },
     drawShape(nextDrawShape) {
       if (nextDrawShape !== null) {
