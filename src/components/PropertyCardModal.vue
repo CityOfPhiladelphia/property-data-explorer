@@ -21,51 +21,53 @@
         </div>
       </div>
     </header>
-    <div
-      class="openmaps-modal-close hide-print"
-      :tabindex="1"
-      @click="closeModal"
-      v-on:keydown.enter="closeModal"
-    >
-      <span class="button-state state-unnamed-state unnamed-state-active pointer">
-        <a>Back to results</a>
-      </span>
-    </div>
-    <div class="openmaps-modal-content">
-      <div class="address-header cell small-24 medium-24">
+      <div class="sticky">
         <div
-          :class="'address-container columns small-24 medium-12 large-12'"
+          class="openmaps-modal-close hide-print"
+          :tabindex="1"
+          @click="closeModal"
+          v-on:keydown.enter="closeModal"
         >
+          <span class="button-state state-unnamed-state unnamed-state-active pointer">
+            <a>Back to results</a>
+          </span>
+        </div>
+        <div class="address-header cell small-24 medium-24">
           <div
-            v-if="!activeAddress"
-            class="default-address-text"
-            :style="defaultAddressTextPlaceholderStyle"
+            :class="'address-container columns small-24 medium-12 large-12'"
           >
-            {{ this.$config.defaultAddressTextPlaceholder.text }}
-          </div>
-          <h1 class="address-header-line-1">
-            <font-awesome-icon icon="map-marker-alt" />
-            {{ activeAddress }}
-            <div class="columns small-24 medium-6 flex-div div-padding-and-margin hide-print">
-              <button-comp-light
-                id="plans-button"
-                class="print-button"
-                :slots="{buttonAction: print}"
-              >
-                <font-awesome-icon
-                  icon="print"
-                  class="button-icon"
-                />
-                Print
-              </button-comp-light>
-            <!-- <p class="p-margin">Print a payment coupon.</p> -->
+            <div
+              v-if="!activeAddress"
+              class="default-address-text"
+              :style="defaultAddressTextPlaceholderStyle"
+            >
+              {{ this.$config.defaultAddressTextPlaceholder.text }}
             </div>
-          </h1>
-          <div class="address-header-line-2">
-            {{ headerLineTwo }}
+            <h1 class="address-header-line-1">
+              <font-awesome-icon icon="map-marker-alt" />
+              {{ activeAddress }}
+              <div class="columns small-24 medium-6 flex-div div-padding-and-margin hide-print">
+                <button-comp-light
+                  id="plans-button"
+                  class="print-button"
+                  :slots="{buttonAction: print}"
+                >
+                  <font-awesome-icon
+                    icon="print"
+                    class="button-icon"
+                  />
+                  Print
+                </button-comp-light>
+              <!-- <p class="p-margin">Print a payment coupon.</p> -->
+              </div>
+            </h1>
+            <div class="address-header-line-2">
+              {{ headerLineTwo }}
+            </div>
           </div>
         </div>
       </div>
+    <div class="openmaps-modal-content">
 
 
       <!-- owner and address horizontal table -->
@@ -1009,6 +1011,12 @@ export default {
   line-height: 1.25;
 }
 
+.sticky {
+  background-color: white;
+  position: sticky;
+  top: 0;
+}
+
 </style>
 <style scoped>
 
@@ -1075,8 +1083,8 @@ export default {
     width: 100%;
     align-items: flex-start;
     padding-left: 20px;
-    padding-top: 20px;
-    padding-bottom: 20px;
+    padding-top: 5px;
+    padding-bottom: 5px;
   }
 
   h1.address-header-line-1 {
@@ -1116,7 +1124,7 @@ header {
 }
 
 .address-header-line-2 {
-  padding: 0px;
+  padding: 0 0 0 40px;
 }
 
 .address-header-line-3 {
@@ -1167,7 +1175,6 @@ header {
 }
 
 .openmaps-modal-close{
-  background: transparent;
   height: 30px;
   width: 30px;
   z-index: 999;
