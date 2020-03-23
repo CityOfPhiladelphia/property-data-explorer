@@ -3,15 +3,15 @@
     id="intro-container"
     :class="widgetClass"
   >
-  <property-card-modal
-    v-if="this.$store.state.activeModal.featureId"
-    slot="introPage"
-    screen-percent="2"
-    />
+    <property-card-modal
+      v-if="this.$store.state.activeModal.featureId !== null"
+      slot="introPage"
+      screen-percent="2"
+      />
     <div
-      v-if="!this.$store.state.activeModal.featureId"
+      v-if="this.$store.state.activeModal.featureId === null"
       class="introduction"
-    />
+    >
       <div class="intro-blue">
           <i>Use the Property Data Explorer to get information about a property's ownership,
           sales history, value, and physical characteristics. You can also generate address
