@@ -842,15 +842,6 @@ export default {
 
 }
 
-  .owner th, .owner tr {
-    background: white !important;
-    color: black;
-    padding-top: 0;
-    padding-bottom: 0;
-  }
-
-
-
 @media print {
 
   * {
@@ -1011,10 +1002,23 @@ export default {
   line-height: 1.25;
 }
 
+.owner th, .owner tr {
+  background: white !important;
+  color: black;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
 .sticky {
   background-color: white;
   position: sticky;
   top: 0;
+}
+
+.pvc-horizontal-table-body h4, h4.table-title {
+  width: 100%;
+  background-color: #f0f0f0;
+  padding: 5px;
 }
 
 </style>
@@ -1109,7 +1113,6 @@ header {
   visibility: hidden ;
   display: none;
 }
-
 
 .address-header {
   background: #daedfe;
