@@ -1005,6 +1005,10 @@ export default {
 
 }
 
+#ownerProperties td {
+  line-height: 1.25;
+}
+
 </style>
 <style scoped>
 
@@ -1091,6 +1095,7 @@ export default {
   float: right;
   font-size: 16px;
 }
+
 
 header {
   visibility: hidden ;
