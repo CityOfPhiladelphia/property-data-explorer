@@ -907,7 +907,6 @@ export default {
   .address-header[data-v-14c63728] {
     /* background: #DAEDFC !important; */
     -webkit-print-color-adjust: exact;
-    color: #0f4d90 !important;
     -webkit-print-color-adjust: exact;
   }
 
@@ -1049,6 +1048,7 @@ export default {
 
 @media screen and (max-width: 750px) {
   #plans-button {
+    min-width: 74px;
     display: none;
   }
   .button-state {
@@ -1100,7 +1100,6 @@ header {
 
 .address-header {
   background: #daedfe;
-  color: #0f4d90;
   /*this keeps the box shadow over the scrollable part of the panel*/
   position: relative;
   z-index: 1;
@@ -1146,7 +1145,6 @@ header {
 }
 
 .openmaps-modal {
-  color: rgb(15, 77, 144);
   height: 100% ;
   width: 100%;
   position: absolute;
