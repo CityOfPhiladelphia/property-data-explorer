@@ -595,6 +595,7 @@ export default {
       return {
         id: 'saleTable',
         dataSources: [ 'opa_public' ],
+        title: 'Property assessment and sale information',
         fields: [
           {
             label: 'Assessed Value',
