@@ -132,6 +132,9 @@ export default {
 }
 
 @media screen and (min-width: 750px) {
+  #intro-container {
+    position: relative;
+  }
   .introduction {
     margin: 30px 40px 0 40px;
     .intro-blue {
