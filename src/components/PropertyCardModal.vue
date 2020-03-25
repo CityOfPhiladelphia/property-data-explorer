@@ -92,16 +92,19 @@
         <h3>Loading Sale Data</h3>
       </div>
 
-      <vertical-table
+      <vertical-table-light
         class="print-padding sale-info"
         :slots="saleVerticalTableSlots"
       />
 
       <!-- main callout -->
-      <callout
-        class="print-padding"
-        :slots="mainCalloutSlots"
-      />
+
+      <p>Office of Property Assessments (OPA) was formerly part of the Bureau of Revision of Taxes (BRT) and some
+        City records may still use that name. Source:
+        <a href="https://www.phila.gov/opa/pages/default.aspx" target="_blank">
+          Office of Property Assessments (OPA).
+        </a>
+      </p>
 
       <!-- valuation history horizontal table -->
       <div
@@ -163,20 +166,24 @@
         />
         <h3>Loading Property Details</h3>
       </div>
-      <vertical-table
+      <vertical-table-light
         class="break-avoid"
         :slots="propertyDetailsVerticalTableSlots"
       />
-      <callout
-        :slots="inquiryCalloutSlots"
-      />
-      <callout
-        class="break-avoid"
-        :slots="metadataCalloutSlots"
-      />
-      <callout
-        :slots="openMapsCalloutSlots"
-      />
+
+      <p>You can download the property assessment dataset in bulk, and get more information about this data at
+        <a target="_blank"
+          href="https://metadata.phila.gov">
+            <b>metadata.phila.gov </b><i class="fa fa-external-link-alt"></i>
+        </a>
+      </p>
+      <p>
+        Additional information such as trash & recycling day, and districts for highway, traffic and sanitation can be found at
+        <a target="_blank"
+          href="https://openmaps.phila.gov/#/'+this.activeAddress+'">
+          <b>OpenMaps </b><i class="fa fa-external-link-alt"></i>
+        </a>
+      </p>
     </div>
   </div>
 </template>
@@ -208,6 +215,7 @@ export default {
     BadgeCustom: () => import(/* webpackChunkName: "pvc_pcm_BadgeCustom" */'@phila/vue-comps/src/components/BadgeCustom.vue'),
     HorizontalTable: () => import(/* webpackChunkName: "pvc_pcm_HorizontalTable" */'@phila/vue-comps/src/components/HorizontalTable.vue'),
     VerticalTable: () => import(/* webpackChunkName: "pvc_pcm_VerticalTable" */'@phila/vue-comps/src/components/VerticalTable.vue'),
+    VerticalTableLight: () => import(/* webpackChunkName: "pvc_pcm_VerticalTableLight" */'@phila/vue-comps/src/components/VerticalTableLight.vue'),
   },
   computed: {
     lastSearchMethod() {
@@ -253,44 +261,6 @@ export default {
       }
       return 'PHILADELPHIA, PA ' + zip;
     },
-    mainCalloutSlots() {
-      return {
-        text: '\
-        Property assessment and sale information for this address. Source: Office of Property Assessments (OPA). \
-        OPA was formerly a part of the Bureau of Revision of Taxes (BRT) and some City records may still use that name.\
-        ',
-      };
-    },
-    inquiryCalloutSlots() {
-      let opaPublicData = this.$store.state.sources.opa_public.targets[this.activeOpaId].data;
-      let searchId =  opaPublicData.street_code + opaPublicData.house_number + (opaPublicData.unit != null ?  opaPublicData.unit : '') ;
-      return {
-        text: '\
-      Property characteristics described above are included for convenience, but may not reflect the most recent conditions \
-      at the property.  Corrections to or questions about this property? \
-      <a target="_blank" href="http://opa.phila.gov/opa.apps/Help/CitizenMain.aspx?sch=Ctrl2&s=1&url=search&id='+ searchId + ' ">\
-      <b>Submit an Official Inquiry</b>  </b><i class="fa fa-external-link-alt"></i></a></a> to the Office of Property Assessment.\
-        ',
-      };
-    },
-    metadataCalloutSlots() {
-      return {
-        text: '\
-        You can download the property assessment dataset in bulk, and get more information about this data at\
-        <a target="_blank" \
-           href="https://metadata.phila.gov"><b>metadata.phila.gov </b><i class="fa fa-external-link-alt"></i></a>\
-        ',
-      };
-    },
-    openMapsCalloutSlots() {
-      return {
-        text: '\
-        Additional information such as trash & recycling day, and districts for highway, traffic and sanitation can be found at\
-        <a target="_blank" \
-          href="https://openmaps.phila.gov/#/'+this.activeAddress+'"><b>OpenMaps </b><i class="fa fa-external-link-alt"></i></a>\
-        ',
-      };
-    },
     propValueCalloutSlots() {
       return {
         text: '\
@@ -309,10 +279,17 @@ export default {
       // console.log('PropertyCardModal activeFeatureId computed is running')
       let state = this.$store.state;
       let opaPublicData = state.sources.opa_public.targets[this.activeOpaId].data;
+      let searchId =  opaPublicData.street_code + opaPublicData.house_number + (opaPublicData.unit != null ?  opaPublicData.unit : '') ;
       return {
         id: 'propertyDetailsTable',
         dataSources: [ 'opa_public' ],
         title: 'Property Details',
+        subtitle:  '\
+          Property characteristics described above are included for convenience, but may not reflect the most recent conditions \
+          at the property.  Corrections to or questions about this property? \
+          <a target="_blank" href="http://opa.phila.gov/opa.apps/Help/CitizenMain.aspx?sch=Ctrl2&s=1&url=search&id='+ searchId + ' ">\
+          <b>Submit an Official Inquiry</b>  </b><i class="fa fa-external-link-alt"></i></a></a>\
+        ',
         fields: [
           {
             label: 'Year Built',
@@ -1188,6 +1165,8 @@ header {
   right: 20px;
   position: absolute;
   padding-top: 5px;
+  font-weight: bold;
+  text-decoration: underline;
 }
 
 .openmaps-modal.openmaps-modal--open{
