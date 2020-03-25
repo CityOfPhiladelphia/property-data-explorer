@@ -13,7 +13,8 @@
       class="widget-slot"
       name="introPage"
     />
-    <div :class="mapPanelContainerClass">
+    <div
+      :class="mapPanelContainerClass + ' print-hide'">
       <map_
         id="map-tag"
         :center="this.$store.state.map.center"
@@ -790,6 +791,12 @@ export default {
 </script>
 
 <style lang="scss">
+
+  @media print {
+    .print-hide {
+      display: none;
+    }
+  }
 
   // CSS FOR LARGE SCREEN APP
   @media screen and (min-width: 750px) {

@@ -72,7 +72,6 @@
 
       <!-- owner and address horizontal table -->
       <horizontal-table
-        class="print-padding"
         :slots="{
           items: opaPublicData
         }"
@@ -129,7 +128,7 @@
 
       <!-- taxable and exempt land values callout -->
       <callout
-        class="print-padding"
+        class="hide-print"
         :slots="propValueCalloutSlots"
       />
 
@@ -147,6 +146,7 @@
       </div>
       <horizontal-table
         v-if="this.$store.state.activeSearch.salesHistory.data"
+        class="break-avoid"
         :slots="{
           title: 'Sales History',
           items: this.$store.state.activeSearch.salesHistory.data
@@ -170,20 +170,29 @@
         class="break-avoid"
         :slots="propertyDetailsVerticalTableSlots"
       />
-
-      <p>You can download the property assessment dataset in bulk, and get more information about this data at
-        <a target="_blank"
-          href="https://metadata.phila.gov">
-            <b>metadata.phila.gov </b><i class="fa fa-external-link-alt"></i>
-        </a>
-      </p>
-      <p>
-        Additional information such as trash & recycling day, and districts for highway, traffic and sanitation can be found at
-        <a target="_blank"
-          href="https://openmaps.phila.gov/#/'+this.activeAddress+'">
-          <b>OpenMaps </b><i class="fa fa-external-link-alt"></i>
-        </a>
-      </p>
+      <div class="break-avoid">
+        <p>You can download the property assessment dataset in bulk, and get more information about this data at
+          <a target="_blank"
+            href="https://metadata.phila.gov">
+              <b>metadata.phila.gov </b><i class="fa fa-external-link-alt"></i>
+          </a>
+        </p>
+        <p>
+          Additional information such as trash & recycling day, and districts for highway, traffic and sanitation can be found at
+          <a target="_blank"
+            href="https://openmaps.phila.gov/#/'+this.activeAddress+'">
+            <b>OpenMaps </b><i class="fa fa-external-link-alt"></i>
+          </a>
+        </p>
+        <p
+          class="show-print-only"
+        >
+          Note: Taxable and exempt land values can represent the contributory value of land in relation to the total market value, or
+          were no structure is present, the value of vacant land. (Consistent with International Association of Assessing Officers (IAAO)
+          standards, the value of an improved parcel is separated into the portion of value attributed to the improvement and the portion
+          of value attributed to the land.)
+        </p>
+      </div>
     </div>
   </div>
 </template>
@@ -801,13 +810,21 @@ export default {
 
 <style >
 
+@media screen {
+  div.show-print-only {
+    display: none;
+  }
+}
+
 @media screen and (min-width: 750px) {
+
   tr > td.big_owner {
     font-size: 32px;
     font-weight: 100;
     font-family: "Montserrat", sans-serif;
     vertical-align: top;
     padding-top: 0;
+    padding-bottom: 0;
   }
 
   td.small_address {
@@ -816,6 +833,7 @@ export default {
     font-family: "Montserrat", sans-serif;
     vertical-align: top !important;
     padding-top: 0 !important;
+    padding-bottom: 0;
   }
 
 }
@@ -870,11 +888,6 @@ export default {
     padding-bottom: 0;
   }
 
-  div.table-container.print-padding, .openmaps-modal-content div.pvc-horizontal-table {
-    margin-bottom: 0 !important;
-  }
-
-
   .address-header[data-v-14c63728] {
     /* background: #DAEDFC !important; */
     -webkit-print-color-adjust: exact;
@@ -902,7 +915,7 @@ export default {
     visibility: hidden !important;
   }
 
-  .app-header, .app-footer, #map-panel-container {
+  .app-header, .app-footer {
     display:none;
   }
 
