@@ -334,6 +334,10 @@ export default {
       // return route.fullPath === '/' ? this.$store.commit('setIntroPage', true) : "";
       return route.fullPath === '/' ? this.openIntroPage(true) : this.openIntroPage(false);
     },
+    introPage: function(){
+      console.log("intro page watcher: ", this.introPage)
+      this.introPage === false ? this.closeModal() : ""
+    },
     activeModal() {
       this.$controller.activeFeatureChange();
       this.$store.state.activeModal.featureId !== null ? this.openIntroPage(true): this.openIntroPage(false);
@@ -403,18 +407,21 @@ export default {
       this.onDataChange('shapeSearch');
     } else if (query.address) {
       // this.introPage = false;
+      this.closePropertyModal();
       this.$store.commit('setIntroPage', false);
       // console.log('query.address:', query.address);
       this.$controller.handleSearchFormSubmit(query.address);
       this.onDataChange('geocode');
     } else if (query.owner) {
       // this.introPage = false;
+      this.closePropertyModal();
       this.$store.commit('setIntroPage', false);
       // console.log('query.owner:', query.owner);
       this.$controller.handleSearchFormSubmit(query.owner);
       this.onDataChange('ownerSearch');
     } else if (query.buffer) {
       // this.introPage = false;
+      this.closePropertyModal();
       this.$store.commit('setIntroPage', false);
       this.$store.commit('setBufferMode', true);
       this.$controller.handleSearchFormSubmit(query.buffer);
@@ -448,6 +455,7 @@ export default {
       this.$data.hasData = true;
       this.$store.commit('setFullScreenMapEnabled', false);
       // this.introPage = false;
+      this.closePropertyModal();
       this.$store.commit('setIntroPage', false);
     },
     clearResults(){
