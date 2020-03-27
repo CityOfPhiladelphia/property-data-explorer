@@ -360,7 +360,7 @@ export default {
       }
     },
     ownerSearchTotal(newValue) {
-      if( newValue > this.$store.state.ownerSearch.data.length ){
+      if( this.$store.state.ownerSearch.data !== null && newValue > this.$store.state.ownerSearch.data.length ){
         this.$store.commit('setOwnerSearchModal', true);
       }
     },
