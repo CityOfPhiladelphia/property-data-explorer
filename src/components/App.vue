@@ -105,9 +105,9 @@ export default {
     IntroPage,
     OwnerSearchModal,
     PropertyCardModal,
-    CyclomediaWidget: () => import(/* webpackChunkName: "mbmb_pvm_CyclomediaWidget" */'@philly/vue-mapping/src/cyclomedia/Widget.vue'),
-    CollectionSummary: () => import(/* webpackChunkName: "pvc_Callout" */'@philly/vue-comps/src/components/CollectionSummary.vue'),
-    Popover: () => import(/* webpackChunkName: "mbmb_pvc_Popover" */'@philly/vue-comps/src/components/Popover.vue'),
+    CyclomediaWidget: () => import(/* webpackChunkName: "mbmb_pvm_CyclomediaWidget" */'@phila/vue-mapping/src/cyclomedia/Widget.vue'),
+    CollectionSummary: () => import(/* webpackChunkName: "pvc_Callout" */'@phila/vue-comps/src/components/CollectionSummary.vue'),
+    Popover: () => import(/* webpackChunkName: "mbmb_pvc_Popover" */'@phila/vue-comps/src/components/Popover.vue'),
   },
 
   props: {
@@ -360,7 +360,7 @@ export default {
       }
     },
     ownerSearchTotal(newValue) {
-      if( this.$store.state.ownerSearch.data !== null && newValue > this.$store.state.ownerSearch.data.length ){
+      if( newValue > this.$store.state.ownerSearch.data.length ){
         this.$store.commit('setOwnerSearchModal', true);
       }
     },
@@ -687,23 +687,6 @@ export default {
   z-index: 999;
   top: 93px;
 }
-
-.pvc-export-data-button {
-  position: fixed;
-  float: right !important;
-}
-
-.csv {
-  right: 5px !important;
-}
-
-.mailing {
-  right: 137px !important;
-}
-
-// .mailing {
-//   left: 125px;
-// }
 
 @media print {
   #results-summary {
