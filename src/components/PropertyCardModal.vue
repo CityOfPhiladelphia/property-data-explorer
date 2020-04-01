@@ -51,14 +51,17 @@
             <font-awesome-icon icon="map-marker-alt" />
             {{ activeAddress }}
             <div class="columns small-24 medium-6 flex-div div-padding-and-margin hide-print">
-              <a
+              <button-comp-light
                 id="plans-button"
-                href="#"
-                class="button"
-                @click.prevent="print"
+                class="print-button"
+                :slots="{buttonAction: print}"
               >
+                <font-awesome-icon
+                  icon="print"
+                  class="button-icon"
+                />
                 Print
-              </a>
+              </button-comp-light>
             <!-- <p class="p-margin">Print a payment coupon.</p> -->
             </div>
           </h1>
@@ -201,11 +204,12 @@ const nth = transforms.nth.transform;
 export default {
   name: 'PropertyCardModal',
   components: {
-    Callout: () => import(/* webpackChunkName: "pvc_pcm_Callout" */'@philly/vue-comps/src/components/Callout.vue'),
-    TopicComponentGroup: () => import(/* webpackChunkName: "pvc_pcm_TopicComponentGroup" */'@philly/vue-comps/src/components/TopicComponentGroup.vue'),
-    BadgeCustom: () => import(/* webpackChunkName: "pvc_pcm_BadgeCustom" */'@philly/vue-comps/src/components/BadgeCustom.vue'),
-    HorizontalTable: () => import(/* webpackChunkName: "pvc_pcm_HorizontalTable" */'@philly/vue-comps/src/components/HorizontalTable.vue'),
-    VerticalTable: () => import(/* webpackChunkName: "pvc_pcm_VerticalTable" */'@philly/vue-comps/src/components/VerticalTable.vue'),
+    ButtonCompLight: () => import(/* webpackChunkName: "pvc_pvc_ButtonCompLight" */'@phila/vue-comps/src/components/ButtonCompLight.vue'),
+    Callout: () => import(/* webpackChunkName: "pvc_pcm_Callout" */'@phila/vue-comps/src/components/Callout.vue'),
+    TopicComponentGroup: () => import(/* webpackChunkName: "pvc_pcm_TopicComponentGroup" */'@phila/vue-comps/src/components/TopicComponentGroup.vue'),
+    BadgeCustom: () => import(/* webpackChunkName: "pvc_pcm_BadgeCustom" */'@phila/vue-comps/src/components/BadgeCustom.vue'),
+    HorizontalTable: () => import(/* webpackChunkName: "pvc_pcm_HorizontalTable" */'@phila/vue-comps/src/components/HorizontalTable.vue'),
+    VerticalTable: () => import(/* webpackChunkName: "pvc_pcm_VerticalTable" */'@phila/vue-comps/src/components/VerticalTable.vue'),
   },
   computed: {
     lastSearchMethod() {
@@ -1087,8 +1091,9 @@ export default {
 }
 
 #plans-button{
-  padding: 10.5px 25px 10.5px;
+  padding: 6.5px;
   float: right;
+  font-size: 16px;
 }
 
 header {
