@@ -86,6 +86,10 @@ export default {
 
 <style lang="scss">
 
+#intro-container {
+  height: 100%
+}
+
 .introduction {
   padding: 28px;
   /* height: 95%; */
