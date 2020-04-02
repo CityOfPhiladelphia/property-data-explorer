@@ -21,8 +21,8 @@ module.exports = {
   transpileDependencies: [
     // can be string or regex
     '@phila/vue-comps',
-    '@philly/vue-mapping',
-    '@philly/vue-datafetch',
+    '@phila/vue-mapping',
+    '@phila/vue-datafetch',
     // /other-dep/
   ],
 };

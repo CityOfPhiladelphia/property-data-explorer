@@ -1,8 +1,8 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import isMobileDevice from './util/is-mobile-device';
-import pvdStore from '@philly/vue-datafetch/src/store';
-import pvmStore from '@philly/vue-mapping/src/store';
+import pvdStore from '@phila/vue-datafetch/src/store';
+import pvmStore from '@phila/vue-mapping/src/store';
 import pvcStore from '@phila/vue-comps/src/store';
 import mergeDeep from './util/merge-deep';
 
