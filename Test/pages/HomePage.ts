@@ -11,7 +11,7 @@ export default class HomePage {
   searchmapButton: Selector = Selector("svg[data-icon= 'search']");
   table: Selector = Selector('table');
   mailingLables: Selector = Selector("a[class='button mailing pvc-export-data-button']");
-  downloadCSV: Selector = Selector("a[class='button csv pvc-export-data-button']");
+  downloadCSV: Selector = Selector(".csv");
 
     // Verify page landing
   public verifyPageFunctionality = async (t: TestController) => {
