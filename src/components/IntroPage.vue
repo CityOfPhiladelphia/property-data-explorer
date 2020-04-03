@@ -109,7 +109,7 @@ export default {
   padding: 28px;
   /* height: 95%; */
   overflow-y: auto;
-  height: calc(100% - 122px);
+  // height: calc(100% - 122px);
 }
 
 .intro-blue {
