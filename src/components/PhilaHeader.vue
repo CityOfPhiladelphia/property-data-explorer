@@ -114,13 +114,13 @@
 <script>
 // TODO: move logo, link etc to app config.
 import Logo from '@/assets/city-of-philadelphia-logo.png';
-// import AddressInput from '@philly/vue-comps/src/components/AddressInput.vue'
-// import Paragraph from '@philly/vue-comps/src/components/Paragraph.vue'
-// import '@philly/vue-comps'
+// import AddressInput from '@phila/vue-comps/src/components/AddressInput.vue'
+// import Paragraph from '@phila/vue-comps/src/components/Paragraph.vue'
+// import '@phila/vue-comps'
 
 export default {
   // components: {
-  //   ComboSearch: () => import(/* webpackChunkName: "pvc_ComboSearch" */'@philly/vue-comps/src/components/ComboSearch.vue'),
+  //   ComboSearch: () => import(/* webpackChunkName: "pvc_ComboSearch" */'@phila/vue-comps/src/components/ComboSearch.vue'),
   // },
   props: {
     appLink: {

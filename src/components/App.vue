@@ -4,7 +4,6 @@
     class="grid-y"
   >
     <PhilaHeader
-      :class="openModal"
       :app-title="this.$config.app.title"
       :app-tag-line="this.$config.app.tagLine"
       :app-logo="appLogo"
@@ -17,11 +16,8 @@
       </div>
     </PhilaHeader>
     <owner-search-modal />
-    <property-card-modal
-      :tabindex="0"
-    />
 
-    <div :class="'cell medium-auto medium-cell-block-container main-content ' + openModal">
+    <div :class="'cell medium-auto medium-cell-block-container main-content '">
       <div :class="mapClass">
         <map-panel>
           <intro-page
@@ -65,7 +61,7 @@
         />
       </div>
 
-      <div :class="tableClass + openModal">
+      <div :class="tableClass">
         <data-panel />
       </div>
     </div>
@@ -88,12 +84,10 @@ import { LatLng } from 'leaflet';
 
 import PhilaHeader from './PhilaHeader.vue';
 import PhilaFooter from './PhilaFooter.vue';
-
 import MapPanel from './MapPanel.vue';
 import DataPanel from './DataPanel.vue';
 import IntroPage from './IntroPage.vue';
 import OwnerSearchModal from './OwnerSearchModal.vue';
-import PropertyCardModal from './PropertyCardModal.vue';
 import Logo from '@/assets/city-of-philadelphia-logo.png';
 
 export default {
@@ -104,10 +98,9 @@ export default {
     DataPanel,
     IntroPage,
     OwnerSearchModal,
-    PropertyCardModal,
-    CyclomediaWidget: () => import(/* webpackChunkName: "mbmb_pvm_CyclomediaWidget" */'@philly/vue-mapping/src/cyclomedia/Widget.vue'),
-    CollectionSummary: () => import(/* webpackChunkName: "pvc_Callout" */'@philly/vue-comps/src/components/CollectionSummary.vue'),
-    Popover: () => import(/* webpackChunkName: "mbmb_pvc_Popover" */'@philly/vue-comps/src/components/Popover.vue'),
+    CyclomediaWidget: () => import(/* webpackChunkName: "mbmb_pvm_CyclomediaWidget" */'@phila/vue-mapping/src/cyclomedia/Widget.vue'),
+    CollectionSummary: () => import(/* webpackChunkName: "pvc_Callout" */'@phila/vue-comps/src/components/CollectionSummary.vue'),
+    Popover: () => import(/* webpackChunkName: "mbmb_pvc_Popover" */'@phila/vue-comps/src/components/Popover.vue'),
   },
 
   props: {
@@ -303,10 +296,6 @@ export default {
     summaryClass() {
       return this.fullScreenMapEnabled ? 'bottom-none': "";
     },
-    openModal() {
-      // console.log("openModal: ", this.activeModal)
-      return this.activeModal != null ? ' modal-opacity' : "";
-    },
     shouldKeepIntroPage() {
       if (this.$store.state.sources.opa_assessment.status || this.$store.state.cyclomedia.active) {
         return false;
@@ -344,8 +333,13 @@ export default {
       // return route.fullPath === '/' ? this.$store.commit('setIntroPage', true) : "";
       return route.fullPath === '/' ? this.openIntroPage(true) : this.openIntroPage(false);
     },
+    introPage: function(){
+      console.log("intro page watcher: ", this.introPage)
+      this.introPage === false ? this.closeModal() : ""
+    },
     activeModal() {
       this.$controller.activeFeatureChange();
+      this.$store.state.activeModal.featureId !== null ? this.openIntroPage(true): this.openIntroPage(false);
     },
     drawShape(nextDrawShape) {
       if (nextDrawShape !== null) {
@@ -360,7 +354,7 @@ export default {
       }
     },
     ownerSearchTotal(newValue) {
-      if( this.$store.state.ownerSearch.data !== null && newValue > this.$store.state.ownerSearch.data.length ){
+      if( newValue > this.$store.state.ownerSearch.data.length ){
         this.$store.commit('setOwnerSearchModal', true);
       }
     },
@@ -412,18 +406,21 @@ export default {
       this.onDataChange('shapeSearch');
     } else if (query.address) {
       // this.introPage = false;
+      this.closePropertyModal();
       this.$store.commit('setIntroPage', false);
       // console.log('query.address:', query.address);
       this.$controller.handleSearchFormSubmit(query.address);
       this.onDataChange('geocode');
     } else if (query.owner) {
       // this.introPage = false;
+      this.closePropertyModal();
       this.$store.commit('setIntroPage', false);
       // console.log('query.owner:', query.owner);
       this.$controller.handleSearchFormSubmit(query.owner);
       this.onDataChange('ownerSearch');
     } else if (query.buffer) {
       // this.introPage = false;
+      this.closePropertyModal();
       this.$store.commit('setIntroPage', false);
       this.$store.commit('setBufferMode', true);
       this.$controller.handleSearchFormSubmit(query.buffer);
@@ -457,6 +454,7 @@ export default {
       this.$data.hasData = true;
       this.$store.commit('setFullScreenMapEnabled', false);
       // this.introPage = false;
+      this.closePropertyModal();
       this.$store.commit('setIntroPage', false);
     },
     clearResults(){
@@ -688,24 +686,12 @@ export default {
   top: 93px;
 }
 
-.pvc-export-data-button {
-  position: fixed;
-  float: right !important;
-}
-
-.csv {
-  right: 5px !important;
-}
-
-.mailing {
-  right: 137px !important;
-}
-
-// .mailing {
-//   left: 125px;
-// }
-
 @media print {
+
+  #map-panel-container {
+    overflow: visible;
+  }
+
   #results-summary {
     display: none;
   }

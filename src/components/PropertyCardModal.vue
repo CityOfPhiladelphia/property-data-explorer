@@ -21,57 +21,57 @@
         </div>
       </div>
     </header>
-    <div
-      class="openmaps-modal-close hide-print"
-      :tabindex="1"
-      @click="closeModal"
-      v-on:keydown.enter="closeModal"
-    >
-      <span class="button-state state-unnamed-state unnamed-state-active pointer">
-        <font-awesome-icon
-          icon="times"
-          class="fa-lg"
-          aria-hidden="true"
-        />
-      </span>
-    </div>
-    <div class="openmaps-modal-content">
-      <div class="address-header cell small-24 medium-24">
+      <div class="fixed-header">
         <div
-          :class="'address-container columns small-24 medium-12 large-12'"
+          class="openmaps-modal-close hide-print"
+          :tabindex="1"
+          @click="closeModal"
+          v-on:keydown.enter="closeModal"
         >
+          <span class="button-state state-unnamed-state unnamed-state-active pointer">
+            <a>Back to results</a>
+          </span>
+        </div>
+        <div class="address-header cell small-24 medium-24">
           <div
-            v-if="!activeAddress"
-            class="default-address-text"
-            :style="defaultAddressTextPlaceholderStyle"
+            :class="'address-container columns small-24 medium-12 large-12'"
           >
-            {{ this.$config.defaultAddressTextPlaceholder.text }}
-          </div>
-          <h1 class="address-header-line-1">
-            <font-awesome-icon icon="map-marker-alt" />
-            {{ activeAddress }}
-            <div class="columns small-24 medium-6 flex-div div-padding-and-margin hide-print">
-              <a
-                id="plans-button"
-                href="#"
-                class="button"
-                @click.prevent="print"
-              >
-                Print
-              </a>
-            <!-- <p class="p-margin">Print a payment coupon.</p> -->
+            <div
+              v-if="!activeAddress"
+              class="default-address-text"
+              :style="defaultAddressTextPlaceholderStyle"
+            >
+              {{ this.$config.defaultAddressTextPlaceholder.text }}
             </div>
-          </h1>
-          <div class="address-header-line-2">
-            {{ headerLineTwo }}
+            <h1 class="address-header-line-1">
+              <font-awesome-icon icon="map-marker-alt" />
+              {{ activeAddress }}
+              <div class="columns small-24 medium-6 flex-div div-padding-and-margin hide-print">
+                <button-comp-light
+                  id="plans-button"
+                  class="print-button"
+                  :slots="{buttonAction: print}"
+                >
+                  <font-awesome-icon
+                    icon="print"
+                    class="button-icon"
+                  />
+                  Print
+                </button-comp-light>
+              <!-- <p class="p-margin">Print a payment coupon.</p> -->
+              </div>
+            </h1>
+            <div class="address-header-line-2">
+              {{ headerLineTwo }}
+            </div>
           </div>
         </div>
       </div>
+    <div class="openmaps-modal-content">
 
 
       <!-- owner and address horizontal table -->
       <horizontal-table
-        class="print-padding"
         :slots="{
           items: opaPublicData
         }"
@@ -91,16 +91,19 @@
         <h3>Loading Sale Data</h3>
       </div>
 
-      <vertical-table
+      <vertical-table-light
         class="print-padding sale-info"
         :slots="saleVerticalTableSlots"
       />
 
       <!-- main callout -->
-      <callout
-        class="print-padding"
-        :slots="mainCalloutSlots"
-      />
+
+      <p>Office of Property Assessments (OPA) was formerly part of the Bureau of Revision of Taxes (BRT) and some
+        City records may still use that name. Source:
+        <a href="https://www.phila.gov/opa/pages/default.aspx" target="_blank">
+          Office of Property Assessments (OPA).
+        </a>
+      </p>
 
       <!-- valuation history horizontal table -->
       <div
@@ -125,7 +128,7 @@
 
       <!-- taxable and exempt land values callout -->
       <callout
-        class="print-padding"
+        class="hide-print"
         :slots="propValueCalloutSlots"
       />
 
@@ -143,6 +146,7 @@
       </div>
       <horizontal-table
         v-if="this.$store.state.activeSearch.salesHistory.data"
+        class="break-avoid"
         :slots="{
           title: 'Sales History',
           items: this.$store.state.activeSearch.salesHistory.data
@@ -162,20 +166,33 @@
         />
         <h3>Loading Property Details</h3>
       </div>
-      <vertical-table
+      <vertical-table-light
         class="break-avoid"
         :slots="propertyDetailsVerticalTableSlots"
       />
-      <callout
-        :slots="inquiryCalloutSlots"
-      />
-      <callout
-        class="break-avoid"
-        :slots="metadataCalloutSlots"
-      />
-      <callout
-        :slots="openMapsCalloutSlots"
-      />
+      <div class="break-avoid">
+        <p>You can download the property assessment dataset in bulk, and get more information about this data at
+          <a target="_blank"
+            href="https://metadata.phila.gov">
+              <b>metadata.phila.gov </b><i class="fa fa-external-link-alt"></i>
+          </a>
+        </p>
+        <p>
+          Additional information such as trash & recycling day, and districts for highway, traffic and sanitation can be found at
+          <a target="_blank"
+            href="https://openmaps.phila.gov/#/'+this.activeAddress+'">
+            <b>OpenMaps </b><i class="fa fa-external-link-alt"></i>
+          </a>
+        </p>
+        <p
+          class="show-print-only"
+        >
+          Note: Taxable and exempt land values can represent the contributory value of land in relation to the total market value, or
+          were no structure is present, the value of vacant land. (Consistent with International Association of Assessing Officers (IAAO)
+          standards, the value of an improved parcel is separated into the portion of value attributed to the improvement and the portion
+          of value attributed to the land.)
+        </p>
+      </div>
     </div>
   </div>
 </template>
@@ -201,11 +218,13 @@ const nth = transforms.nth.transform;
 export default {
   name: 'PropertyCardModal',
   components: {
-    Callout: () => import(/* webpackChunkName: "pvc_pcm_Callout" */'@philly/vue-comps/src/components/Callout.vue'),
-    TopicComponentGroup: () => import(/* webpackChunkName: "pvc_pcm_TopicComponentGroup" */'@philly/vue-comps/src/components/TopicComponentGroup.vue'),
-    BadgeCustom: () => import(/* webpackChunkName: "pvc_pcm_BadgeCustom" */'@philly/vue-comps/src/components/BadgeCustom.vue'),
-    HorizontalTable: () => import(/* webpackChunkName: "pvc_pcm_HorizontalTable" */'@philly/vue-comps/src/components/HorizontalTable.vue'),
-    VerticalTable: () => import(/* webpackChunkName: "pvc_pcm_VerticalTable" */'@philly/vue-comps/src/components/VerticalTable.vue'),
+    ButtonCompLight: () => import(/* webpackChunkName: "pvc_pvc_ButtonCompLight" */'@phila/vue-comps/src/components/ButtonCompLight.vue'),
+    Callout: () => import(/* webpackChunkName: "pvc_pcm_Callout" */'@phila/vue-comps/src/components/Callout.vue'),
+    TopicComponentGroup: () => import(/* webpackChunkName: "pvc_pcm_TopicComponentGroup" */'@phila/vue-comps/src/components/TopicComponentGroup.vue'),
+    BadgeCustom: () => import(/* webpackChunkName: "pvc_pcm_BadgeCustom" */'@phila/vue-comps/src/components/BadgeCustom.vue'),
+    HorizontalTable: () => import(/* webpackChunkName: "pvc_pcm_HorizontalTable" */'@phila/vue-comps/src/components/HorizontalTable.vue'),
+    VerticalTable: () => import(/* webpackChunkName: "pvc_pcm_VerticalTable" */'@phila/vue-comps/src/components/VerticalTable.vue'),
+    VerticalTableLight: () => import(/* webpackChunkName: "pvc_pcm_VerticalTableLight" */'@phila/vue-comps/src/components/VerticalTableLight.vue'),
   },
   computed: {
     lastSearchMethod() {
@@ -251,44 +270,6 @@ export default {
       }
       return 'PHILADELPHIA, PA ' + zip;
     },
-    mainCalloutSlots() {
-      return {
-        text: '\
-        Property assessment and sale information for this address. Source: Office of Property Assessments (OPA). \
-        OPA was formerly a part of the Bureau of Revision of Taxes (BRT) and some City records may still use that name.\
-        ',
-      };
-    },
-    inquiryCalloutSlots() {
-      let opaPublicData = this.$store.state.sources.opa_public.targets[this.activeOpaId].data;
-      let searchId =  opaPublicData.street_code + opaPublicData.house_number + (opaPublicData.unit != null ?  opaPublicData.unit : '') ;
-      return {
-        text: '\
-      Property characteristics described above are included for convenience, but may not reflect the most recent conditions \
-      at the property.  Corrections to or questions about this property? \
-      <a target="_blank" href="http://opa.phila.gov/opa.apps/Help/CitizenMain.aspx?sch=Ctrl2&s=1&url=search&id='+ searchId + ' ">\
-      <b>Submit an Official Inquiry</b>  </b><i class="fa fa-external-link-alt"></i></a></a> to the Office of Property Assessment.\
-        ',
-      };
-    },
-    metadataCalloutSlots() {
-      return {
-        text: '\
-        You can download the property assessment dataset in bulk, and get more information about this data at\
-        <a target="_blank" \
-           href="https://metadata.phila.gov"><b>metadata.phila.gov </b><i class="fa fa-external-link-alt"></i></a>\
-        ',
-      };
-    },
-    openMapsCalloutSlots() {
-      return {
-        text: '\
-        Additional information such as trash & recycling day, and districts for highway, traffic and sanitation can be found at\
-        <a target="_blank" \
-          href="https://openmaps.phila.gov/#/'+this.activeAddress+'"><b>OpenMaps </b><i class="fa fa-external-link-alt"></i></a>\
-        ',
-      };
-    },
     propValueCalloutSlots() {
       return {
         text: '\
@@ -307,10 +288,17 @@ export default {
       // console.log('PropertyCardModal activeFeatureId computed is running')
       let state = this.$store.state;
       let opaPublicData = state.sources.opa_public.targets[this.activeOpaId].data;
+      let searchId =  opaPublicData.street_code + opaPublicData.house_number + (opaPublicData.unit != null ?  opaPublicData.unit : '') ;
       return {
         id: 'propertyDetailsTable',
         dataSources: [ 'opa_public' ],
         title: 'Property Details',
+        subtitle:  '\
+          Property characteristics described above are included for convenience, but may not reflect the most recent conditions \
+          at the property.  Corrections to or questions about this property? \
+          <a target="_blank" href="http://opa.phila.gov/opa.apps/Help/CitizenMain.aspx?sch=Ctrl2&s=1&url=search&id='+ searchId + ' ">\
+          <b>Submit an Official Inquiry</b>  </b><i class="fa fa-external-link-alt"></i></a></a>\
+        ',
         fields: [
           {
             label: 'Year Built',
@@ -593,6 +581,7 @@ export default {
       return {
         id: 'saleTable',
         dataSources: [ 'opa_public' ],
+        title: 'Property assessment and sale information',
         fields: [
           {
             label: 'Assessed Value',
@@ -821,13 +810,21 @@ export default {
 
 <style >
 
+@media screen {
+  div.show-print-only {
+    display: none;
+  }
+}
+
 @media screen and (min-width: 750px) {
+
   tr > td.big_owner {
     font-size: 32px;
     font-weight: 100;
     font-family: "Montserrat", sans-serif;
     vertical-align: top;
     padding-top: 0;
+    padding-bottom: 0;
   }
 
   td.small_address {
@@ -836,18 +833,10 @@ export default {
     font-family: "Montserrat", sans-serif;
     vertical-align: top !important;
     padding-top: 0 !important;
-  }
-
-}
-
-  .owner th, .owner tr {
-    background: white !important;
-    color: black;
-    padding-top: 0;
     padding-bottom: 0;
   }
 
-
+}
 
 @media print {
 
@@ -899,15 +888,9 @@ export default {
     padding-bottom: 0;
   }
 
-  div.table-container.print-padding, .openmaps-modal-content div.pvc-horizontal-table {
-    margin-bottom: 0 !important;
-  }
-
-
   .address-header[data-v-14c63728] {
     /* background: #DAEDFC !important; */
     -webkit-print-color-adjust: exact;
-    color: #0f4d90 !important;
     -webkit-print-color-adjust: exact;
   }
 
@@ -932,7 +915,7 @@ export default {
     visibility: hidden !important;
   }
 
-  .app-header, .app-footer, #map-panel-container {
+  .app-header, .app-footer {
     display:none;
   }
 
@@ -1006,6 +989,27 @@ export default {
 
 }
 
+#ownerProperties td {
+  line-height: 1.25;
+}
+
+.owner th, .owner tr {
+  background: white !important;
+  color: black;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.fixed-header {
+  background-color: white;
+}
+
+.pvc-horizontal-table-body h4, h4.table-title {
+  width: 100%;
+  background-color: #f0f0f0;
+  padding: 5px;
+}
+
 </style>
 <style scoped>
 
@@ -1038,17 +1042,22 @@ export default {
 
   #main.openmaps-modal {
     overflow: visible;
-    position: relative;
+    position: absolute;
     top: 0 !important;
-    padding: 0 !important;
+    /* padding: 0 !important; */
     height: 100%;
     border-style: none !important;
+  }
+
+  .openmaps-modal-content{
+    overflow-y: visible;
   }
 
 }
 
 @media screen and (max-width: 750px) {
   #plans-button {
+    min-width: 74px;
     display: none;
   }
   .button-state {
@@ -1071,8 +1080,8 @@ export default {
     width: 100%;
     align-items: flex-start;
     padding-left: 20px;
-    padding-top: 20px;
-    padding-bottom: 20px;
+    padding-top: 5px;
+    padding-bottom: 5px;
   }
 
   h1.address-header-line-1 {
@@ -1084,22 +1093,26 @@ export default {
     padding-left: 8px;
   }
 
+.openmaps-modal-content{
+  overflow-y: scroll;
+}
+
 }
 
 #plans-button{
-  padding: 10.5px 25px 10.5px;
+  padding: 6.5px;
   float: right;
+  font-size: 16px;
 }
+
 
 header {
   visibility: hidden ;
   display: none;
 }
 
-
 .address-header {
   background: #daedfe;
-  color: #0f4d90;
   /*this keeps the box shadow over the scrollable part of the panel*/
   position: relative;
   z-index: 1;
@@ -1111,7 +1124,7 @@ header {
 }
 
 .address-header-line-2 {
-  padding: 0px;
+  padding: 0 0 0 40px;
 }
 
 .address-header-line-3 {
@@ -1145,34 +1158,32 @@ header {
 }
 
 .openmaps-modal {
-  color: rgb(15, 77, 144);
-  height: calc(100% - 44px) ;
-  padding: 20px;
-  overflow-y: auto;
-  position: fixed;
+  height: 100% ;
+  width: 100%;
+  position: absolute;
   background: white;
   z-index:1000;
   margin: auto;
   max-width: 1200px;
-  left: 2%;
-  right: 2%;
-  border-style: solid;
-  border-width: 4px;
-  border-color: #8a8a8a;
 }
 
 .openmaps-modal-content{
-  width: 95%;
   height: 85%;
-  margin: 0 20px;
+  padding: 0 20px;
 }
 
 .openmaps-modal-close{
-  position: fixed;
-  background: transparent;
   height: 30px;
   width: 30px;
   z-index: 999;
+}
+
+.button-state.state-unnamed-state {
+  right: 20px;
+  position: absolute;
+  padding-top: 5px;
+  font-weight: bold;
+  text-decoration: underline;
 }
 
 .openmaps-modal.openmaps-modal--open{
