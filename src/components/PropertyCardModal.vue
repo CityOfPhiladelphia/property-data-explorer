@@ -21,7 +21,7 @@
         </div>
       </div>
     </header>
-      <div class="sticky">
+      <div class="fixed-header">
         <div
           class="openmaps-modal-close hide-print"
           :tabindex="1"
@@ -1000,10 +1000,8 @@ export default {
   padding-bottom: 0;
 }
 
-.sticky {
+.fixed-header {
   background-color: white;
-  position: sticky;
-  top: 0;
 }
 
 .pvc-horizontal-table-body h4, h4.table-title {
@@ -1044,9 +1042,9 @@ export default {
 
   #main.openmaps-modal {
     overflow: visible;
-    position: relative;
+    position: absolute;
     top: 0 !important;
-    padding: 0 !important;
+    /* padding: 0 !important; */
     height: 100%;
     border-style: none !important;
   }
@@ -1155,7 +1153,6 @@ header {
   height: 100% ;
   width: 100%;
   position: absolute;
-  overflow-y: auto;
   background: white;
   z-index:1000;
   margin: auto;
@@ -1163,9 +1160,9 @@ header {
 }
 
 .openmaps-modal-content{
-  width: 95%;
   height: 85%;
-  margin: 0 20px;
+  padding: 0 20px;
+  overflow-y: scroll;
 }
 
 .openmaps-modal-close{
