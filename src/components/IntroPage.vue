@@ -1,46 +1,61 @@
 <template>
   <div
     id="intro-container"
-    :class="widgetClass + ' introduction'"
+    :class="widgetClass"
   >
-    <div class="intro-blue">
-        <i>Use the Property Data Explorer to get information about a property's ownership,
-        sales history, value, and physical characteristics. You can also generate address
-        listings near a property or within an area of interest.</i>
-    </div>
-    <h2>To get started, you can: </h2>
-    <div class="spacer" />
-    <!-- <p>Here are some things you can do with Property Data Explorer:</p> -->
-    <!-- <div class="callout"> -->
-    <div>
-      <ul class="padded-list fa-ul">
-        <li> <span class="fa-li"><i class="far fa-hand-rock"></i></span>
-          <h4>Select a location on the map</h4>
-          Click or tap on a specific property to view details about it.
-        </li>
-        <li> <span class="fa-li"><i class="fas fa-search"></i></span>
-          <h4>Search on property information</h4>
-          type an address, owner name, property account number, or
-          Department of Records registry map number into the search box.
-        </li>
-        <li> <span class="fa-li"><i class="fas fa-circle"></i></span>
-          <h4>View Properties within a selected radius</h4>
-          Use this tool to select a point on the map and view details about all
-          properties within a 250-foot radius.
-        </li>
-        <li>
-          <h4>View properties within drawn boundaries</h4>
-          Use this tool to draw a shape on the map and view details about all
-          properties within its boundaries.
-        </li>
-      </ul>
+    <property-card-modal
+      v-if="this.$store.state.activeModal.featureId !== null"
+      slot="introPage"
+      screen-percent="2"
+      />
+    <div
+      v-if="this.$store.state.activeModal.featureId === null"
+      class="introduction"
+    >
+      <div class="intro-blue">
+          <i>Use the Property Data Explorer to get information about a property's ownership,
+          sales history, value, and physical characteristics. You can also generate address
+          listings near a property or within an area of interest.</i>
+      </div>
+      <h2>To get started, you can: </h2>
+      <div class="spacer" />
+      <!-- <p>Here are some things you can do with Property Data Explorer:</p> -->
+      <!-- <div class="callout"> -->
+      <div>
+        <ul class="padded-list fa-ul">
+          <li> <span class="fa-li"><i class="far fa-hand-rock"></i></span>
+            <h4>Select a location on the map</h4>
+            Click or tap on a specific property to view details about it.
+          </li>
+          <li> <span class="fa-li"><i class="fas fa-search"></i></span>
+            <h4>Search on property information</h4>
+            type an address, owner name, property account number, or
+            Department of Records registry map number into the search box.
+          </li>
+          <li> <span class="fa-li"><i class="fas fa-circle"></i></span>
+            <h4>View Properties within a selected radius</h4>
+            Use this tool to select a point on the map and view details about all
+            properties within a 250-foot radius.
+          </li>
+          <li>
+            <h4>View properties within drawn boundaries</h4>
+            Use this tool to draw a shape on the map and view details about all
+            properties within its boundaries.
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 
+import PropertyCardModal from './PropertyCardModal.vue';
+
 export default {
+  components: {
+    PropertyCardModal,
+  },
   computed: {
     map() {
       return this.$store.state.map.map;
@@ -117,6 +132,9 @@ export default {
 }
 
 @media screen and (min-width: 750px) {
+  #intro-container {
+    position: relative;
+  }
   .introduction {
     margin: 30px 40px 0 40px;
     .intro-blue {
