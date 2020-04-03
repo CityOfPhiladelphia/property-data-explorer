@@ -17,7 +17,7 @@ export default class SearchPage {
     await t.expect(this.finishIcon.visible).ok();
     await t.expect(this.deleteIcon.visible).ok();
     await t.expect(this.cancelIcon.visible).ok();
-    await t.wait(4000);
+    await t.wait(1000);
     await t.click('#map', { offsetX: 150, offsetY: 150 })
     await t.wait(1000);
     await t.click('#map', { offsetX: 150, offsetY: 250 })
