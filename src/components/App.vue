@@ -499,9 +499,15 @@ export default {
 .toggle-map{
   margin:0 !important;
 }
-// .main-content{
-//   margin-top:.5rem;
-// }
+.main-content{
+  position: relative;
+}
+.top-full {
+  position: relative;
+  top: 0;
+  bottom: 0;
+}
+
 
 //TODO, move to standards
 @each $value in $colors {
@@ -596,14 +602,14 @@ export default {
 //   top: calc(60% - 10px);
 // }
 
-.bottom-full #data-panel-container #lower-toggle-tab {
-  // position: relative;
-  top: 87px;
-}
+// .bottom-full #data-panel-container #lower-toggle-tab {
+//   // position: relative;
+//   top: 87px;
+// }
 
 .bottom-half #data-panel-container #lower-toggle-tab {
     // add height from #results-summary
-    top: calc(60% - 14px) !important;
+    top: calc(60% - 25px) !important;
 }
 
 .logo {

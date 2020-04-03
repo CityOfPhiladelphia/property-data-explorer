@@ -106,9 +106,10 @@ export default {
 }
 
 .introduction {
-  padding: 28px;
-  /* height: 95%; */
   overflow-y: auto;
+  top: 0;
+  bottom: 0;
+  position: absolute;
   // height: calc(100% - 122px);
 }
 
@@ -136,7 +137,7 @@ export default {
     position: relative;
   }
   .introduction {
-    margin: 30px 40px 0 40px;
+    padding: 38px 46px 0 46px;
     .intro-blue {
         margin: 0 0 24px 0;
     }
@@ -145,9 +146,7 @@ export default {
 
 @media screen and (max-width: 750px) {
   .introduction {
-    padding: 28px;
-    height: auto;
-    // height: calc(100vh - 122px);
+    padding: 28px 28px 0 28px;
   }
 
   // .padded-list {
