@@ -687,6 +687,11 @@ export default {
 }
 
 @media print {
+
+  #map-panel-container {
+    overflow: visible;
+  }
+
   #results-summary {
     display: none;
   }

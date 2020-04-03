@@ -1049,6 +1049,10 @@ export default {
     border-style: none !important;
   }
 
+  .openmaps-modal-content{
+    overflow-y: visible;
+  }
+
 }
 
 @media screen and (max-width: 750px) {
@@ -1088,6 +1092,10 @@ export default {
     padding-right: 8px;
     padding-left: 8px;
   }
+
+.openmaps-modal-content{
+  overflow-y: scroll;
+}
 
 }
 
@@ -1162,7 +1170,6 @@ header {
 .openmaps-modal-content{
   height: 85%;
   padding: 0 20px;
-  overflow-y: scroll;
 }
 
 .openmaps-modal-close{
