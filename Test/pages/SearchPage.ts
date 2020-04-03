@@ -1,4 +1,4 @@
-import {  Selector } from "testcafe";
+import {  ClientFunction, Selector } from "testcafe";
 import { buildingAddressData } from "../helpers/searchData";
 
 export default class SearchPage {
@@ -17,16 +17,19 @@ export default class SearchPage {
     await t.expect(this.finishIcon.visible).ok();
     await t.expect(this.deleteIcon.visible).ok();
     await t.expect(this.cancelIcon.visible).ok();
+    await t.wait(4000);
+    await t.click('#map', { offsetX: 150, offsetY: 150 })
     await t.wait(1000);
-    await t.drag( this.polygonSearch, 10, 10, { offsetX: 5, offsetY: 5 });
-    await t.click(this.map);
-    await t.wait(2000);
-    await t.hover(this.map);
-    await t.click(this.map);
-    await t.wait(2000);
-    await t.drag( this.polygonSearch, 40, 50, { offsetX: 15, offsetY: 15 });
-    await t.click(this.map);
-    await t.wait(2000);
-    await t.click(this.finishIcon);
+    await t.click('#map', { offsetX: 150, offsetY: 250 })
+    await t.wait(1000);
+    await t.click('#map', { offsetX: 250, offsetY: 150 })
+    await t.wait(1000);
+    await t.click('#map', { offsetX: 150, offsetY: 150 })
+    await t.wait(4000);
+
   }
 }
+
+
+
+
