@@ -811,7 +811,7 @@ export default {
 <style >
 
 @media screen {
-  div.show-print-only {
+  p.show-print-only {
     display: none;
   }
 }
