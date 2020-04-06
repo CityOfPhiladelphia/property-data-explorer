@@ -1,5 +1,4 @@
 import {  ClientFunction, Selector } from "testcafe";
-import { buildingAddressData } from "../helpers/searchData";
 
 export default class SearchPage {
   searchMap: Selector = Selector("input[placeholder='Search the map']");

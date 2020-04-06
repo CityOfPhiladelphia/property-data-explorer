@@ -8,10 +8,10 @@ export default class HomePage {
   closeHowtouseButton: Selector = Selector("svg[data-icon='times-circle']");
   feedbackButton: Selector = Selector(".app-footer:nth-child(4) li:nth-child(3) > a");
   searchMap: Selector = Selector("input[placeholder='Search the map']");
-  searchmapButton: Selector = Selector("svg[data-icon= 'search']");
+  searchmapButton: Selector = Selector("button[name='pvm-search-control-button']");
   table: Selector = Selector('table');
-  mailingLables: Selector = Selector("a[class='button mailing pvc-export-data-button']");
-  downloadCSV: Selector = Selector(".csv");
+  mailingLables: Selector = Selector("svg[data-icon='download']");
+  downloadCSV: Selector = Selector("svg[data-icon='envelope']");
 
     // Verify page landing
   public verifyPageFunctionality = async (t: TestController) => {
@@ -22,6 +22,7 @@ export default class HomePage {
     await t.click(this.closeHowtouseButton);
     await t.typeText(this.searchMap,  buildingAddressData.address);
     await t.click(this.searchmapButton);
+    await t.wait(2000);
     await t.click(this.downloadCSV);
     await t.click(this.mailingLables);
     await t.wait(2000);
