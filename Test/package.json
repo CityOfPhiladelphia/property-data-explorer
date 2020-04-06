@@ -1,0 +1,16 @@
+{
+  "name": "test",
+  "version": "1.0.0",
+  "description": "PropertyData Test Service",
+  "dependencies": {
+    "dotenv": "^8.0.0"
+  },
+  "devDependencies": {
+    "testcafe": "^1.4.1"
+  },
+  "scripts": {
+    "test-local": "testcafe"
+  },
+  "author": "",
+  "license": "ISC"
+}
