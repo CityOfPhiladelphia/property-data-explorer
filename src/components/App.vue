@@ -428,6 +428,9 @@ export default {
       this.$store.commit('setLastSearchMethod', 'buffer search');
     }
   },
+  beforeMount(){
+    return this.$store.state.isMobileOrTablet ? this.$store.commit('setIntroPage', false) : "";
+  },
   created() {
     window.addEventListener('resize', this.onResize);
   },
@@ -711,6 +714,15 @@ export default {
 
 
 @media screen and (max-width: 750px) {
+
+  #map-panel-container {
+    height: 300px;
+  }
+
+
+  .main-content{
+    position: inherit;
+  }
 
   .pl-alert {
     height: 100% !important;
