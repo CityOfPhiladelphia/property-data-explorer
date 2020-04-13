@@ -9,7 +9,7 @@
       screen-percent="2"
       />
     <div
-      v-if="this.$store.state.activeModal.featureId === null"
+      v-if="this.$store.state.activeModal.featureId === null && !this.$store.state.isMobileOrTablet"
       class="introduction"
     >
       <div class="intro-blue">

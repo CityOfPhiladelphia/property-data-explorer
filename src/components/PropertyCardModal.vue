@@ -818,6 +818,10 @@ export default {
 
 @media screen and (min-width: 750px) {
 
+  /* .openmaps-modal-content{
+    height: 85%;
+  } */
+
   tr > td.big_owner {
     font-size: 32px;
     font-weight: 100;
@@ -1071,6 +1075,9 @@ export default {
     left: 0 !important;
     right: 0 !important;
   }
+  .openmaps-modal-content {
+    height: auto !important;
+  }
 }
 
 @media screen {
@@ -1168,7 +1175,6 @@ header {
 }
 
 .openmaps-modal-content{
-  height: 85%;
   padding: 0 20px;
 }
 

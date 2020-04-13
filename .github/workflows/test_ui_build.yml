@@ -1,0 +1,31 @@
+name: UI Test
+
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Use Node.js 8.x
+      uses: actions/setup-node@v1
+      with:
+        node-version: '8.x'
+
+    - name: Install app and test
+      run: |
+        printf "@fortawesome:registry=https://npm.fontawesome.com/\n//npm.fontawesome.com/:_authToken=${FONTAWESOME_NPM_AUTH_TOKEN}" >> ~/.npmrc
+        npm install
+        npm run build
+        npm run serve &
+        cd Test
+        npm install
+        npm run test-local
+      env:
+        FONTAWESOME_NPM_AUTH_TOKEN: ${{ secrets.FONTAWESOME_NPM_AUTH_TOKEN }}
