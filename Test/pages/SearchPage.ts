@@ -5,6 +5,8 @@ import { testSearchData } from "../helpers/searchData";
 export default class SearchPage {
   searchMap: Selector = Selector("input[placeholder='Search the map']");
   searchmapButton: Selector = Selector(".pvm-search-control-button");
+  mailingLables: Selector = Selector("svg[data-icon='download']");
+  downloadCSV: Selector = Selector("svg[data-icon='envelope']");
   table: Selector = Selector('table');
   tableRowCount: Selector = Selector('table tr');
   polygonSearch: Selector = Selector(".leaflet-draw-draw-polygon");
@@ -21,6 +23,8 @@ export default class SearchPage {
     await t.typeText(this.searchMap, testSearchData.condoAddress1);
     await t.click(this.searchmapButton);
     await t.wait(7000);
+    await t.click(this.downloadCSV);
+    await t.click(this.mailingLables);
     const tableValues = await this.table.innerText;
     await t.expect(tableValues).contains(testSearchData.condoAddress1)
     await t.click(this.btnAddUnitresults);
