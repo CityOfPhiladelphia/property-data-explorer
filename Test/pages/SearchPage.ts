@@ -19,21 +19,21 @@ export default class SearchPage {
   btnBuffer: Selector = Selector("button[class='inactive pointer']");
   btnZoomIn: Selector = Selector("a[title='Zoom in']");
 
-  public verifySearchByCondoAddress = async (t: TestController) => {
-    await t.typeText(this.searchMap, testSearchData.condoAddress1);
-    await t.click(this.searchmapButton);
-    await t.wait(10000);
-    await t.click(this.downloadCSV);
-    await t.click(this.mailingLables);
-    // const tableValues = await this.table.innerText;
-    // await t.expect(tableValues).contains(testSearchData.condoAddress1)
-    await t.click(this.btnAddUnitresults);
-    await t.wait(4000);
-    const tableRowcount = await this.tableRowCount.count;
-    await t.expect(tableRowcount).eql(271);
-    const tablerowValues = await this.table.innerText;
-    await t.expect(tablerowValues).contains(testSearchData.condoAddressverify)
-  }
+  // public verifySearchByCondoAddress = async (t: TestController) => {
+  //   await t.typeText(this.searchMap, testSearchData.condoAddress1);
+  //   await t.click(this.searchmapButton);
+  //   await t.wait(10000);
+  //   await t.click(this.downloadCSV);
+  //   await t.click(this.mailingLables);
+  //   // const tableValues = await this.table.innerText;
+  //   // await t.expect(tableValues).contains(testSearchData.condoAddress1)
+  //   await t.click(this.btnAddUnitresults);
+  //   await t.wait(4000);
+  //   const tableRowcount = await this.tableRowCount.count;
+  //   await t.expect(tableRowcount).eql(271);
+  //   const tablerowValues = await this.table.innerText;
+  //   await t.expect(tablerowValues).contains(testSearchData.condoAddressverify)
+  // }
 
   public verifySearchByBuffer = async (t: TestController) => {
     await t.navigateTo(`${process.env.TEST_URL}`);
