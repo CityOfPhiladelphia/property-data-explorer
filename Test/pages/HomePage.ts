@@ -17,6 +17,7 @@ export default class HomePage {
 
     // Verify page landing
   public verifyPageFunctionality = async (t: TestController) => {
+    await t.wait(3000);
     await t.expect(this.pageTitle.visible).ok();
     await t.expect(this.feedbackButton.visible).ok();
     await t.expect(this.citylinkButton.visible).ok();

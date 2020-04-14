@@ -4,7 +4,7 @@ import { testSearchData } from "../helpers/searchData";
 
 export default class SearchPage {
   searchMap: Selector = Selector("input[placeholder='Search the map']");
-  searchmapButton: Selector = Selector(".pvm-search-control-button");
+  searchmapButton: Selector = Selector("button[name='pvm-search-control-button']")
   mailingLables: Selector = Selector("svg[data-icon='download']");
   downloadCSV: Selector = Selector("svg[data-icon='envelope']");
   table: Selector = Selector('table');
@@ -19,21 +19,21 @@ export default class SearchPage {
   btnBuffer: Selector = Selector("button[class='inactive pointer']");
   btnZoomIn: Selector = Selector("a[title='Zoom in']");
 
-  // public verifySearchByCondoAddress = async (t: TestController) => {
-  //   await t.typeText(this.searchMap, testSearchData.condoAddress1);
-  //   await t.click(this.searchmapButton);
-  //   await t.wait(10000);
-  //   await t.click(this.downloadCSV);
-  //   await t.click(this.mailingLables);
-  //   // const tableValues = await this.table.innerText;
-  //   // await t.expect(tableValues).contains(testSearchData.condoAddress1)
-  //   await t.click(this.btnAddUnitresults);
-  //   await t.wait(4000);
-  //   const tableRowcount = await this.tableRowCount.count;
-  //   await t.expect(tableRowcount).eql(271);
-  //   const tablerowValues = await this.table.innerText;
-  //   await t.expect(tablerowValues).contains(testSearchData.condoAddressverify)
-  // }
+  public verifySearchByCondoAddress = async (t: TestController) => {
+    await t.typeText(this.searchMap, testSearchData.condoAddress1);
+    await t.click(this.searchmapButton);
+    await t.wait(10000);
+    await t.click(this.downloadCSV);
+    await t.click(this.mailingLables);
+    const tableValues = await this.table.innerText;
+    await t.expect(tableValues).contains(testSearchData.condoAddress1)
+    await t.click(this.btnAddUnitresults);
+    await t.wait(4000);
+    const tableRowcount = await this.tableRowCount.count;
+    await t.expect(tableRowcount).eql(271);
+    const tablerowValues = await this.table.innerText;
+    await t.expect(tablerowValues).contains(testSearchData.condoAddressverify)
+  }
 
   public verifySearchByBuffer = async (t: TestController) => {
     await t.navigateTo(`${process.env.TEST_URL}`);
@@ -53,9 +53,9 @@ export default class SearchPage {
     await t.wait(1000);
     await t.click('#map', { offsetX: 150, offsetY: 150 })
     await t.wait(1000);
-    await t.click('#map', { offsetX: 150, offsetY: 250 })
+    await t.click('#map', { offsetX: 150, offsetY: 100 })
     await t.wait(1000);
-    await t.click('#map', { offsetX: 290, offsetY: 150 })
+    await t.click('#map', { offsetX: 310, offsetY: 100 })
     await t.wait(1000);
     await t.click('#map', { offsetX: 150, offsetY: 150 })
     await t.wait(4000);
@@ -74,8 +74,8 @@ export default class SearchPage {
     await t.typeText(this.searchMap, testSearchData.addressBuffer);
     await t.click(this.searchmapButton);
     await t.wait(3000);
-    const tableValues = await this.table.innerText;
-    await t.expect(tableValues).contains(testSearchData.addressBuffer)
+    const tableAddressValues = await this.table.innerText;
+    await t.expect(tableAddressValues).contains(testSearchData.addressBuffer)
     await t.click(this.btnBuffer);
     await t.click('#map');
     await t.wait(4000);
@@ -88,7 +88,7 @@ export default class SearchPage {
     await t.navigateTo(`${process.env.TEST_URL}`);
     await t.typeText(this.searchMap, testSearchData.opaAccountValue);
     await t.click(this.searchmapButton);
-    await t.wait(2000);
+    await t.wait(5000);
     const tableOPAValues = await this.table.innerText;
     await t.expect(tableOPAValues).contains(testSearchData.address)
     await t.wait(3000)
@@ -103,12 +103,12 @@ export default class SearchPage {
     await t.wait(1000);
     await t.click('#map', { offsetX: 550, offsetY: 250 })
     await t.wait(1000);
-    await t.click('#map', { offsetX: 650, offsetY: 200 })
+    await t.click('#map', { offsetX: 750, offsetY: 150 })
     await t.wait(1000);
     await t.click('#map', { offsetX: 450, offsetY: 150 })
-    await t.wait(2000);
-   // const tableOPAShapeValues = await this.table.innerText;
-    //await t.expect(tableOPAShapeValues).contains(testSearchData.address);
+    await t.wait(4000);
+    const tableOPAShapeValues = await this.table.innerText;
+    await t.expect(tableOPAShapeValues).contains(testSearchData.address);
   }
   public verifySearchByAddressplusOwner = async (t: TestController) => {
     await t.navigateTo(`${process.env.TEST_URL}`);
@@ -124,8 +124,8 @@ export default class SearchPage {
     await t.typeText(this.searchMap, testSearchData.addressBufferVerify);
     await t.click(this.searchmapButton);
     await t.wait(3000);
-    const tableValues = await this.table.innerText;
-    await t.expect(tableValues).contains(testSearchData.addressBufferVerify)
+    const tableAddresValues = await this.table.innerText;
+    await t.expect(tableAddresValues).contains(testSearchData.addressBufferVerify)
     await t.wait(2000);
     await t.click(this.polygonSearch);
     await t.click('#map', { offsetX: 450, offsetY: 150 })
@@ -134,7 +134,7 @@ export default class SearchPage {
     await t.wait(2000);
     await t.click('#map', { offsetX: 600, offsetY: 200 })
     await t.wait(2000);
-    await t.click('#map', { offsetX: 750, offsetY: 200 })
+    await t.click('#map', { offsetX: 750, offsetY: 130 })
     await t.wait(3000);
     await t.click('#map', { offsetX: 450, offsetY: 150 })
     await t.wait(4000);
