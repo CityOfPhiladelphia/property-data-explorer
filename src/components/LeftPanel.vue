@@ -107,7 +107,6 @@ export default {
 
 #intro-container {
   height: 100%;
-  overflow-y: auto;
 }
 
 // .introduction {
@@ -137,9 +136,16 @@ export default {
     }
 }
 
+@media print {
+  #intro-container {
+    overflow-y: visible;
+  }
+}
+
 @media screen and (min-width: 750px) {
   #intro-container {
     position: relative;
+      overflow-y: auto;
   }
   .introduction {
     padding: 38px 46px 0 46px;

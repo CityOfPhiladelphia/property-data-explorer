@@ -706,6 +706,10 @@ export default {
 
 @media print {
 
+  .grid-y.medium-grid-frame#application {
+    overflow: visible;
+  }
+
   #map-panel-container {
     overflow: visible;
   }
