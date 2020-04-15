@@ -10,6 +10,6 @@ export default {
   },
   drawControl: true,
   initialImagery: 'imagery2018',
-  containerClass: 'map-container-350',
-  containerClassWCyclo: 'map-container',
+  containerClass: 'map-container',
+  containerClassWCyclo: 'height-50',
 };
