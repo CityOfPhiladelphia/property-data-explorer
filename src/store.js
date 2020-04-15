@@ -17,7 +17,7 @@ function createStore(config) {
 
   const initialState = {
     isMobileOrTablet: isMobileDevice(),
-    introPage: true,
+    leftPanel: true,
     ownerSearchModal: false,
     mapViewWasSetOnAppLoad: false,
     fullScreen: {
@@ -82,8 +82,8 @@ function createStore(config) {
       // }
     },
     mutations: {
-      setIntroPage(state, payload) {
-        state.introPage = payload;
+      setLeftPanel(state, payload) {
+        state.leftPanel = payload;
       },
       setOwnerSearchModal(state, payload){
         state.ownerSearchModal = payload;

@@ -216,7 +216,7 @@ const titleCase = transforms.titleCase.transform;
 const nth = transforms.nth.transform;
 
 export default {
-  name: 'PropertyCardModal',
+  name: 'PropertyCard',
   components: {
     ButtonCompLight: () => import(/* webpackChunkName: "pvc_pvc_ButtonCompLight" */'@phila/vue-comps/src/components/ButtonCompLight.vue'),
     Callout: () => import(/* webpackChunkName: "pvc_pcm_Callout" */'@phila/vue-comps/src/components/Callout.vue'),
@@ -234,7 +234,7 @@ export default {
       return this.$store.state.activeModal;
     },
     activeFeatureId() {
-      console.log('PropertyCardModal activeFeatureId computed is running');
+      console.log('PropertyCard.vue activeFeatureId computed is running');
       return this.activeModal.featureId;
     },
     activeModalFeature() {
@@ -285,7 +285,7 @@ export default {
       return opaData ;
     },
     propertyDetailsVerticalTableSlots() {
-      // console.log('PropertyCardModal activeFeatureId computed is running')
+      // console.log('PropertyCard activeFeatureId computed is running')
       let state = this.$store.state;
       let opaPublicData = state.sources.opa_public.targets[this.activeOpaId].data;
       let searchId =  opaPublicData.street_code + opaPublicData.house_number + (opaPublicData.unit != null ?  opaPublicData.unit : '') ;
@@ -910,9 +910,9 @@ export default {
     visibility: hidden;
   }
 
-  .grid-y.medium-grid-frame#application {
+  /* .grid-y.medium-grid-frame #application {
     overflow: visible !important;
-  }
+  } */
 
   .hide-print {
     display: none !important;
@@ -1045,8 +1045,8 @@ export default {
   }
 
   #main.openmaps-modal {
-    overflow: visible;
-    position: absolute;
+    /* overflow: visible; */
+    /* position: absolute; */
     top: 0 !important;
     /* padding: 0 !important; */
     height: 100%;
@@ -1054,7 +1054,7 @@ export default {
   }
 
   .openmaps-modal-content{
-    overflow-y: visible;
+    /* overflow-y: visible; */
   }
 
 }
@@ -1069,7 +1069,7 @@ export default {
   }
 
   .openmaps-modal {
-    width: 100% !important;
+    /* width: 100% !important; */
     height: 100% !important;
     margin: 0;
     left: 0 !important;
@@ -1101,7 +1101,7 @@ export default {
   }
 
 .openmaps-modal-content{
-  overflow-y: scroll;
+  /* overflow-y: scroll; */
 }
 
 }
@@ -1166,8 +1166,8 @@ header {
 
 .openmaps-modal {
   height: 100% ;
-  width: 100%;
-  position: absolute;
+  /* width: 100%; */
+  /* position: absolute; */
   background: white;
   z-index:1000;
   margin: auto;

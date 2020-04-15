@@ -69,7 +69,7 @@ const formatter = new Intl.NumberFormat('en-US', {
   minimumFractionDigits: 0,
 });
 
-import PropertyCardModal from './PropertyCardModal.vue';
+// import PropertyCard from './PropertyCard.vue';
 
 export default {
   components: {
@@ -662,7 +662,7 @@ export default {
       this.$store.commit('setMapCenter', coords);
     },
     expandedData() {
-      let modalComputed = PropertyCardModal.computed;
+      // let modalComputed = PropertyCard.computed;
       let opaPublicData = this.opaPublicData;
 
       return [
