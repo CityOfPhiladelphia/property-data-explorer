@@ -1,17 +1,20 @@
 <template>
   <div
     id="intro-container"
-    :class="widgetClass"
+    :class="panelClass"
   >
-    <property-card-modal
+    <property-card
       v-if="this.$store.state.activeModal.featureId !== null"
-      slot="introPage"
-      screen-percent="2"
-      />
+    />
+    <!-- slot="introPage"
+    screen-percent="2" -->
+
     <div
-      v-if="this.$store.state.activeModal.featureId === null && !this.$store.state.isMobileOrTablet"
+      v-if="this.$store.state.activeModal.featureId === null"
       class="introduction"
     >
+    <!-- v-if="this.$store.state.activeModal.featureId === null && !this.$store.state.isMobileOrTablet" -->
+
       <div class="intro-blue">
           <i>Use the Property Data Explorer to get information about a property's ownership,
           sales history, value, and physical characteristics. You can also generate address
@@ -45,16 +48,17 @@
         </ul>
       </div>
     </div>
+
   </div>
 </template>
 
 <script>
 
-import PropertyCardModal from './PropertyCardModal.vue';
+import PropertyCard from './PropertyCard.vue';
 
 export default {
   components: {
-    PropertyCardModal,
+    PropertyCard,
   },
   computed: {
     map() {
@@ -69,11 +73,11 @@ export default {
     // fullScreenTopicsEnabled() {
     //   return this.$store.state.fullScreenTopicsEnabled;
     // },
-    widgetClass() {
+    panelClass() {
       // if (this.fullScreenTopicsEnabled) {
       //   return 'medium-12 small-24 full-topics-open'
       // } else {
-      return 'medium-24 small-24';
+      return 'small-24 small-order-2 medium-24 medium-order-1';
       // }
     },
     sitePath() {
@@ -102,16 +106,17 @@ export default {
 <style lang="scss">
 
 #intro-container {
-  height: 100%
+  height: 100%;
+  overflow-y: auto;
 }
 
-.introduction {
-  overflow-y: auto;
-  top: 0;
-  bottom: 0;
-  position: absolute;
-  // height: calc(100% - 122px);
-}
+// .introduction {
+//   overflow-y: auto;
+//   top: 0;
+//   bottom: 0;
+//   position: absolute;
+//   // height: calc(100% - 122px);
+// }
 
 .intro-blue {
   background: #daedfe;

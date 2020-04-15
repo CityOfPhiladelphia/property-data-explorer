@@ -1,22 +1,27 @@
 <template>
   <div
     id="map-panel-container"
-    class="surrounding-div grid-x medium-grid-frame"
+    :class="mapPanelContainerClass + ' surrounding-div grid-frame print-hide'"
   >
-    <!-- this.mapDivClass -->
-    <!-- :class="'medium-grid-frame surrounding-div ' + this.mapDivClass" -->
+  <!-- class="surrounding-div grid-frame print-hide" -->
+
+  <!-- :class="mapPanelContainerClass + ' surrounding-div print-hide'" -->
+  <!-- class="surrounding-div grid-x grid-frame" -->
+  <!-- this.mapDivClass -->
+  <!-- :class="'medium-grid-frame surrounding-div ' + this.mapDivClass" -->
+
     <full-screen-map-toggle-tab-vertical
-      v-if="!this.$store.state.introPage"
+      v-if="!this.$store.state.leftPanel"
       v-once
     />
-    <slot
-      class="widget-slot"
-      name="introPage"
-    />
+
     <div
-      :class="mapPanelContainerClass + ' print-hide'">
+      id="map-tag"
+      class="grid-x"
+    >
       <map_
-        id="map-tag"
+        id="map-object"
+        :class="mapPanelClass"
         :center="this.$store.state.map.center"
         :zoom="this.$store.state.map.zoom"
         attribution-position="bottomleft"
@@ -26,6 +31,7 @@
         @l-click="handleMapClick"
         @l-moveend="handleMapMove"
       >
+
         <!-- loading mask -->
         <div
           v-show="isGeocoding"
@@ -308,11 +314,15 @@
           @l-click="handleCyclomediaRecordingClick"
         />
       </map_>
-    </div>
-    <slot
+
+      <slot
       class="widget-slot"
       name="cycloWidget"
-    />
+      />
+
+    </div>
+
+
   </div>
 </template>
 
@@ -492,11 +502,18 @@ export default {
       return this.$store.state.fullScreenMapEnabled;
     },
     mapPanelContainerClass() {
-      if (this.$store.state.cyclomedia.active) {
-        return 'small-24 medium-12';
+      if (this.$store.state.leftPanel) {
+        return 'small-24 small-order-1 medium-12 medium-order-2';
       }
-      return 'small-24  medium-24';
-
+      return 'small-24 small-order-1 medium-24 medium-order-2';
+    },
+    mapPanelClass() {
+      if (this.$store.state.leftPanel && this.$store.state.cyclomedia.active) {
+        return 'small-24 medium-24 map-panel-class-50';
+      } else if (this.$store.state.cyclomedia.active) {
+        return 'small-24 medium-12 map-panel-class';
+      }
+      return 'small-24 medium-24 map-panel-class';
     },
     loadingMaskLeft() {
       if (this.$store.state.cyclomedia.active) {
@@ -792,6 +809,19 @@ export default {
 
 <style lang="scss">
 
+  .map-panel-class {
+    position: relative;
+  }
+
+  .map-panel-class-50 {
+    position: relative;
+    height: 50%;
+  }
+
+  #map-tag {
+    height: 100%;
+  }
+
   @media print {
     .print-hide {
       display: none;
@@ -940,6 +970,14 @@ export default {
 
   // CSS FOR SMALL SCREEN APP
   @media screen and (max-width: 750px) {
+
+    .height-50 {
+      height: 50%;
+    }
+
+    // .map-panel-class {
+    //   height: 200px;
+    // }
 
     // .map-div {
     //   height: 350px;
