@@ -7,7 +7,7 @@ export default class SearchPage {
   searchmapButton: Selector = Selector("button[name='pvm-search-control-button']")
   mailingLables: Selector = Selector("svg[data-icon='download']");
   downloadCSV: Selector = Selector("svg[data-icon='envelope']");
-  public table: Selector = Selector("table").with({ visibilityCheck: true });
+  table: Selector = Selector("table").with({ visibilityCheck: true });
   tableRowCount: Selector = Selector('table tr');
   polygonSearch: Selector = Selector(".leaflet-draw-draw-polygon");
   finishIcon: Selector = Selector(".leaflet-draw-actions > li:nth-child(1) > a");
@@ -21,7 +21,7 @@ export default class SearchPage {
 
   
   public verifySearchByOPAplusBufferplusShape = async (t: TestController) => {
-    await t.navigateTo(`${process.env.TEST_URL}`);
+   // await t.navigateTo(`${process.env.TEST_URL}`);
     await t.typeText(this.searchMap, testSearchData.opaAccountValue);
     await t.click(this.searchmapButton);
     await t.wait(4000);
@@ -36,13 +36,13 @@ export default class SearchPage {
     await t.wait(2000);
     await t.click(this.polygonSearch);
     await t.click('#map', { offsetX: 450, offsetY: 150 })
-    await t.wait(1000);
+    await t.wait(2000);
     await t.click('#map', { offsetX: 550, offsetY: 250 })
-    await t.wait(1000);
+    await t.wait(2000);
     await t.click('#map', { offsetX: 750, offsetY: 150 })
-    await t.wait(1000);
+    await t.wait(2000);
     await t.click('#map', { offsetX: 450, offsetY: 150 })
-    await t.wait(3000);
+    await t.wait(4000);
     const tableOPAShapeValues = await this.table.innerText;
     await t.expect(tableOPAShapeValues).contains(testSearchData.address);
   }

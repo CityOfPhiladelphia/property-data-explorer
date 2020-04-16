@@ -24,7 +24,8 @@ export default class SearchPage {
     await t.click(this.btnBuffer);
     await t.click('#map');
     await t.wait(4000);
-    const tableBuffervalues = await this.table.innerText;
+    const tableSelected = await this.table;
+    const tableBuffervalues = await tableSelected.innerText;
     await t.expect(tableBuffervalues).contains(testSearchData.tablePolygontextVerify);
     await t.click(this.btnAddUnitresults);
   }

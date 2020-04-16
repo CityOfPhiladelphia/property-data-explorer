@@ -22,25 +22,29 @@ export default class SearchPage {
   public verifySearchByCondoAddress = async (t: TestController) => {
     await t.typeText(this.searchMap, testSearchData.condoAddress1);
     await t.click(this.searchmapButton);
+    await t.expect(this.mailingLables.visible).ok();
+    await t.expect(this.downloadCSV.visible).ok();
     await t.wait(5000);
-    const table = document.querySelector('table');
-    const tableValues = await table.textContent;
+    const tableSelected = await this.table;
+    const tableValues = await tableSelected.textContent;
     await t.expect(tableValues).contains(testSearchData.condoAddress1)
     await t.click(this.btnAddUnitresults);
     await t.wait(4000);
-    const tableRowcount = await this.tableRowCount.count;
+    const tableRowcounts = await this.tableRowCount;
+    const tableRowcount = await tableRowcounts.count;
     await t.expect(tableRowcount).eql(271);
-    const table1 = document.querySelector('table');
-    const tablerowValues = await table1.innerText;
+    const tableSelected1 = await this.table;
+    const tablerowValues = await tableSelected1 .innerText;
     await t.expect(tablerowValues).contains(testSearchData.condoAddressverify)
   }
   public verifySearchByAddressplusOwner = async (t: TestController) => {
     await t.navigateTo(`${process.env.TEST_URL}`);
     await t.typeText(this.searchMap, testSearchData.AddressOwner);
     await t.click(this.searchmapButton);
-    await t.wait(10000);
-    const table = document.querySelector('table');
-    const tableOwnerValues = await table.innerText;
+    await t.wait(5000);
+    await t.expect(this.mailingLables.visible).ok();
+    const tableSelected = await this.table;
+    const tableOwnerValues = await tableSelected.innerText;
     await t.expect(tableOwnerValues).contains(testSearchData.addressBuffer);
 
   }
