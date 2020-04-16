@@ -19,28 +19,29 @@ export default class SearchPage {
   btnBuffer: Selector = Selector("button[class='inactive pointer']");
   btnZoomIn: Selector = Selector("a[title='Zoom in']");
 
-  public verifySearchByCondoAddress = async (t: TestController) => {
-    await t.typeText(this.searchMap, testSearchData.condoAddress1);
+  public verifySearchByAddressplusShape = async (t: TestController) => {
+    //await t.navigateTo(`${process.env.TEST_URL}`);
+    await t.wait(2000);
+    await t.typeText(this.searchMap, testSearchData.addressBufferVerify);
     await t.click(this.searchmapButton);
-    await t.wait(5000);
-    await t.click(this.downloadCSV);
-    await t.click(this.mailingLables);
-    const tableValues = await this.table.innerText;
-    await t.expect(tableValues).contains(testSearchData.condoAddress1)
-    await t.click(this.btnAddUnitresults);
-    await t.wait(4000);
-    const tableRowcount = await this.tableRowCount.count;
-    await t.expect(tableRowcount).eql(271);
-    const tablerowValues = await this.table.innerText;
-    await t.expect(tablerowValues).contains(testSearchData.condoAddressverify)
-  }
-  public verifySearchByAddressplusOwner = async (t: TestController) => {
-    await t.navigateTo(`${process.env.TEST_URL}`);
-    await t.typeText(this.searchMap, testSearchData.AddressOwner);
-    await t.click(this.searchmapButton);
-    await t.wait(10000);
-    const tableOwnerValues = await this.table.innerText;
-    await t.expect(tableOwnerValues).contains(testSearchData.addressBuffer);
+    await t.wait(3000);
+    const tableAddresValues = await this.table.innerText;
+    await t.expect(tableAddresValues).contains(testSearchData.addressBufferVerify)
+    await t.wait(2000);
+    await t.click(this.polygonSearch);
+    await t.click('#map', { offsetX: 450, offsetY: 150 })
+    await t.wait(1000);
+    await t.click('#map', { offsetX: 550, offsetY: 250 })
+    await t.wait(2000);
+    await t.click('#map', { offsetX: 600, offsetY: 200 })
+    await t.wait(2000);
+    await t.click('#map', { offsetX: 750, offsetY: 130 })
+    await t.wait(3000);
+    await t.click('#map', { offsetX: 450, offsetY: 150 })
+    await t.wait(3000);
+    const tableOPAShapeAddressValues = await this.table.innerText;
+    await t.expect(tableOPAShapeAddressValues).contains(testSearchData.addressBufferVerify);
 
   }
+  
 }

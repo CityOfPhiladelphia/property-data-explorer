@@ -18,29 +18,15 @@ export default class SearchPage {
   btnAddUnitresults: Selector = Selector("a[class='topic-component button condo-button clicked-false']");
   btnBuffer: Selector = Selector("button[class='inactive pointer']");
   btnZoomIn: Selector = Selector("a[title='Zoom in']");
-
-  public verifySearchByCondoAddress = async (t: TestController) => {
-    await t.typeText(this.searchMap, testSearchData.condoAddress1);
+  
+  public verifySearchByOwnerplusShape = async (t: TestController) => {
+    //await t.navigateTo(`${process.env.TEST_URL}`);
+    await t.typeText(this.searchMap, testSearchData.owner);
     await t.click(this.searchmapButton);
-    await t.wait(5000);
-    await t.click(this.downloadCSV);
-    await t.click(this.mailingLables);
-    const tableValues = await this.table.innerText;
-    await t.expect(tableValues).contains(testSearchData.condoAddress1)
-    await t.click(this.btnAddUnitresults);
-    await t.wait(4000);
-    const tableRowcount = await this.tableRowCount.count;
-    await t.expect(tableRowcount).eql(271);
-    const tablerowValues = await this.table.innerText;
-    await t.expect(tablerowValues).contains(testSearchData.condoAddressverify)
-  }
-  public verifySearchByAddressplusOwner = async (t: TestController) => {
-    await t.navigateTo(`${process.env.TEST_URL}`);
-    await t.typeText(this.searchMap, testSearchData.AddressOwner);
-    await t.click(this.searchmapButton);
-    await t.wait(10000);
-    const tableOwnerValues = await this.table.innerText;
-    await t.expect(tableOwnerValues).contains(testSearchData.addressBuffer);
+    await t.wait(3000);
+    const tableOwnerShapeValues = await this.table.innerText;
+    await t.expect(tableOwnerShapeValues).contains(testSearchData.owner);
 
   }
+  
 }

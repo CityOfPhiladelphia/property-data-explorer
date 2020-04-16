@@ -1,4 +1,4 @@
- stuffname: UI Test
+name: UI Test
 
 on:
   pull_request:
@@ -30,7 +30,7 @@ jobs:
       env:
         FONTAWESOME_NPM_AUTH_TOKEN: ${{ secrets.FONTAWESOME_NPM_AUTH_TOKEN }}
 
-    - name: Deploy screenshots on fail
+   - name: Deploy screenshots on fail
       if: failure()
       run: |
          $(aws ecr get-login --no-include-email --region us-east-1)

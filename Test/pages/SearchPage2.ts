@@ -18,29 +18,30 @@ export default class SearchPage {
   btnAddUnitresults: Selector = Selector("a[class='topic-component button condo-button clicked-false']");
   btnBuffer: Selector = Selector("button[class='inactive pointer']");
   btnZoomIn: Selector = Selector("a[title='Zoom in']");
+  
+  public verifySearchbyShapePlusBuffer = async (t: TestController) => {
+    // await t.navigateTo(`${process.env.TEST_URL}`);
+    await t.click(this.polygonSearch);
+    await t.expect(this.finishIcon.visible).ok();
+    await t.expect(this.deleteIcon.visible).ok();
+    await t.expect(this.cancelIcon.visible).ok();
+    await t.wait(1000);
+    await t.click('#map', { offsetX: 150, offsetY: 150 })
+    await t.wait(1000);
+    await t.click('#map', { offsetX: 150, offsetY: 100 })
+    await t.wait(1000);
+    await t.click('#map', { offsetX: 310, offsetY: 100 })
+    await t.wait(1000);
+    await t.click('#map', { offsetX: 150, offsetY: 150 })
+    await t.wait(3000);
+    const tablePolySearchValues = this.table.innerText
+    await t.expect(tablePolySearchValues).contains(testSearchData.tablePolygontextVerify);
+    await t.click(this.btnBuffer);
+    await t.click('#map', { offsetX: 350, offsetY: 200 })
+    await t.wait(3000);
+    const tableBufferSearchValues = this.table.innerText
+    await t.expect(tableBufferSearchValues).contains(testSearchData.tablePolygontextVerify);
 
-  public verifySearchByCondoAddress = async (t: TestController) => {
-    await t.typeText(this.searchMap, testSearchData.condoAddress1);
-    await t.click(this.searchmapButton);
-    await t.wait(5000);
-    await t.click(this.downloadCSV);
-    await t.click(this.mailingLables);
-    const tableValues = await this.table.innerText;
-    await t.expect(tableValues).contains(testSearchData.condoAddress1)
-    await t.click(this.btnAddUnitresults);
-    await t.wait(4000);
-    const tableRowcount = await this.tableRowCount.count;
-    await t.expect(tableRowcount).eql(271);
-    const tablerowValues = await this.table.innerText;
-    await t.expect(tablerowValues).contains(testSearchData.condoAddressverify)
   }
-  public verifySearchByAddressplusOwner = async (t: TestController) => {
-    await t.navigateTo(`${process.env.TEST_URL}`);
-    await t.typeText(this.searchMap, testSearchData.AddressOwner);
-    await t.click(this.searchmapButton);
-    await t.wait(10000);
-    const tableOwnerValues = await this.table.innerText;
-    await t.expect(tableOwnerValues).contains(testSearchData.addressBuffer);
 
-  }
 }
