@@ -23,7 +23,7 @@ export default class SearchPage {
     // await t.navigateTo(`${process.env.TEST_URL}`);
     await t.click(this.btnBuffer);
     await t.click('#map');
-    await t.wait(3000);
+    await t.wait(4000);
     const tableBuffervalues = await this.table.innerText;
     await t.expect(tableBuffervalues).contains(testSearchData.tablePolygontextVerify);
     await t.click(this.btnAddUnitresults);
