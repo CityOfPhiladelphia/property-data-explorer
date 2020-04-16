@@ -7,8 +7,8 @@ export default class SearchPage {
   searchmapButton: Selector = Selector("button[name='pvm-search-control-button']")
   mailingLables: Selector = Selector("svg[data-icon='download']");
   downloadCSV: Selector = Selector("svg[data-icon='envelope']");
-  table: Selector = Selector('table');
-  tableRowCount: Selector = Selector('table tr');
+  table: Selector = Selector("table").with({ visibilityCheck: true });
+  tableRowCount: Selector = Selector('table tr').with({ visibilityCheck: true });
   polygonSearch: Selector = Selector(".leaflet-draw-draw-polygon");
   finishIcon: Selector = Selector(".leaflet-draw-actions > li:nth-child(1) > a");
   deleteIcon: Selector = Selector(".leaflet-draw-actions > li:nth-child(2) > a");
@@ -23,15 +23,15 @@ export default class SearchPage {
     await t.typeText(this.searchMap, testSearchData.condoAddress1);
     await t.click(this.searchmapButton);
     await t.wait(5000);
-    await t.click(this.downloadCSV);
-    await t.click(this.mailingLables);
-    const tableValues = await this.table.innerText;
+    const table = document.querySelector('table');
+    const tableValues = await table.textContent;
     await t.expect(tableValues).contains(testSearchData.condoAddress1)
     await t.click(this.btnAddUnitresults);
     await t.wait(4000);
     const tableRowcount = await this.tableRowCount.count;
     await t.expect(tableRowcount).eql(271);
-    const tablerowValues = await this.table.innerText;
+    const table1 = document.querySelector('table');
+    const tablerowValues = await table1.innerText;
     await t.expect(tablerowValues).contains(testSearchData.condoAddressverify)
   }
   public verifySearchByAddressplusOwner = async (t: TestController) => {
@@ -39,7 +39,8 @@ export default class SearchPage {
     await t.typeText(this.searchMap, testSearchData.AddressOwner);
     await t.click(this.searchmapButton);
     await t.wait(10000);
-    const tableOwnerValues = await this.table.innerText;
+    const table = document.querySelector('table');
+    const tableOwnerValues = await table.innerText;
     await t.expect(tableOwnerValues).contains(testSearchData.addressBuffer);
 
   }

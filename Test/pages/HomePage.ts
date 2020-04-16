@@ -13,7 +13,7 @@ export default class HomePage {
   mailingLables: Selector = Selector("svg[data-icon='download']");
   downloadCSV: Selector = Selector("svg[data-icon='envelope']");
   btnAddUnitresults: Selector = Selector("a[class='topic-component button condo-button clicked-false']");
-  tableRowCount: Selector = Selector('table tr');
+  //tableRowCount: Selector = Selector('table tr');
 
     // Verify page landing
   public verifyPageFunctionality = async (t: TestController) => {

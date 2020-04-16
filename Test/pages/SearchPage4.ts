@@ -7,7 +7,7 @@ export default class SearchPage {
   searchmapButton: Selector = Selector("button[name='pvm-search-control-button']")
   mailingLables: Selector = Selector("svg[data-icon='download']");
   downloadCSV: Selector = Selector("svg[data-icon='envelope']");
-  table: Selector = Selector('table');
+  public table: Selector = Selector("table").with({ visibilityCheck: true });
   tableRowCount: Selector = Selector('table tr');
   polygonSearch: Selector = Selector(".leaflet-draw-draw-polygon");
   finishIcon: Selector = Selector(".leaflet-draw-actions > li:nth-child(1) > a");
