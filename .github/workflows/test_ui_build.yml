@@ -28,12 +28,9 @@ jobs:
         npm install
         npm run test-local
     
-    - name: Deploy screenshots on fail
-    # uses: actions/aws/cli@master
-    if: failure()
-    # with:
-    #   args: s3 sync Test/screenshots s3://$AWS_S3_BUCKET/testcafe
-    run: |
+   - name: Deploy screenshots on fail
+     if: failure()
+     run: |
       $(aws ecr get-login --no-include-email --region us-east-1)
       aws s3 sync Test/screenshots s3://$AWS_S3_BUCKET/testcafe
     env:
