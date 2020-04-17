@@ -69,7 +69,7 @@ const formatter = new Intl.NumberFormat('en-US', {
   minimumFractionDigits: 0,
 });
 
-import PropertyCardModal from './PropertyCardModal.vue';
+// import PropertyCard from './PropertyCard.vue';
 
 export default {
   components: {
@@ -662,7 +662,7 @@ export default {
       this.$store.commit('setMapCenter', coords);
     },
     expandedData() {
-      let modalComputed = PropertyCardModal.computed;
+      // let modalComputed = PropertyCard.computed;
       let opaPublicData = this.opaPublicData;
 
       return [
@@ -757,8 +757,8 @@ export default {
         {
           label: 'OPA Account Number',
           value: function(state, item) {
-            console.log("line 761 item: ", item.parcel_number)
-            if(typeof item.parcel_number != undefined) {
+            console.log("line 761 item: ", item)
+            if(typeof item.parcel_number != 'undefined') {
               return item.parcel_number
             } else {
               return item.properties.opa_account_num
@@ -1005,7 +1005,7 @@ export default {
           label: 'Zoning Code',
           value: function(state, item){
             let id = [];
-            if(typeof item.parcel_number != undefined) {
+            if(typeof item.parcel_number != 'undefined') {
               id = item.parcel_number
             } else {
               id =  item.properties.opa_account_num
@@ -1022,7 +1022,7 @@ export default {
           label: 'Zoning Description',
           value: function (state, item) {
             let id = [];
-         if(typeof item.parcel_number != undefined) {
+         if(typeof item.parcel_number != 'undefined') {
               id = item.parcel_number
             } else {
               id =  item.properties.opa_account_num

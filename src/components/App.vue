@@ -15,24 +15,28 @@
         />
       </div>
     </PhilaHeader>
+
     <owner-search-modal />
 
-    <div :class="'cell medium-auto medium-cell-block-container main-content '">
-      <div :class="mapClass">
+    <!-- <div :class="'cell medium-auto medium-cell-block-container main-content'"> -->
+    <div class="cell medium-auto medium-cell-block-container main-content">
+      <div :class="mainContentClass">
+
+        <left-panel
+          v-show="leftPanel"
+        />
+
         <map-panel>
-          <intro-page
-            v-if="introPage"
-            slot="introPage"
-            screen-percent="2"
-          />
           <cyclomedia-widget
             v-if="shouldLoadCyclomediaWidget"
             v-show="cyclomediaActive"
             slot="cycloWidget"
-            screen-percent="2"
             :orientation="this.$config.cyclomedia.orientation"
+            screen-percent="2"
           />
+
         </map-panel>
+
       </div>
 
       <div
@@ -86,7 +90,7 @@ import PhilaHeader from './PhilaHeader.vue';
 import PhilaFooter from './PhilaFooter.vue';
 import MapPanel from './MapPanel.vue';
 import DataPanel from './DataPanel.vue';
-import IntroPage from './IntroPage.vue';
+import LeftPanel from './LeftPanel.vue';
 import OwnerSearchModal from './OwnerSearchModal.vue';
 import Logo from '@/assets/city-of-philadelphia-logo.png';
 
@@ -96,7 +100,7 @@ export default {
     PhilaFooter,
     MapPanel,
     DataPanel,
-    IntroPage,
+    LeftPanel,
     OwnerSearchModal,
     CyclomediaWidget: () => import(/* webpackChunkName: "mbmb_pvm_CyclomediaWidget" */'@phila/vue-mapping/src/cyclomedia/Widget.vue'),
     CollectionSummary: () => import(/* webpackChunkName: "pvc_Callout" */'@phila/vue-comps/src/components/CollectionSummary.vue'),
@@ -117,7 +121,7 @@ export default {
       'bottom': 2,
       hasData: false,
       isModalOpen: false,
-      introPage: true,
+      leftPanel: true,
     };
   },
   computed: {
@@ -283,25 +287,28 @@ export default {
     fullScreenTopicsEnabled() {
       return this.$store.state.fullScreenTopicsEnabled;
     },
-    mapClass() {
-      return this.fullScreenMapEnabled ? 'top-full':
-        this.fullScreenTopicsEnabled ? 'top-none':
-          'top-half';
+    mainContentClass() {
+      return this.fullScreenMapEnabled ? 'top-full cell medium-auto grid-x':
+        this.fullScreenTopicsEnabled ? 'top-none cell medium-auto grid-x':
+          'top-half cell medium-auto grid-x';
     },
     tableClass() {
-      return this.fullScreenMapEnabled ? 'bottom-none':
-        this.fullScreenTopicsEnabled? 'bottom-full':
-          'bottom-half';
+      return this.fullScreenMapEnabled ? 'bottom-none medium-auto':
+        this.fullScreenTopicsEnabled? 'bottom-full medium-auto':
+          'bottom-half medium-auto';
     },
     summaryClass() {
       return this.fullScreenMapEnabled ? 'bottom-none': "";
     },
-    shouldKeepIntroPage() {
+    shouldKeepLeftPanel() {
       if (this.$store.state.sources.opa_assessment.status || this.$store.state.cyclomedia.active) {
+        console.log('App.vue shouldKeepLeftPanel first if');
         return false;
-      } else if (!this.$store.state.introPage) {
+      } else if (!this.$store.state.leftPanel) {
+        console.log('App.vue shouldKeepLeftPanel second if');
         return false;
       }
+      console.log('App.vue shouldKeepLeftPanel neither if');
       return true;
 
     },
@@ -330,16 +337,16 @@ export default {
   },
   watch: {
     '$route': function(route) {
-      // return route.fullPath === '/' ? this.$store.commit('setIntroPage', true) : "";
-      return route.fullPath === '/' ? this.openIntroPage(true) : this.openIntroPage(false);
+      // return route.fullPath === '/' ? this.$store.commit('setLeftPanel', true) : "";
+      return route.fullPath === '/' ? this.openLeftPanel(true) : this.openLeftPanel(false);
     },
-    introPage: function(){
-      console.log("intro page watcher: ", this.introPage)
-      this.introPage === false ? this.closeModal() : ""
+    leftPanel: function(){
+      console.log("intro page watcher: ", this.leftPanel)
+      this.leftPanel === false ? this.closeModal() : ""
     },
     activeModal() {
       this.$controller.activeFeatureChange();
-      this.$store.state.activeModal.featureId !== null ? this.openIntroPage(true): this.openIntroPage(false);
+      this.$store.state.activeModal.featureId !== null ? this.openLeftPanel(true): this.openLeftPanel(false);
     },
     drawShape(nextDrawShape) {
       if (nextDrawShape !== null) {
@@ -363,10 +370,10 @@ export default {
         this.onDataChange('ownerSearch');
       }
     },
-    shouldKeepIntroPage(nextShouldKeepIntroPage) {
-      if (nextShouldKeepIntroPage === false) {
-        // console.log('in watch shouldKeepIntroPage if, next:', nextShouldKeepIntroPage);
-        this.$data.introPage = false;
+    shouldKeepLeftPanel(nextShouldKeepLeftPanel) {
+      if (nextShouldKeepLeftPanel === false) {
+        // console.log('in watch shouldKeepLeftPanel if, next:', nextShouldKeepLeftPanel);
+        this.$data.leftPanel = false;
       }
     },
     activeModalFeature(nextActiveModalFeature) {
@@ -386,8 +393,8 @@ export default {
     let query = this.$route.query;
     // console.log('App.vue mounted is running, this.$route.query:', this.$route.query);
     if (query.shape) {
-      // this.introPage = false;
-      // this.$store.commit('setIntroPage', false);
+      // this.leftPanel = false;
+      // this.$store.commit('setLeftPanel', false);
       // let shape = query.shape;
       // shape = shape.slice(2, shape.length-2);
       // shape = shape.split('],[');
@@ -405,32 +412,32 @@ export default {
       // this.$controller.getParcelsByPoints(points);
       this.onDataChange('shapeSearch');
     } else if (query.address) {
-      // this.introPage = false;
+      // this.leftPanel = false;
       this.closePropertyModal();
-      this.$store.commit('setIntroPage', false);
+      this.$store.commit('setLeftPanel', false);
       // console.log('query.address:', query.address);
       this.$controller.handleSearchFormSubmit(query.address);
       this.onDataChange('geocode');
     } else if (query.owner) {
-      // this.introPage = false;
+      // this.leftPanel = false;
       this.closePropertyModal();
-      this.$store.commit('setIntroPage', false);
+      this.$store.commit('setLeftPanel', false);
       // console.log('query.owner:', query.owner);
       this.$controller.handleSearchFormSubmit(query.owner);
       this.onDataChange('ownerSearch');
     } else if (query.buffer) {
-      // this.introPage = false;
+      // this.leftPanel = false;
       this.closePropertyModal();
-      this.$store.commit('setIntroPage', false);
+      this.$store.commit('setLeftPanel', false);
       this.$store.commit('setBufferMode', true);
       this.$controller.handleSearchFormSubmit(query.buffer);
       this.onDataChange('bufferSearch');
       this.$store.commit('setLastSearchMethod', 'buffer search');
     }
   },
-  beforeMount(){
-    return this.$store.state.isMobileOrTablet ? this.$store.commit('setIntroPage', false) : "";
-  },
+  // beforeMount(){
+  //   return this.$store.state.isMobileOrTablet ? this.$store.commit('setLeftPanel', false) : "";
+  // },
   created() {
     window.addEventListener('resize', this.onResize);
   },
@@ -445,20 +452,20 @@ export default {
         this.$store.state.map.map.invalidateSize();
       });
     },
-    openIntroPage(value){
-      // console.log('App.vue openIntroPage is running, value:', value);
-      this.$data.introPage = value
+    openLeftPanel(value){
+      console.log('App.vue openLeftPanel is running, value:', value);
+      this.$data.leftPanel = value
       this.$store.commit('setFullScreenMapEnabled', value);
-      value = true ? this.$store.commit('setCyclomediaActive', false ): "";
-      return this.$store.commit('setIntroPage', value)
+      // value = true ? this.$store.commit('setCyclomediaActive', false ): "";
+      return this.$store.commit('setLeftPanel', value)
     },
     onDataChange(type) {
       // console.log('onDataChange, type:', type)
       this.$data.hasData = true;
       this.$store.commit('setFullScreenMapEnabled', false);
-      // this.introPage = false;
+      // this.leftPanel = false;
       this.closePropertyModal();
-      this.$store.commit('setIntroPage', false);
+      this.$store.commit('setLeftPanel', false);
     },
     clearResults(){
       this.$controller.handleSearchFormSubmit('');
@@ -502,9 +509,11 @@ export default {
 .toggle-map{
   margin:0 !important;
 }
+
 .main-content{
   position: relative;
 }
+
 .top-full {
   position: relative;
   top: 0;
@@ -697,6 +706,10 @@ export default {
 
 @media print {
 
+  .grid-y.medium-grid-frame#application {
+    overflow: visible;
+  }
+
   #map-panel-container {
     overflow: visible;
   }
@@ -716,7 +729,11 @@ export default {
 @media screen and (max-width: 750px) {
 
   #map-panel-container {
-    height: 300px;
+    height: 400px;
+  }
+
+  #cyclomedia-container {
+    height: 200px
   }
 
 
