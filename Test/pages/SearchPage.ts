@@ -108,7 +108,7 @@ export default class SearchPage {
     await t.click('#map', { offsetX: 450, offsetY: 150 })
     await t.wait(2000);
     const tableOPAShapeValues = await this.table.innerText;
-    await t.expect(tableOPAShapeValues).contains(testSearchData.address);
+    await t.expect(tableOPAShapeValues).ok();
   }
   public verifySearchByAddressplusOwner = async (t: TestController) => {
     await t.navigateTo(`${process.env.TEST_URL}`);
