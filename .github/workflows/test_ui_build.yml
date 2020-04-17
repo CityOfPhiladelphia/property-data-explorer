@@ -1,4 +1,4 @@
- stuffname: UI Test
+name: UI Test
 
 on:
   pull_request:
@@ -29,15 +29,17 @@ jobs:
         npm run test-local
       env:
         FONTAWESOME_NPM_AUTH_TOKEN: ${{ secrets.FONTAWESOME_NPM_AUTH_TOKEN }}
-
+        VUE_APP_CYCLOMEDIA_API_KEY: ${{ secrets.VUE_APP_CYCLOMEDIA_API_KEY }}
+        VUE_APP_CYCLOMEDIA_PASSWORD: ${{ secrets.VUE_APP_CYCLOMEDIA_PASSWORD }}
+        VUE_APP_CYCLOMEDIA_USERNAME: ${{ secrets.VUE_APP_CYCLOMEDIA_USERNAME }}
+        VUE_APP_GATEKEEPER_KEY: ${{ secrets.VUE_APP_GATEKEEPER_KEY }}
+   
     - name: Deploy screenshots on fail
       if: failure()
       run: |
-         $(aws ecr get-login --no-include-email --region us-east-1)
-         aws s3 sync Test/screenshots s3://$AWS_S3_BUCKET/vend-pay-test-ui/testcafe
+        aws s3 sync Test/screenshots s3://$AWS_S3_BUCKET/testcafe/ --region us-east-1
       env:
         AWS_DEFAULT_REGION: 'us-east-1'
-        AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET_DEV }}
+        AWS_S3_BUCKET: property-data-explorer
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-    
