@@ -56,9 +56,6 @@
                 <h1 class="title">
                   {{ appTitle }}
                 </h1>
-                <h2 class="h6 hide-for-small-only tagline">
-                  {{ appTagLine }}
-                </h2>
               </a>
               <div id="demo-container">
                 <div id="demo-badge">
@@ -244,6 +241,22 @@ export default {
 </script>
 
 <style lang="scss">
+
+#demo-container {
+  display: inline;
+  position: relative;
+  height: 100%;
+  transform: translateY(70%);
+}
+
+.app-title>h1 {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+
+
 .app-header{
   vertical-align: middle;
   background: color(dark-ben-franklin);
@@ -338,7 +351,6 @@ export default {
   display: inline-block;
   margin: 0 1rem;
   vertical-align: middle;
-  margin-bottom: 1rem;
 
   @media screen and (min-width: 40em) {
     border-left:1px solid white;
