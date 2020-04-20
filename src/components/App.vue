@@ -5,7 +5,6 @@
   >
     <PhilaHeader
       :app-title="this.$config.app.title"
-      :app-tag-line="this.$config.app.tagLine"
       :app-logo="appLogo"
       :app-logo-alt="this.$config.app.logoAlt"
     >
@@ -756,7 +755,6 @@ export default {
 
   #demo-badge {
     top: 25%;
-    position: absolute;
     width: max-content;
   }
 
