@@ -58,7 +58,7 @@ export default {
     popoverLinkSlots() {
       return {
         shouldShowValue: false,
-        value: 'How To Use',
+        value: 'How to use',
       };
     },
   },
