@@ -182,15 +182,16 @@ export default {
           {
             label: 'Street Address',
             value: function(state, item) {
+              let address;
               if( state.lastSearchMethod === "buffer search") {
-                return titleCase(item.address_std);
+                address = titleCase(item.address_std);
               }
               if(item.properties.opa_address != "" && item.properties.opa_address != null) {
-                return titleCase(item.properties.opa_address);
+                address = titleCase(item.properties.opa_address);
               } else if (typeof item.properties.street_address != 'undefined') {
-                return titleCase(item.properties.street_address);
+                address = titleCase(item.properties.street_address);
               }
-              return;
+              return '<u><b><a>' + address + '</a></b></u>';
             },
             customStyle: { float: 'left', 'padding-right': '5px' },
             customClass: "testtest",
@@ -333,7 +334,7 @@ export default {
           {
             label: 'Street Address',
             value: function(state, item) {
-              return titleCase(item.properties.opa_address);
+              return '<u><b><a>' + titleCase(item.properties.opa_address) + '</a></b></u>';
             },
             hideMobileIcon: true,
             customStyle: { float: 'left', 'padding-right': '5px' },
@@ -431,9 +432,9 @@ export default {
             label: 'Street Address',
             value: function(state, item) {
               if(item.unit != null && item.unit != "") {
-                return titleCase(item.address_std);
+                return '<u><b><a>' + titleCase(item.address_std) + '</a></b></u>';
               }
-              return titleCase(item.location);
+              return '<u><b><a>' + titleCase(item.location) + '</a></b></u>';
 
             },
             customStyle: { float: 'left', 'padding-right': '5px' },
