@@ -250,7 +250,7 @@
             :button-height="'45px'"
             :button-width="'45px'"
             :button-line-height="'45px'"
-            :position="'topnearleft'"
+            :position="'topleft'"
             :class="buttonClass"
             @click="handleBufferClick"
           />
@@ -261,7 +261,7 @@
           >
             <draw-control
               :control="true"
-              :position="'topnearleft2'"
+              :position="'topleft'"
               @click="handleDrawControlClick"
             />
           </div>
@@ -827,6 +827,50 @@ export default {
       display: none;
     }
   }
+
+  // CSS For buttons
+  .leaflet-top.leaflet-left {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .leaflet-draw.leaflet-control {
+    display: flex;
+  
+    &:hover:after {
+      content: "Draw a shape on the map.";
+      background: #d3d3d3;
+      opacity: 0.7;
+      display: flex;
+      align-items: center;
+      color: #000;
+      font-style: italic;
+      padding: 5px;
+    }
+
+    .leaflet-draw-draw-polygon {
+      width: 100%;
+      height: 100%;
+    }
+
+    .leaflet-draw-section {
+      display: flex;
+      border: 2px solid rgba(0,0,0,0.2);
+      border-radius: 2px;
+    
+      &:after {
+        content: "Draw Boundaries";
+        color: white;
+        background: color(dark-ben-franklin);
+        display: flex;
+        align-items: center;
+        padding: 5px;
+        text-transform: uppercase;
+        font-weight: bold;
+      }
+    }
+  }
+
 
   // CSS FOR LARGE SCREEN APP
   @media screen and (min-width: 750px) {
