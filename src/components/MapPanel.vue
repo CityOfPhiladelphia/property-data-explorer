@@ -244,14 +244,10 @@
           <!-- :width-from-config="addressInputWidth" -->
 
           <buffer-control
-            :bar-height="'49px'"
-            :bar-width="'49px'"
-            :bar-line-height="'49px'"
             :button-height="'45px'"
-            :button-width="'45px'"
-            :button-line-height="'45px'"
-            :position="'topnearleft'"
-            :class="buttonClass"
+            :button-width="'100%'"
+            :position="'topleft'"
+            :class="buttonClass + ' buffer-control'"
             @click="handleBufferClick"
           />
 
@@ -261,7 +257,7 @@
           >
             <draw-control
               :control="true"
-              :position="'topnearleft2'"
+              :position="'topleft'"
               @click="handleDrawControlClick"
             />
           </div>
@@ -407,7 +403,6 @@ export default {
       lastGeocodeResult: {},
       buttonDimensions: {
         'barHeight': '49px',
-        'barWidth': '49px',
         'barLineHeight': '49px',
         'buttonHeight': '45px',
         'buttonWidth': '45px',
@@ -822,6 +817,15 @@ export default {
     height: 100%;
   }
 
+  button.pvm-search-control-button {
+    background: color(dark-ben-franklin) !important;
+  }
+
+  .pvm-search-control-input {
+    border-color: color(dark-ben-franklin) !important;
+  }
+
+
   @media print {
     .print-hide {
       display: none;
@@ -838,25 +842,6 @@ export default {
     // .map-div-cyclo {
     //   height: 100%;
     // }
-
-    .leaflet-nearleft.non-mobile-corner {
-      position: absolute;
-      bottom: 0px;
-      top: -1px;
-      left: 315px;
-      // left: 365px;
-      padding-bottom: 10px;
-      z-index: 500;
-    }
-
-    .leaflet-nearleft.mobile-corner {
-      position: absolute;
-      bottom: 0px;
-      padding-bottom: 10px;
-      z-index: 500;
-      right: 10px !important;
-      top: 88px !important;
-    }
 
     .leaflet-nearleft2.non-mobile-corner {
       position: absolute;
@@ -926,7 +911,6 @@ export default {
     }
 
     .non-mobile-corner > div > div > .leaflet-draw-toolbar.leaflet-bar.leaflet-draw-toolbar-top {
-      width: 49px !important;
       height: 49px !important;
     }
 
@@ -937,7 +921,7 @@ export default {
     }
 
     .non-mobile-corner > div > div > div> a {
-      width: 45px !important;
+      width: 230px !important;
       height: 45px !important;
     }
 
@@ -945,25 +929,129 @@ export default {
       background-position: -73px -15px !important;
     }
 
-    // HIDES THE INSTRUCTIONS IF MOBILE
-    .leaflet-draw.leaflet-control {
-      clear: unset;
-      float: right;
-    }
-
-    .leaflet-draw-toolbar.leaflet-bar.leaflet-draw-toolbar-top {
-      width: 49px;
-      height: 49px;
-    }
-
     .leaflet-touch .leaflet-draw-actions {
-      left: 60px;
+      left: 230px;
     }
 
     .leaflet-bar button {
       padding: inherit !important;
     }
 
+
+          //CSS for search buttons
+
+    .leaflet-bar.leaflet-draw-toolbar>a.leaflet-draw-draw-polygon {
+      border-radius: 0;
+    }
+
+    .leaflet-bar.leaflet-control.buffer-control {
+      button {
+        border-radius: 0;
+      }
+      :focus {
+        outline: none;
+      }
+
+    }
+
+    div.buffer-control.leaflet-bar {
+      display: flex;
+      border: none;
+      button.inactive.pointer {
+        background-color: color(dark-ben-franklin);
+        span>svg {
+          color: white;
+        }
+      }
+      button.active {
+          background-color: white;
+          span>svg { color: color(dark-ben-franklin);
+          }
+          &:after {
+            background: white;
+            color: color(dark-ben-franklin);
+          }
+      }
+      button{
+        display: flex;
+        span {
+          margin-left: 5px;
+          }
+        &:hover{
+          display: flex;
+        }
+        &:after {
+          font-weight: normal;
+          padding: 0 10px 0 10px;
+          content: "Select Buffer";
+          position: relative;
+          display: flex;
+          color: white;
+          // background: color(dark-ben-franklin);
+          display: flex;
+          align-items: center;
+          padding: 5px 10px 5px 10px;
+          text-transform: uppercase;
+          font-size: 16px;
+          line-height: 35px;
+        }
+      }
+    }
+
+
+    .leaflet-draw.leaflet-control {
+      display: flex;
+
+      // &:hover:after {
+      //   content: "Draw a shape on the map.";
+      //   background: #d3d3d3;
+      //   opacity: 0.7;
+      //   display: flex;
+      //   align-items: center;
+      //   color: #000;
+      //   font-style: italic;
+      //   padding: 5px;
+      // }
+
+      .leaflet-draw-draw-polygon {
+        width: 100%;
+        height: 100%;
+      }
+      .leaflet-draw-section {
+        display: flex;
+        // border: 2px solid rgba(0,0,0,0.2);
+        border-radius: 2px;
+        .leaflet-draw-toolbar {
+          border: none;
+        }
+        a.leaflet-draw-toolbar-button-enabled {
+          background-color: white !important;
+          background-image: url("../assets/search-button-images/spritesheet-2-blue.png") !important;
+          &:after {
+            background: white !important;
+            color: color(dark-ben-franklin);
+          }
+        }
+
+        .leaflet-draw-draw-polygon {
+          background-image: url("../assets/search-button-images/spritesheet-2-white.png");
+          background-color: color(dark-ben-franklin);
+          &:after {
+            content: "Draw Boundaries";
+            color: white;
+            font-weight: normal !important;
+            background: color(dark-ben-franklin);
+            display: flex;
+            align-items: center;
+            padding: 5px 10px 5px 10px;
+            margin-left: 40px;
+            text-transform: uppercase;
+            font-size: 16px;
+            line-height: 35px;
+          }
+        }
+      }
+    }
   }
   // END OF CSS FOR LARGE SCREEN APP
 
@@ -1064,7 +1152,6 @@ export default {
     .leaflet-touch .leaflet-bar button {
       line-height: unset;
     }
-
   }
   // END OF CSS FOR SMALL SCREEN APP
 
