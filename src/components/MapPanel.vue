@@ -953,10 +953,47 @@ export default {
       }
 
     }
+    .leaflet-control-container>div{
+      width: 100%;
+      // .leaflet-control{
+      //   width: inherit;
+      // }
+      .pvm-container-non-mobile {
+        &:hover:after {
+          height: 100%;
+          width: 100%;
+          min-width: 315px;
+          position: absolute;
+          left: 295px;
+          content: "Type an address, owner name, property account number, or Department of Records registry map number.";
+          background: #d3d3d3;
+          opacity: 0.7;
+          display: flex;
+          // align-items: center;
+          color: #000;
+          font-style: italic;
+          padding: 4px;
+          // width: 183%;
+        }
+      }
+    }
 
     div.buffer-control.leaflet-bar {
       display: flex;
       border: none;
+
+      &:hover:after {
+        content: "Select a point on the map to show all parcels within 250-foot radius.";
+        background: #d3d3d3;
+        opacity: 0.7;
+        display: flex;
+        // align-items: center;
+        color: #000;
+        font-style: italic;
+        padding: 4px;
+        width: 183%;
+      }
+
       button.inactive.pointer {
         background-color: color(dark-ben-franklin);
         span>svg {
@@ -972,7 +1009,8 @@ export default {
             color: color(dark-ben-franklin);
           }
       }
-      button{
+      button {
+        min-width: 45px;
         display: flex;
         span {
           margin-left: 5px;
@@ -996,22 +1034,45 @@ export default {
           line-height: 35px;
         }
       }
+      .leaflet-buffer-actions {
+        background: #d3d3d3;
+        opacity: 0.7;
+        top: 0px !important;
+        left: 197px;
+        height: 45px;
+        ul, li, a {
+          height: inherit;
+          color: #000;
+          line-height: 45px;
+          text-align: center;
+        }
+        li:not(:first-child) {
+          border-left: 1px solid #AAA;
+          border-left-width: 1px;
+          border-left-style: solid;
+          border-left-color: rgb(170, 170, 170);
+        }
+        a {
+          background-color: transparent;
+          border: none;
+        }
+      }
     }
 
 
     .leaflet-draw.leaflet-control {
       display: flex;
 
-      // &:hover:after {
-      //   content: "Draw a shape on the map.";
-      //   background: #d3d3d3;
-      //   opacity: 0.7;
-      //   display: flex;
-      //   align-items: center;
-      //   color: #000;
-      //   font-style: italic;
-      //   padding: 5px;
-      // }
+      &:hover:after {
+        content: "Draw a shape on the map.";
+        background: #d3d3d3;
+        opacity: 0.7;
+        display: flex;
+        align-items: center;
+        color: #000;
+        font-style: italic;
+        padding: 5px;
+      }
 
       .leaflet-draw-draw-polygon {
         width: 100%;
@@ -1048,6 +1109,30 @@ export default {
             text-transform: uppercase;
             font-size: 16px;
             line-height: 35px;
+          }
+        }
+
+        .leaflet-draw-actions {
+          background: #d3d3d3;
+          opacity: 0.7;
+          top: 0px !important;
+          left: 219px;
+          height: 45px;
+          li, a {
+            height: inherit;
+            color: #000;
+          }
+          li:not(:first-child) {
+            border-left: 1px solid #AAA;
+            border-left-width: 1px;
+            border-left-style: solid;
+            border-left-color: rgb(170, 170, 170);
+          }
+          a {
+            top: 15%;
+            position: relative;
+            background-color: transparent;
+            border: none;
           }
         }
       }
