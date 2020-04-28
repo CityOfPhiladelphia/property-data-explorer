@@ -399,6 +399,7 @@ export default {
         geojsonParcels: [],
         markersForAddress: [],
       },
+      isLarge: true,
       lastGeocodeGeom: {},
       lastGeocodeResult: {},
       buttonDimensions: {
@@ -415,6 +416,10 @@ export default {
   computed: {
     isMobileOrTablet() {
       return this.$store.state.isMobileOrTablet;
+    },
+    isThisLarge(value){
+      console.log("is this large? ", this.isLarge, value)
+      return value
     },
     mapDivClass() {
       if (this.cyclomediaActive) {
@@ -695,6 +700,7 @@ export default {
   created() {
     // if there's a default address, navigate to it
     const defaultAddress = this.$config.defaultAddress;
+    window.addEventListener('resize', this.onResize);
     if (defaultAddress) {
       this.$controller.goToDefaultAddress(defaultAddress);
     }
@@ -722,9 +728,13 @@ export default {
       };
     }
   },
+  beforeDestroy() {
+    window.removeEventListener('resize', this.onResize);
+  },
   mounted() {
     // console.log('MapPanel mounted is running, DrawControl', DrawControl)
     const map = this.$store.state.map.map;
+    this.onResize();
   },
   methods: {
     handleSearchFormSubmit(value) {
@@ -751,7 +761,16 @@ export default {
 
       return curStyle.fillColor;
     },
-
+    onResize() {
+      if (window.innerWidth > 749) {
+        this.$data.isMapVisible = true;
+        this.$data.isLarge = true;
+        this.isThisLarge(true);
+      } else {
+        this.$data.isLarge = false;
+        this.isThisLarge(false);
+      }
+    },
     setMapToBounds() {
       // console.log('setMapToBounds is running, this.geojsonParcels:', this.geojsonParcels);
       let featureArray = [];
@@ -1010,7 +1029,7 @@ export default {
           }
       }
       button {
-        min-width: 45px;
+        min-width: 198px;
         display: flex;
         span {
           margin-left: 5px;
@@ -1164,23 +1183,23 @@ export default {
       display: none !important;
     }
 
-    .leaflet-nearleft {
-      position: absolute;
+    .buffer-control {
+      position: fixed;
       bottom: 0px;
       padding-bottom: 10px;
       z-index: 500;
       right: 0 !important;
       left: unset;
-      top: 78px !important;
+      top: 162px !important;
     }
 
-    .leaflet-nearleft2 {
-      position: absolute;
+    .leaflet-draw {
+      position: fixed;
       bottom: 0px;
       padding-bottom: 10px;
       z-index: 500;
       right: 0 !important;
-      top: 116px !important;
+      top: 200px !important;
     }
 
     .mobile-corner.leaflet-almostright {
