@@ -1156,4 +1156,8 @@ a.button.owner-locate-button {
   text-align: center;
 }
 
+.pl-alert {
+  display: none;
+}
+
 </style>
