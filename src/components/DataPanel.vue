@@ -187,11 +187,10 @@ export default {
               let address;
               if( state.lastSearchMethod === "buffer search") {
                 address = titleCase(item.address_std);
-              }
-              if(item.properties.opa_address != "" && item.properties.opa_address != null) {
-                address = titleCase(item.properties.opa_address);
               } else if (typeof item.properties.street_address != 'undefined') {
                 address = titleCase(item.properties.street_address);
+              } else if(item.properties.opa_address != "" && item.properties.opa_address != null) {
+                address = titleCase(item.properties.opa_address);
               }
               return address;
             },
