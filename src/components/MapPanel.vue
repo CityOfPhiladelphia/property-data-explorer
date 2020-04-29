@@ -21,7 +21,7 @@
     >
       <map_
         id="map-object"
-        :class="mapPanelClass"
+        :class="mapPanelClass + ' ' + drawButtonActiveClass"
         :center="this.$store.state.map.center"
         :zoom="this.$store.state.map.zoom"
         attribution-position="bottomleft"
@@ -247,7 +247,7 @@
             :button-height="'45px'"
             :button-width="'100%'"
             :position="'topleft'"
-            :class="buttonClass + ' buffer-control'"
+            :class="buttonClass + ' buffer-control ' + bufferButtonActiveClass"
             @click="handleBufferClick"
           />
 
@@ -399,7 +399,6 @@ export default {
         geojsonParcels: [],
         markersForAddress: [],
       },
-      isLarge: true,
       lastGeocodeGeom: {},
       lastGeocodeResult: {},
       buttonDimensions: {
@@ -417,16 +416,20 @@ export default {
     isMobileOrTablet() {
       return this.$store.state.isMobileOrTablet;
     },
-    isThisLarge(value){
-      console.log("is this large? ", this.isLarge, value)
-      return value
-    },
     mapDivClass() {
       if (this.cyclomediaActive) {
         return 'map-div-cyclo';
       }
       return 'map-div';
 
+    },
+    bufferButtonActiveClass() {
+      console.log("bufferButtonActiveClass: ", this.$store.state.bufferMode);
+      return this.$store.state.bufferMode ? '' : 'inactive-buffer-button';
+    },
+    drawButtonActiveClass() {
+      console.log("bufferButtonActiveClass: ", this.$store.state.bufferMode);
+      return this.$store.state.drawStart === null ? 'inactive-draw-button' : '';
     },
     buttonClass() {
       if (this.isMobileOrTablet) {
@@ -700,7 +703,6 @@ export default {
   created() {
     // if there's a default address, navigate to it
     const defaultAddress = this.$config.defaultAddress;
-    window.addEventListener('resize', this.onResize);
     if (defaultAddress) {
       this.$controller.goToDefaultAddress(defaultAddress);
     }
@@ -728,13 +730,9 @@ export default {
       };
     }
   },
-  beforeDestroy() {
-    window.removeEventListener('resize', this.onResize);
-  },
   mounted() {
     // console.log('MapPanel mounted is running, DrawControl', DrawControl)
     const map = this.$store.state.map.map;
-    this.onResize();
   },
   methods: {
     handleSearchFormSubmit(value) {
@@ -760,16 +758,6 @@ export default {
       const curStyle = useHoverStyle ? hoverStyle : style;
 
       return curStyle.fillColor;
-    },
-    onResize() {
-      if (window.innerWidth > 749) {
-        this.$data.isMapVisible = true;
-        this.$data.isLarge = true;
-        this.isThisLarge(true);
-      } else {
-        this.$data.isLarge = false;
-        this.isThisLarge(false);
-      }
     },
     setMapToBounds() {
       // console.log('setMapToBounds is running, this.geojsonParcels:', this.geojsonParcels);
@@ -997,10 +985,7 @@ export default {
       }
     }
 
-    div.buffer-control.leaflet-bar {
-      display: flex;
-      border: none;
-
+    div.buffer-control.leaflet-bar.inactive-buffer-button {
       &:hover:after {
         content: "Select a point on the map to show all parcels within 250-foot radius.";
         background: #d3d3d3;
@@ -1012,6 +997,11 @@ export default {
         padding: 4px;
         width: 183%;
       }
+    }
+
+    div.buffer-control.leaflet-bar {
+      display: flex;
+      border: none;
 
       button.inactive.pointer {
         background-color: color(dark-ben-franklin);
@@ -1079,9 +1069,7 @@ export default {
     }
 
 
-    .leaflet-draw.leaflet-control {
-      display: flex;
-
+      .inactive-draw-button .leaflet-draw .leaflet-draw-section {
       &:hover:after {
         content: "Draw a shape on the map.";
         background: #d3d3d3;
@@ -1092,6 +1080,12 @@ export default {
         font-style: italic;
         padding: 5px;
       }
+
+    }
+
+
+    .leaflet-draw.leaflet-control {
+      display: flex;
 
       .leaflet-draw-draw-polygon {
         width: 100%;
