@@ -66,7 +66,7 @@ export default {
 </script>
 <style lang="scss">
 
-.app-footer{
+#application .app-footer{
   vertical-align: middle;
   background: color(dark-ben-franklin);
   text-align: center;
@@ -88,6 +88,7 @@ export default {
     display: inline-block;
     padding: 0 1rem;
     border-right: solid 1px #fff;
+    border-left: solid 1px #fff;
     &:last-of-type{
       border: none;
     }
