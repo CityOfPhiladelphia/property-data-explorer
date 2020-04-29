@@ -181,6 +181,8 @@ export default {
         fields: [
           {
             label: 'Street Address',
+            popoverLink: true,
+            shouldBeBold: true,
             value: function(state, item) {
               let address;
               if( state.lastSearchMethod === "buffer search") {
@@ -191,10 +193,10 @@ export default {
               } else if (typeof item.properties.street_address != 'undefined') {
                 address = titleCase(item.properties.street_address);
               }
-              return '<u><b><a>' + address + '</a></b></u>';
+              return address;
             },
             customStyle: { float: 'left', 'padding-right': '5px' },
-            customClass: "testtest",
+            customClass: "address-field",
             mobileIcon: "info-circle",
             hideMobileIcon: (state, item) => typeof state.sources.opa_assessment.targets[item.properties.opa_account_num] != 'undefined' ? true : false ,
           },
@@ -333,8 +335,9 @@ export default {
         fields: [
           {
             label: 'Street Address',
+            customClass: "address-field",
             value: function(state, item) {
-              return '<u><b><a>' + titleCase(item.properties.opa_address) + '</a></b></u>';
+              return titleCase(item.properties.opa_address);
             },
             hideMobileIcon: true,
             customStyle: { float: 'left', 'padding-right': '5px' },
@@ -430,11 +433,12 @@ export default {
         fields: [
           {
             label: 'Street Address',
+            customClass: "address-field",
             value: function(state, item) {
               if(item.unit != null && item.unit != "") {
-                return '<u><b><a>' + titleCase(item.address_std) + '</a></b></u>';
+                return titleCase(item.address_std);
               }
-              return '<u><b><a>' + titleCase(item.location) + '</a></b></u>';
+              return titleCase(item.location);
 
             },
             customStyle: { float: 'left', 'padding-right': '5px' },
@@ -1128,6 +1132,11 @@ export default {
   #data-panel-container {
     display: none;
   }
+}
+
+.address-field .popover-link {
+  border-bottom: 1px solid;
+  color: #0f4d90;
 }
 
 a.button.owner-locate-button {
