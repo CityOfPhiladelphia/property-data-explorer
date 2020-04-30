@@ -962,9 +962,6 @@ export default {
     }
     .leaflet-control-container>div{
       width: 100%;
-      // .leaflet-control{
-      //   width: inherit;
-      // }
       .pvm-container-non-mobile {
         &:hover:after {
           height: 100%;
@@ -976,11 +973,9 @@ export default {
           background: #d3d3d3;
           opacity: 0.7;
           display: flex;
-          // align-items: center;
           color: #000;
           font-style: italic;
           padding: 4px;
-          // width: 183%;
         }
       }
     }
@@ -1034,7 +1029,6 @@ export default {
           position: relative;
           display: flex;
           color: white;
-          // background: color(dark-ben-franklin);
           display: flex;
           align-items: center;
           padding: 5px 10px 5px 10px;
@@ -1093,7 +1087,6 @@ export default {
       }
       .leaflet-draw-section {
         display: flex;
-        // border: 2px solid rgba(0,0,0,0.2);
         border-radius: 2px;
         .leaflet-draw-toolbar {
           border: none;
@@ -1160,18 +1153,6 @@ export default {
     .height-50 {
       height: 50%;
     }
-
-    // .map-panel-class {
-    //   height: 200px;
-    // }
-
-    // .map-div {
-    //   height: 350px;
-    // }
-    //
-    // .map-div-cyclo {
-    //   height: 350px;
-    // }
 
     .leaflet-control-zoom, .leaflet-control-zoom {
       display: none !important;
