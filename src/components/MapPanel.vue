@@ -963,7 +963,7 @@ export default {
       &:hover:after {
         background: #d3d3d3;
         align-items: center;
-        opacity: 0.7;
+        opacity: 0.8;
         display: flex;
         color: #000;
         padding: 7px;
@@ -995,7 +995,7 @@ export default {
     div.buffer-control.leaflet-bar .leaflet-buffer-actions,
     .leaflet-draw-section .leaflet-draw-actions {
       background: #d3d3d3;
-      opacity: 0.7;
+      opacity: 0.8;
       top: 0px !important;
       left: 197px;
       height: 45px;
