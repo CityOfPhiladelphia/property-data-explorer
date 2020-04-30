@@ -991,7 +991,7 @@ export default {
         background: #d3d3d3;
         opacity: 0.7;
         display: flex;
-        // align-items: center;
+        align-items: center;
         color: #000;
         font-style: italic;
         padding: 4px;
