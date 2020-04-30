@@ -945,37 +945,41 @@ export default {
     }
 
 
-          //CSS for search buttons
+    //CSS for search buttons
 
-    .leaflet-bar.leaflet-draw-toolbar>a.leaflet-draw-draw-polygon {
+    .leaflet-bar.leaflet-draw-toolbar>a.leaflet-draw-draw-polygon,
+    .leaflet-bar.leaflet-control.buffer-control button,
+    .leaflet-bar.leaflet-control.buffer-control .leaflet-buffer-actions {
       border-radius: 0;
     }
 
-    .leaflet-bar.leaflet-control.buffer-control {
-      button {
-        border-radius: 0;
-      }
-      :focus {
-        outline: none;
-      }
-
+    .leaflet-bar.leaflet-control.buffer-control :focus {
+      outline: none;
     }
+
+    .leaflet-control-container div .pvm-container-non-mobile,
+    div.buffer-control.leaflet-bar.inactive-buffer-button,
+    .inactive-draw-button .leaflet-draw .leaflet-draw-section {
+      &:hover:after {
+        background: #d3d3d3;
+        align-items: center;
+        opacity: 0.7;
+        display: flex;
+        color: #000;
+        padding: 7px;
+      }
+    }
+
     .leaflet-control-container>div{
       width: 100%;
       .pvm-container-non-mobile {
         &:hover:after {
+          content: "Type an address, owner name, property account number, or Department of Records registry map number.";
           height: 100%;
           width: 100%;
           min-width: 315px;
           position: absolute;
           left: 295px;
-          content: "Type an address, owner name, property account number, or Department of Records registry map number.";
-          background: #d3d3d3;
-          opacity: 0.7;
-          display: flex;
-          color: #000;
-          font-style: italic;
-          padding: 4px;
         }
       }
     }
@@ -983,22 +987,39 @@ export default {
     div.buffer-control.leaflet-bar.inactive-buffer-button {
       &:hover:after {
         content: "Select a point on the map to show all parcels within 250-foot radius.";
-        background: #d3d3d3;
-        opacity: 0.7;
-        display: flex;
-        align-items: center;
-        color: #000;
-        font-style: italic;
-        padding: 4px;
         width: 183%;
+        height: 45px;
+      }
+    }
+
+    div.buffer-control.leaflet-bar .leaflet-buffer-actions,
+    .leaflet-draw-section .leaflet-draw-actions {
+      background: #d3d3d3;
+      opacity: 0.7;
+      top: 0px !important;
+      left: 197px;
+      height: 45px;
+      ul, li, a {
+        height: inherit;
+        color: #000;
+      }
+      li:not(:first-child) {
+        border-left: 1px solid #AAA;
+        border-left-width: 1px;
+        border-left-style: solid;
+        border-left-color: rgb(170, 170, 170);
+      }
+      a {
+        background-color: transparent;
+        border: none;
       }
     }
 
     div.buffer-control.leaflet-bar {
       display: flex;
       border: none;
-
       button.inactive.pointer {
+        min-width: 199px;
         background-color: color(dark-ben-franklin);
         span>svg {
           color: white;
@@ -1023,64 +1044,41 @@ export default {
           display: flex;
         }
         &:after {
+          content: "Select Buffer";
           font-weight: normal;
           padding: 0 10px 0 10px;
-          content: "Select Buffer";
           position: relative;
-          display: flex;
           color: white;
-          display: flex;
           align-items: center;
-          padding: 5px 10px 5px 10px;
-          text-transform: uppercase;
-          font-size: 16px;
-          line-height: 35px;
         }
       }
       .leaflet-buffer-actions {
-        background: #d3d3d3;
-        opacity: 0.7;
-        top: 0px !important;
         left: 197px;
-        height: 45px;
         ul, li, a {
-          height: inherit;
-          color: #000;
           line-height: 45px;
           text-align: center;
         }
-        li:not(:first-child) {
-          border-left: 1px solid #AAA;
-          border-left-width: 1px;
-          border-left-style: solid;
-          border-left-color: rgb(170, 170, 170);
-        }
-        a {
-          background-color: transparent;
-          border: none;
-        }
       }
     }
 
-
-      .inactive-draw-button .leaflet-draw .leaflet-draw-section {
+    .inactive-draw-button .leaflet-draw .leaflet-draw-section {
       &:hover:after {
         content: "Draw a shape on the map.";
-        background: #d3d3d3;
-        opacity: 0.7;
-        display: flex;
-        align-items: center;
-        color: #000;
-        font-style: italic;
-        padding: 5px;
       }
-
     }
 
+    .leaflet-draw.leaflet-control .leaflet-draw-section .leaflet-draw-draw-polygon,
+     div.buffer-control.leaflet-bar button {
+      &:after {
+        padding: 5px 10px 5px 10px;
+        text-transform: uppercase;
+        font-size: 16px;
+        line-height: 35px;
+      }
+    }
 
     .leaflet-draw.leaflet-control {
       display: flex;
-
       .leaflet-draw-draw-polygon {
         width: 100%;
         height: 100%;
@@ -1099,7 +1097,6 @@ export default {
             color: color(dark-ben-franklin);
           }
         }
-
         .leaflet-draw-draw-polygon {
           background-image: url("../assets/search-button-images/spritesheet-2-white.png");
           background-color: color(dark-ben-franklin);
@@ -1110,35 +1107,15 @@ export default {
             background: color(dark-ben-franklin);
             display: flex;
             align-items: center;
-            padding: 5px 10px 5px 10px;
             margin-left: 40px;
-            text-transform: uppercase;
-            font-size: 16px;
-            line-height: 35px;
           }
         }
-
         .leaflet-draw-actions {
-          background: #d3d3d3;
-          opacity: 0.7;
-          top: 0px !important;
           left: 219px;
           height: 45px;
-          li, a {
-            height: inherit;
-            color: #000;
-          }
-          li:not(:first-child) {
-            border-left: 1px solid #AAA;
-            border-left-width: 1px;
-            border-left-style: solid;
-            border-left-color: rgb(170, 170, 170);
-          }
           a {
             top: 15%;
             position: relative;
-            background-color: transparent;
-            border: none;
           }
         }
       }
