@@ -1,4 +1,4 @@
-# Property Reboot
+# Property (Beta)
 
 Updated application for property.phila.gov
 
@@ -24,4 +24,10 @@ yarn run dev
 ```
 
 ## Deploying
-TODO
+
+-Open a PR to the master branch. This should trigger the various testing scripts and build test. Once those pass, and review is complete merge into master. 
+- Pushing/merging to the master branch should be picked up by GitHub actions and sends to a dev bucket in S3. 
+- Changes merged from master into the production branch will be picked up by GitHub actions and sent to the production bucket in S3.  
+
+## Note:
+For internal City Of Philadelphia users, find more information at [Property Data Explorer](https://phila.city/display/appdev/Property+Data+Explorer) in phila.city.
