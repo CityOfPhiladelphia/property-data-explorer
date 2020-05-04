@@ -10,8 +10,8 @@ Prerequisites:
 
 1. Update the fortawesome repository in your local .npmrc file: 
 ```
-  npm config set "@fortawesome:registry" https://npm.fontawesome.com/
-  npm config set "//npm.fontawesome.com/:_authToken" AUTH_TOKEN
+  fortawesome:registry=https://npm.fontawesome.com/
+  npm.fontawesome.com/:_authToken=[TOKEN]
 ```
 * Ask another developer for the authtoken. 
 1. Install packages: 
