@@ -1,5 +1,5 @@
 import { Selector } from "testcafe";
-import { buildingAddressData } from "../helpers/searchData";
+import { testSearchData } from "../helpers/searchData";
 
 export default class HomePage {
   pageTitle: Selector = Selector("[class='app-title']");
@@ -12,26 +12,30 @@ export default class HomePage {
   table: Selector = Selector('table');
   mailingLables: Selector = Selector("svg[data-icon='download']");
   downloadCSV: Selector = Selector("svg[data-icon='envelope']");
+  btnAddUnitresults: Selector = Selector("a[class='topic-component button condo-button clicked-false']");
+  tableRowCount: Selector = Selector('table tr');
 
     // Verify page landing
   public verifyPageFunctionality = async (t: TestController) => {
+    await t.wait(3000);
     await t.expect(this.pageTitle.visible).ok();
     await t.expect(this.feedbackButton.visible).ok();
     await t.expect(this.citylinkButton.visible).ok();
     await t.click(this.howtouseButton);
     await t.click(this.closeHowtouseButton);
-    await t.typeText(this.searchMap,  buildingAddressData.address);
+    await t.typeText(this.searchMap,  testSearchData.address);
     await t.click(this.searchmapButton);
     await t.wait(2000);
     await t.click(this.downloadCSV);
     await t.click(this.mailingLables);
     await t.wait(2000);
     const tableValues = await this.table.innerText;
-    await t.expect(tableValues).contains(buildingAddressData.opaAddress)
+    await t.expect(tableValues).contains(testSearchData.opaAddress)
     var tablecount = await this.table.count;
     for (var i=0; i < tablecount; i++)
     await t.click(this.table.nth(i))
-    await t.expect(tableValues).contains(buildingAddressData.opaAddress);
+    await t.expect(tableValues).contains(testSearchData.opaAddress);
    
   }
+
 }
