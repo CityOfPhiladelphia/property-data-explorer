@@ -5,7 +5,6 @@
   >
     <PhilaHeader
       :app-title="this.$config.app.title"
-      :app-tag-line="this.$config.app.tagLine"
       :app-logo="appLogo"
       :app-logo-alt="this.$config.app.logoAlt"
     >
@@ -48,21 +47,21 @@
           v-show="currentErrorType !== null"
           v-html="errorMessage"
         />
-        <div
-          v-if="anySearchStatus === 'success'"
-          id="clear-results"
-          @click="clearResults"
-        >
-          <a>
-            <i class="fa fa-times-circle" />
-          </a>
-        </div>
         <collection-summary
           v-if="anySearchStatus === 'success'"
           id="collection-summary"
           :options="summaryOptions"
           :slots="summaryOptions.slots"
         />
+        <div
+          v-if="anySearchStatus === 'success'"
+          id="clear-results"
+          @click="clearResults"
+        >
+          <a>
+            <u><b> Clear search</b></u>
+          </a>
+        </div>
       </div>
 
       <div :class="tableClass">
@@ -182,11 +181,11 @@ export default {
           }
         },
         context: {
-          singular: function(list) {
-            return list + ' result. Select address for details.';
+          singular: function(list, shape) {
+            return 'Showing ' + list + ' result.';
           },
-          plural: function(list) {
-            return list + ' results. Select address for details.';
+          plural: function(list, shape) {
+            return 'Showing ' + list + ' results.';
           },
           pluralizeList: false,
         },
@@ -585,7 +584,8 @@ export default {
 
 #clear-results {
   display: inline-block !important;
-  margin-right: 10px;
+  margin-left: 10px;
+  font-size: 14px;
 }
 
 #collection-summary {
@@ -653,10 +653,6 @@ export default {
   font-family: "Open Sans", Helvetica, Roboto, Arial, sans-serif;
   font-weight: 600;
   padding: 10.5px 0 10.5px 0;
-}
-
-.fa-times-circle{
-  margin-bottom: 2px;
 }
 
 .leaflet-top, .leaflet-bottom {
@@ -756,7 +752,6 @@ export default {
 
   #demo-badge {
     top: 25%;
-    position: absolute;
     width: max-content;
   }
 

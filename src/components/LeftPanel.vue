@@ -36,7 +36,7 @@
             Department of Records registry map number into the search box.
           </li>
           <li> <span class="fa-li"><i class="fas fa-circle"></i></span>
-            <h4>View Properties within a selected radius</h4>
+            <h4>View properties within a selected radius</h4>
             Use this tool to select a point on the map and view details about all
             properties within a 250-foot radius.
           </li>
