@@ -23,6 +23,7 @@ module.exports = {
     '@phila/vue-comps',
     '@phila/vue-mapping',
     '@phila/vue-datafetch',
+    '@terraformer/arcgis',
     // /other-dep/
   ],
 };
