@@ -32,7 +32,7 @@
           </li>
           <li> <span class="fa-li"><i class="fas fa-search"></i></span>
             <h4>Search on property information</h4>
-            type an address, owner name, property account number, or
+            Type an address, owner name, property account number, or
             Department of Records registry map number into the search box.
           </li>
           <li> <span class="fa-li"><i class="fas fa-circle"></i></span>
