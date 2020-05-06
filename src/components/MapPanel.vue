@@ -1135,23 +1135,25 @@ export default {
       display: none !important;
     }
 
-    .buffer-control {
-      position: fixed;
+    .leaflet-control-container>.leaflet-top.leaflet-left {
+      right: 0;
+    }
+
+    .buffer-control, .leaflet-draw {
+      position: absolute;
       bottom: 0px;
       padding-bottom: 10px;
       z-index: 500;
-      right: 0 !important;
+      right: 0;
+    }
+
+    .buffer-control {
+      top: 78px;
       left: unset;
-      top: 162px !important;
     }
 
     .leaflet-draw {
-      position: fixed;
-      bottom: 0px;
-      padding-bottom: 10px;
-      z-index: 500;
-      right: 0 !important;
-      top: 200px !important;
+      top: 116px;
     }
 
     .mobile-corner.leaflet-almostright {
