@@ -850,6 +850,13 @@ export default {
     //   height: 100%;
     // }
 
+    .leaflet-bar {
+      button, a {
+        font-family: 'Montserrat';
+        font-weight: 600;
+      }
+    }
+
     .leaflet-nearleft2.non-mobile-corner {
       position: absolute;
       bottom: 0px;
