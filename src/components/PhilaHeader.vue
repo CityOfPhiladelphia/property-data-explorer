@@ -334,10 +334,11 @@ export default {
   }
 }
 .mobile-menu-content-container{
+  position: relative;
   margin-top:1rem;
   overflow: hidden;
   color: white;
-  z-index: 100;
+  z-index: 1000;
   background: color(dark-ben-franklin);
   height: 100vh;
   width:100%;
@@ -345,6 +346,10 @@ export default {
   .mobile-menu-content{
     text-align: center;
   }
+}
+
+.logo {
+  visibility: hidden;
 }
 
 .app-divide{
