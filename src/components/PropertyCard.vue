@@ -15,7 +15,7 @@
           </div>
           <div class="page-title-container">
             <h1 class="page-title">
-              Property Data Explorer
+              Property
             </h1>
           </div>
         </div>

@@ -30,4 +30,4 @@ yarn run dev
 - Changes merged from master into the production branch will be picked up by GitHub actions and sent to the production bucket in S3.  
 
 ## Note:
-For internal City Of Philadelphia users, find more information at [Property Data Explorer](https://phila.city/display/appdev/Property+Data+Explorer) in phila.city.
+For internal City Of Philadelphia users, find more information at [Property](https://phila.city/display/appdev/Property+Data+Explorer) in phila.city.

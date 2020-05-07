@@ -37,7 +37,7 @@ let config = {
     type: 'vue',
   },
   app: {
-    title: 'Property Data Explorer',
+    title: 'Property',
     tagLine: 'Explore Property Data',
     logoAlt: 'logo',
   },
