@@ -181,7 +181,6 @@ export default {
         fields: [
           {
             label: 'Street Address',
-            popoverLink: true,
             shouldBeBold: true,
             value: function(state, item) {
               let address;
@@ -195,7 +194,7 @@ export default {
               return address;
             },
             customStyle: { float: 'left', 'padding-right': '5px' },
-            customClass: "address-field",
+            customClass: "address-field faux-link",
             mobileIcon: "info-circle",
             hideMobileIcon: (state, item) => typeof state.sources.opa_assessment.targets[item.properties.opa_account_num] != 'undefined' ? true : false ,
           },
@@ -334,7 +333,7 @@ export default {
         fields: [
           {
             label: 'Street Address',
-            customClass: "address-field",
+            customClass: "address-field faux-link",
             value: function(state, item) {
               return titleCase(item.properties.opa_address);
             },
@@ -432,7 +431,7 @@ export default {
         fields: [
           {
             label: 'Street Address',
-            customClass: "address-field",
+            customClass: "address-field faux-link",
             value: function(state, item) {
               if(item.unit != null && item.unit != "") {
                 return titleCase(item.address_std);
@@ -1125,7 +1124,16 @@ export default {
 
 </script>
 
-<style>
+<style lang="scss">
+
+.faux-link {
+  cursor: pointer;
+  color: color(dark-ben-franklin);
+  font-weight: bold;
+  div{
+    text-decoration: underline !important
+  }
+}
 
 @media print {
   #data-panel-container {
@@ -1153,10 +1161,6 @@ a.button.owner-locate-button {
   padding-top: 40px;
   padding-bottom: 20px;
   text-align: center;
-}
-
-.pl-alert {
-  display: none;
 }
 
 </style>
