@@ -4,7 +4,7 @@
     class="grid-y"
   >
     <PhilaHeader
-      :app-title="this.$config.app.title"
+      :app-title="'Property'"
       :sub-title="this.$config.app.subtitle"
       :app-logo="appLogo"
       :app-logo-alt="this.$config.app.logoAlt"

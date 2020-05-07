@@ -37,7 +37,7 @@ let config = {
     type: 'vue',
   },
   app: {
-    title: 'Property',
+    title: 'Property Data Explorer',
     subtitle: 'City of Philadelphia',
     tagLine: 'Explore Property Data',
     logoAlt: 'logo',
