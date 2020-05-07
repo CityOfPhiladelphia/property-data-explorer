@@ -16,13 +16,13 @@
     <!-- v-if="this.$store.state.activeModal.featureId === null && !this.$store.state.isMobileOrTablet" -->
 
       <div class="intro-blue">
-          <i>Use the Property Data Explorer to get information about a property's ownership,
+          <i>Use the Property App to get information about a property's ownership,
           sales history, value, and physical characteristics. You can also generate address
           listings near a property or within an area of interest.</i>
       </div>
       <h2>To get started, you can: </h2>
       <div class="spacer" />
-      <!-- <p>Here are some things you can do with Property Data Explorer:</p> -->
+      <!-- <p>Here are some things you can do with Property:</p> -->
       <!-- <div class="callout"> -->
       <div>
         <ul class="padded-list fa-ul">

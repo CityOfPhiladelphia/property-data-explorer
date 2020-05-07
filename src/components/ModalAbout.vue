@@ -1,7 +1,7 @@
 <template>
   <div class="background">
     <h2 class="text-center ">
-      <b>How to use Property Data Explorer</b>
+      <b>How to use Property</b>
     </h2>
     <div class="grid-x align-center-middle">
       <div class="cell small-9 medium-3 text-center">
