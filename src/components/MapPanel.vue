@@ -850,6 +850,13 @@ export default {
     //   height: 100%;
     // }
 
+    .leaflet-bar {
+      button, a.leaflet-draw-draw-polygon {
+        font-family: 'Montserrat';
+        font-weight: 600;
+      }
+    }
+
     .leaflet-nearleft2.non-mobile-corner {
       position: absolute;
       bottom: 0px;
@@ -961,6 +968,7 @@ export default {
     div.buffer-control.leaflet-bar.inactive-buffer-button,
     .inactive-draw-button .leaflet-draw .leaflet-draw-section {
       &:hover:after {
+        font-family: "Open Sans" !important;
         background: #d3d3d3;
         align-items: center;
         opacity: 0.8;
@@ -992,12 +1000,14 @@ export default {
       }
     }
 
-    div.buffer-control.leaflet-bar .leaflet-buffer-actions,
+    div.buffer-control.leaflet-bar div.leaflet-buffer-actions,
     .leaflet-draw-section .leaflet-draw-actions {
+      font-family: 'Open Sans';
       background: #d3d3d3;
+      margin-left: 2px;
       opacity: 0.8;
       top: 0px !important;
-      left: 197px;
+      left: 207px;
       height: 45px;
       ul, li, a {
         height: inherit;
@@ -1018,8 +1028,10 @@ export default {
     div.buffer-control.leaflet-bar {
       display: flex;
       border: none;
+      button{
+        min-width: 209px !important;
+      }
       button.inactive.pointer {
-        min-width: 199px;
         background-color: color(dark-ben-franklin);
         span>svg {
           color: white;
@@ -1027,6 +1039,8 @@ export default {
       }
       button.active {
           background-color: white;
+          min-width: 199px;
+          border: 2px solid color(dark-ben-franklin);
           span>svg { color: color(dark-ben-franklin);
           }
           &:after {
@@ -1046,7 +1060,7 @@ export default {
         &:after {
           content: "Select Buffer";
           font-weight: normal;
-          padding: 0 10px 0 10px;
+          padding: 3px 10px 0 10px;
           position: relative;
           color: white;
           align-items: center;
@@ -1054,6 +1068,9 @@ export default {
       }
       .leaflet-buffer-actions {
         left: 197px;
+        li {
+          padding: 0;
+        }
         ul, li, a {
           line-height: 45px;
           text-align: center;
@@ -1070,7 +1087,6 @@ export default {
     .leaflet-draw.leaflet-control .leaflet-draw-section .leaflet-draw-draw-polygon,
      div.buffer-control.leaflet-bar button {
       &:after {
-        padding: 5px 10px 5px 10px;
         text-transform: uppercase;
         font-size: 16px;
         line-height: 35px;
@@ -1085,15 +1101,19 @@ export default {
       }
       .leaflet-draw-section {
         display: flex;
-        border-radius: 2px;
         .leaflet-draw-toolbar {
           border: none;
         }
         a.leaflet-draw-toolbar-button-enabled {
+          max-height: 45px;
           background-color: white !important;
+          border: 2px solid color(dark-ben-franklin);
           background-image: url("../assets/search-button-images/spritesheet-2-blue.png") !important;
           &:after {
+            padding: 3px 8px 3px 8px;
             background: white !important;
+            padding-top: 4px;
+            padding-bottom: 2px;
             color: color(dark-ben-franklin);
           }
         }
@@ -1102,6 +1122,7 @@ export default {
           background-color: color(dark-ben-franklin);
           &:after {
             content: "Draw Boundaries";
+            padding: 5px 10px 5px 10px;
             color: white;
             font-weight: normal !important;
             background: color(dark-ben-franklin);
@@ -1111,7 +1132,7 @@ export default {
           }
         }
         .leaflet-draw-actions {
-          left: 219px;
+          left: 227px;
           height: 45px;
           a {
             top: 15%;
@@ -1194,11 +1215,6 @@ export default {
 
     .leaflet-touch .leaflet-draw-toolbar .leaflet-draw-draw-polygon {
       background-position: -31px -1px;
-    }
-
-    // DOES THIS DO ANYTHING?
-    .icon-padding {
-      padding-top: unset;
     }
 
     // IMAGERY AND CYCLOMEDIA BUTTONS
