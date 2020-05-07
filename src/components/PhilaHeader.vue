@@ -348,10 +348,6 @@ export default {
   }
 }
 
-.logo {
-  visibility: hidden;
-}
-
 .app-divide{
   display: inline-block;
   margin: 0 1rem;
@@ -400,6 +396,10 @@ export default {
     font-family: "Montserrat", sans-serif;
     font-style: normal;
     font-weight: normal !important;
+  }
+
+  .logo {
+    visibility: hidden;
   }
 
 
