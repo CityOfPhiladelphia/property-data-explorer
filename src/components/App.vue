@@ -506,6 +506,10 @@ export default {
 <style lang="scss">
 @import "@/scss/global.scss";
 
+button {
+  cursor: pointer;
+}
+
 .toggle-map{
   margin:0 !important;
 }
