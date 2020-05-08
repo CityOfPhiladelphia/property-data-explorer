@@ -47,22 +47,23 @@ export default class SearchPage {
   public verifySearchbyShapePlusBuffer = async (t: TestController) => {
     await t.navigateTo(`${process.env.TEST_URL}`);
     await t.click(this.polygonSearch);
+    await t.wait(3000);
     await t.expect(this.finishIcon.visible).ok();
     await t.expect(this.deleteIcon.visible).ok();
     await t.expect(this.cancelIcon.visible).ok();
     await t.wait(1000);
-    await t.click('#map', { offsetX: 150, offsetY: 150 })
+    await t.click('#map', { offsetX: 250, offsetY: 250 })
     await t.wait(1000);
-    await t.click('#map', { offsetX: 150, offsetY: 100 })
+    await t.click('#map', { offsetX: 250, offsetY: 200 })
     await t.wait(1000);
     await t.click('#map', { offsetX: 310, offsetY: 100 })
     await t.wait(1000);
-    await t.click('#map', { offsetX: 150, offsetY: 150 })
+    await t.click('#map', { offsetX: 250, offsetY: 250 })
     await t.wait(2000);
     const tablePolySearchValues = this.table.innerText
     await t.expect(tablePolySearchValues).contains(testSearchData.tablePolygontextVerify);
     await t.click(this.btnBuffer);
-    await t.click('#map', { offsetX: 350, offsetY: 200 })
+    await t.click('#map')
     await t.wait(2000);
     const tableBufferSearchValues = this.table.innerText
     await t.expect(tableBufferSearchValues).contains(testSearchData.tablePolygontextVerify);
