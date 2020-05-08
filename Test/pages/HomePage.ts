@@ -3,16 +3,16 @@ import { testSearchData } from "../helpers/searchData";
 
 export default class HomePage {
   pageTitle: Selector = Selector("[class='app-title']");
-  citylinkButton: Selector = Selector("a[href='https://www.phila.gov']");
-  howtouseButton: Selector = Selector(".app-footer:nth-child(4) .cell div")
+  citylinkButton: Selector = Selector(".app-footer:nth-child(4) li:nth-child(1) > a");
+  howtouseButton: Selector = Selector(".app-footer:nth-child(4) .cell div");
   closeHowtouseButton: Selector = Selector("svg[data-icon='times-circle']");
-  feedbackButton: Selector = Selector(".app-footer:nth-child(4) li:nth-child(3) > a");
+  feedbackButton: Selector = Selector(".app-footer:nth-child(4) li:nth-child(3) > a"); 
   searchMap: Selector = Selector("input[placeholder='Search the map']");
   searchmapButton: Selector = Selector("button[name='pvm-search-control-button']");
   table: Selector = Selector('table');
   mailingLables: Selector = Selector("svg[data-icon='download']");
   downloadCSV: Selector = Selector("svg[data-icon='envelope']");
-  btnAddUnitresults: Selector = Selector("a[class='topic-component button condo-button clicked-false']");
+  btnAddUnitresults: Selector = Selector("a[class='topic-component']");
   tableRowCount: Selector = Selector('table tr');
 
     // Verify page landing

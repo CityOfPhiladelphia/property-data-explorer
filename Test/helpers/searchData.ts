@@ -58,9 +58,9 @@ export const testSearchData: SearchData = {
     "1931 Pine st BONOVITZ SHELDON JILL F ",
   condoAddress1: "1414 S Penn Sq",
   condoAddressverify: "1414 S Penn Sq Unit 11a",
-  tablePolygontextVerify: "1501 John F Kennedy Blvd",
+  tablePolygontextVerify: "1400 John F Kennedy Blvd",
   addressBuffer: "1931 Pine St",
   addressBufferVerify: "1918 Delancey Pl",
-  owner: "THOMAS ZACHARIAH"
+  owner: "ZACHARIAH THOMAS"
 };
 
