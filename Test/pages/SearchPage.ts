@@ -47,10 +47,7 @@ export default class SearchPage {
   public verifySearchbyShapePlusBuffer = async (t: TestController) => {
     await t.navigateTo(`${process.env.TEST_URL}`);
     await t.click(this.polygonSearch);
-<<<<<<< HEAD
     await t.wait(3000);
-=======
->>>>>>> master
     await t.expect(this.finishIcon.visible).ok();
     await t.expect(this.deleteIcon.visible).ok();
     await t.expect(this.cancelIcon.visible).ok();
