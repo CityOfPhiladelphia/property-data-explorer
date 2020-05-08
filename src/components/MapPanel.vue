@@ -985,7 +985,7 @@ export default {
           content: "Type an address, owner name, property account number, or Department of Records registry map number.";
           height: 100%;
           width: 100%;
-          min-width: 315px;
+          min-width: 340px;
           position: absolute;
           left: 295px;
         }
@@ -1058,7 +1058,7 @@ export default {
           display: flex;
         }
         &:after {
-          content: "Select Buffer";
+          content: "Select Radius";
           font-weight: normal;
           padding: 3px 10px 0 10px;
           position: relative;
