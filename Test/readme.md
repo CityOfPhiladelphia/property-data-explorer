@@ -13,6 +13,10 @@
 - tests are running with GithubActions CI.
 - Using commandline make sure you are in the Test root directory then type 'npm run test-local' it will run your tests.
 
+** Debugging **
+
+-If a test fails in GitHub, run the tests locally. On error, the process will create screenshots in a local folder that can be used to trace which specific test failed. 
+
 **Notes**
 
 - screen shots are visible only when you run it in local environment. Which are mentioned in the testcafe.rc.json 

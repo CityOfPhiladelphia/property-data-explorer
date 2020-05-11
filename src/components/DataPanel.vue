@@ -181,20 +181,20 @@ export default {
         fields: [
           {
             label: 'Street Address',
+            shouldBeBold: true,
             value: function(state, item) {
               let address;
               if( state.lastSearchMethod === "buffer search") {
                 address = titleCase(item.address_std);
-              }
-              if(item.properties.opa_address != "" && item.properties.opa_address != null) {
-                address = titleCase(item.properties.opa_address);
               } else if (typeof item.properties.street_address != 'undefined') {
                 address = titleCase(item.properties.street_address);
+              } else if(item.properties.opa_address != "" && item.properties.opa_address != null) {
+                address = titleCase(item.properties.opa_address);
               }
-              return '<u><b><a>' + address + '</a></b></u>';
+              return address;
             },
             customStyle: { float: 'left', 'padding-right': '5px' },
-            customClass: "testtest",
+            customClass: "address-field faux-link",
             mobileIcon: "info-circle",
             hideMobileIcon: (state, item) => typeof state.sources.opa_assessment.targets[item.properties.opa_account_num] != 'undefined' ? true : false ,
           },
@@ -333,8 +333,9 @@ export default {
         fields: [
           {
             label: 'Street Address',
+            customClass: "address-field faux-link",
             value: function(state, item) {
-              return '<u><b><a>' + titleCase(item.properties.opa_address) + '</a></b></u>';
+              return titleCase(item.properties.opa_address);
             },
             hideMobileIcon: true,
             customStyle: { float: 'left', 'padding-right': '5px' },
@@ -430,11 +431,12 @@ export default {
         fields: [
           {
             label: 'Street Address',
+            customClass: "address-field faux-link",
             value: function(state, item) {
               if(item.unit != null && item.unit != "") {
-                return '<u><b><a>' + titleCase(item.address_std) + '</a></b></u>';
+                return titleCase(item.address_std);
               }
-              return '<u><b><a>' + titleCase(item.location) + '</a></b></u>';
+              return titleCase(item.location);
 
             },
             customStyle: { float: 'left', 'padding-right': '5px' },
@@ -1122,12 +1124,26 @@ export default {
 
 </script>
 
-<style>
+<style lang="scss">
+
+.faux-link {
+  cursor: pointer;
+  color: color(dark-ben-franklin);
+  font-weight: bold;
+  div{
+    text-decoration: underline !important
+  }
+}
 
 @media print {
   #data-panel-container {
     display: none;
   }
+}
+
+.address-field .popover-link {
+  border-bottom: 1px solid;
+  color: #0f4d90;
 }
 
 a.button.owner-locate-button {

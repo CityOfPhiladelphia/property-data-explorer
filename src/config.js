@@ -38,6 +38,7 @@ let config = {
   },
   app: {
     title: 'Property Data Explorer',
+    subtitle: 'City of Philadelphia',
     tagLine: 'Explore Property Data',
     logoAlt: 'logo',
   },

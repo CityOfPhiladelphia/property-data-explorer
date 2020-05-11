@@ -4,7 +4,8 @@
     class="grid-y"
   >
     <PhilaHeader
-      :app-title="this.$config.app.title"
+      :app-title="'Property'"
+      :sub-title="this.$config.app.subtitle"
       :app-logo="appLogo"
       :app-logo-alt="this.$config.app.logoAlt"
     >
@@ -505,6 +506,10 @@ export default {
 <style lang="scss">
 @import "@/scss/global.scss";
 
+button {
+  cursor: pointer;
+}
+
 .toggle-map{
   margin:0 !important;
 }
@@ -787,8 +792,15 @@ export default {
   }
 
   .app-title {
-    max-width: 150px;
+    font-family: 'Montserrat';
+   h2 {
+    font-size: 13px!important;
+    letter-spacing: 2.5px;
+    font-weight: 200;
+   }
   }
+
+
 
   .mobile-menu-content {
     position: fixed;

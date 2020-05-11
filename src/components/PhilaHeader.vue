@@ -55,13 +55,14 @@
                 <!-- :to="appLink" -->
                 <h1 class="title">
                   {{ appTitle }}
+                    <div id="demo-badge">
+                      BETA
+                    </div>
                 </h1>
+                <h2 class="sub-title">
+                  {{ subTitle }}
+                </h2>
               </a>
-              <div id="demo-container">
-                <div id="demo-badge">
-                  BETA
-                </div>
-              </div>
             </section>
           </div>
           <!-- <div class="cell large-auto small-auto small-centered text-center">
@@ -143,6 +144,10 @@ export default {
     appTitle: {
       type: String,
       default: 'App Title',
+    },
+    subTitle: {
+      type: String,
+      default: 'Sub Title',
     },
   },
   data() {
@@ -242,20 +247,10 @@ export default {
 
 <style lang="scss">
 
-#demo-container {
-  display: inline;
-  position: relative;
-  height: 100%;
-  transform: translateY(70%);
-}
-
 .app-title>h1 {
   position: relative;
   top: 50%;
-  transform: translateY(-50%);
 }
-
-
 
 .app-header{
   vertical-align: middle;
@@ -285,6 +280,10 @@ export default {
 
     h1, h2{
       padding:0;
+      margin-bottom: 0;
+    }
+    .sub-title {
+      text-transform: uppercase;
     }
     a {
       color: white;
@@ -301,17 +300,16 @@ export default {
     #demo-badge{
       /*text-transform: capitalize;*/
       white-space: nowrap;
+      height: 22px;
       width: 48px;
+      text-align: center;
+      line-height: 1.5rem;
       display: inline-block;
       font-size: 12px;
       font-family: Arial, Helvetica, sans-serif;
       font-weight: 800;
       vertical-align: middle;
       margin-left: 8px;
-      margin-bottom: 5px;
-      padding: 1px;
-      padding-left: 6px;
-      padding-right: 6px;
       border-radius: 1px;
       color: black;
       background: #FF8D00;
@@ -334,10 +332,11 @@ export default {
   }
 }
 .mobile-menu-content-container{
+  position: relative;
   margin-top:1rem;
   overflow: hidden;
   color: white;
-  z-index: 100;
+  z-index: 1000;
   background: color(dark-ben-franklin);
   height: 100vh;
   width:100%;
@@ -372,10 +371,6 @@ export default {
     cursor: default;
   }
 
-  .app-header .title-container .title {
-    text-align: center !important;
-  }
-
   .mobile-menu-content {
     top: 15%
   }
@@ -397,7 +392,20 @@ export default {
     font-weight: normal !important;
   }
 
+  .logo {
+    display: none;
+  }
 
+
+}
+
+@media screen and (min-width: 750px) {
+  .sub-title {
+    display: none;
+  }
+  .app-header h1.title {
+    top: 25%;
+  }
 }
 
 
