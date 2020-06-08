@@ -552,7 +552,7 @@ export default {
             label: 'Political Divisions',
             value: function(state) {
               return "<a href='http://atlas.phila.gov/#/"+this.activeAddress+"/voting' target='_blank'>\
-                      Ward Division: "+nth(opaPublicData.political_ward)+" | Council District: "+ nth(opaPublicData.council_district_2016) +" \
+                      Ward: "+nth(opaPublicData.political_ward)+" | Council District: "+ nth(opaPublicData.council_district_2016) +" \
                       <i class='fa fa-external-link-alt'></i></a>";
             }.bind(this),
           },
