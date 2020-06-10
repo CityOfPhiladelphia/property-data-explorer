@@ -172,7 +172,7 @@ export default {
           th: function(field) {
             let classType = field === 'Price of Last Sale' ? 'sorttable_numeric pointer':
               field === 'Market Value' ? 'sorttable_numeric pointer':
-                field === 'Date of Last Sale' ? 'sorttable_ddmm pointer': 'pointer';
+                field === 'Date of Last Sale' ? 'sorttable_numeric pointer': 'pointer';
             return classType;
 
           },
@@ -257,8 +257,8 @@ export default {
             customKey: function(state, item) {
               if (item.properties.opa_account_num != "") {
                 if (typeof state.sources.opa_assessment.targets[item.properties.opa_account_num] != 'undefined') {
-                  // return format(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date, 'MM/DD/YYYY');
-                  return format(parseISO(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date), 'MM/dd/yyyy');
+                  // console.log(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date);
+                  return format(parseISO(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date), 'yyyyMMdd');
                 }
                 return;
 
@@ -324,7 +324,7 @@ export default {
           th: function(field) {
             let classType = field === 'Price of Last Sale' ? 'sorttable_numeric pointer':
               field === 'Market Value' ? 'sorttable_numeric pointer':
-                field === 'Date of Last Sale' ? 'sorttable_ddmmyyyy pointer': 'pointer';
+                field === 'Date of Last Sale' ? 'sorttable_numeric pointer': 'pointer';
             return classType;
 
           },
@@ -356,7 +356,7 @@ export default {
             },
             customKey: function(state, item) {
               // return format(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date.toString(), 'MM/DD/YYYY');
-              return format(parseISO(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date.toString()), 'MM/dd/yyyy');
+              return format(parseISO(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date.toString()), 'yyyyMMdd');
             },
           },
           {
@@ -482,8 +482,8 @@ export default {
             },
             customKey: function(state, item) {
               if (item.sale_date != "") {
-                // return format(item.sale_date, 'MM/DD/YYYY');
-                return format(parseISO(item.sale_date), 'yyyymmdd');
+                // console.log(   format(parseISO(item.sale_date), 'yyyyMMdd')  );
+                return format(parseISO(item.sale_date), 'yyyyMMdd');
               }
               return 0;
 
