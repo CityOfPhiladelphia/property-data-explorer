@@ -77,18 +77,17 @@ let config = {
       },
     },
   },
+  blockSearch: {
+    url: function (input) {
+      let inputWithoutBlockKeyword = input.trim().toLowerCase().replace("blk" , "").replace("block", "");
+      var inputEncoded = encodeURIComponent(inputWithoutBlockKeyword);
+      return 'http://api.phila.gov/ais_ps/v1/block/' + inputEncoded;
+    }
+  },
   ownerSearch: {
     url: function (input) {
-      let blockTerms = ["block", "block:", "blk"];
-      let blockSearchCheck = blockTerms.map( x=> input.trim().toLowerCase().startsWith(x)? true : "");
-      if(blockSearchCheck === true) {
-        let inputWithoutBlockKeyword = input.trim().toLowerCase().replace("blk" , "").replace("block", "");
-        var inputEncoded = encodeURIComponent(inputWithoutBlockKeyword);
-        return 'http://api.phila.gov/ais_ps/v1/block/' + inputEncoded;
-      } else {
-        var inputEncoded = encodeURIComponent(input);
-        return 'http://api.phila.gov/ais_ps/v1/owner/' + inputEncoded;
-      }
+      var inputEncoded = encodeURIComponent(input);
+      return 'http://api.phila.gov/ais_ps/v1/owner/' + inputEncoded;
     },
     params: {
       gatekeeperKey: process.env.VUE_APP_GATEKEEPER_KEY,
