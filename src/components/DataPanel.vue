@@ -30,7 +30,8 @@
     />
     <horizontal-table
       v-show="!loadingData"
-      v-if="lastSearchMethod === 'owner search'"
+      v-if="lastSearchMethod === 'owner search'
+        || lastSearchMethod === 'block search'"
       :slots="{
         items: function(state) {
           var data = state.ownerSearch.data;

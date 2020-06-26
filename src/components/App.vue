@@ -149,8 +149,9 @@ export default {
           // console.log('second if is running');
           feature = state.geocode.data;
         }
-      } else if (state.lastSearchMethod === 'owner search') {
-        feature = state.ownerSearch.data.filter(object => {
+      } else if (state.lastSearchMethod === 'owner search' || state.lastSearchMethod === 'block search' ) {
+        let searchValue = state.lastSearchMethod === 'owner search' ? "ownerSearch" : "blockSearch"
+        feature = state[searchValue].data.filter(object => {
           return object._featureId === state.activeModal.featureId;
         })[0];
       } else if ([ 'shape search', 'buffer search' ].includes(state.lastSearchMethod)) {

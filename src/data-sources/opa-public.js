@@ -6,7 +6,7 @@ export default {
     runOnce: true,
     get: function(state) {
       // console.log('opa-public get is running');
-      if (state.lastSearchMethod === 'owner search') {
+      if (state.lastSearchMethod === 'owner search'|| state.lastSearchMethod === 'block search') {
         return state.ownerSearch.data;
       } else if (state.lastSearchMethod === 'shape search' || state.lastSearchMethod === 'buffer search') {
         if (state.shapeSearch.data) {

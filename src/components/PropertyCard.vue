@@ -243,7 +243,7 @@ export default {
     activeOpaId() {
       let feature = this.activeModalFeature;
       let opaId;
-      if (![ 'geocode', 'reverseGeocode', 'owner search' ].includes(this.lastSearchMethod)) {
+      if (![ 'geocode', 'reverseGeocode', 'owner search', 'block search' ].includes(this.lastSearchMethod)) {
         opaId = feature.parcel_number;
       } else {
         opaId = feature.properties.opa_account_num;
@@ -253,7 +253,8 @@ export default {
     activeAddress() {
       let feature = this.activeModalFeature;
       let address;
-      if ([ 'geocode', 'reverseGeocode', 'owner search' ].includes(this.lastSearchMethod)) {
+      console.log("active modal feature: ", this.activeModalFeature)
+      if ([ 'geocode', 'reverseGeocode', 'owner search', 'block search' ].includes(this.lastSearchMethod)) {
         address = feature.properties.street_address;
       } else {
         address = feature.address_std;
@@ -263,7 +264,7 @@ export default {
     headerLineTwo() {
       let feature = this.activeModalFeature;
       let zip;
-      if ([ 'geocode', 'reverseGeocode', 'owner search' ].includes(this.lastSearchMethod)) {
+      if ([ 'geocode', 'reverseGeocode', 'owner search', 'block search' ].includes(this.lastSearchMethod)) {
         zip = feature.properties.zip_code + '-' + feature.properties.zip_4;
       } else {
         zip = feature.zip_code.substring(0,5) + '-' + feature.zip_code.substring(5,10);
@@ -727,7 +728,7 @@ export default {
           href: function(state) {
             let feature = state.activeModalFeature;
             let address;
-            if ([ 'geocode', 'reverseGeocode', 'owner search' ].includes(state.lastSearchMethod)) {
+            if ([ 'geocode', 'reverseGeocode', 'owner search', 'block search' ].includes(state.lastSearchMethod)) {
               address = feature.properties.street_address;
             } else {
               address = feature.address_std;
