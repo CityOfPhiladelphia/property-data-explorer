@@ -82,7 +82,10 @@ let config = {
       let inputWithoutBlockKeyword = input.trim().toLowerCase().replace("blk" , "").replace("block", "");
       var inputEncoded = encodeURIComponent(inputWithoutBlockKeyword);
       return 'http://api.phila.gov/ais_ps/v1/block/' + inputEncoded;
-    }
+    },
+    params: {
+      page: 1,
+    },
   },
   ownerSearch: {
     url: function (input) {

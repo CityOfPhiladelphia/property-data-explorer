@@ -34,8 +34,13 @@
         || lastSearchMethod === 'block search'"
       :slots="{
         items: function(state) {
-          var data = state.ownerSearch.data;
-          return data;
+          let data = [];
+          if (state.lastSearchMethod === 'owner search') {
+            data = state.ownerSearch.data;
+          } else {
+            data = state.blockSearch.data;
+          } 
+          return data
         },
       }"
       :options="ownerOptions"

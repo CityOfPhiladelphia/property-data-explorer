@@ -7,7 +7,7 @@ export default {
     get: function(state) {
       // console.log('opa-assessment get is running');
       if (state.lastSearchMethod === 'owner search'|| state.lastSearchMethod === 'block search') {
-        return state.ownerSearch.data;
+        return state.lastSearchMethod === 'owner search' ? state.ownerSearch.data : state.blockSearch.data;
       } else if (state.lastSearchMethod === 'shape search' || state.lastSearchMethod === 'buffer search') {
         if (state.shapeSearch.data) {
           return state.shapeSearch.data.rows || [];
