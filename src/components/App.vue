@@ -214,6 +214,8 @@ export default {
 
             } else if (state.ownerSearch.data != null) {
               return state.ownerSearch.data;
+            } else if (state.blockSearch.data != null) {
+              return state.blockSearch.data;
             }
           },
         },
@@ -263,11 +265,14 @@ export default {
     ownerSearchTotal() {
       return this.$store.state.ownerSearch.total_size
     },
+    blockSearchStatus() {
+      return this.$store.state.blockSearch.status;
+    },
     shapeSearchStatus() {
       return this.$store.state.shapeSearch.status;
     },
     anySearchStatus() {
-      let statusArray = [ this.geocodeStatus, this.ownerSearchStatus, this.shapeSearchStatus, this.condoStatus ];
+      let statusArray = [ this.geocodeStatus, this.ownerSearchStatus, this.shapeSearchStatus, this.condoStatus, this.blockSearchStatus ];
       let status;
       if (statusArray.includes('waiting')) {
         if (this.condoStatus === 'waiting') {

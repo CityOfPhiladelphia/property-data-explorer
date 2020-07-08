@@ -341,6 +341,7 @@ export default {
             label: 'Street Address',
             customClass: "address-field faux-link",
             value: function(state, item) {
+              // console.log(item.properties)
               return titleCase(item.properties.opa_address);
             },
             hideMobileIcon: true,
@@ -349,33 +350,113 @@ export default {
           },
           {
             label: 'Market Value',
-            value: function(state, item) {
-              // if(state.sources.opa_assessment.targets){}
-              return formatter.format(state.sources.opa_assessment.targets[item.properties.opa_account_num.toString()].data.market_value);
+            value: function(state, item){
+              if(state.sources.opa_assessment.targets[item.properties.opa_account_num]){
+                if(typeof state.sources.opa_assessment.targets[item.properties.opa_account_num].data != 'undefined') {
+                      return formatter.format(state.sources.opa_assessment.targets[item.properties.opa_account_num.toString()].data.market_value);
+                }
+              } else {
+                return '';
+              }
             },
+            components: [
+              {
+                type: 'button-comp',
+                slots: {
+                  text: 'Click to add units to results.',
+                  buttonAction: this.addCondoRecords,
+                  buttonFinished() {
+                    // console.log("button finished running")
+                    this.$data.showTable = true;
+                  },
+                },
+                options: {
+                  class: function (state, item) {
+                    // console.log('calculating button-comp class, item.properties.opa_account_num:', item.properties.opa_account_num, typeof state.sources.opa_assessment.targets[item.properties.opa_account_num]);
+                    // return state.sources.opa_assessment.targets[item.properties.opa_account_num] ? "" : 'condo-button';
+                    if (typeof state.sources.opa_assessment.targets[item.properties.opa_account_num] != 'undefined') {
+                      return '';
+                    } else {
+                      return 'condo-button';
+                    }
+                  },
+                  style: function (state, item) {
+                    // return state.sources.opa_assessment.targets[item.properties.opa_account_num] ? { display: 'none' } : "";
+                    if (typeof state.sources.opa_assessment.targets[item.properties.opa_account_num] != 'undefined') {
+                      return { display: 'none' };
+                    } else {
+                      return '';
+                    }
+                  },
+                },
+              },
+            ],
           },
+
           {
             label: 'Date of Last Sale',
             value: function(state, item) {
-              // return format(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date.toString(), 'MM/DD/YYYY');
-              return format(parseISO(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date.toString()), 'MM/dd/yyyy');
+              if (item.properties.opa_account_num != ""){
+                if (typeof state.sources.opa_assessment.targets[item.properties.opa_account_num] != 'undefined') {
+                  // console.log(item.properties.opa_account_num, state.sources.opa_assessment.targets[item.properties.opa_account_num] )
+                  // return format(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date, 'MM/DD/YYYY');
+                  return format(parseISO(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date.toString()), 'MM/dd/yyyy');
+                }
+              } else {
+                return "Not Applicable";
+              }
             },
             customKey: function(state, item) {
-              // return format(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date.toString(), 'MM/DD/YYYY');
-              return format(parseISO(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date.toString()), 'yyyyMMdd');
+              if (item.properties.opa_account_num != "") {
+                if (typeof state.sources.opa_assessment.targets[item.properties.opa_account_num] != 'undefined') {
+                  // console.log(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date);
+                  return format(parseISO(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date.toString()), 'yyyyMMdd');
+                }
+                return;
+
+              }
+              return 0;
+
             },
           },
+
+          // {
+          //   label: 'Date of Last Sale',
+          //   value: function(state, item) {
+          //     // return format(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date.toString(), 'MM/DD/YYYY');
+          //     return format(parseISO(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date.toString()), 'MM/dd/yyyy');
+          //   },
+          //   customKey: function(state, item) {
+          //     // return format(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date.toString(), 'MM/DD/YYYY');
+          //     return format(parseISO(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date.toString()), 'yyyyMMdd');
+          //   },
+          // },
+
+
           {
             label: 'Price of Last Sale',
             value: function(state, item) {
-              return formatter.format(state.sources.opa_assessment.targets[item.properties.opa_account_num.toString()].data.sale_price);
+              if(item.properties.opa_account_num != ""){
+                if(typeof state.sources.opa_assessment.targets[item.properties.opa_account_num] != 'undefined'){
+                   return formatter.format(state.sources.opa_assessment.targets[item.properties.opa_account_num.toString()].data.sale_price);
+                }
+              } else {
+                return "Not Applicable";
+              }
             },
           },
+
+          // {
+          //   label: 'Price of Last Sale',
+          //   value: function(state, item) {
+          //     return formatter.format(state.sources.opa_assessment.targets[item.properties.opa_account_num.toString()].data.sale_price);
+          //   },
+          // },
           {
             label: 'Owner',
             value: function(state, item){
               if (item.properties.opa_owners != '') {
-                return item.properties.opa_owners.join(', ');
+                return item.properties.opa_owners.lrength > 1 ? item.properties.opa_owners.join(', ') : item.properties.opa_owners;
               }
               return item.properties.usps_bldgfirm;
             },
@@ -566,7 +647,7 @@ export default {
       this.$data.showTable = false;
       this.$data.condoExpanded = true;
       let mapUnitIds = function(id) {
-        console.log('running mapUnitIds, id:', id);
+        console.log('running mapUnitIds, id:', id, this.$store.state.condoUnits.units[id]);
         let unitsToAdd = this.$store.state.condoUnits.units[id];
         unitsToAdd.map(
           (item, index) => {
@@ -578,9 +659,34 @@ export default {
         return unitsToAdd;
       };
       mapUnitIds = mapUnitIds.bind(this);
-      // console.log('after mapUnitIds');
+      console.log('after mapUnitIds', item);
       let unitData;
-      if (this.$store.state.lastSearchMethod === 'geocode') {
+      if (this.$store.state.lastSearchMethod === 'block search') {
+          let result = this.$store.state.blockSearch.data.filter(
+          row => row._featureId === item._featureId,
+        );
+      console.log("block button: ", item, "result: ", result);
+
+      function arrayObjectIndexOf(myArray, searchTerm, property) {
+          for(let i = 0, len = myArray.length; i < len; i++) {
+            if (myArray[i][property] === searchTerm) {
+              return i;
+            }
+          }
+          return -1;
+      }
+
+      let units = mapUnitIds(result[0].properties.pwd_parcel_id);
+      console.log("arrayObjectIndexOf: ", this.$store.state.blockSearch.data, item._featureId );
+      units.objIndex = arrayObjectIndexOf(this.$store.state.blockSearch.data, item._featureId, "_featureId" );
+
+      console.log("mapped unit id's: ", units);
+      this.$store.commit('setBlockSearchDataPush', units);
+      this.$controller.dataManager.resetData();
+      this.$controller.dataManager.fetchData();
+
+
+      } else if (this.$store.state.lastSearchMethod === 'geocode') {
         this.$controller.dataManager.resetData();
         this.$data.condoExpanded = true;
         const input = this.$store.state.parcels.pwd[0].properties.ADDRESS;
@@ -589,7 +695,7 @@ export default {
         console.log('in addCondoRecords, lastSearchMethod = geocode');
         this.$store.commit('setGeocodeRelated', unitData);
         this.$controller.dataManager.fetchData();
-      } else if (this.$store.state.lastSearchMethod === 'reverseGeocode') {
+      } else if (this.$store.state.lastSearchMethod === 'reverseGeocode' ) {
       // if (this.$store.state.lastSearchMethod === 'reverseGeocode' || this.$store.state.lastSearchMethod === 'geocode') {
         // console.log("Not shape search, input: ", input)
 
