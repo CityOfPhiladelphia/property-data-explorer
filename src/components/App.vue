@@ -439,7 +439,14 @@ export default {
       this.$controller.handleSearchFormSubmit(query.buffer);
       this.onDataChange('bufferSearch');
       this.$store.commit('setLastSearchMethod', 'buffer search');
-    }
+    } else if (query.block) {
+      // this.leftPanel = false;
+      this.closePropertyModal();
+      this.$store.commit('setLeftPanel', false);
+      // console.log('query.owner:', query.owner);
+      this.$controller.handleSearchFormSubmit(query.block);
+      this.onDataChange('blockSearch');
+    } 
   },
   // beforeMount(){
   //   return this.$store.state.isMobileOrTablet ? this.$store.commit('setLeftPanel', false) : "";
