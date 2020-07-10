@@ -234,7 +234,7 @@ export default {
       return this.$store.state.activeModal;
     },
     activeFeatureId() {
-      console.log('PropertyCard.vue activeFeatureId computed is running');
+      // console.log('PropertyCard.vue activeFeatureId computed is running');
       return this.activeModal.featureId;
     },
     activeModalFeature() {
@@ -253,7 +253,7 @@ export default {
     activeAddress() {
       let feature = this.activeModalFeature;
       let address;
-      console.log("active modal feature: ", this.activeModalFeature)
+      // console.log("active modal feature: ", this.activeModalFeature)
       if ([ 'geocode', 'reverseGeocode', 'owner search', 'block search' ].includes(this.lastSearchMethod)) {
         address = feature.properties.street_address;
       } else {

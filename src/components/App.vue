@@ -308,13 +308,13 @@ export default {
     },
     shouldKeepLeftPanel() {
       if (this.$store.state.sources.opa_assessment.status || this.$store.state.cyclomedia.active) {
-        console.log('App.vue shouldKeepLeftPanel first if');
+        // console.log('App.vue shouldKeepLeftPanel first if');
         return false;
       } else if (!this.$store.state.leftPanel) {
-        console.log('App.vue shouldKeepLeftPanel second if');
+        // console.log('App.vue shouldKeepLeftPanel second if');
         return false;
       }
-      console.log('App.vue shouldKeepLeftPanel neither if');
+      // console.log('App.vue shouldKeepLeftPanel neither if');
       return true;
 
     },
@@ -347,7 +347,7 @@ export default {
       return route.fullPath === '/' ? this.openLeftPanel(true) : this.openLeftPanel(false);
     },
     leftPanel: function(){
-      console.log("intro page watcher: ", this.leftPanel)
+      // console.log("intro page watcher: ", this.leftPanel)
       this.leftPanel === false ? this.closeModal() : ""
     },
     activeModal() {
@@ -466,7 +466,7 @@ export default {
       });
     },
     openLeftPanel(value){
-      console.log('App.vue openLeftPanel is running, value:', value);
+      // console.log('App.vue openLeftPanel is running, value:', value);
       this.$data.leftPanel = value
       this.$store.commit('setFullScreenMapEnabled', value);
       // value = true ? this.$store.commit('setCyclomediaActive', false ): "";

@@ -872,7 +872,7 @@ export default {
         {
           label: 'OPA Account Number',
           value: function(state, item) {
-            console.log("line 761 item: ", item)
+            // console.log("line 761 item: ", item)
             if(typeof item.parcel_number != 'undefined') {
               return item.parcel_number
             } else {
