@@ -465,7 +465,10 @@ export default {
                 type: 'button-comp',
                 slots: {
                   buttonAction(state, item) {event.stopPropagation(), rowClick(state, item) },
-                  text: '<i class="fas fa-location-arrow"></i>',
+                  text: function(state){
+                    let buttonClass = state.lastSearchMethod === 'block search' ? '<i class="fas fa-location-arrow hide"></i>' : '<i class="fas fa-location-arrow"></i>'
+                    return buttonClass
+                  },
                 },
                 options: {
                   stopClickedChange: true,
@@ -1267,6 +1270,10 @@ a.button.owner-locate-button {
 
 .data-panel.container {
   justify-content: center;
+}
+
+.hide {
+  display: none;
 }
 
 .spinner-div {
