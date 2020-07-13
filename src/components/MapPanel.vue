@@ -424,11 +424,11 @@ export default {
 
     },
     bufferButtonActiveClass() {
-      console.log("bufferButtonActiveClass: ", this.$store.state.bufferMode);
+      // console.log("bufferButtonActiveClass: ", this.$store.state.bufferMode);
       return this.$store.state.bufferMode ? '' : 'inactive-buffer-button';
     },
     drawButtonActiveClass() {
-      console.log("bufferButtonActiveClass: ", this.$store.state.bufferMode);
+      // console.log("bufferButtonActiveClass: ", this.$store.state.bufferMode);
       return this.$store.state.drawStart === null ? 'inactive-draw-button' : '';
     },
     buttonClass() {

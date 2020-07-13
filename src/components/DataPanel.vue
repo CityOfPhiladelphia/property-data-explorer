@@ -121,7 +121,7 @@ export default {
       // if (!this.$data.condoExpanded && this.geocode.data && this.$store.state.condoUnits.units && this.$store.state.parcels.pwd && this.$store.state.parcels.pwd[0].properties && this.$store.state.lastSearchMethod === 'geocode') {
       if (!this.$data.condoExpanded && this.geocode.data && this.$store.state.condoUnits.units && this.$store.state.parcels.pwd && this.$store.state.parcels.pwd[0].properties) {
       // if (this.geocode.data && this.$store.state.condoUnits.units && this.$store.state.parcels.pwd && this.$store.state.parcels.pwd[0].properties) {
-        console.log('in geocodeItems, in if');
+        // console.log('in geocodeItems, in if');
         const parentCondo = this.geocode.data;
         for (let i in parentCondo.properties) {
           parentCondo.properties[i] = "";
@@ -136,7 +136,7 @@ export default {
         // parentCondo.condo = true;
         data.push(parentCondo);
       } else {
-        console.log('in geocodeItems, in else, this.geocode.data:', this.geocode.data, 'this.geocode.related:', this.geocode.related);
+        // console.log('in geocodeItems, in else, this.geocode.data:', this.geocode.data, 'this.geocode.related:', this.geocode.related);
         if (this.geocode.data) {
           data.push(this.geocode.data);
         }
@@ -645,12 +645,12 @@ export default {
              state.sources.opa_public.targets[this.activeOpaId(state, item)].data;
     },
     addCondoRecords(state, item) {
-      console.log('addCondoRecords is running, item:', item);
+      // console.log('addCondoRecords is running, item:', item);
 
       this.$data.showTable = false;
       this.$data.condoExpanded = true;
       let mapUnitIds = function(id) {
-        console.log('running mapUnitIds, id:', id, this.$store.state.condoUnits.units[id]);
+        // console.log('running mapUnitIds, id:', id, this.$store.state.condoUnits.units[id]);
         let unitsToAdd = this.$store.state.condoUnits.units[id];
         unitsToAdd.map(
           (item, index) => {
@@ -662,13 +662,13 @@ export default {
         return unitsToAdd;
       };
       mapUnitIds = mapUnitIds.bind(this);
-      console.log('after mapUnitIds', item);
+      // console.log('after mapUnitIds', item);
       let unitData;
       if (this.$store.state.lastSearchMethod === 'block search') {
           let result = this.$store.state.blockSearch.data.filter(
           row => row._featureId === item._featureId,
         );
-      console.log("block button: ", item, "result: ", result);
+      // console.log("block button: ", item, "result: ", result);
 
       function arrayObjectIndexOf(myArray, searchTerm, property) {
           for(let i = 0, len = myArray.length; i < len; i++) {
@@ -680,10 +680,10 @@ export default {
       }
 
       let units = mapUnitIds(result[0].properties.pwd_parcel_id);
-      console.log("arrayObjectIndexOf: ", this.$store.state.blockSearch.data, item._featureId );
+      // console.log("arrayObjectIndexOf: ", this.$store.state.blockSearch.data, item._featureId );
       units.objIndex = arrayObjectIndexOf(this.$store.state.blockSearch.data, item._featureId, "_featureId" );
 
-      console.log("mapped unit id's: ", units);
+      // console.log("mapped unit id's: ", units);
       this.$store.commit('setBlockSearchDataPush', units);
       this.$controller.dataManager.resetData();
       this.$controller.dataManager.fetchData();
@@ -695,7 +695,7 @@ export default {
         const input = this.$store.state.parcels.pwd[0].properties.ADDRESS;
         this.$controller.dataManager.clients.condoSearch.fetch(input);
         unitData = mapUnitIds(item._featureId);
-        console.log('in addCondoRecords, lastSearchMethod = geocode');
+        // console.log('in addCondoRecords, lastSearchMethod = geocode');
         this.$store.commit('setGeocodeRelated', unitData);
         this.$controller.dataManager.fetchData();
       } else if (this.$store.state.lastSearchMethod === 'reverseGeocode' ) {
