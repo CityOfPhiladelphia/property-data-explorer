@@ -979,7 +979,7 @@ export default {
     }
 
     .leaflet-control-container>div{
-      width: 100%;
+      // width: 100%;
       .pvm-container-non-mobile {
         &:hover:after {
           content: "Enter an address, owner, property acct #, or registry map #. Type “block:” before the address to search by block.";
