@@ -254,10 +254,14 @@ export default {
               if (item.properties.opa_account_num != ""){
                 if (typeof state.sources.opa_assessment.targets[item.properties.opa_account_num] != 'undefined') {
                   // return format(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date, 'MM/DD/YYYY');
+                  if (state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date != null) {
                   return format(parseISO(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date), 'MM/dd/yyyy');
+                  } else {
+                    return "Not Applicable"
+                  }
                 }
               } else {
-                return "Not Applicable";
+                return "Not Applicable"
               }
             },
             customKey: function(state, item) {
@@ -278,7 +282,11 @@ export default {
             value: function(state, item) {
               if(item.properties.opa_account_num != ""){
                 if(typeof state.sources.opa_assessment.targets[item.properties.opa_account_num] != 'undefined'){
-                  return formatter.format(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_price);
+                  if(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_price != null) {
+                    return formatter.format(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_price);
+                  } else {
+                    return "Not Applicable"
+                  }
                 }
               } else {
                 return "Not Applicable";
@@ -563,7 +571,7 @@ export default {
           {
             label: 'Date of Last Sale',
             value: function(state, item) {
-              if (item.sale_date != "") {
+              if (item.sale_date != "" && item.sale_date != null) {
                 // return format(item.sale_date, 'MM/DD/YYYY');
                 return format(parseISO(item.sale_date), 'MM/dd/yyyy');
               }
@@ -571,7 +579,7 @@ export default {
 
             },
             customKey: function(state, item) {
-              if (item.sale_date != "") {
+              if (item.sale_date != "" && item.sale_date != null) {
                 // console.log(   format(parseISO(item.sale_date), 'yyyyMMdd')  );
                 return format(parseISO(item.sale_date), 'yyyyMMdd');
               }
@@ -582,7 +590,7 @@ export default {
           {
             label: 'Price of Last Sale',
             value: function(state, item) {
-              if (item.sale_price != "") {
+              if (item.sale_price != "" && item.sale_price != null) {
                 return formatter.format(item.sale_price);
               }
               return "Not Applicable";
@@ -592,7 +600,7 @@ export default {
           {
             label: 'Owner',
             value: function(state, item){
-              if (item.owner_1 != "") {
+              if (item.owner_1 != "" && item.owner_1 != null) {
                 let owners = item.owner_2 != null ?
                   item.owner_1.trim() + ", " + item.owner_2.trim():
                   item.owner_1.trim();
