@@ -692,6 +692,9 @@ export default {
         // console.log('watch geojsonParcels is affecting things');
         this.setMapToBounds();
         this.$store.commit('setMapViewWasSetOnAppLoad', true);
+      } else if(this.$store.state.lastSearchMethod === 'block search') {
+      // console.log(this.store.state.parcels.pwd[0].geometry.coordinates[0][0]);
+      this.$store.commit('setMapCenter', this.$store.state.parcels.pwd[0].geometry.coordinates[0][0]);
       }
     },
     cyclomediaActive(value) {
