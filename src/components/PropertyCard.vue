@@ -1203,8 +1203,8 @@ header {
 }
 
 .openmaps-modal-content{
-  padding-left: 20px;
-  padding-right: 20px;
+  padding-left: 15%;
+  padding-right: 15%;
 }
 
 .openmaps-modal-close{
