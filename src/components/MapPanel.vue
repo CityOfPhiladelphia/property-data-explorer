@@ -424,11 +424,11 @@ export default {
 
     },
     bufferButtonActiveClass() {
-      console.log("bufferButtonActiveClass: ", this.$store.state.bufferMode);
+      // console.log("bufferButtonActiveClass: ", this.$store.state.bufferMode);
       return this.$store.state.bufferMode ? '' : 'inactive-buffer-button';
     },
     drawButtonActiveClass() {
-      console.log("bufferButtonActiveClass: ", this.$store.state.bufferMode);
+      // console.log("bufferButtonActiveClass: ", this.$store.state.bufferMode);
       return this.$store.state.drawStart === null ? 'inactive-draw-button' : '';
     },
     buttonClass() {
@@ -692,6 +692,9 @@ export default {
         // console.log('watch geojsonParcels is affecting things');
         this.setMapToBounds();
         this.$store.commit('setMapViewWasSetOnAppLoad', true);
+      } else if(this.$store.state.lastSearchMethod === 'block search') {
+      // console.log(this.store.state.parcels.pwd[0].geometry.coordinates[0][0]);
+      this.$store.commit('setMapCenter', this.$store.state.parcels.pwd[0].geometry.coordinates[0][0]);
       }
     },
     cyclomediaActive(value) {
@@ -979,13 +982,13 @@ export default {
     }
 
     .leaflet-control-container>div{
-      width: 100%;
+      // width: 100%;
       .pvm-container-non-mobile {
         &:hover:after {
-          content: "Type an address, owner name, property account number, or Department of Records registry map number.";
+          content: "Enter an address, owner, property acct #, or registry map #. Type “block:” before the address to search by block.";
           height: 100%;
           width: 100%;
-          min-width: 340px;
+          min-width: 350px;
           position: absolute;
           left: 295px;
         }

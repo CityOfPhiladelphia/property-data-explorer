@@ -30,11 +30,17 @@
     />
     <horizontal-table
       v-show="!loadingData"
-      v-if="lastSearchMethod === 'owner search'"
+      v-if="lastSearchMethod === 'owner search'
+        || lastSearchMethod === 'block search'"
       :slots="{
         items: function(state) {
-          var data = state.ownerSearch.data;
-          return data;
+          let data = [];
+          if (state.lastSearchMethod === 'owner search') {
+            data = state.ownerSearch.data;
+          } else {
+            data = state.blockSearch.data;
+          } 
+          return data
         },
       }"
       :options="ownerOptions"
@@ -115,7 +121,7 @@ export default {
       // if (!this.$data.condoExpanded && this.geocode.data && this.$store.state.condoUnits.units && this.$store.state.parcels.pwd && this.$store.state.parcels.pwd[0].properties && this.$store.state.lastSearchMethod === 'geocode') {
       if (!this.$data.condoExpanded && this.geocode.data && this.$store.state.condoUnits.units && this.$store.state.parcels.pwd && this.$store.state.parcels.pwd[0].properties) {
       // if (this.geocode.data && this.$store.state.condoUnits.units && this.$store.state.parcels.pwd && this.$store.state.parcels.pwd[0].properties) {
-        console.log('in geocodeItems, in if');
+        // console.log('in geocodeItems, in if');
         const parentCondo = this.geocode.data;
         for (let i in parentCondo.properties) {
           parentCondo.properties[i] = "";
@@ -130,7 +136,7 @@ export default {
         // parentCondo.condo = true;
         data.push(parentCondo);
       } else {
-        console.log('in geocodeItems, in else, this.geocode.data:', this.geocode.data, 'this.geocode.related:', this.geocode.related);
+        // console.log('in geocodeItems, in else, this.geocode.data:', this.geocode.data, 'this.geocode.related:', this.geocode.related);
         if (this.geocode.data) {
           data.push(this.geocode.data);
         }
@@ -248,10 +254,14 @@ export default {
               if (item.properties.opa_account_num != ""){
                 if (typeof state.sources.opa_assessment.targets[item.properties.opa_account_num] != 'undefined') {
                   // return format(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date, 'MM/DD/YYYY');
+                  if (state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date != null) {
                   return format(parseISO(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date), 'MM/dd/yyyy');
+                  } else {
+                    return "Not Applicable"
+                  }
                 }
               } else {
-                return "Not Applicable";
+                return "Not Applicable"
               }
             },
             customKey: function(state, item) {
@@ -272,7 +282,11 @@ export default {
             value: function(state, item) {
               if(item.properties.opa_account_num != ""){
                 if(typeof state.sources.opa_assessment.targets[item.properties.opa_account_num] != 'undefined'){
-                  return formatter.format(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_price);
+                  if(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_price != null) {
+                    return formatter.format(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_price);
+                  } else {
+                    return "Not Applicable"
+                  }
                 }
               } else {
                 return "Not Applicable";
@@ -335,6 +349,7 @@ export default {
             label: 'Street Address',
             customClass: "address-field faux-link",
             value: function(state, item) {
+              // console.log(item.properties)
               return titleCase(item.properties.opa_address);
             },
             hideMobileIcon: true,
@@ -343,33 +358,113 @@ export default {
           },
           {
             label: 'Market Value',
-            value: function(state, item) {
-              // if(state.sources.opa_assessment.targets){}
-              return formatter.format(state.sources.opa_assessment.targets[item.properties.opa_account_num.toString()].data.market_value);
+            value: function(state, item){
+              if(state.sources.opa_assessment.targets[item.properties.opa_account_num]){
+                if(typeof state.sources.opa_assessment.targets[item.properties.opa_account_num].data != 'undefined') {
+                      return formatter.format(state.sources.opa_assessment.targets[item.properties.opa_account_num.toString()].data.market_value);
+                }
+              } else {
+                return '';
+              }
             },
+            components: [
+              {
+                type: 'button-comp',
+                slots: {
+                  text: 'Click to add units to results.',
+                  buttonAction: this.addCondoRecords,
+                  buttonFinished() {
+                    // console.log("button finished running")
+                    this.$data.showTable = true;
+                  },
+                },
+                options: {
+                  class: function (state, item) {
+                    // console.log('calculating button-comp class, item.properties.opa_account_num:', item.properties.opa_account_num, typeof state.sources.opa_assessment.targets[item.properties.opa_account_num]);
+                    // return state.sources.opa_assessment.targets[item.properties.opa_account_num] ? "" : 'condo-button';
+                    if (typeof state.sources.opa_assessment.targets[item.properties.opa_account_num] != 'undefined') {
+                      return '';
+                    } else {
+                      return 'condo-button';
+                    }
+                  },
+                  style: function (state, item) {
+                    // return state.sources.opa_assessment.targets[item.properties.opa_account_num] ? { display: 'none' } : "";
+                    if (typeof state.sources.opa_assessment.targets[item.properties.opa_account_num] != 'undefined') {
+                      return { display: 'none' };
+                    } else {
+                      return '';
+                    }
+                  },
+                },
+              },
+            ],
           },
+
           {
             label: 'Date of Last Sale',
             value: function(state, item) {
-              // return format(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date.toString(), 'MM/DD/YYYY');
-              return format(parseISO(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date.toString()), 'MM/dd/yyyy');
+              if (item.properties.opa_account_num != ""){
+                if (typeof state.sources.opa_assessment.targets[item.properties.opa_account_num] != 'undefined') {
+                  // console.log(item.properties.opa_account_num, state.sources.opa_assessment.targets[item.properties.opa_account_num] )
+                  // return format(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date, 'MM/DD/YYYY');
+                  return format(parseISO(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date.toString()), 'MM/dd/yyyy');
+                }
+              } else {
+                return "Not Applicable";
+              }
             },
             customKey: function(state, item) {
-              // return format(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date.toString(), 'MM/DD/YYYY');
-              return format(parseISO(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date.toString()), 'yyyyMMdd');
+              if (item.properties.opa_account_num != "") {
+                if (typeof state.sources.opa_assessment.targets[item.properties.opa_account_num] != 'undefined') {
+                  // console.log(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date);
+                  return format(parseISO(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date.toString()), 'yyyyMMdd');
+                }
+                return;
+
+              }
+              return 0;
+
             },
           },
+
+          // {
+          //   label: 'Date of Last Sale',
+          //   value: function(state, item) {
+          //     // return format(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date.toString(), 'MM/DD/YYYY');
+          //     return format(parseISO(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date.toString()), 'MM/dd/yyyy');
+          //   },
+          //   customKey: function(state, item) {
+          //     // return format(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date.toString(), 'MM/DD/YYYY');
+          //     return format(parseISO(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date.toString()), 'yyyyMMdd');
+          //   },
+          // },
+
+
           {
             label: 'Price of Last Sale',
             value: function(state, item) {
-              return formatter.format(state.sources.opa_assessment.targets[item.properties.opa_account_num.toString()].data.sale_price);
+              if(item.properties.opa_account_num != ""){
+                if(typeof state.sources.opa_assessment.targets[item.properties.opa_account_num] != 'undefined'){
+                   return formatter.format(state.sources.opa_assessment.targets[item.properties.opa_account_num.toString()].data.sale_price);
+                }
+              } else {
+                return "Not Applicable";
+              }
             },
           },
+
+          // {
+          //   label: 'Price of Last Sale',
+          //   value: function(state, item) {
+          //     return formatter.format(state.sources.opa_assessment.targets[item.properties.opa_account_num.toString()].data.sale_price);
+          //   },
+          // },
           {
             label: 'Owner',
             value: function(state, item){
               if (item.properties.opa_owners != '') {
-                return item.properties.opa_owners.join(', ');
+                return item.properties.opa_owners.lrength > 1 ? item.properties.opa_owners.join(', ') : item.properties.opa_owners;
               }
               return item.properties.usps_bldgfirm;
             },
@@ -378,7 +473,10 @@ export default {
                 type: 'button-comp',
                 slots: {
                   buttonAction(state, item) {event.stopPropagation(), rowClick(state, item) },
-                  text: '<i class="fas fa-location-arrow"></i>',
+                  text: function(state){
+                    let buttonClass = state.lastSearchMethod === 'block search' ? '<i class="fas fa-location-arrow hide"></i>' : '<i class="fas fa-location-arrow"></i>'
+                    return buttonClass
+                  },
                 },
                 options: {
                   stopClickedChange: true,
@@ -473,7 +571,7 @@ export default {
           {
             label: 'Date of Last Sale',
             value: function(state, item) {
-              if (item.sale_date != "") {
+              if (item.sale_date != "" && item.sale_date != null) {
                 // return format(item.sale_date, 'MM/DD/YYYY');
                 return format(parseISO(item.sale_date), 'MM/dd/yyyy');
               }
@@ -481,7 +579,7 @@ export default {
 
             },
             customKey: function(state, item) {
-              if (item.sale_date != "") {
+              if (item.sale_date != "" && item.sale_date != null) {
                 // console.log(   format(parseISO(item.sale_date), 'yyyyMMdd')  );
                 return format(parseISO(item.sale_date), 'yyyyMMdd');
               }
@@ -492,7 +590,7 @@ export default {
           {
             label: 'Price of Last Sale',
             value: function(state, item) {
-              if (item.sale_price != "") {
+              if (item.sale_price != "" && item.sale_price != null) {
                 return formatter.format(item.sale_price);
               }
               return "Not Applicable";
@@ -502,7 +600,7 @@ export default {
           {
             label: 'Owner',
             value: function(state, item){
-              if (item.owner_1 != "") {
+              if (item.owner_1 != "" && item.owner_1 != null) {
                 let owners = item.owner_2 != null ?
                   item.owner_1.trim() + ", " + item.owner_2.trim():
                   item.owner_1.trim();
@@ -555,12 +653,12 @@ export default {
              state.sources.opa_public.targets[this.activeOpaId(state, item)].data;
     },
     addCondoRecords(state, item) {
-      console.log('addCondoRecords is running, item:', item);
+      // console.log('addCondoRecords is running, item:', item);
 
       this.$data.showTable = false;
       this.$data.condoExpanded = true;
       let mapUnitIds = function(id) {
-        console.log('running mapUnitIds, id:', id);
+        // console.log('running mapUnitIds, id:', id, this.$store.state.condoUnits.units[id]);
         let unitsToAdd = this.$store.state.condoUnits.units[id];
         unitsToAdd.map(
           (item, index) => {
@@ -572,18 +670,43 @@ export default {
         return unitsToAdd;
       };
       mapUnitIds = mapUnitIds.bind(this);
-      // console.log('after mapUnitIds');
+      // console.log('after mapUnitIds', item);
       let unitData;
-      if (this.$store.state.lastSearchMethod === 'geocode') {
+      if (this.$store.state.lastSearchMethod === 'block search') {
+          let result = this.$store.state.blockSearch.data.filter(
+          row => row._featureId === item._featureId,
+        );
+      // console.log("block button: ", item, "result: ", result);
+
+      function arrayObjectIndexOf(myArray, searchTerm, property) {
+          for(let i = 0, len = myArray.length; i < len; i++) {
+            if (myArray[i][property] === searchTerm) {
+              return i;
+            }
+          }
+          return -1;
+      }
+
+      let units = mapUnitIds(result[0].properties.pwd_parcel_id);
+      // console.log("arrayObjectIndexOf: ", this.$store.state.blockSearch.data, item._featureId );
+      units.objIndex = arrayObjectIndexOf(this.$store.state.blockSearch.data, item._featureId, "_featureId" );
+
+      // console.log("mapped unit id's: ", units);
+      this.$store.commit('setBlockSearchDataPush', units);
+      this.$controller.dataManager.resetData();
+      this.$controller.dataManager.fetchData();
+
+
+      } else if (this.$store.state.lastSearchMethod === 'geocode') {
         this.$controller.dataManager.resetData();
         this.$data.condoExpanded = true;
         const input = this.$store.state.parcels.pwd[0].properties.ADDRESS;
         this.$controller.dataManager.clients.condoSearch.fetch(input);
         unitData = mapUnitIds(item._featureId);
-        console.log('in addCondoRecords, lastSearchMethod = geocode');
+        // console.log('in addCondoRecords, lastSearchMethod = geocode');
         this.$store.commit('setGeocodeRelated', unitData);
         this.$controller.dataManager.fetchData();
-      } else if (this.$store.state.lastSearchMethod === 'reverseGeocode') {
+      } else if (this.$store.state.lastSearchMethod === 'reverseGeocode' ) {
       // if (this.$store.state.lastSearchMethod === 'reverseGeocode' || this.$store.state.lastSearchMethod === 'geocode') {
         // console.log("Not shape search, input: ", input)
 
@@ -760,7 +883,7 @@ export default {
         {
           label: 'OPA Account Number',
           value: function(state, item) {
-            console.log("line 761 item: ", item)
+            // console.log("line 761 item: ", item)
             if(typeof item.parcel_number != 'undefined') {
               return item.parcel_number
             } else {
@@ -1155,6 +1278,10 @@ a.button.owner-locate-button {
 
 .data-panel.container {
   justify-content: center;
+}
+
+.hide {
+  display: none;
 }
 
 .spinner-div {

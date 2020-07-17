@@ -26,6 +26,13 @@
       <div class="cell small-15 medium-21 text-div">
         <p><b>Search for a person's name</b></p>
         <p>The map will not move to any locations found, because there may be multiple</p>
+        <p>Click the locate arrow in a result to move the map to that location</p>
+      </div>
+
+      <div class="cell small-15 medium-21 text-div">
+        <p><b>Search for a block</b></p>
+        <p>Enter "block:" before the address to find all properties on the block.</p>
+        <p>The map will move to the location that you have searched</p>
       </div>
 
       <div class="cell small-9 medium-3 text-center">

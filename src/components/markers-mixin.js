@@ -370,6 +370,12 @@ export default {
         featureId = result.length > 0 ? Number(result[0].properties.pwd_parcel_id) : null;
 
 
+      } else if (this.$store.state.blockSearch.status === "success") {
+        let result = this.$store.state.blockSearch.data.filter( function(object) {
+          return object._featureId === feature.featureId;
+        });
+        featureId = result.length > 0 ? Number(result[0].properties.pwd_parcel_id) : null;
+
       } else if (this.$store.state.shapeSearch.status === "success") {
         let result = this.$store.state.shapeSearch.data.rows.filter( function(object) {
           // return object._featureId === parseInt(feature.featureId.toString().slice(0,6));
@@ -397,6 +403,12 @@ export default {
         // console.log("rowId from geocode success: ", rowId)
       } else if (this.$store.state.ownerSearch.status === "success" && this.$store.state.lastSearchMethod !== 'shape search' && this.$store.state.lastSearchMethod !== 'buffer search') {
         let result = this.$store.state.ownerSearch.data.filter( function(object) {
+          // console.log("object.properties.pwd_parcel_id: ", object.properties.pwd_parcel_id, "featureId: ", featureId)
+          return Number(object.properties.pwd_parcel_id) === featureId;
+        });
+        rowId = result[0]._featureId;
+      }  else if (this.$store.state.blockSearch.status === "success" && this.$store.state.lastSearchMethod !== 'shape search' && this.$store.state.lastSearchMethod !== 'buffer search') {
+        let result = this.$store.state.blockSearch.data.filter( function(object) {
           // console.log("object.properties.pwd_parcel_id: ", object.properties.pwd_parcel_id, "featureId: ", featureId)
           return Number(object.properties.pwd_parcel_id) === featureId;
         });

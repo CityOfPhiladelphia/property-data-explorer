@@ -149,8 +149,9 @@ export default {
           // console.log('second if is running');
           feature = state.geocode.data;
         }
-      } else if (state.lastSearchMethod === 'owner search') {
-        feature = state.ownerSearch.data.filter(object => {
+      } else if (state.lastSearchMethod === 'owner search' || state.lastSearchMethod === 'block search' ) {
+        let searchValue = state.lastSearchMethod === 'owner search' ? "ownerSearch" : "blockSearch"
+        feature = state[searchValue].data.filter(object => {
           return object._featureId === state.activeModal.featureId;
         })[0];
       } else if ([ 'shape search', 'buffer search' ].includes(state.lastSearchMethod)) {
@@ -213,6 +214,8 @@ export default {
 
             } else if (state.ownerSearch.data != null) {
               return state.ownerSearch.data;
+            } else if (state.blockSearch.data != null) {
+              return state.blockSearch.data;
             }
           },
         },
@@ -262,11 +265,14 @@ export default {
     ownerSearchTotal() {
       return this.$store.state.ownerSearch.total_size
     },
+    blockSearchStatus() {
+      return this.$store.state.blockSearch.status;
+    },
     shapeSearchStatus() {
       return this.$store.state.shapeSearch.status;
     },
     anySearchStatus() {
-      let statusArray = [ this.geocodeStatus, this.ownerSearchStatus, this.shapeSearchStatus, this.condoStatus ];
+      let statusArray = [ this.geocodeStatus, this.ownerSearchStatus, this.shapeSearchStatus, this.condoStatus, this.blockSearchStatus ];
       let status;
       if (statusArray.includes('waiting')) {
         if (this.condoStatus === 'waiting') {
@@ -302,13 +308,13 @@ export default {
     },
     shouldKeepLeftPanel() {
       if (this.$store.state.sources.opa_assessment.status || this.$store.state.cyclomedia.active) {
-        console.log('App.vue shouldKeepLeftPanel first if');
+        // console.log('App.vue shouldKeepLeftPanel first if');
         return false;
       } else if (!this.$store.state.leftPanel) {
-        console.log('App.vue shouldKeepLeftPanel second if');
+        // console.log('App.vue shouldKeepLeftPanel second if');
         return false;
       }
-      console.log('App.vue shouldKeepLeftPanel neither if');
+      // console.log('App.vue shouldKeepLeftPanel neither if');
       return true;
 
     },
@@ -341,7 +347,7 @@ export default {
       return route.fullPath === '/' ? this.openLeftPanel(true) : this.openLeftPanel(false);
     },
     leftPanel: function(){
-      console.log("intro page watcher: ", this.leftPanel)
+      // console.log("intro page watcher: ", this.leftPanel)
       this.leftPanel === false ? this.closeModal() : ""
     },
     activeModal() {
@@ -433,7 +439,14 @@ export default {
       this.$controller.handleSearchFormSubmit(query.buffer);
       this.onDataChange('bufferSearch');
       this.$store.commit('setLastSearchMethod', 'buffer search');
-    }
+    } else if (query.block) {
+      // this.leftPanel = false;
+      this.closePropertyModal();
+      this.$store.commit('setLeftPanel', false);
+      // console.log('query.owner:', query.owner);
+      this.$controller.handleSearchFormSubmit(query.block);
+      this.onDataChange('blockSearch');
+    } 
   },
   // beforeMount(){
   //   return this.$store.state.isMobileOrTablet ? this.$store.commit('setLeftPanel', false) : "";
@@ -453,7 +466,7 @@ export default {
       });
     },
     openLeftPanel(value){
-      console.log('App.vue openLeftPanel is running, value:', value);
+      // console.log('App.vue openLeftPanel is running, value:', value);
       this.$data.leftPanel = value
       this.$store.commit('setFullScreenMapEnabled', value);
       // value = true ? this.$store.commit('setCyclomediaActive', false ): "";
