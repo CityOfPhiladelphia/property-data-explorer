@@ -857,7 +857,7 @@ export default {
 
  .openmaps-modal-content{
     height: 85%;
-    padding-top: 25%
+    padding-top: 15%
   }
 
   .fixed-header {
@@ -1204,8 +1204,8 @@ header {
 }
 
 .openmaps-modal-content{
-  padding-left: 15%;
-  padding-right: 15%;
+  padding-left: 20pt;
+  padding-right: 20pt;
 }
 
 .openmaps-modal-close{
