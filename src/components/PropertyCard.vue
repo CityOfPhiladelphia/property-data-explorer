@@ -857,11 +857,12 @@ export default {
 
  .openmaps-modal-content{
     height: 85%;
-    padding-top: 15%
+    padding-top: 20%
   }
 
   .fixed-header {
     position: fixed;
+    white-space: nowrap;
     width: calc(50% - 15px);
   }
 
@@ -1053,6 +1054,7 @@ export default {
 
 .fixed-header {
   background-color: white;
+  white-space: nowrap;
 }
 
 .pvc-horizontal-table-body h4, h4.table-title {
