@@ -11,6 +11,6 @@ export default {
         <li>Explore historical imagery and maps</li>\
       </ul>\
     </div>\
-    <p>To get started, click anywhere on the map, or type an address, intersection, property assessment account number, or Department of Records Map Registry number into the search box.</p>\
+    <p>To get started, click anywhere on the map, or type an address, intersection, property assessment account number, or Department of Records Map Registry number into the search box. Enter "block:" before the address to find all properties on the block.</p>\
   ',
 };

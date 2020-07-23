@@ -21,52 +21,53 @@
         </div>
       </div>
     </header>
-      <div class="fixed-header">
+    <div class="fixed-header">
+      <div
+        class="openmaps-modal-close hide-print"
+        :tabindex="1"
+        @click="closeModal"
+        v-on:keydown.enter="closeModal"
+      >
+        <span class="button-state state-unnamed-state unnamed-state-active pointer">
+          <a>Back to results</a>
+        </span>
+      </div>
+      <div class="address-header cell small-24 medium-24">
         <div
-          class="openmaps-modal-close hide-print"
-          :tabindex="1"
-          @click="closeModal"
-          v-on:keydown.enter="closeModal"
+          :class="'address-container columns small-24 medium-12 large-12'"
         >
-          <span class="button-state state-unnamed-state unnamed-state-active pointer">
-            <a>Back to results</a>
-          </span>
-        </div>
-        <div class="address-header cell small-24 medium-24">
           <div
-            :class="'address-container columns small-24 medium-12 large-12'"
+            v-if="!activeAddress"
+            class="default-address-text"
+            :style="defaultAddressTextPlaceholderStyle"
           >
-            <div
-              v-if="!activeAddress"
-              class="default-address-text"
-              :style="defaultAddressTextPlaceholderStyle"
-            >
-              {{ this.$config.defaultAddressTextPlaceholder.text }}
+            {{ this.$config.defaultAddressTextPlaceholder.text }}
+          </div>
+          <h1 class="address-header-line-1">
+            <font-awesome-icon icon="map-marker-alt" />
+            {{ activeAddress }}
+            <div class="columns small-24 medium-6 flex-div div-padding-and-margin hide-print">
             </div>
-            <h1 class="address-header-line-1">
-              <font-awesome-icon icon="map-marker-alt" />
-              {{ activeAddress }}
-              <div class="columns small-24 medium-6 flex-div div-padding-and-margin hide-print">
-                <button-comp-light
-                  id="plans-button"
-                  class="print-button"
-                  :slots="{buttonAction: print}"
-                >
-                  <font-awesome-icon
-                    icon="print"
-                    class="button-icon"
-                  />
-                  Print
-                </button-comp-light>
-              <!-- <p class="p-margin">Print a payment coupon.</p> -->
-              </div>
-            </h1>
-            <div class="address-header-line-2">
-              {{ headerLineTwo }}
-            </div>
+          </h1>
+          <div class="address-header-line-2">
+            {{ headerLineTwo }}
           </div>
         </div>
+        <div>
+          <button-comp-light
+            id="plans-button"
+            class="print-button"
+            :slots="{buttonAction: print}"
+            >
+            <font-awesome-icon
+              icon="print"
+              class="button-icon"
+            />
+            Print
+          </button-comp-light>
+        </div>
       </div>
+    </div>
     <div class="openmaps-modal-content">
 
 
@@ -234,7 +235,7 @@ export default {
       return this.$store.state.activeModal;
     },
     activeFeatureId() {
-      console.log('PropertyCard.vue activeFeatureId computed is running');
+      // console.log('PropertyCard.vue activeFeatureId computed is running');
       return this.activeModal.featureId;
     },
     activeModalFeature() {
@@ -243,7 +244,7 @@ export default {
     activeOpaId() {
       let feature = this.activeModalFeature;
       let opaId;
-      if (![ 'geocode', 'reverseGeocode', 'owner search' ].includes(this.lastSearchMethod)) {
+      if (![ 'geocode', 'reverseGeocode', 'owner search', 'block search' ].includes(this.lastSearchMethod)) {
         opaId = feature.parcel_number;
       } else {
         opaId = feature.properties.opa_account_num;
@@ -253,7 +254,8 @@ export default {
     activeAddress() {
       let feature = this.activeModalFeature;
       let address;
-      if ([ 'geocode', 'reverseGeocode', 'owner search' ].includes(this.lastSearchMethod)) {
+      // console.log("active modal feature: ", this.activeModalFeature)
+      if ([ 'geocode', 'reverseGeocode', 'owner search', 'block search' ].includes(this.lastSearchMethod)) {
         address = feature.properties.street_address;
       } else {
         address = feature.address_std;
@@ -263,7 +265,7 @@ export default {
     headerLineTwo() {
       let feature = this.activeModalFeature;
       let zip;
-      if ([ 'geocode', 'reverseGeocode', 'owner search' ].includes(this.lastSearchMethod)) {
+      if ([ 'geocode', 'reverseGeocode', 'owner search', 'block search' ].includes(this.lastSearchMethod)) {
         zip = feature.properties.zip_code + '-' + feature.properties.zip_4;
       } else {
         zip = feature.zip_code.substring(0,5) + '-' + feature.zip_code.substring(5,10);
@@ -552,7 +554,7 @@ export default {
             label: 'Political Divisions',
             value: function(state) {
               return "<a href='http://atlas.phila.gov/#/"+this.activeAddress+"/voting' target='_blank'>\
-                      Ward Division: "+nth(opaPublicData.political_ward)+" | Council District: "+ nth(opaPublicData.council_district_2016) +" \
+                      Ward: "+nth(opaPublicData.political_ward)+" | Council District: "+ nth(opaPublicData.council_district_2016) +" \
                       <i class='fa fa-external-link-alt'></i></a>";
             }.bind(this),
           },
@@ -567,7 +569,7 @@ export default {
           {
             label: 'Police District',
             value: function() {
-              return "<a href='https://webapps1.philasd.org/school_finder/' target='_blank'>\
+              return "<a href='https://www.phillypolice.com/districts/" + nth(opaPublicData.police_district) + "/index.html' target='_blank'>\
                       " + nth(opaPublicData.police_district) + " District\
                       <i class='fa fa-external-link-alt'></i></a>";
             }.bind(this),
@@ -727,7 +729,7 @@ export default {
           href: function(state) {
             let feature = state.activeModalFeature;
             let address;
-            if ([ 'geocode', 'reverseGeocode', 'owner search' ].includes(state.lastSearchMethod)) {
+            if ([ 'geocode', 'reverseGeocode', 'owner search', 'block search' ].includes(state.lastSearchMethod)) {
               address = feature.properties.street_address;
             } else {
               address = feature.address_std;
@@ -808,19 +810,61 @@ export default {
 </script>
 
 
-<style >
+<style lang="scss">
 
 @media screen {
   p.show-print-only {
     display: none;
   }
-}
 
+  .address-header .address-container {
+    height: 100%;
+    width: 80%;
+    align-items: flex-start;
+    padding-left: 20px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }
+
+  h1.address-header-line-1 {
+    margin-bottom: 0;
+    margin-top: 0;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-right: 8px;
+    padding-left: 8px;
+  }
+
+  #plans-button {
+    position: absolute;
+    top: 25%;
+  }
+
+
+}
+@media screen and (max-width: 1030px) {
+  #plans-button {
+    margin: 5px 0 5px 0;
+    width: 250px;
+    position: relative;
+    right: 25%;
+  }
+  .address-header .address-container {
+    width: 100%;
+  }
+}
 @media screen and (min-width: 750px) {
 
-  /* .openmaps-modal-content{
+ .openmaps-modal-content{
     height: 85%;
-  } */
+    padding-top: 20%
+  }
+
+  .fixed-header {
+    position: fixed;
+    white-space: nowrap;
+    width: calc(50% - 15px);
+  }
 
   tr > td.big_owner {
     font-size: 32px;
@@ -856,6 +900,10 @@ export default {
 
   #ownerProperties div.external-link, #salesHistory div.external-link {
     padding-top: 0;
+  }
+
+  .print-button {
+    display: none;
   }
 
   h4 {
@@ -1006,6 +1054,7 @@ export default {
 
 .fixed-header {
   background-color: white;
+  white-space: nowrap;
 }
 
 .pvc-horizontal-table-body h4, h4.table-title {
@@ -1082,24 +1131,6 @@ export default {
 
 @media screen {
 
-  .address-container {
-    height: 100%;
-    width: 100%;
-    align-items: flex-start;
-    padding-left: 20px;
-    padding-top: 5px;
-    padding-bottom: 5px;
-  }
-
-  h1.address-header-line-1 {
-    margin-bottom: 0;
-    margin-top: 0;
-    padding-top: 0px;
-    padding-bottom: 0px;
-    padding-right: 8px;
-    padding-left: 8px;
-  }
-
 .openmaps-modal-content{
   /* overflow-y: scroll; */
 }
@@ -1175,7 +1206,8 @@ header {
 }
 
 .openmaps-modal-content{
-  padding: 0 20px;
+  padding-left: 20pt;
+  padding-right: 20pt;
 }
 
 .openmaps-modal-close{
