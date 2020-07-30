@@ -298,7 +298,7 @@ export default {
         subtitle:  '\
           Property characteristics described above are included for convenience, but may not reflect the most recent conditions \
           at the property.  Corrections to or questions about this property? \
-          <a target="_blank" href="http://opa.phila.gov/opa.apps/Help/CitizenMain.aspx?sch=Ctrl2&s=1&url=search&id='+ searchId + ' ">\
+          <a target="_blank" href="https://opainquiry.phila.gov/opa.apps/help/PropInq.aspx?acct_num='+ this.activeOpaId + ' ">\
           <b>Submit an Official Inquiry</b>  </b><i class="fa fa-external-link-alt"></i></a></a>\
         ',
         fields: [
