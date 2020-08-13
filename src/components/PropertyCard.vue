@@ -181,7 +181,7 @@
         <p>
           Additional information such as trash & recycling day, and districts for highway, traffic and sanitation can be found at
           <a target="_blank"
-            href="https://openmaps.phila.gov/#/'+this.activeAddress+'">
+            href="https://openmaps.phila.gov">
             <b>OpenMaps </b><i class="fa fa-external-link-alt"></i>
           </a>
         </p>
