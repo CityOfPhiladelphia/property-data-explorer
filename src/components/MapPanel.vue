@@ -294,7 +294,7 @@
             :position="'topright'"
             :link="'cyclomedia'"
             :img-src="sitePath + 'images/cyclomedia.png'"
-            @handle-cyclomedia-button-click="handleCyclomediaButtonClick"
+            @click="handleCyclomediaButtonClick"
           />
         </div>
 
@@ -738,15 +738,6 @@ export default {
     const map = this.$store.state.map.map;
   },
   methods: {
-    handleCyclomediaButtonClick(e) {
-      // console.log('handleCyclomediaButtonClick is running');
-      if (!this.cyclomediaInitializationBegun) {
-        this.$store.commit('setCyclomediaInitializationBegun', true);
-      }
-      const willBeActive = !this.$store.state.cyclomedia.active;
-
-      this.$store.commit('setCyclomediaActive', willBeActive);
-    },
     handleSearchFormSubmit(value) {
       // console.log('MapPanel.vue handleSearchFormSubmit is running');
       this.$controller.handleSearchFormSubmit(value);
