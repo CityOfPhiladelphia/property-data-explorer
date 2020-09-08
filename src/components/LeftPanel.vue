@@ -32,9 +32,10 @@
           </li>
           <li> <span class="fa-li"><i class="fas fa-search"></i></span>
             <h4>Search on property information</h4>
-            Type an address, owner name, property account number, or
+            Type an address, property account number, or
             Department of Records registry map number into the search box.
             Enter "block:" before the address to find all properties on the block.
+            <p class="red">*Property Search is no longer allowing Search By Owner due to privacy concerns.</p>
           </li>
           <li> <span class="fa-li"><i class="fas fa-circle"></i></span>
             <h4>View properties within a selected radius</h4>
@@ -121,6 +122,11 @@ export default {
 .intro-blue {
   background: #daedfe;
   padding: 10px;
+}
+
+.red {
+  color: red;
+  padding-top: 5px;
 }
 
 .spacer {

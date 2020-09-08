@@ -14,21 +14,9 @@
       <div class="cell small-15 medium-21 text-div">
         <p><b>Search for a single address, property account number, or Department of Records Map Registry number</b></p>
         <p>The map will move to the location that you have searched</p>
+        <p class="red">* Property Search is no longer allowing Search By Owner due to privacy concerns.</p>
       </div>
 
-      <div class="cell small-9 medium-3 text-center">
-        <font-awesome-icon
-          icon="search"
-          class="fa-3x"
-          aria-hidden="true"
-        />
-      </div>
-      <div class="cell small-15 medium-21 text-div">
-        <p><b>Search for a person's name</b></p>
-        <p>The map will not move to any locations found, because there may be multiple</p>
-        <p>Click the locate arrow in a result to move the map to that location</p>
-      </div>
-      
       <div class="cell small-9 medium-3 text-center">
         <font-awesome-icon
           icon="search"
