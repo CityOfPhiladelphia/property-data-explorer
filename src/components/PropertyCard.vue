@@ -73,6 +73,7 @@
 
       <!-- owner and address horizontal table -->
       <horizontal-table
+        class="owner-table"
         :slots="{
           items: opaPublicData
         }"
@@ -635,12 +636,15 @@ export default {
                 item.owner_1.trim();
               return owner;
             },
-            customClass: 'big_owner',
+            customClass: 'large-owner',
           },
           {
-            label: 'Mailing Address',
+            label: 'OPA Account Number',
             value: function(state, item) {
               let mailingAddress = [];
+              mailingAddress.push('<span class="large-owner">' + this.activeOpaId+'</span><br>');
+              mailingAddress.push('<br class="mobile-break">');
+              mailingAddress.push('<span class="small-address">Mailing Address</span> <br>');
               let addressFields = [ 'mailing_address_1', 'mailing_address_2', 'mailing_care_of', 'mailing_street',  'mailing_city_state', 'mailing_zip' ];
               addressFields.map( a => item[a] != null ? a === 'mailing_city_state' ?
                 mailingAddress.push(titleCase(item[a]) + ' ' ) : mailingAddress.push(titleCase( (item[a])) + ' <br>') :'');
@@ -655,7 +659,7 @@ export default {
               return mailingAddress.join('<br>');
 
             }.bind(this),
-            customClass: 'small_address',
+            customClass: 'small-address',
           },
         ],
       };
@@ -840,8 +844,12 @@ export default {
     top: 25%;
   }
 
+  span.small-address {
+    font-weight: bold;
+  }
 
 }
+
 @media screen and (max-width: 1030px) {
   #plans-button {
     margin: 5px 0 5px 0;
@@ -875,14 +883,22 @@ export default {
     padding-bottom: 0;
   }
 
-  td.small_address {
+  td.small-address {
     font-size: 12px !important;
-    font-weight: 100 !important;
+    font-weight: 100;
     font-family: "Montserrat", sans-serif;
     vertical-align: top !important;
     padding-top: 0 !important;
     padding-bottom: 0;
   }
+  .mobile-break {
+    display: none;
+  }
+
+  td.large-owner>div>div>div, span.large-owner {
+    font-size: 24px;
+  }
+  
 
 }
 
@@ -900,6 +916,18 @@ export default {
 
   #ownerProperties div.external-link, #salesHistory div.external-link {
     padding-top: 0;
+  }
+
+  #ownerProperties>tbody>tr>td.large-owner {
+    background-color: white !important;
+  }
+
+  span.small-address {
+    font-weight: bold;
+  }
+
+  td.large-owner>div>div>div,, span.large-owner {
+    font-size: 24px;
   }
 
   .print-button {
@@ -1004,16 +1032,16 @@ export default {
   } */
 
   .pvc-horizontal-table table tr:nth-child(odd) td.big_owner,
-  .pvc-horizontal-table table tr:nth-child(odd) td.small_address {
+  .pvc-horizontal-table table tr:nth-child(odd) td.small-address {
     background: none !important;
   }
   .pvc-horizontal-table table tr:nth-child(odd) td.big_owner,
-  .pvc-horizontal-table table tr:nth-child(odd) td.small_address {
+  .pvc-horizontal-table table tr:nth-child(odd) td.small-address {
 
     font-family: "Montserrat", sans-serif;
   }
 
-  /* .pvc-horizontal-table table tr:nth-child(odd) td.small_address {
+  /* .pvc-horizontal-table table tr:nth-child(odd) td.small-address {
     font-size: 12px !important;
     font-weight: 100 !important;
     font-family: "Montserrat", sans-serif;
@@ -1041,13 +1069,26 @@ export default {
 
 }
 
-#ownerProperties td {
-  line-height: 1.25;
+.address-opa-right {
+  float: right;
+  margin-left: 10px;
+}
+
+#ownerProperties {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  td {
+    line-height: 1.25;
+    color: #444;
+  }
+  .owner-left {
+    float: left;
+  }
 }
 
 .owner th, .owner tr {
   background: white !important;
-  color: black;
+  color: #444;
   padding-top: 0;
   padding-bottom: 0;
 }
@@ -1127,13 +1168,29 @@ export default {
   .openmaps-modal-content {
     height: auto !important;
   }
+
+
+  .large-owner, td.large-owner, .owner th {
+    font-size: 24px;
+  }
+
+  br.mobile-break {
+    display: visible;
+  }
+
+
 }
 
 @media screen {
 
-.openmaps-modal-content{
-  /* overflow-y: scroll; */
-}
+  .openmaps-modal-content{
+    /* overflow-y: scroll; */
+  }
+
+  .owner th, .owner .small-address {
+    font-size: 10px;
+    padding-top: 10px;
+  }
 
 }
 
