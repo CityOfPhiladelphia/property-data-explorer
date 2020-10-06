@@ -13,6 +13,7 @@ import { faHexagon } from '@fortawesome/pro-solid-svg-icons/faHexagon';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons/faInfoCircle';
 import { faLocationArrow } from '@fortawesome/pro-solid-svg-icons/faLocationArrow';
 import { faPrint } from '@fortawesome/free-solid-svg-icons/faPrint';
-library.add(faSpinner, faBars, faCircle, faDownload, faEnvelope, faHandRock, faHexagon, faInfoCircle, faLocationArrow, faPrint);
+import { faMoneyCheckAlt } from '@fortawesome/pro-solid-svg-icons/faMoneyCheckAlt';
+library.add(faMoneyCheckAlt, faSpinner, faBars, faCircle, faDownload, faEnvelope, faHandRock, faHexagon, faInfoCircle, faLocationArrow, faPrint);
 
 export default library;

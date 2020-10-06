@@ -107,6 +107,26 @@
         </a>
       </p>
 
+      <!-- Tax Balance Link -->
+      <div class="has-background-bell-yellow-light hide-print">
+        <font-awesome-icon
+          icon="money-check-alt"
+          class="fa-2x"
+        />
+      <div>
+        <h3>Real Estate Tax Balance</h3>
+        Balance details on this property.
+      </div>
+
+      <button-comp-light
+        :slots="tbd"
+      >
+        View the tax balance
+      </button-comp-light>
+
+
+      </div>
+
       <!-- valuation history horizontal table -->
       <div
         v-if="!this.$store.state.activeSearch.assessmentHistory.data"
@@ -1072,6 +1092,34 @@ export default {
 .address-opa-right {
   float: right;
   margin-left: 10px;
+}
+
+.has-background-bell-yellow-light  {
+  background-color: #fff7d0;
+  display: flex;
+  margin: 15px  0px;
+  padding: 10px;
+  position: relative;
+  svg {
+    margin: auto 5px;
+    top: 50%;
+  }
+  div {
+    padding-left: 15px;
+  }
+  div, .button-light {
+    margin: 5px 5px;
+    h3 {
+      margin-bottom: 0;
+    }
+  }
+  .button-light {
+    max-height: 32px;
+    position: absolute;
+    padding: 10px 7px 24px 7px;
+    top: 20%;
+    right: 5px;
+  }
 }
 
 #ownerProperties {
