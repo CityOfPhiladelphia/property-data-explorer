@@ -110,8 +110,8 @@
       <!-- Tax Balance Link -->
       <div class="has-background-bell-yellow-light hide-print">
         <font-awesome-icon
-          icon="money-check-alt"
-          class="fa-2x"
+          :icon="['fal', 'money-check-alt']"
+          class="fa-3x"
         />
         <div>
           <h3>Real Estate Tax Balance</h3>
@@ -216,13 +216,23 @@
               <b>metadata.phila.gov </b><i class="fa fa-external-link-alt"></i>
           </a>
         </p>
-        <p>
-          Additional information such as trash & recycling day, and districts for highway, traffic and sanitation can be found at
-          <a target="_blank"
-            href="https://openmaps.phila.gov">
-            <b>OpenMaps </b><i class="fa fa-external-link-alt"></i>
-          </a>
-        </p>
+
+      <!-- More Info Link -->
+      <div class="has-background-ben-franklin-blue-light hide-print">
+
+        <font-awesome-icon
+          :icon="['fal', 'info-circle']"
+          class="fa-3x"
+          aria-hidden="true"
+        />
+
+        <div>
+          <h3>Not finding the information you're looking for?</h3>
+          For the legacy Property application, try <a href="https://property.phila.gov" target="_blank">property.phila.gov</a>.<br>
+          For more information specific to this property, try <a href="https://atlas.phila.gov" target="_blank">atlas.phila.gov</a>
+        </div>
+      </div>
+
         <p
           class="show-print-only"
         >
@@ -682,18 +692,17 @@ export default {
               mailingAddress.push('<span class="large-owner">' + this.activeOpaId+'</span><br>');
               mailingAddress.push('<br class="mobile-break">');
               mailingAddress.push('<span class="small-address">Mailing Address</span> <br>');
-              let addressFields = [ 'mailing_address_1', 'mailing_address_2', 'mailing_care_of', 'mailing_street',  'mailing_city_state', 'mailing_zip' ];
-              addressFields.map( a => item[a] != null ? a === 'mailing_city_state' ?
-                mailingAddress.push(titleCase(item[a]) + ' ' ) : mailingAddress.push(titleCase( (item[a])) + ' <br>') :'');
-              // console.log('mailingAddress', mailingAddress, item)
-
-              if(mailingAddress.length > 0 ) {
-                return mailingAddress.join('');
+              if(item.mailing_address_1 !== null) {
+                let addressFields = [ 'mailing_address_1', 'mailing_address_2', 'mailing_care_of', 'mailing_street',  'mailing_city_state', 'mailing_zip' ];
+                addressFields.map( a => item[a] != null ? a === 'mailing_city_state' ?
+                mailingAddress.push(titleCase(item[a]) + ' ' ) : mailingAddress.push(titleCase( (item[a])) + ' <br>') :'')
+                return mailingAddress.join(' ');
+              } else {
+                // console.log('activeAddress', this.activeAddress, item)
+                let zip = item.zip_code.substring(0,5) + '-' + item.zip_code.substring(5,10);
+                mailingAddress.push(titleCase( this.activeAddress), 'Philadelphia, PA', zip);
+                return mailingAddress.join(' ');
               }
-              // console.log('activeAddress', this.activeAddress, item)
-              let zip = item.zip_code.substring(0,5) + '-' + item.zip_code.substring(5,10);
-              mailingAddress.push(titleCase( this.activeAddress), 'Philadelphia, PA', zip);
-              return mailingAddress.join('<br>');
 
             }.bind(this),
             customClass: 'small-address',
@@ -891,6 +900,7 @@ export default {
 
   span.small-address {
     font-weight: bold;
+    line-height: 2;
   }
 
 }
@@ -1125,9 +1135,16 @@ export default {
   margin-left: 10px;
 }
 
-.has-background-bell-yellow-light  {
-  z-index: 300;
+.has-background-bell-yellow-light {
   background-color: #fff7d0;
+}
+
+.has-background-ben-franklin-blue-light {
+  background-color: #daedfe;
+}
+
+.has-background-bell-yellow-light, .has-background-ben-franklin-blue-light  {
+  z-index: 300;
   display: flex;
   justify-content: space-between;
   margin: 15px  0px;
