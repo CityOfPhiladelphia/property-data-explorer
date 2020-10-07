@@ -113,18 +113,16 @@
           icon="money-check-alt"
           class="fa-2x"
         />
-      <div>
-        <h3>Real Estate Tax Balance</h3>
-        Balance details on this property.
-      </div>
+        <div>
+          <h3>Real Estate Tax Balance</h3>
+          Balance details on this property.
+        </div>
 
-      <button-comp-light
-        :slots="tbd"
-      >
-        View the tax balance
-      </button-comp-light>
-
-
+        <button-comp-light
+          :slots="{buttonAction: buttonLinkTaxBalance}"
+        >
+          View the tax balance
+        </button-comp-light>
       </div>
 
       <!-- valuation history horizontal table -->
@@ -175,6 +173,25 @@
         }"
         :options="salesHistoryHorizontalTableOptions"
       />
+
+      <!-- L&I Records Link -->
+      <div class="has-background-bell-yellow-light hide-print">
+        <font-awesome-icon
+          icon="wrench"
+          class="fa-3x"
+        />
+        <div>
+          <h3>L&I Records</h3>
+          Permits, licenses, violations, and appeals
+          <br>related to this property.
+        </div>
+
+        <button-comp-light
+          :slots="{buttonAction: buttonLinkLI}"
+        >
+          View L&I Records
+        </button-comp-light>
+      </div>
 
       <!-- property details vertical table -->
       <div
@@ -819,6 +836,14 @@ export default {
     },
   },
   methods: {
+    buttonLinkLI(){
+      window.open('https://li.phila.gov/#summary?address=' + this.activeOpaId, '_blank');
+      return false;
+    },
+    buttonLinkTaxBalance(){
+      window.open('https://www.phila.gov/revenue/realestatetax/#/' + this.activeOpaId, '_blank');
+      return false;
+    },
     closeModal(state) {
       this.$store.state.activeModal.featureId = null;
       this.$store.commit('setActiveFeature', null);
@@ -881,11 +906,17 @@ export default {
     width: 100%;
   }
 }
+@media screen and (min-width: 1030px) {
+   div.openmaps-modal-content{
+    height: 85%;
+    padding-top: 125px;
+  }
+}
 @media screen and (min-width: 750px) {
 
  .openmaps-modal-content{
     height: 85%;
-    padding-top: 20%
+    padding-top: 150px;
   }
 
   .fixed-header {
@@ -1095,17 +1126,22 @@ export default {
 }
 
 .has-background-bell-yellow-light  {
+  z-index: 300;
   background-color: #fff7d0;
   display: flex;
+  justify-content: space-between;
   margin: 15px  0px;
   padding: 10px;
-  position: relative;
+  flex-wrap: wrap;
   svg {
     margin: auto 5px;
     top: 50%;
+    flex-grow: 2;
   }
   div {
     padding-left: 15px;
+    min-width: 260px;
+    flex-grow: 4;
   }
   div, .button-light {
     margin: 5px 5px;
@@ -1115,15 +1151,16 @@ export default {
   }
   .button-light {
     max-height: 32px;
-    position: absolute;
+    min-width: 190px;
     padding: 10px 7px 24px 7px;
-    top: 20%;
+    margin: auto;
     right: 5px;
+    align-self: flex-end;
+    flex-grow: 2;
   }
 }
 
 #ownerProperties {
-  margin-top: 20px;
   margin-bottom: 20px;
   td {
     line-height: 1.25;
@@ -1205,7 +1242,6 @@ export default {
   .button-state {
     background: white;
   }
-
   .openmaps-modal {
     /* width: 100% !important; */
     height: 100% !important;
