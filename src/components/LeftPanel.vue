@@ -79,7 +79,7 @@ export default {
       // if (this.fullScreenTopicsEnabled) {
       //   return 'medium-12 small-24 full-topics-open'
       // } else {
-      return 'small-24 small-order-2 medium-24 medium-order-1';
+      return 'small-24 small-order-2 medium-12 medium-order-1';
       // }
     },
     sitePath() {
@@ -153,7 +153,6 @@ export default {
   #intro-container {
     position: relative;
       overflow-y: auto;
-      flex: auto;
   }
   .introduction {
     padding: 38px 46px 0 46px;
