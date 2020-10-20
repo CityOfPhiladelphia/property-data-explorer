@@ -1,7 +1,7 @@
 <template>
   <div
     id="map-panel-container"
-    :class="mapPanelContainerClass + ' surrounding-div grid-frame print-hide'"
+    :class="mapPanelContainerClass + ' surrounding-div print-hide'"
   >
   <!-- class="surrounding-div grid-frame print-hide" -->
 
