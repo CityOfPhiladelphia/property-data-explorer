@@ -147,6 +147,9 @@ export default {
   #intro-container {
     overflow-y: visible;
   }
+  .grid-x > #intro-container.medium-12 {
+    width: 100%;
+  }
 }
 
 @media screen and (min-width: 750px) {
