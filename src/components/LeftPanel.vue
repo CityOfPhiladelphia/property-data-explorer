@@ -150,6 +150,15 @@ export default {
   .grid-x > #intro-container.medium-12 {
     width: 100%;
   }
+  #ownerProperties, #salesHistory {
+   thead>tr,  tbody>tr,  {
+      display: revert;
+      td, th {
+        display: revert;
+      }
+    }
+
+  }
 }
 
 @media screen and (min-width: 750px) {
