@@ -139,17 +139,20 @@
       </div>
       <horizontal-table
         v-if="this.$store.state.activeSearch.assessmentHistory.data"
+        class='valuation-history'
         :slots="{
           title: 'Valuation History',
+          subtitle: 'Taxable and exempt land values can represent the \
+                     contributory value of land in relation to the total \
+                     market value, or were no structure is present, the \
+                     value of vacant land. (Consistent with International \
+                     Association of Assessing Officers (IAAO) standards, \
+                     the value of an improved parcel is separated into the \
+                     portion of value attributed to the improvement and the \
+                     portion of value attributed to the land.)',
           items: this.$store.state.activeSearch.assessmentHistory.data
         }"
         :options="valuationHistoryHorizontalTableOptions"
-      />
-
-      <!-- taxable and exempt land values callout -->
-      <callout
-        class="hide-print"
-        :slots="propValueCalloutSlots"
       />
 
       <!-- sales history horizontal table -->
@@ -700,7 +703,7 @@ export default {
               } else {
                 // console.log('activeAddress', this.activeAddress, item)
                 let zip = item.zip_code.substring(0,5) + '-' + item.zip_code.substring(5,10);
-                mailingAddress.push(titleCase( this.activeAddress), 'Philadelphia, PA', zip);
+                mailingAddress.push(titleCase( this.activeAddress), '<br>Philadelphia, PA', zip);
                 return mailingAddress.join(' ');
               }
 
@@ -769,24 +772,6 @@ export default {
           },
           // asc or desc
           order: 'desc',
-        },
-        externalLink: {
-          forceShow: true,
-          action: function() {
-            return 'View the Real Estate Tax Balance';
-          },
-          name: '',
-          href: function(state) {
-            let feature = state.activeModalFeature;
-            let address;
-            if ([ 'geocode', 'reverseGeocode', 'owner search', 'block search' ].includes(state.lastSearchMethod)) {
-              address = feature.properties.street_address;
-            } else {
-              address = feature.address_std;
-            }
-            let addressEncoded = encodeURIComponent(address);
-            return '//www.phila.gov/revenue/realestatetax/#/' + addressEncoded + '//property';
-          },
         },
       };
     },
@@ -1147,7 +1132,7 @@ export default {
   z-index: 300;
   display: flex;
   justify-content: space-between;
-  margin: 15px  0px;
+  margin: 35px  0px;
   padding: 10px;
   flex-wrap: wrap;
   svg {
@@ -1186,6 +1171,12 @@ export default {
   .owner-left {
     float: left;
   }
+}
+
+.valuation-history h5 {
+  font-size: 14px;
+  margin: 1%;
+  color: #444 !important;
 }
 
 .owner th, .owner tr {
