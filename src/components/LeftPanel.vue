@@ -79,7 +79,7 @@ export default {
       // if (this.fullScreenTopicsEnabled) {
       //   return 'medium-12 small-24 full-topics-open'
       // } else {
-      return 'small-24 small-order-2 medium-24 medium-order-1';
+      return 'small-24 small-order-2 medium-12 medium-order-1';
       // }
     },
     sitePath() {
@@ -146,6 +146,18 @@ export default {
 @media print {
   #intro-container {
     overflow-y: visible;
+  }
+  .grid-x > #intro-container.medium-12 {
+    width: 100%;
+  }
+  #ownerProperties, #salesHistory {
+   thead>tr,  tbody>tr,  {
+      display: revert;
+      td, th {
+        display: revert;
+      }
+    }
+
   }
 }
 

@@ -73,6 +73,7 @@
 
       <!-- owner and address horizontal table -->
       <horizontal-table
+        class="owner-table"
         :slots="{
           items: opaPublicData
         }"
@@ -106,6 +107,24 @@
         </a>
       </p>
 
+      <!-- Tax Balance Link -->
+      <div class="has-background-bell-yellow-light hide-print">
+        <font-awesome-icon
+          :icon="['fal', 'money-check-alt']"
+          class="fa-3x"
+        />
+        <div>
+          <h3>Real Estate Tax Balance</h3>
+          Balance details on this property.
+        </div>
+
+        <button-comp-light
+          :slots="{buttonAction: buttonLinkTaxBalance}"
+        >
+          View the tax balance
+        </button-comp-light>
+      </div>
+
       <!-- valuation history horizontal table -->
       <div
         v-if="!this.$store.state.activeSearch.assessmentHistory.data"
@@ -120,17 +139,20 @@
       </div>
       <horizontal-table
         v-if="this.$store.state.activeSearch.assessmentHistory.data"
+        class='valuation-history'
         :slots="{
           title: 'Valuation History',
+          subtitle: 'Taxable and exempt land values can represent the \
+                     contributory value of land in relation to the total \
+                     market value, or were no structure is present, the \
+                     value of vacant land. (Consistent with International \
+                     Association of Assessing Officers (IAAO) standards, \
+                     the value of an improved parcel is separated into the \
+                     portion of value attributed to the improvement and the \
+                     portion of value attributed to the land.)',
           items: this.$store.state.activeSearch.assessmentHistory.data
         }"
         :options="valuationHistoryHorizontalTableOptions"
-      />
-
-      <!-- taxable and exempt land values callout -->
-      <callout
-        class="hide-print"
-        :slots="propValueCalloutSlots"
       />
 
       <!-- sales history horizontal table -->
@@ -155,6 +177,25 @@
         :options="salesHistoryHorizontalTableOptions"
       />
 
+      <!-- L&I Records Link -->
+      <div class="has-background-bell-yellow-light hide-print">
+        <font-awesome-icon
+          icon="wrench"
+          class="fa-3x"
+        />
+        <div>
+          <h3>L&I Records</h3>
+          Permits, licenses, violations, and appeals
+          <br>related to this property.
+        </div>
+
+        <button-comp-light
+          :slots="{buttonAction: buttonLinkLI}"
+        >
+          View L&I Records
+        </button-comp-light>
+      </div>
+
       <!-- property details vertical table -->
       <div
         v-if="!this.$store.state.sources.opa_public.targets[activeOpaId].data"
@@ -178,13 +219,23 @@
               <b>metadata.phila.gov </b><i class="fa fa-external-link-alt"></i>
           </a>
         </p>
-        <p>
-          Additional information such as trash & recycling day, and districts for highway, traffic and sanitation can be found at
-          <a target="_blank"
-            href="https://openmaps.phila.gov">
-            <b>OpenMaps </b><i class="fa fa-external-link-alt"></i>
-          </a>
-        </p>
+
+      <!-- More Info Link -->
+      <div class="has-background-ben-franklin-blue-light hide-print">
+
+        <font-awesome-icon
+          :icon="['fal', 'info-circle']"
+          class="fa-3x"
+          aria-hidden="true"
+        />
+
+        <div>
+          <h3>Not finding the information you're looking for?</h3>
+          For the legacy Property application, try <a href="https://property.phila.gov" target="_blank">property.phila.gov</a>.<br>
+          For more information specific to this property, try <a href="https://atlas.phila.gov" target="_blank">atlas.phila.gov</a>
+        </div>
+      </div>
+
         <p
           class="show-print-only"
         >
@@ -635,27 +686,29 @@ export default {
                 item.owner_1.trim();
               return owner;
             },
-            customClass: 'big_owner',
+            customClass: 'large-owner',
           },
           {
-            label: 'Mailing Address',
+            label: 'OPA Account Number',
             value: function(state, item) {
               let mailingAddress = [];
-              let addressFields = [ 'mailing_address_1', 'mailing_address_2', 'mailing_care_of', 'mailing_street',  'mailing_city_state', 'mailing_zip' ];
-              addressFields.map( a => item[a] != null ? a === 'mailing_city_state' ?
-                mailingAddress.push(titleCase(item[a]) + ' ' ) : mailingAddress.push(titleCase( (item[a])) + ' <br>') :'');
-              // console.log('mailingAddress', mailingAddress, item)
-
-              if(mailingAddress.length > 0 ) {
-                return mailingAddress.join('');
+              mailingAddress.push('<span class="large-owner">' + this.activeOpaId+'</span><br>');
+              mailingAddress.push('<br class="mobile-break">');
+              mailingAddress.push('<span class="small-address">Mailing Address</span> <br>');
+              if(item.mailing_address_1 !== null) {
+                let addressFields = [ 'mailing_address_1', 'mailing_address_2', 'mailing_care_of', 'mailing_street',  'mailing_city_state', 'mailing_zip' ];
+                addressFields.map( a => item[a] != null ? a === 'mailing_city_state' ?
+                mailingAddress.push(titleCase(item[a]) + ' ' ) : mailingAddress.push(titleCase( (item[a])) + ' <br>') :'')
+                return mailingAddress.join(' ');
+              } else {
+                // console.log('activeAddress', this.activeAddress, item)
+                let zip = item.zip_code.substring(0,5) + '-' + item.zip_code.substring(5,10);
+                mailingAddress.push(titleCase( this.activeAddress), '<br>Philadelphia, PA', zip);
+                return mailingAddress.join(' ');
               }
-              // console.log('activeAddress', this.activeAddress, item)
-              let zip = item.zip_code.substring(0,5) + '-' + item.zip_code.substring(5,10);
-              mailingAddress.push(titleCase( this.activeAddress), 'Philadelphia, PA', zip);
-              return mailingAddress.join('<br>');
 
             }.bind(this),
-            customClass: 'small_address',
+            customClass: 'small-address',
           },
         ],
       };
@@ -720,24 +773,6 @@ export default {
           // asc or desc
           order: 'desc',
         },
-        externalLink: {
-          forceShow: true,
-          action: function() {
-            return 'View the Real Estate Tax Balance';
-          },
-          name: '',
-          href: function(state) {
-            let feature = state.activeModalFeature;
-            let address;
-            if ([ 'geocode', 'reverseGeocode', 'owner search', 'block search' ].includes(state.lastSearchMethod)) {
-              address = feature.properties.street_address;
-            } else {
-              address = feature.address_std;
-            }
-            let addressEncoded = encodeURIComponent(address);
-            return '//www.phila.gov/revenue/realestatetax/#/' + addressEncoded + '//property';
-          },
-        },
       };
     },
 
@@ -795,6 +830,14 @@ export default {
     },
   },
   methods: {
+    buttonLinkLI(){
+      window.open('https://li.phila.gov/#summary?address=' + this.activeOpaId, '_blank');
+      return false;
+    },
+    buttonLinkTaxBalance(){
+      window.open('https://www.phila.gov/revenue/realestatetax/#/' + this.activeOpaId, '_blank');
+      return false;
+    },
     closeModal(state) {
       this.$store.state.activeModal.featureId = null;
       this.$store.commit('setActiveFeature', null);
@@ -840,8 +883,13 @@ export default {
     top: 25%;
   }
 
+  span.small-address {
+    font-weight: bold;
+    line-height: 2;
+  }
 
 }
+
 @media screen and (max-width: 1030px) {
   #plans-button {
     margin: 5px 0 5px 0;
@@ -853,11 +901,17 @@ export default {
     width: 100%;
   }
 }
+@media screen and (min-width: 1030px) {
+   div.openmaps-modal-content{
+    height: 85%;
+    padding-top: 125px;
+  }
+}
 @media screen and (min-width: 750px) {
 
  .openmaps-modal-content{
     height: 85%;
-    padding-top: 20%
+    padding-top: 150px;
   }
 
   .fixed-header {
@@ -875,14 +929,22 @@ export default {
     padding-bottom: 0;
   }
 
-  td.small_address {
+  td.small-address {
     font-size: 12px !important;
-    font-weight: 100 !important;
+    font-weight: 100;
     font-family: "Montserrat", sans-serif;
     vertical-align: top !important;
     padding-top: 0 !important;
     padding-bottom: 0;
   }
+  .mobile-break {
+    display: none;
+  }
+
+  td.large-owner>div>div>div, span.large-owner {
+    font-size: 24px;
+  }
+  
 
 }
 
@@ -900,6 +962,18 @@ export default {
 
   #ownerProperties div.external-link, #salesHistory div.external-link {
     padding-top: 0;
+  }
+
+  #ownerProperties>tbody>tr>td.large-owner {
+    background-color: white !important;
+  }
+
+  span.small-address {
+    font-weight: bold;
+  }
+
+  td.large-owner>div>div>div, span.large-owner {
+    font-size: 24px;
   }
 
   .print-button {
@@ -1004,16 +1078,16 @@ export default {
   } */
 
   .pvc-horizontal-table table tr:nth-child(odd) td.big_owner,
-  .pvc-horizontal-table table tr:nth-child(odd) td.small_address {
+  .pvc-horizontal-table table tr:nth-child(odd) td.small-address {
     background: none !important;
   }
   .pvc-horizontal-table table tr:nth-child(odd) td.big_owner,
-  .pvc-horizontal-table table tr:nth-child(odd) td.small_address {
+  .pvc-horizontal-table table tr:nth-child(odd) td.small-address {
 
     font-family: "Montserrat", sans-serif;
   }
 
-  /* .pvc-horizontal-table table tr:nth-child(odd) td.small_address {
+  /* .pvc-horizontal-table table tr:nth-child(odd) td.small-address {
     font-size: 12px !important;
     font-weight: 100 !important;
     font-family: "Montserrat", sans-serif;
@@ -1041,13 +1115,73 @@ export default {
 
 }
 
-#ownerProperties td {
-  line-height: 1.25;
+.address-opa-right {
+  float: right;
+  margin-left: 10px;
+}
+
+.has-background-bell-yellow-light {
+  background-color: #fff7d0;
+}
+
+.has-background-ben-franklin-blue-light {
+  background-color: #daedfe;
+}
+
+.has-background-bell-yellow-light, .has-background-ben-franklin-blue-light  {
+  z-index: 300;
+  display: flex;
+  justify-content: space-between;
+  margin: 35px  0px;
+  padding: 10px;
+  flex-wrap: wrap;
+  svg {
+    margin: auto 5px;
+    top: 50%;
+    flex-grow: 2;
+  }
+  div {
+    padding-left: 15px;
+    min-width: 260px;
+    flex-grow: 4;
+  }
+  div, .button-light {
+    margin: 5px 5px;
+    h3 {
+      margin-bottom: 0;
+    }
+  }
+  .button-light {
+    max-height: 32px;
+    min-width: 190px;
+    padding: 10px 7px 24px 7px;
+    margin: auto;
+    right: 5px;
+    align-self: flex-end;
+    flex-grow: 2;
+  }
+}
+
+#ownerProperties {
+  margin-bottom: 20px;
+  td {
+    line-height: 1.25;
+    color: #444;
+  }
+  .owner-left {
+    float: left;
+  }
+}
+
+.valuation-history h5 {
+  font-size: 14px;
+  margin: 1%;
+  color: #444 !important;
 }
 
 .owner th, .owner tr {
   background: white !important;
-  color: black;
+  color: #444;
   padding-top: 0;
   padding-bottom: 0;
 }
@@ -1102,9 +1236,9 @@ export default {
     border-style: none !important;
   }
 
-  .openmaps-modal-content{
-    /* overflow-y: visible; */
-  }
+  /* .openmaps-modal-content {
+    overflow-y: visible;
+  } */
 
 }
 
@@ -1116,7 +1250,6 @@ export default {
   .button-state {
     background: white;
   }
-
   .openmaps-modal {
     /* width: 100% !important; */
     height: 100% !important;
@@ -1127,13 +1260,29 @@ export default {
   .openmaps-modal-content {
     height: auto !important;
   }
+
+
+  .large-owner, td.large-owner, .owner th {
+    font-size: 24px;
+  }
+
+  br.mobile-break {
+    display: visible;
+  }
+
+
 }
 
 @media screen {
 
-.openmaps-modal-content{
-  /* overflow-y: scroll; */
-}
+  /* .openmaps-modal-content {
+    overflow-y: scroll;
+  } */
+
+  .owner th, .owner .small-address {
+    font-size: 10px;
+    padding-top: 10px;
+  }
 
 }
 

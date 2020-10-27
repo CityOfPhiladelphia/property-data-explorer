@@ -1,7 +1,7 @@
 <template>
   <div
     id="map-panel-container"
-    :class="mapPanelContainerClass + ' surrounding-div grid-frame print-hide'"
+    :class="mapPanelContainerClass + ' surrounding-div print-hide'"
   >
   <!-- class="surrounding-div grid-frame print-hide" -->
 
@@ -11,7 +11,7 @@
   <!-- :class="'medium-grid-frame surrounding-div ' + this.mapDivClass" -->
 
     <full-screen-map-toggle-tab-vertical
-      v-if="!this.$store.state.leftPanel"
+      v-if="!this.$store.state.leftPanel && !this.fullScreenTopicsEnabled"
       v-once
     />
 
@@ -415,6 +415,9 @@ export default {
   computed: {
     isMobileOrTablet() {
       return this.$store.state.isMobileOrTablet;
+    },
+    fullScreenTopicsEnabled() {
+      return this.$store.state.fullScreenTopicsEnabled;
     },
     mapDivClass() {
       if (this.cyclomediaActive) {
@@ -861,6 +864,9 @@ export default {
     // .map-div-cyclo {
     //   height: 100%;
     // }
+    #map-panel-container {
+      position: relative;
+    }
 
     .leaflet-bar {
       button, a.leaflet-draw-draw-polygon {
