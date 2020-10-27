@@ -972,7 +972,7 @@ export default {
     font-weight: bold;
   }
 
-  td.large-owner>div>div>div,, span.large-owner {
+  td.large-owner>div>div>div, span.large-owner {
     font-size: 24px;
   }
 
@@ -1236,9 +1236,9 @@ export default {
     border-style: none !important;
   }
 
-  .openmaps-modal-content{
-    /* overflow-y: visible; */
-  }
+  /* .openmaps-modal-content {
+    overflow-y: visible;
+  } */
 
 }
 
@@ -1275,9 +1275,9 @@ export default {
 
 @media screen {
 
-  .openmaps-modal-content{
-    /* overflow-y: scroll; */
-  }
+  /* .openmaps-modal-content {
+    overflow-y: scroll;
+  } */
 
   .owner th, .owner .small-address {
     font-size: 10px;
