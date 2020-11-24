@@ -14,6 +14,22 @@
       class="introduction"
     >
     <!-- v-if="this.$store.state.activeModal.featureId === null && !this.$store.state.isMobileOrTablet" -->
+      <div class="intro-blue warning">
+        <div class="icon">
+          <i class='fa fa-exclamation-triangle fa-5x'></i>
+        </div>
+        <div>
+          <p>
+            Please note that the OPA is currently upgrading its computer systems.  This implementation 
+            may cause delays in updating internal records and displaying current information in this section.  
+            We apologize for any delays you may experience. 
+          </p> 
+          <p>
+            You may contact the OPA at <a href="tel:+12156864334">215-686-4334</a> for information on a property, 
+            or submit an official inquiry below.
+          </p>
+        </div>
+      </div>
 
       <div class="intro-blue">
           <i>Use the Property App to get information about a property's ownership,
@@ -106,6 +122,17 @@ export default {
 </script>
 
 <style lang="scss">
+
+.warning {
+  display: flex;
+  div.icon {
+    margin-top: auto;
+    margin-bottom: auto;
+  }
+  .fa-exclamation-triangle{
+    margin-right: 10px;
+  }
+}
 
 #intro-container {
   height: 100%;
