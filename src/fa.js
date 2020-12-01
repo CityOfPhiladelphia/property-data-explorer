@@ -19,4 +19,5 @@ import { faWrench } from '@fortawesome/pro-solid-svg-icons/faWrench';
 import { faExclamationTriangle } from '@fortawesome/pro-solid-svg-icons/faExclamationTriangle'; 
 library.add(faExclamationTriangle, faWrench, faMoneyCheckAlt, faSpinner, faBars, faCircle, faDownload, faEnvelope, faHandRock, faHexagon, faInfoCircle, falInfoCircle, faLocationArrow, faPrint);
 
+
 export default library;
