@@ -16,6 +16,8 @@ import { faLocationArrow } from '@fortawesome/pro-solid-svg-icons/faLocationArro
 import { faPrint } from '@fortawesome/free-solid-svg-icons/faPrint';
 import { faMoneyCheckAlt } from '@fortawesome/pro-light-svg-icons/faMoneyCheckAlt';
 import { faWrench } from '@fortawesome/pro-solid-svg-icons/faWrench';
-library.add(faWrench, faMoneyCheckAlt, faSpinner, faBars, faCircle, faDownload, faEnvelope, faHandRock, faHexagon, faInfoCircle, falInfoCircle, faLocationArrow, faPrint);
+import { faExclamationTriangle } from '@fortawesome/pro-solid-svg-icons/faExclamationTriangle'; 
+library.add(faExclamationTriangle, faWrench, faMoneyCheckAlt, faSpinner, faBars, faCircle, faDownload, faEnvelope, faHandRock, faHexagon, faInfoCircle, falInfoCircle, faLocationArrow, faPrint);
+
 
 export default library;

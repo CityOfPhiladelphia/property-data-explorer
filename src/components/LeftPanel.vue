@@ -107,6 +107,17 @@ export default {
 
 <style lang="scss">
 
+.warning {
+  display: flex;
+  div.icon {
+    margin-top: auto;
+    margin-bottom: auto;
+  }
+  .fa-exclamation-triangle{
+    margin-right: 10px;
+  }
+}
+
 #intro-container {
   height: 100%;
 }
