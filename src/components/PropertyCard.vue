@@ -100,10 +100,10 @@
 
       <!-- main callout -->
 
-      <p>Office of Property Assessments (OPA) was formerly part of the Bureau of Revision of Taxes (BRT) and some
+      <p>Office of Property Assessment (OPA) was formerly part of the Board of Revision of Taxes (BRT) and some
         City records may still use that name. Source:
         <a href="https://www.phila.gov/opa/pages/default.aspx" target="_blank">
-          Office of Property Assessments (OPA).
+          Office of Property Assessment (OPA).
         </a>
       </p>
 
@@ -347,7 +347,7 @@ export default {
         dataSources: [ 'opa_public' ],
         title: 'Property Details',
         subtitle:  '\
-          Property characteristics described above are included for convenience, but may not reflect the most recent conditions \
+          Property characteristics described below are included for convenience, but may not reflect the most recent conditions \
           at the property.  Corrections to or questions about this property? <br>\
           <a target="_blank" href="https://opainquiry.phila.gov/opa.apps/help/PropInq.aspx?acct_num='+ this.activeOpaId + ' ">\
           <b>Submit an Official Inquiry</b>  </b><i class="fa fa-external-link-alt"></i></a></a>\
@@ -363,7 +363,7 @@ export default {
             </p> \
             <p>\
               You may contact the OPA at <a href="tel:+12156864334">215-686-4334</a> for information on a property, \
-              or submit an official inquiry below.\
+              or submit an official inquiry above.\
             </p>\
           </div>\
         </div>\
