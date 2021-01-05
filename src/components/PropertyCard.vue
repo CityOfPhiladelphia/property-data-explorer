@@ -711,7 +711,7 @@ export default {
               mailingAddress.push('<span class="large-owner">' + this.activeOpaId+'</span><br>');
               mailingAddress.push('<br class="mobile-break">');
               mailingAddress.push('<span class="small-address">Mailing Address</span> <br>');
-              if(item.mailing_address_1 !== null) {
+              if(item.mailing_street !== null) {
                 let addressFields = [ 'mailing_address_1', 'mailing_address_2', 'mailing_care_of', 'mailing_street',  'mailing_city_state', 'mailing_zip' ];
                 addressFields.map( a => item[a] != null ? a === 'mailing_city_state' ?
                 mailingAddress.push(titleCase(item[a]) + ' ' ) : mailingAddress.push(titleCase( (item[a])) + ' <br>') :'')
