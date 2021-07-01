@@ -162,7 +162,7 @@ export default {
     width: 100%;
   }
   #ownerProperties, #salesHistory {
-   thead>tr,  tbody>tr,  {
+   thead>tr,  tbody>tr  {
       display: revert;
       td, th {
         display: revert;
