@@ -17,6 +17,7 @@
     "@fortawesome/pro-solid-svg-icons": "^5.8.2",
     "@phila/vue-comps": "2.1.6",
     "@phila/vue-mapping": "2.1.18",
+    "@phila/vue-datafetch": "1.4.11",
     "accounting": "^0.4.1",
     "core-js": "^3.4.7",
     "leaflet": "1.5.1",
