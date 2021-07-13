@@ -16,6 +16,7 @@ function createStore(config) {
   const parcels = pvdStore.createParcels(config);
 
   const initialState = {
+    appName: 'pde',
     isMobileOrTablet: isMobileDevice(),
     leftPanel: true,
     ownerSearchModal: false,
