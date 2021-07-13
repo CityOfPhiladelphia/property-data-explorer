@@ -596,11 +596,20 @@ export default {
           {
             label: 'Zoning',
             value: function(state) {
-              return '<a target="_blank" \
-                        href="https://atlas.phila.gov/#/'+ this.activeAddress + '/zoning ">\
-                       <b>' + opaPublicData.zoning + '-' + helpers.ZONING_CODE_MAP[opaPublicData.zoning.trim()] + '</b>\
-                       </b> <i class="fa fa-external-link-alt"></i></a>\
-                       </a>';
+              let zoningCodeMapTrimmed = opaPublicData.zoning ? helpers.ZONING_CODE_MAP[opaPublicData.zoning.trim()] : 'Not Available'
+              if (opaPublicData.zoning) {
+                return '<a target="_blank" \
+                          href="https://atlas.phila.gov/#/'+ this.activeAddress + '/zoning ">\
+                         <b>' + opaPublicData.zoning + '-' + zoningCodeMapTrimmed + '</b>\
+                         </b> <i class="fa fa-external-link-alt"></i></a>\
+                         </a>';
+              } else {
+                    return '<a target="_blank" \
+                      href="https://atlas.phila.gov/'+ this.activeAddress + '/zoning">\
+                      <b> See Atlas </b>\
+                      </b> <i class="fa fa-external-link-alt"></i></a>\
+                      </a>';
+              }
             }.bind(this),
           },
           {
@@ -620,7 +629,7 @@ export default {
           {
             label: 'Political Divisions',
             value: function(state) {
-              return "<a href='http://atlas.phila.gov/#/"+this.activeAddress+"/voting' target='_blank'>\
+              return "<a href='http://atlas.phila.gov/"+this.activeAddress+"/voting' target='_blank'>\
                       Ward: "+nth(opaPublicData.political_ward)+" | Council District: "+ nth(opaPublicData.council_district_2016) +" \
                       <i class='fa fa-external-link-alt'></i></a>";
             }.bind(this),
