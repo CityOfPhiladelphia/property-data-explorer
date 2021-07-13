@@ -307,7 +307,7 @@ export default {
       return this.fullScreenMapEnabled ? 'bottom-none': "";
     },
     shouldKeepLeftPanel() {
-      if (this.$store.state.sources.opa_assessment.status || this.$store.state.cyclomedia.active) {
+      if (this.$store.state.sources.opa_assessment.status || this.$store.state.cyclomedia.active && this.$store.state.activeModal.featureId !== null) {
         // console.log('App.vue shouldKeepLeftPanel first if');
         return false;
       } else if (!this.$store.state.leftPanel) {
@@ -446,7 +446,7 @@ export default {
       // console.log('query.owner:', query.owner);
       this.$controller.handleSearchFormSubmit(query.block);
       this.onDataChange('blockSearch');
-    } 
+    }
   },
   // beforeMount(){
   //   return this.$store.state.isMobileOrTablet ? this.$store.commit('setLeftPanel', false) : "";
@@ -466,7 +466,7 @@ export default {
       });
     },
     openLeftPanel(value){
-      // console.log('App.vue openLeftPanel is running, value:', value);
+      console.log('App.vue openLeftPanel is running, value:', value);
       this.$data.leftPanel = value
       this.$store.commit('setFullScreenMapEnabled', value);
       // value = true ? this.$store.commit('setCyclomediaActive', false ): "";
