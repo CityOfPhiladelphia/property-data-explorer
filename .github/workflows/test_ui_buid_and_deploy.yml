@@ -3,7 +3,7 @@ name: Build, Check And Deploy to Dev
 on:
   push:
     branches:
-      - fix/imagery-removal-2
+      - master
 
 jobs:
   build:
