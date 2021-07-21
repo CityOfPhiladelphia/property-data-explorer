@@ -15,9 +15,9 @@
     "@fortawesome/free-solid-svg-icons": "^5.12.1",
     "@fortawesome/pro-light-svg-icons": "^5.15.1",
     "@fortawesome/pro-solid-svg-icons": "^5.8.2",
-    "@phila/vue-comps": "2.1.6",
-    "@phila/vue-datafetch": "1.4.11",
-    "@phila/vue-mapping": "2.2.11",
+    "@phila/vue-comps": "https://github.com/CityOfPhiladelphia/phila-vue-comps#05985b27a33522dff31adaa755d4a7663a7f8bd1",
+    "@phila/vue-datafetch": "https://github.com/CityOfPhiladelphia/phila-vue-datafetch#de70a4bffa8a6b9346aae3aaaadd2c83382751a7",
+    "@phila/vue-mapping": "https://github.com/CityOfPhiladelphia/phila-vue-mapping#9e9636697700607c38d58c0ec02b89ff8876cd07",
     "accounting": "^0.4.1",
     "core-js": "^3.4.7",
     "leaflet": "1.5.1",
@@ -46,5 +46,8 @@
     "> 1%",
     "last 2 versions",
     "not ie <= 8"
-  ]
+  ],
+  "engines": {
+    "yarn": "YARN NO LONGER USED - use npm instead."
+  }
 }
