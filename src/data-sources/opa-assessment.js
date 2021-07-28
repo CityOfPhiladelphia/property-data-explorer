@@ -24,7 +24,8 @@ export default {
       if (state.geocode.data.condo != null && state.geocode.data.condo == true) {
         // console.log('opa-assessment in if condo is running');
         // opa.push(state.geocode.data);
-        opa.push(state.condoUnits.units[Number(state.parcels.pwd[0].properties.PARCELID)][0]);
+        let idNumber = state.parcels.pwd ? Number(state.parcels.pwd[0].properties.PARCELID) : state.geocode.data.properties.dor_parcel_id;
+        opa.push(state.condoUnits.units[idNumber][0]);
       }
       return opa;
 
