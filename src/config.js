@@ -79,7 +79,7 @@ let config = {
   },
   blockSearch: {
     url: function (input) {
-      let inputWithoutBlockKeyword = input.trim().toLowerCase().replace("blk" , "").replace("block", "");
+      let inputWithoutBlockKeyword = input.trim().toLowerCase().replace("blk" , "").replace("block:", "").replace("block", "");
       var inputEncoded = encodeURIComponent(inputWithoutBlockKeyword);
       return 'https://api.phila.gov/ais_ps/v1/block/' + inputEncoded;
     },
