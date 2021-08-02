@@ -856,7 +856,7 @@ export default {
   },
   methods: {
     buttonLinkLI(){
-      window.open('https://li.phila.gov/#summary?address=' + this.activeOpaId, '_blank');
+      window.open('https://li.phila.gov/property-history/search?address=' + this.activeOpaId, '_blank');
       return false;
     },
     buttonLinkTaxBalance(){
