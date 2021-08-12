@@ -700,7 +700,9 @@ export default {
       } else if (this.$store.state.lastSearchMethod === 'geocode') {
         this.$controller.dataManager.resetData();
         this.$data.condoExpanded = true;
-        const input = this.$store.state.parcels.pwd[0].properties.ADDRESS;
+        const input = this.$store.state.parcels.pwd ?
+                this.$store.state.parcels.pwd[0].properties.ADDRESS :
+                this.$store.state.geocode.data.properties.opa_address;
         this.$controller.dataManager.clients.condoSearch.fetch(input);
         unitData = mapUnitIds(item._featureId);
         // console.log('in addCondoRecords, lastSearchMethod = geocode');
