@@ -15,13 +15,13 @@
     "@fortawesome/free-solid-svg-icons": "^5.12.1",
     "@fortawesome/pro-light-svg-icons": "^5.15.1",
     "@fortawesome/pro-solid-svg-icons": "^5.8.2",
-    "@phila/vue-comps": "2.1.6",
-    "@phila/vue-datafetch": "1.4.11",
-    "@phila/vue-mapping": "2.2.12",
+    "@phila/vue-comps": "3.0.0",
+    "@phila/vue-datafetch": "2.1.1",
+    "@phila/vue-mapping": "3.0.0",
     "accounting": "^0.4.1",
     "core-js": "^3.4.7",
-    "leaflet": "1.5.1",
-    "leaflet-vector-icon": "https://github.com/CityOfPhiladelphia/leaflet-vector-icon#c37571e92c66ce0003f22058f2d246b31d3941a5",
+    "leaflet": "1.7.1",
+    "leaflet-vector-icon": "git+https://github.com/CityOfPhiladelphia/leaflet-vector-icon.git#c37571e92c66ce0003f22058f2d246b31d3941a5",
     "sorttable": "^1.0.2",
     "vue": "^2.6.10",
     "vue-router": "^3.0.6",
@@ -46,5 +46,8 @@
     "> 1%",
     "last 2 versions",
     "not ie <= 8"
-  ]
+  ],
+  "engines": {
+    "yarn": "YARN NO LONGER USED - use npm instead."
+  }
 }

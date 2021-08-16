@@ -17,6 +17,7 @@ const customComps = {
 var BASE_CONFIG_URL = 'https://cdn.jsdelivr.net/gh/cityofphiladelphia/pde_base_config@3cb644750f4db8619a5b41f5369d1e280678f7bb/config.js';
 
 let config = {
+  resetDataOnGeocode: true,
   customComps,
   geocoder: {
     url: function (input) {
@@ -79,7 +80,7 @@ let config = {
   },
   blockSearch: {
     url: function (input) {
-      let inputWithoutBlockKeyword = input.trim().toLowerCase().replace("blk" , "").replace("block", "");
+      let inputWithoutBlockKeyword = input.trim().toLowerCase().replace("blk" , "").replace("block:", "").replace("block", "");
       var inputEncoded = encodeURIComponent(inputWithoutBlockKeyword);
       return 'https://api.phila.gov/ais_ps/v1/block/' + inputEncoded;
     },

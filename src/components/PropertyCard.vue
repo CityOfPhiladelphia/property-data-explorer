@@ -599,7 +599,7 @@ export default {
               let zoningCodeMapTrimmed = opaPublicData.zoning ? helpers.ZONING_CODE_MAP[opaPublicData.zoning.trim()] : 'Not Available'
               if (opaPublicData.zoning) {
                 return '<a target="_blank" \
-                          href="https://atlas.phila.gov/#/'+ this.activeAddress + '/zoning ">\
+                          href="https://atlas.phila.gov/'+ this.activeAddress + '/zoning ">\
                          <b>' + opaPublicData.zoning + '-' + zoningCodeMapTrimmed + '</b>\
                          </b> <i class="fa fa-external-link-alt"></i></a>\
                          </a>';
@@ -856,7 +856,7 @@ export default {
   },
   methods: {
     buttonLinkLI(){
-      window.open('https://li.phila.gov/#summary?address=' + this.activeOpaId, '_blank');
+      window.open('https://li.phila.gov/property-history/search?address=' + this.activeOpaId, '_blank');
       return false;
     },
     buttonLinkTaxBalance(){
