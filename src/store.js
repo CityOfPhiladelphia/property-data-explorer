@@ -156,11 +156,13 @@ function createStore(config) {
         state.activeFeature = nextActiveFeature;
       },
       setActiveModal(state, payload) {
+        console.log('store.js setActiveModal is running, payload:', payload);
         const { featureId } = payload || {};
         const nextActiveFeature = { featureId };
         state.activeModal = nextActiveFeature;
       },
       setActiveModalFeature(state, payload) {
+        console.log('store.js setActiveModalFeature is running, payload:', payload);
         state.activeModalFeature = payload;
       },
       setImageOverlay(state, payload) {
@@ -173,6 +175,8 @@ function createStore(config) {
       setPropertyBalance(state, payload) {
         state.appData.propertyBalance = payload;
       },
+
+      // this is redundant with PVD
       setDidToggleModal(state, name) {
         // console.log('setDidToggleModal, name:', name, 'open:', open);
         // console.log('setDidToggleModal, name:', name);

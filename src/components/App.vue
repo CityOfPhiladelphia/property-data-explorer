@@ -351,8 +351,16 @@ export default {
       this.leftPanel === false ? this.closeModal() : ""
     },
     activeModal() {
+      console.log('watch activeModal is firing');
       this.$controller.activeFeatureChange();
-      this.$store.state.activeModal.featureId !== null ? this.openLeftPanel(true): this.openLeftPanel(false);
+      // this.$store.state.activeModal.featureId !== null ? this.openLeftPanel(true): this.openLeftPanel(false);
+      if (this.$store.state.activeModal.featureId !== null) {
+        console.log('open panel - this.$store.state.activeModal.featureId !== null:', this.$store.state.activeModal.featureId);
+        this.openLeftPanel(true);
+      } else {
+        console.log('close panel - this.$store.state.activeModal.featureId is null:', this.$store.state.activeModal.featureId);
+        this.openLeftPanel(false);
+      }
     },
     drawShape(nextDrawShape) {
       if (nextDrawShape !== null) {
@@ -389,9 +397,9 @@ export default {
   },
   mounted() {
 
-  //Adding this function as an event listener so that it can be used to clear when property modal errors on open as well.
-  window.addEventListener("keydown", function(e) {
-    return e.keyCode === 27 ? this.closePropertyModal() : "";
+    //Adding this function as an event listener so that it can be used to clear when property modal errors on open as well.
+    window.addEventListener("keydown", function(e) {
+      return e.keyCode === 27 ? this.closePropertyModal() : "";
     }.bind(this), false);
 
     this.onResize();
@@ -470,7 +478,8 @@ export default {
       this.$data.leftPanel = value
       this.$store.commit('setFullScreenMapEnabled', value);
       // value = true ? this.$store.commit('setCyclomediaActive', false ): "";
-      return this.$store.commit('setLeftPanel', value)
+      // this seems weird that a store function is returned
+      this.$store.commit('setLeftPanel', value);
     },
     onDataChange(type) {
       // console.log('onDataChange, type:', type)

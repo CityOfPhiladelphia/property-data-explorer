@@ -39,7 +39,7 @@
             data = state.ownerSearch.data;
           } else {
             data = state.blockSearch.data;
-          } 
+          }
           return data
         },
       }"
@@ -777,7 +777,7 @@ export default {
 
     },
     rowClick(state, item) {
-      // console.log("Row Click")
+      console.log("DataPanel.vue Row Click")
       let coords = [];
       if( typeof this.geocodeItems[0] != 'undefined') {
         Array.prototype.push.apply(coords, [ this.geocodeItems[0].geometry.coordinates[0],this.geocodeItems[0].geometry.coordinates[1] ]);
