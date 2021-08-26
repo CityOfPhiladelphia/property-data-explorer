@@ -171,6 +171,26 @@ export default {
     popoverOptions() {
       return this.$store.state.popover.options;
     },
+    foundItemsLength() {
+      // return state.dorParcels.data;
+      // return state.parcels.dor.data;
+      if(this.$store.state.shapeSearch.data != null) {
+        return this.$store.state.shapeSearch.data.rows.length;
+      } else if (this.$store.state.geocode.data != null && this.$store.state.geocode.data != "") {
+        let geocodeArray = [];
+        geocodeArray.push(this.$store.state.geocode.data.properties);
+        if(this.$store.state.geocode.related != null ) {
+          this.$store.state.geocode.related.map(a => geocodeArray.push(a));
+          return geocodeArray.length;
+        }
+        return geocodeArray.length;
+
+      } else if (this.$store.state.ownerSearch.data != null) {
+        return this.$store.state.ownerSearch.data.length;
+      } else if (this.$store.state.blockSearch.data != null) {
+        return this.$store.state.blockSearch.data.length;
+      }
+    },
     summaryOptions() {
       const options = {
         // dataSources: ['opa_assessment'],
@@ -307,14 +327,15 @@ export default {
       return this.fullScreenMapEnabled ? 'bottom-none': "";
     },
     shouldKeepLeftPanel() {
-      if (this.$store.state.sources.opa_assessment.status || this.$store.state.cyclomedia.active && this.$store.state.activeModal.featureId !== null) {
-        // console.log('App.vue shouldKeepLeftPanel first if');
+      // if (this.$store.state.sources.opa_assessment.status || this.$store.state.cyclomedia.active && this.$store.state.activeModal.featureId !== null) {
+      if (this.$store.state.cyclomedia.active && this.$store.state.activeModal.featureId !== null) {
+        console.log('App.vue shouldKeepLeftPanel first if');
         return false;
       } else if (!this.$store.state.leftPanel) {
-        // console.log('App.vue shouldKeepLeftPanel second if');
+        console.log('App.vue shouldKeepLeftPanel second if');
         return false;
       }
-      // console.log('App.vue shouldKeepLeftPanel neither if');
+      console.log('App.vue shouldKeepLeftPanel neither if');
       return true;
 
     },
@@ -340,12 +361,23 @@ export default {
     cycloHFov() {
       return this.$store.state.cyclomedia.orientation.hFov;
     },
+    opa() {
+      return this.$store.state.sources.opa_assessment;
+    },
+    opaStatus() {
+      // return this.$store.state.sources.opa_assessment.status;
+      if (this.opa && this.opa.status) {
+        return this.opa.status;
+      }
+      return null;
+    },
   },
   watch: {
-    '$route': function(route) {
-      // return route.fullPath === '/' ? this.$store.commit('setLeftPanel', true) : "";
-      return route.fullPath === '/' ? this.openLeftPanel(true) : this.openLeftPanel(false);
-    },
+    // '$route': function(route) {
+    //   console.log('watch route is firing');
+    //   // return route.fullPath === '/' ? this.$store.commit('setLeftPanel', true) : "";
+    //   return route.fullPath === '/' ? this.openLeftPanel(true) : this.openLeftPanel(false);
+    // },
     leftPanel: function(){
       // console.log("intro page watcher: ", this.leftPanel)
       this.leftPanel === false ? this.closeModal() : ""
@@ -369,11 +401,17 @@ export default {
         this.$store.commit('setShapeSearchStatus', 'waiting');
       }
     },
-    geocodeStatus(nextGeocodeStatus) {
-      if (nextGeocodeStatus === 'waiting') {
-        this.onDataChange('geocode');
+    foundItemsLength(nextFoundItemsLength) {
+      console.log('watch foundItemsLength is firing, nextFoundItemsLength:', nextFoundItemsLength);
+      if (nextFoundItemsLength === 1) {
+        this.onDataChange('oneItem');
       }
     },
+    // geocodeStatus(nextGeocodeStatus) {
+    //   if (nextGeocodeStatus === 'waiting') {
+    //     this.onDataChange('geocode');
+    //   }
+    // },
     ownerSearchTotal(newValue) {
       if( newValue > this.$store.state.ownerSearch.data.length ){
         this.$store.commit('setOwnerSearchModal', true);
@@ -386,7 +424,7 @@ export default {
     },
     shouldKeepLeftPanel(nextShouldKeepLeftPanel) {
       if (nextShouldKeepLeftPanel === false) {
-        // console.log('in watch shouldKeepLeftPanel if, next:', nextShouldKeepLeftPanel);
+        console.log('in watch shouldKeepLeftPanel if, next:', nextShouldKeepLeftPanel);
         this.$data.leftPanel = false;
       }
     },
@@ -482,12 +520,24 @@ export default {
       this.$store.commit('setLeftPanel', value);
     },
     onDataChange(type) {
-      // console.log('onDataChange, type:', type)
-      this.$data.hasData = true;
-      this.$store.commit('setFullScreenMapEnabled', false);
-      // this.leftPanel = false;
-      this.closePropertyModal();
-      this.$store.commit('setLeftPanel', false);
+      if (type !== 'oneItem') {
+        console.log('onDataChange if is running, type:', type)
+        this.$data.hasData = true;
+        this.$store.commit('setFullScreenMapEnabled', false);
+        // this.leftPanel = false;
+        this.closePropertyModal();
+        this.$store.commit('setLeftPanel', false);
+      } else {
+        console.log('onDataChange else is running, type:', type)
+
+        this.$store.commit('setActiveFeature', { featureId: 'feat-geocode-0' });
+        this.$store.commit('setActiveModal', { featureId: 'feat-geocode-0' });
+        this.$data.hasData = true;
+        this.$store.commit('setFullScreenMapEnabled', true);
+        // this.leftPanel = false;
+        // this.closePropertyModal();
+        this.$store.commit('setLeftPanel', true);
+      }
     },
     clearResults(){
       this.$controller.handleSearchFormSubmit('');

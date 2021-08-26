@@ -81,8 +81,9 @@
       />
 
       <!-- sale vertical table -->
+      <!-- v-if="!this.$store.state.sources.opa_public.targets[activeOpaId].data" -->
       <div
-        v-if="!this.$store.state.sources.opa_public.targets[activeOpaId].data"
+        v-if="!activeOpaData"
         class="spinner-div small-12 cell"
       >
         <font-awesome-icon
@@ -197,8 +198,9 @@
       </div>
 
       <!-- property details vertical table -->
+      <!-- v-if="!this.$store.state.sources.opa_public.targets[activeOpaId].data" -->
       <div
-        v-if="!this.$store.state.sources.opa_public.targets[activeOpaId].data"
+        v-if="!activeOpaData"
         class="spinner-div small-12 cell"
       >
         <font-awesome-icon
@@ -279,6 +281,15 @@ export default {
     VerticalTableLight: () => import(/* webpackChunkName: "pvc_pcm_VerticalTableLight" */'@phila/vue-comps/src/components/VerticalTableLight.vue'),
   },
   computed: {
+    activeOpaData() {
+      let value = [];
+      if (this.$store.state.sources.opa_public.targets[this.activeOpaId] && this.$store.state.sources.opa_public.targets[this.activeOpaId].data) {
+        value = this.$store.state.sources.opa_public.targets[this.activeOpaId].data;
+      } //else {
+      //   value = null;
+      // }
+      return value;
+    },
     lastSearchMethod() {
       return this.$store.state.lastSearchMethod;
     },
@@ -333,14 +344,17 @@ export default {
       };
     },
     opaPublicData() {
-      let opaData =  [];
-      opaData.push(this.$store.state.sources.opa_public.targets[this.activeOpaId].data);
-      return opaData ;
+      let opaData = [];
+      if (this.$store.state.sources.opa_public.targets && this.$store.state.sources.opa_public.targets[this.activeOpaId]) {
+        opaData.push(this.$store.state.sources.opa_public.targets[this.activeOpaId].data);
+      }
+      return opaData;
     },
     propertyDetailsVerticalTableSlots() {
       // console.log('PropertyCard activeFeatureId computed is running')
       let state = this.$store.state;
-      let opaPublicData = state.sources.opa_public.targets[this.activeOpaId].data;
+      let opaPublicData = this.activeOpaData;
+      // let opaPublicData = state.sources.opa_public.targets[this.activeOpaId].data;
       let searchId =  opaPublicData.street_code + opaPublicData.house_number + (opaPublicData.unit != null ?  opaPublicData.unit : '') ;
       return {
         id: 'propertyDetailsTable',
@@ -388,7 +402,7 @@ export default {
           {
             label: 'Number of Stories',
             value: opaPublicData.number_stories === null ? "Not Available" :
-              opaPublicData.number_stories.toString().length > 0 ?
+              opaPublicData.number_stories && opaPublicData.number_stories.toString().length > 0 ?
                 opaPublicData.number_stories === 0 ?
                   opaPublicData.total_livable_area > 0 ? 'Not Available':
                     'None' :
@@ -571,23 +585,27 @@ export default {
           },
           {
             label: 'Lot Size',
-            value: opaPublicData.total_area
-              .toLocaleString('en-US', {
+            value: opaPublicData.total_area ?
+              opaPublicData.total_area.toLocaleString('en-US', {
                 minimumFractionDigits: 0,
-              }) + ' sq ft',
+              }) + ' sq ft' :
+              null,
           },
           {
             label: 'Improvement Area',
             value: opaPublicData.total_livable_area === null ? 'Not Available ' :
-              opaPublicData.total_livable_area
-                .toLocaleString('en-US', {
+              opaPublicData.total_livable_area ?
+                opaPublicData.total_livable_area.toLocaleString('en-US', {
                   minimumFractionDigits: 0,
-                }) + ' sq ft',
+                }) + ' sq ft':
+                null,
           },
           {
             label: 'Frontage',
             value: opaPublicData.frontage === null ? 'Not Available ' :
-              opaPublicData.frontage.toFixed(0) + ' ft',
+              opaPublicData.frontage ?
+              opaPublicData.frontage.toFixed(0) + ' ft' :
+              null,
           },
           {
             label: 'Beginning Point',
@@ -655,7 +673,10 @@ export default {
     },
     saleVerticalTableSlots() {
       let state = this.$store.state;
-      let opaAssessmentData = state.sources.opa_assessment.targets[this.activeOpaId].data;
+      let opaAssessmentData = [];
+      if (state.sources.opa_assessment.targets[this.activeOpaId]) {
+        opaAssessmentData = state.sources.opa_assessment.targets[this.activeOpaId].data;
+      }
       return {
         id: 'saleTable',
         dataSources: [ 'opa_public' ],
@@ -689,7 +710,10 @@ export default {
 
     ownerAddressTableOptions() {
       let state = this.$store.state;
-      let opaPublicData = this.$store.state.sources.opa_public.targets[this.activeOpaId].data;
+      let opaPublicData = [];
+      if (this.$store.state.sources.opa_public.targets && this.$store.state.sources.opa_public.targets[this.activeOpaId]) {
+        opaPublicData = this.$store.state.sources.opa_public.targets[this.activeOpaId].data;
+      }
       return {
         id: 'ownerProperties',
         tableid: 'ddd',
@@ -969,7 +993,7 @@ export default {
   td.large-owner>div>div>div, span.large-owner {
     font-size: 24px;
   }
-  
+
 
 }
 
