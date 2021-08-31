@@ -344,7 +344,29 @@ export default {
     localDetailsVerticalTableSlots() {
       let state = this.$store.state;
       let opaPublicData = state.sources.opa_public.targets[this.activeOpaId].data;
-      let searchId =  opaPublicData.street_code + opaPublicData.house_number + (opaPublicData.unit != null ?  opaPublicData.unit : '') ;
+      let trashDay = function(state) {
+        let prop = state.activeModalFeature.properties ? state.activeModalFeature.properties : state.activeModalFeature
+        let trashDay = prop.rubbish_recycle_day ? prop.rubbish_recycle_day : 'Unavailable';
+        let day = 'Unavailable';
+        switch (trashDay) {
+          case 'MON' : day = 'Monday';
+            break;
+          case 'TUES' : day = 'Tuesday';
+            break;
+          case 'WED' : day = 'Wednesday';
+            break;
+          case 'THU' : day = 'Thursday';
+            break;
+          case 'FRI' : day = 'Friday';
+            break;
+          case 'SAT' : day = 'Saturday';
+            break;
+          case 'SUN' : day = 'Sunday';
+            break;
+        }
+        return day;
+      };
+
       return {
         id: 'localDetailsTable',
         dataSources: [ 'opa_public' ],
@@ -379,20 +401,22 @@ export default {
             value: function() {
               // TODO Clean up this link and add function for the day of week, check other search types for mapping prop
               return "<a href='https://webapps1.philasd.org/school_finder/' target='_blank'>"
-                      + state.activeModalFeature.properties.rubbish_recycle_day +
-                      "<i class='fa fa-external-link-alt'></i></a>";
+                      + trashDay(state) +
+                      " <i class='fa fa-external-link-alt'></i></a>";
             }.bind(this),
           },
           {
             label: 'L&I District',
             value: function() {
-              return state.activeModalFeature.properties.li_district
+              let prop = state.activeModalFeature.properties ? state.activeModalFeature.properties : state.activeModalFeature
+              return prop.li_district ? prop.li_district : "Unavailable"
             }.bind(this),
           },
           {
             label: 'Census Tract',
             value: function() {
-              return state.activeModalFeature.properties.census_tract_2010
+              let prop = state.activeModalFeature.properties ? state.activeModalFeature.properties : state.activeModalFeature
+              return prop.census_tract_2010 ? prop.census_tract_2010 : "Unavailable"
             }.bind(this),
           },
         ],
