@@ -400,7 +400,7 @@ export default {
             label: 'Trash Day',
             value: function() {
               // TODO Clean up this link and add function for the day of week, check other search types for mapping prop
-              return "<a href='https://webapps1.philasd.org/school_finder/' target='_blank'>"
+              return "<a href='https://www.phila.gov/services/trash-recycling-city-upkeep/residential-trash-and-recycling/find-your-trash-and-recycling-collection-day/#/' target='_blank'>"
                       + trashDay(state) +
                       " <i class='fa fa-external-link-alt'></i></a>";
             }.bind(this),
@@ -416,7 +416,7 @@ export default {
             label: 'Census Tract',
             value: function() {
               let prop = state.activeModalFeature.properties ? state.activeModalFeature.properties : state.activeModalFeature
-              return prop.census_tract_2010 ? prop.census_tract_2010 : "Unavailable"
+              return prop.census_tract_2010 ? prop.census_tract_2010 : prop.census_tract ? prop.census_tract : "Unavailable";
             }.bind(this),
           },
         ],
