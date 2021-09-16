@@ -656,8 +656,8 @@ export default {
           },
           {
             label: 'Lot Size',
-            value: opaPublicData.total_area
-              .toLocaleString('en-US', {
+            value: opaPublicData.total_area === null ? 'Not Available':
+            opaPublicData.total_area.toLocaleString('en-US', {
                 minimumFractionDigits: 0,
               }) + ' sq ft',
           },
