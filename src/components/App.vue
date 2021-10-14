@@ -155,9 +155,12 @@ export default {
           return object._featureId === state.activeModal.featureId;
         })[0];
       } else if ([ 'shape search', 'buffer search' ].includes(state.lastSearchMethod)) {
-        feature = state.shapeSearch.data.rows.filter(object => {
-          return object._featureId === state.activeModal.featureId;
-        })[0];
+        console.log('App.vue computed activeModalFeature is running after buffer search');
+        if (state.shapeSearch.data) {
+          feature = state.shapeSearch.data.rows.filter(object => {
+            return object._featureId === state.activeModal.featureId;
+          })[0];
+        }
       }
       // console.log('activeModalFeature computed is running, feature:', feature);
       return feature;
@@ -402,9 +405,11 @@ export default {
       }
     },
     foundItemsLength(nextFoundItemsLength) {
-      console.log('watch foundItemsLength is firing, nextFoundItemsLength:', nextFoundItemsLength);
-      if (nextFoundItemsLength === 1) {
+      console.log('watch foundItemsLength is firing, nextFoundItemsLength:', nextFoundItemsLength, 'lastSearchMethod:', this.lastSearchMethod, 'bufferMode:', this.$store.state.bufferMode);
+      if (nextFoundItemsLength === 1 && this.$store.state.bufferMode === false) {
         this.onDataChange('oneItem');
+      } else {
+        this.onDataChange('multiItem');
       }
     },
     // geocodeStatus(nextGeocodeStatus) {

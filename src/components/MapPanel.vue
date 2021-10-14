@@ -755,10 +755,10 @@ export default {
       this.$controller.handleSearchFormSubmit(value);
     },
     handleBufferClick() {
-      // console.log('handleBufferClick is running');
+      console.log('handleBufferClick is running');
     },
     handleDrawControlClick() {
-      // console.log('handleDrawControlClick is running');
+      console.log('handleDrawControlClick is running');
     },
     fillColorForOverlayMarker(markerId, activeFeature) {
       // get map overlay style and hover style for table
