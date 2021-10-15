@@ -22,8 +22,8 @@
       </div>
     </header>
     <div class="fixed-header">
+      <!-- v-if="foundItemsLength > 1" -->
       <div
-        v-if="foundItemsLength > 1"
         class="openmaps-modal-close hide-print"
         :tabindex="1"
         @click="closeModal"

@@ -26,7 +26,9 @@
           :foundItemsLength="foundItemsLength"
         />
 
-        <map-panel>
+        <map-panel
+          :leftPanel="leftPanel"
+        >
           <cyclomedia-widget
             v-if="shouldLoadCyclomediaWidget"
             v-show="cyclomediaActive"
@@ -174,14 +176,18 @@ export default {
       return this.$store.state.popover.options;
     },
     foundItemsLength() {
-      if(this.$store.state.shapeSearch.data != null) {
+      if (this.$store.state.shapeSearch.data != null) {
         return this.$store.state.shapeSearch.data.rows.length;
       } else if (this.$store.state.geocode.data != null && this.$store.state.geocode.data != "") {
         let geocodeArray = [];
         geocodeArray.push(this.$store.state.geocode.data.properties);
-        if(this.$store.state.geocode.related != null ) {
+        if (this.$store.state.geocode.related != null ) {
           this.$store.state.geocode.related.map(a => geocodeArray.push(a));
           return geocodeArray.length;
+        }
+        if (this.$store.state.condoUnits.units) {
+          // return >1
+          return 2;
         }
         return geocodeArray.length;
 
@@ -333,12 +339,11 @@ export default {
       //   return false;
       // } else if (!this.$store.state.leftPanel) {
       if (!this.$store.state.leftPanel) {
-        console.log('App.vue shouldKeepLeftPanel second if');
+        console.log('App.vue shouldKeepLeftPanel if');
         return false;
       }
-      console.log('App.vue shouldKeepLeftPanel neither if');
+      console.log('App.vue shouldKeepLeftPanel outside if');
       return true;
-
     },
     shouldLoadCyclomediaWidget() {
       return this.$config.cyclomedia.enabled;

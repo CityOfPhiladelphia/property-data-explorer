@@ -3,15 +3,10 @@
     id="map-panel-container"
     :class="mapPanelContainerClass + ' surrounding-div print-hide'"
   >
-  <!-- class="surrounding-div grid-frame print-hide" -->
 
-  <!-- :class="mapPanelContainerClass + ' surrounding-div print-hide'" -->
-  <!-- class="surrounding-div grid-x grid-frame" -->
-  <!-- this.mapDivClass -->
-  <!-- :class="'medium-grid-frame surrounding-div ' + this.mapDivClass" -->
-
+    <!-- v-if="!this.$store.state.leftPanel && !this.fullScreenTopicsEnabled" -->
     <full-screen-map-toggle-tab-vertical
-      v-if="!this.$store.state.leftPanel && !this.fullScreenTopicsEnabled"
+      v-if="!leftPanel && !this.fullScreenTopicsEnabled"
       v-once
     />
 
@@ -393,6 +388,12 @@ export default {
     markersMixin,
     cyclomediaMixin,
   ],
+  props: {
+    leftPanel: {
+      type: Boolean,
+      value: true,
+    },
+  },
   data() {
     const data = {
       zoomToShape: {
@@ -462,17 +463,11 @@ export default {
           return true;
         }
         return false;
-
       }
       return false;
-
     },
     addressInputPosition() {
-      // if (this.isMobileOrTablet) {
       return 'topleft';
-      // } else {
-      //   return 'topnearleft'
-      // }
     },
     addressInputWidth() {
       if (this.$config.addressInput) {
@@ -485,14 +480,9 @@ export default {
         return this.$config.addressInput.placeholder;
       }
       return null;
-
     },
     basemapSelectControlPosition() {
-      // if (this.isMobileOrTablet) {
-      //   return 'almosttopalmostright'
-      // } else {
       return 'topalmostright';
-      // }
     },
     shouldShowAddressCandidateList() {
       return this.$store.state.shouldShowAddressCandidateList;
@@ -502,19 +492,18 @@ export default {
         return false;
       }
       return true;
-
     },
     fullScreenMapEnabled() {
       return this.$store.state.fullScreenMapEnabled;
     },
     mapPanelContainerClass() {
-      if (this.$store.state.leftPanel) {
+      if (this.leftPanel) {
         return 'small-24 small-order-1 medium-12 medium-order-2';
       }
       return 'small-24 small-order-1 medium-24 medium-order-2';
     },
     mapPanelClass() {
-      if (this.$store.state.leftPanel && this.$store.state.cyclomedia.active) {
+      if (this.leftPanel && this.$store.state.cyclomedia.active) {
         return 'small-24 medium-24 map-panel-class-50';
       } else if (this.$store.state.cyclomedia.active) {
         return 'small-24 medium-12 map-panel-class';
@@ -526,21 +515,12 @@ export default {
         return 'mb-map-loading-mask-inner left-fifteen';
       }
       return 'mb-map-loading-mask-inner left-forty';
-
     },
-    // mapPanelContainerClass() {
-    //   if (this.$store.state.cyclomedia.active) {
-    //     return 'medium-12 small-order-1 small-24 medium-order-1'
-    //   } else {
-    //     return 'medium-24 small-order-1 small-24 medium-order-1'
-    //   }
-    // },
     geolocationEnabled() {
       if (this.$config.geolocation) {
         return this.$config.geolocation.enabled;
       }
       return false;
-
     },
     legendControls() {
       return this.$config.legendControls || {};
@@ -559,19 +539,11 @@ export default {
       const activeBasemapConfig = this.configForBasemap(activeBasemap);
       return activeBasemapConfig.tiledLayers || [];
     },
-    // activeTiledOverlays() {
-    //   if (!this.activeTopicConfig || !this.activeTopicConfig.tiledOverlays) {
-    //     return [];
-    //   } else {
-    //     return this.activeTopicConfig.tiledOverlays;
-    //   }
-    // },
     activeFeatureLayers() {
       if (!this.activeTopicConfig || !this.activeTopicConfig.featureLayers) {
         return [];
       }
       return this.activeTopicConfig.featureLayers;
-
     },
     activeFeature() {
       return this.$store.state.activeFeature;
@@ -590,7 +562,6 @@ export default {
         return this.hasImageryBasemaps && this.$config.map.imagery.enabled;
       }
       return this.hasImageryBasemaps;
-
     },
     identifyFeature() {
       let configFeature;
@@ -680,24 +651,42 @@ export default {
       }
     },
     geocodeResult(nextGeocodeResult) {
-      // console.log('watch geocodeResult is running, nextGeocodeResult:', nextGeocodeResult);
+      console.log('watch geocodeResult is running, nextGeocodeResult:', nextGeocodeResult);
       if (Object.keys(nextGeocodeResult).length > 0) {
         this.lastGeocodeResult = nextGeocodeResult;
         if (nextGeocodeResult._featureId) {
-          this.$store.commit('setMapCenter', nextGeocodeResult.geometry.coordinates);
-          this.$store.commit('setMapZoom', this.geocodeZoom);
+          let store = this.$store;
+          const myMethod = (function() {
+            store.commit('setMapCenter', nextGeocodeResult.geometry.coordinates);
+            store.commit('setMapZoom', this.geocodeZoom);
+          }).bind(store);
+          setTimeout(myMethod, 250);
         }
       }
     },
     geojsonParcels(nextGeojson) {
-      // console.log('watch geojsonParcels is running');
+      console.log('watch geojsonParcels is running, nextGeojson:', nextGeojson);
       if (!this.$store.state.mapViewWasSetOnAppLoad && this.lastSearchMethod === 'shape search') {
-        // console.log('watch geojsonParcels is affecting things');
+        console.log('watch geojsonParcels is affecting things');
         this.setMapToBounds();
         this.$store.commit('setMapViewWasSetOnAppLoad', true);
-      } else if(this.$store.state.lastSearchMethod === 'block search') {
-      // console.log(this.store.state.parcels.pwd[0].geometry.coordinates[0][0]);
-      this.$store.commit('setMapCenter', this.$store.state.parcels.pwd[0].geometry.coordinates[0][0]);
+      } else if (this.$store.state.lastSearchMethod === 'block search') {
+        console.log(this.store.state.parcels.pwd[0].geometry.coordinates[0][0]);
+        this.$store.commit('setMapCenter', this.$store.state.parcels.pwd[0].geometry.coordinates[0][0]);
+      }
+    },
+    leftPanel(nextLeftPanel) {
+      console.log('MapPanel.vue watch leftPanel is firing, nextLeftPanel:', nextLeftPanel);
+      if (this.$store.state.geocode.data && Object.keys(this.$store.state.geocode.data).length > 0) {
+        this.lastGeocodeResult = this.$store.state.geocode.data;
+        if (this.$store.state.geocode.data._featureId) {
+          let store = this.$store;
+          const myMethod = (function() {
+            store.commit('setMapCenter', store.state.geocode.data.geometry.coordinates);
+            store.commit('setMapZoom', this.geocodeZoom);
+          }).bind(store);
+          setTimeout(myMethod, 250);
+        }
       }
     },
     cyclomediaActive(value) {
