@@ -17,6 +17,9 @@ const customComps = {
 var BASE_CONFIG_URL = 'https://cdn.jsdelivr.net/gh/cityofphiladelphia/pde_base_config@3cb644750f4db8619a5b41f5369d1e280678f7bb/config.js';
 
 let config = {
+  defaultAddressTextPlaceholder: {
+    text: 'Address',
+  },
   resetDataOnGeocode: true,
   customComps,
   geocoder: {

@@ -39,8 +39,8 @@
           <div
             v-if="!activeAddress"
             class="default-address-text"
-            :style="defaultAddressTextPlaceholderStyle"
           >
+          <!-- :style="defaultAddressTextPlaceholderStyle" -->
             {{ this.$config.defaultAddressTextPlaceholder.text }}
           </div>
           <h1 class="address-header-line-1">
@@ -306,9 +306,9 @@ export default {
     activeOpaId() {
       let feature = this.activeModalFeature;
       let opaId;
-      if (![ 'geocode', 'reverseGeocode', 'owner search', 'block search' ].includes(this.lastSearchMethod)) {
+      if (feature && ![ 'geocode', 'reverseGeocode', 'owner search', 'block search' ].includes(this.lastSearchMethod)) {
         opaId = feature.parcel_number;
-      } else {
+      } else if (feature) {
         opaId = feature.properties.opa_account_num;
       }
       return opaId;
@@ -317,9 +317,9 @@ export default {
       let feature = this.activeModalFeature;
       let address;
       // console.log("active modal feature: ", this.activeModalFeature)
-      if ([ 'geocode', 'reverseGeocode', 'owner search', 'block search' ].includes(this.lastSearchMethod)) {
+      if (feature && [ 'geocode', 'reverseGeocode', 'owner search', 'block search' ].includes(this.lastSearchMethod)) {
         address = feature.properties.street_address;
-      } else {
+      } else if (feature) {
         address = feature.address_std;
       }
       return address;
@@ -327,9 +327,9 @@ export default {
     headerLineTwo() {
       let feature = this.activeModalFeature;
       let zip;
-      if ([ 'geocode', 'reverseGeocode', 'owner search', 'block search' ].includes(this.lastSearchMethod)) {
+      if (feature && [ 'geocode', 'reverseGeocode', 'owner search', 'block search' ].includes(this.lastSearchMethod)) {
         zip = feature.properties.zip_code + '-' + feature.properties.zip_4;
-      } else {
+      } else if (feature) {
         zip = feature.zip_code.substring(0,5) + '-' + feature.zip_code.substring(5,10);
       }
       return 'PHILADELPHIA, PA ' + zip;

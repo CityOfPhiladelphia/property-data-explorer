@@ -1,7 +1,7 @@
 <template>
   <div
     id="intro-container"
-    :class="panelClass"
+    class="small-24 small-order-2 medium-12 medium-order-1"
   >
     <property-card
       v-if="this.$store.state.activeModal.featureId !== null"
@@ -69,33 +69,12 @@ export default {
     isMobileOrTablet() {
       return this.$store.state.isMobileOrTablet;
     },
-    // fullScreenMapEnabled() {
-    //   return this.$store.state.fullScreenMapEnabled;
-    // },
-    // fullScreenTopicsEnabled() {
-    //   return this.$store.state.fullScreenTopicsEnabled;
-    // },
-    panelClass() {
-      // if (this.fullScreenTopicsEnabled) {
-      //   return 'medium-12 small-24 full-topics-open'
-      // } else {
-      return 'small-24 small-order-2 medium-12 medium-order-1';
-      // }
-    },
     sitePath() {
       if (process.env.VUE_APP_PUBLICPATH) {
         return window.location.origin + process.env.VUE_APP_PUBLICPATH;
       }
       return '';
     },
-  },
-  watch: {
-    // fullScreenMapEnabled() {
-    //   this.setDivWidth();
-    // },
-    // fullScreenTopicsEnabled() {
-    //   console.log('IntroPage.vue watch fullScreenTopicEnabled is firing');
-    // },
   },
   destroyed() {
     // console.log('intro page destroyed is running');
