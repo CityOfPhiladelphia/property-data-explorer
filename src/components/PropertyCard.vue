@@ -23,6 +23,7 @@
     </header>
     <div class="fixed-header">
       <div
+        v-if="foundItemsLength > 1"
         class="openmaps-modal-close hide-print"
         :tabindex="1"
         @click="closeModal"
@@ -280,14 +281,18 @@ export default {
     VerticalTable: () => import(/* webpackChunkName: "pvc_pcm_VerticalTable" */'@phila/vue-comps/src/components/VerticalTable.vue'),
     VerticalTableLight: () => import(/* webpackChunkName: "pvc_pcm_VerticalTableLight" */'@phila/vue-comps/src/components/VerticalTableLight.vue'),
   },
+  props: {
+    foundItemsLength: {
+      type: Number,
+      default: 1,
+    },
+  },
   computed: {
     activeOpaData() {
       let value = [];
       if (this.$store.state.sources.opa_public.targets[this.activeOpaId] && this.$store.state.sources.opa_public.targets[this.activeOpaId].data) {
         value = this.$store.state.sources.opa_public.targets[this.activeOpaId].data;
-      } //else {
-      //   value = null;
-      // }
+      }
       return value;
     },
     lastSearchMethod() {
@@ -297,7 +302,6 @@ export default {
       return this.$store.state.activeModal;
     },
     activeFeatureId() {
-      // console.log('PropertyCard.vue activeFeatureId computed is running');
       return this.activeModal.featureId;
     },
     activeModalFeature() {

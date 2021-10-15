@@ -18,12 +18,12 @@
 
     <owner-search-modal />
 
-    <!-- <div :class="'cell medium-auto medium-cell-block-container main-content'"> -->
     <div class="cell medium-auto medium-cell-block-container main-content">
       <div :class="mainContentClass">
 
         <left-panel
           v-show="leftPanel"
+          :foundItemsLength="foundItemsLength"
         />
 
         <map-panel>
@@ -143,7 +143,6 @@ export default {
           // console.log('first if is running');
           feature = state.geocode.related.filter(object => {
             return object._featureId === state.activeModal.featureId;
-            // return object._featureId === state.activeFeature.featureId
           })[0];
         } else {
           // console.log('second if is running');
@@ -155,7 +154,7 @@ export default {
           return object._featureId === state.activeModal.featureId;
         })[0];
       } else if ([ 'shape search', 'buffer search' ].includes(state.lastSearchMethod)) {
-        console.log('App.vue computed activeModalFeature is running after buffer search');
+        // console.log('App.vue computed activeModalFeature is running after buffer search');
         if (state.shapeSearch.data) {
           feature = state.shapeSearch.data.rows.filter(object => {
             return object._featureId === state.activeModal.featureId;
@@ -175,8 +174,6 @@ export default {
       return this.$store.state.popover.options;
     },
     foundItemsLength() {
-      // return state.dorParcels.data;
-      // return state.parcels.dor.data;
       if(this.$store.state.shapeSearch.data != null) {
         return this.$store.state.shapeSearch.data.rows.length;
       } else if (this.$store.state.geocode.data != null && this.$store.state.geocode.data != "") {
@@ -331,10 +328,11 @@ export default {
     },
     shouldKeepLeftPanel() {
       // if (this.$store.state.sources.opa_assessment.status || this.$store.state.cyclomedia.active && this.$store.state.activeModal.featureId !== null) {
-      if (this.$store.state.cyclomedia.active && this.$store.state.activeModal.featureId !== null) {
-        console.log('App.vue shouldKeepLeftPanel first if');
-        return false;
-      } else if (!this.$store.state.leftPanel) {
+      // if (this.$store.state.cyclomedia.active && this.$store.state.activeModal.featureId !== null) {
+      //   console.log('App.vue shouldKeepLeftPanel first if');
+      //   return false;
+      // } else if (!this.$store.state.leftPanel) {
+      if (!this.$store.state.leftPanel) {
         console.log('App.vue shouldKeepLeftPanel second if');
         return false;
       }

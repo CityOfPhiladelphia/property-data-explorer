@@ -5,15 +5,13 @@
   >
     <property-card
       v-if="this.$store.state.activeModal.featureId !== null"
+      :foundItemsLength="foundItemsLength"
     />
-    <!-- slot="introPage"
-    screen-percent="2" -->
 
     <div
       v-if="this.$store.state.activeModal.featureId === null"
       class="introduction"
     >
-    <!-- v-if="this.$store.state.activeModal.featureId === null && !this.$store.state.isMobileOrTablet" -->
 
       <div class="intro-blue">
           <i>Use the Property App to get information about a property's ownership,
@@ -61,6 +59,12 @@ import PropertyCard from './PropertyCard.vue';
 export default {
   components: {
     PropertyCard,
+  },
+  props: {
+    foundItemsLength: {
+      type: Number,
+      default: 1,
+    },
   },
   computed: {
     map() {
