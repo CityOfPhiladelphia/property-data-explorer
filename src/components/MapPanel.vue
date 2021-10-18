@@ -104,15 +104,6 @@
           v-if="currentBuffer !== null"
           :latlngs="currentBuffer"
         />
-        <!-- :fillColor="'green'" -->
-        <!-- :color="'red'"
-        :weight="2" -->
-        <!-- :fillColor="geojsonFeature.properties.fillColor"
-        :weight="geojsonFeature.properties.weight"
-        :opacity="geojsonFeature.properties.opacity"
-        :fillOpacity="geojsonFeature.properties.fillOpacity"
-        :data="geojsonFeature.properties"
-        :key="geojsonFeature.properties.PARCELID" -->
 
         <!-- vector markers -->
         <vector-marker
@@ -143,9 +134,6 @@
           :icon="marker.icon"
         />
 
-
-
-
         <!-- CONTROLS: -->
         <!-- basemap control -->
         <control-corner
@@ -173,9 +161,6 @@
           :h-side="'left'"
         />
 
-        <!-- <basemap-tooltip :position="'topright'"
-        /> -->
-
         <div v-once>
           <basemap-toggle-control
             v-if="shouldShowImageryToggle"
@@ -187,12 +172,6 @@
         <div v-once>
           <basemap-select-control :position="basemapSelectControlPosition" />
         </div>
-
-        <!-- <div v-once
-             v-if="this.measureControlEnabled"
-        >
-          <measure-control :position="'bottomleft'" />
-        </div> -->
 
         <div v-once>
           <legend-control
@@ -227,7 +206,6 @@
         />
 
         <div>
-          <!-- <div v-once> -->
           <map-address-input
             :position="'topleft'"
             :placeholder="addressInputPlaceholder"
@@ -256,9 +234,7 @@
             />
           </div>
 
-          <!-- </div> -->
         </div>
-
 
         <address-candidate-list
           v-if="addressAutocompleteEnabled"
@@ -672,7 +648,7 @@ export default {
         this.setMapToBounds();
         this.$store.commit('setMapViewWasSetOnAppLoad', true);
       } else if (this.$store.state.lastSearchMethod === 'block search') {
-        console.log(this.store.state.parcels.pwd[0].geometry.coordinates[0][0]);
+        console.log(this.$store.state.parcels.pwd[0].geometry.coordinates[0][0]);
         this.$store.commit('setMapCenter', this.$store.state.parcels.pwd[0].geometry.coordinates[0][0]);
       }
     },
