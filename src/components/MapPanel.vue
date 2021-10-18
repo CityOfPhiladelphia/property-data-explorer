@@ -4,7 +4,6 @@
     :class="mapPanelContainerClass + ' surrounding-div print-hide'"
   >
 
-    <!-- v-if="!this.$store.state.leftPanel && !this.fullScreenTopicsEnabled" -->
     <full-screen-map-toggle-tab-vertical
       v-if="!leftPanel && !this.fullScreenTopicsEnabled"
       v-once
@@ -357,7 +356,6 @@ export default {
   components: {
     DrawControl,
     BufferControl,
-    // DrawControl: () => import(/* webpackChunkName: "mbmp_pvm_DrawControl" */'@phila/vue-mapping/src/components/DrawControl.vue'),
     Control: () => import(/* webpackChunkName: "mbmp_pvm_Control" */'@phila/vue-mapping/src/leaflet/Control.vue'),
     EsriTiledMapLayer: () => import(/* webpackChunkName: "mbmp_pvm_EsriTiledMapLayer" */'@phila/vue-mapping/src/esri-leaflet/TiledMapLayer.vue'),
     // EsriTiledOverlay: () => import(/* webpackChunkName: "mbmp_pvm_EsriTiledOverlay" */'@phila/vue-mapping/src/esri-leaflet/TiledOverlay.vue'),
@@ -388,12 +386,12 @@ export default {
     markersMixin,
     cyclomediaMixin,
   ],
-  props: {
-    leftPanel: {
-      type: Boolean,
-      value: true,
-    },
-  },
+  // props: {
+  //   leftPanel: {
+  //     type: Boolean,
+  //     value: true,
+  //   },
+  // },
   data() {
     const data = {
       zoomToShape: {
@@ -414,6 +412,9 @@ export default {
   },
 
   computed: {
+    leftPanel() {
+      return this.$store.state.leftPanel;
+    },
     isMobileOrTablet() {
       return this.$store.state.isMobileOrTablet;
     },

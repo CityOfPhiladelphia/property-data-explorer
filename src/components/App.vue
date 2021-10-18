@@ -26,9 +26,8 @@
           :foundItemsLength="foundItemsLength"
         />
 
-        <map-panel
-          :leftPanel="leftPanel"
-        >
+        <map-panel>
+
           <cyclomedia-widget
             v-if="shouldLoadCyclomediaWidget"
             v-show="cyclomediaActive"
