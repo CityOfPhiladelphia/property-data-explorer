@@ -536,9 +536,13 @@ export default {
         this.$store.commit('setLeftPanel', false);
       } else {
         console.log('onDataChange else is running, type:', type)
-
-        this.$store.commit('setActiveFeature', { featureId: 'feat-geocode-0' });
-        this.$store.commit('setActiveModal', { featureId: 'feat-geocode-0' });
+        if (this.lastSearchMethod === 'shape search') {
+          this.$store.commit('setActiveFeature', { featureId: 'feat-shape-0' });
+          this.$store.commit('setActiveModal', { featureId: 'feat-shape-0' });
+        } else {
+          this.$store.commit('setActiveFeature', { featureId: 'feat-geocode-0' });
+          this.$store.commit('setActiveModal', { featureId: 'feat-geocode-0' });
+        }
         this.$data.hasData = true;
         this.$store.commit('setFullScreenMapEnabled', true);
         // this.leftPanel = false;
