@@ -41,17 +41,21 @@
             v-if="!activeAddress"
             class="default-address-text"
           >
-          <!-- :style="defaultAddressTextPlaceholderStyle" -->
-            {{ this.$config.defaultAddressTextPlaceholder.text }}
+            <font-awesome-icon
+              icon="spinner"
+              aria-hidden="true"
+            />
           </div>
-          <h1 class="address-header-line-1">
-            <font-awesome-icon icon="map-marker-alt" />
-            {{ activeAddress }}
-            <div class="columns small-24 medium-6 flex-div div-padding-and-margin hide-print">
+          <div v-if="activeAddress">
+            <h1 class="address-header-line-1">
+              <font-awesome-icon icon="map-marker-alt" />
+              {{ activeAddress }}
+              <div class="columns small-24 medium-6 flex-div div-padding-and-margin hide-print">
+              </div>
+            </h1>
+            <div class="address-header-line-2">
+              {{ headerLineTwo }}
             </div>
-          </h1>
-          <div class="address-header-line-2">
-            {{ headerLineTwo }}
           </div>
         </div>
         <div>

@@ -175,8 +175,9 @@ export default {
       return this.$store.state.popover.options;
     },
     foundItemsLength() {
+      console.log('App.vue computed foundItemsLength, this.$store.state.condoUnits.units:', this.$store.state.condoUnits.units);
       if (this.$store.state.shapeSearch.data != null) {
-        if (this.$store.state.condoUnits.units.length) {
+        if (Object.keys(this.$store.state.condoUnits.units).length) {
           return 2;
         }
         return this.$store.state.shapeSearch.data.rows.length;
@@ -193,8 +194,8 @@ export default {
         }
         return geocodeArray.length;
 
-      } else if (this.$store.state.ownerSearch.data != null) {
-        return this.$store.state.ownerSearch.data.length;
+      // } else if (this.$store.state.ownerSearch.data != null) {
+      //   return this.$store.state.ownerSearch.data.length;
       } else if (this.$store.state.blockSearch.data != null) {
         if (this.$store.state.condoUnits.units) {
           return 2;
@@ -395,7 +396,7 @@ export default {
     },
     activeModal() {
       console.log('watch activeModal is firing');
-      this.$controller.activeFeatureChange();
+      // this.$controller.activeFeatureChange();
       // this.$store.state.activeModal.featureId !== null ? this.openLeftPanel(true): this.openLeftPanel(false);
       if (this.$store.state.activeModal.featureId !== null) {
         console.log('open panel - this.$store.state.activeModal.featureId !== null:', this.$store.state.activeModal.featureId);
@@ -407,27 +408,25 @@ export default {
     },
     drawShape(nextDrawShape) {
       if (nextDrawShape !== null) {
-        this.onDataChange('shapeSearch');
+        // this.onDataChange('shapeSearch');
         this.$controller.handleDrawnShape();
         this.$store.commit('setShapeSearchStatus', 'waiting');
       }
     },
     foundItemsLength(nextFoundItemsLength) {
+      // debugger;
       console.log('watch foundItemsLength is firing, nextFoundItemsLength:', nextFoundItemsLength, 'lastSearchMethod:', this.lastSearchMethod, 'bufferMode:', this.$store.state.bufferMode);
       if (!nextFoundItemsLength) {
+        // debugger;
         return;
       }
+      // if (nextFoundItemsLength === 1 && this.$store.state.lastSearchMethod !== 'shape search') {
       if (nextFoundItemsLength === 1 && this.$store.state.bufferMode === false) {
         this.onDataChange('oneItem');
       } else {
         this.onDataChange('multiItem');
       }
     },
-    // geocodeStatus(nextGeocodeStatus) {
-    //   if (nextGeocodeStatus === 'waiting') {
-    //     this.onDataChange('geocode');
-    //   }
-    // },
     ownerSearchTotal(newValue) {
       if( newValue > this.$store.state.ownerSearch.data.length ){
         this.$store.commit('setOwnerSearchModal', true);
@@ -445,8 +444,9 @@ export default {
       }
     },
     activeModalFeature(nextActiveModalFeature) {
-      // console.log('watch activeModalFeature is firing, nextActiveModalFeature:', nextActiveModalFeature);
+      console.log('watch activeModalFeature is firing, nextActiveModalFeature:', nextActiveModalFeature);
       this.$store.commit('setActiveModalFeature', nextActiveModalFeature);
+      this.$controller.activeFeatureChange();
     },
   },
   mounted() {
