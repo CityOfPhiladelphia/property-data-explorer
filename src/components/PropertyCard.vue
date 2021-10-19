@@ -2,7 +2,7 @@
   <div
     id="main"
     v-if="this.$store.state.activeModal.featureId"
-    :class="['openmaps-about', 'openmaps-modal']"
+    :class="containerClass"
   >
     <header class="modal">
       <div class="row expanded">
@@ -292,6 +292,9 @@ export default {
     },
   },
   computed: {
+    containerClass() {
+      return ['openmaps-about', 'openmaps-modal'];
+    },
     activeOpaData() {
       let value = [];
       if (this.$store.state.sources.opa_public.targets[this.activeOpaId] && this.$store.state.sources.opa_public.targets[this.activeOpaId].data) {
@@ -886,6 +889,16 @@ export default {
       };
     },
   },
+  watch: {
+    activeAddress(nextActiveAddress) {
+      console.log('PropertyCard.vue watch activeAddress, nextActiveAddress:', nextActiveAddress);
+      if (nextActiveAddress) {
+        this.$store.commit('setActiveAddressKnown', true);
+      } else {
+        this.$store.commit('setActiveAddressKnown', false);
+      }
+    },
+  },
   methods: {
     buttonLinkLI(){
       window.open('https://li.phila.gov/property-history/search?address=' + this.activeOpaId, '_blank');
@@ -1399,6 +1412,18 @@ header {
 
 .icon-div {
   margin: 10px;
+}
+
+.loading-mask {
+  /*display: inline;*/
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  background: rgba(0, 0 ,0 , 0.25);
+  z-index: 1000;
+  text-align: center;
+  vertical-align: middle;
 }
 
 .openmaps-modal {

@@ -91,11 +91,14 @@ export default {
   data() {
     return {
       'showTable': false,
-      'loadingData': false,
+      // 'loadingData': false,
       'condoExpanded': false,
     };
   },
   computed: {
+    loadingData() {
+      return this.$store.state.loadingData;
+    },
     lastSearchMethod() {
       return this.$store.state.lastSearchMethod;
     },
@@ -620,12 +623,15 @@ export default {
     opaStatus(nextOpaStatus) {
       if (nextOpaStatus === 'success') {
         this.$data.showTable = true;
-        this.$data.loadingData = false;
+        // this.$data.loadingData = false;
+        this.$store.commit('setLoadingData', false);
       } else if (nextOpaStatus === 'waiting') {
         // this.$data.condoExpanded = false;
-        this.$data.loadingData = true;
+        // this.$data.loadingData = true;
+        this.$store.commit('setLoadingData', true);
       } else {
-        this.$data.loadingData = false;
+        // this.$data.loadingData = false;
+        this.$store.commit('setLoadingData', false);
       }
     },
     geocodeStatus(nextGeocodeStatus) {

@@ -3,8 +3,14 @@
     id="intro-container"
     class="small-24 small-order-2 medium-12 medium-order-1"
   >
+    <!-- v-show="loadingData" -->
+    <div
+      v-show="!activeAddressKnown"
+      class="loading-mask"
+    />
+
     <property-card
-      v-if="this.$store.state.activeModal.featureId !== null"
+      v-show="this.$store.state.activeModal.featureId !== null"
       :foundItemsLength="foundItemsLength"
     />
 
@@ -67,6 +73,12 @@ export default {
     },
   },
   computed: {
+    loadingData() {
+      return this.$store.state.loadingData;
+    },
+    activeAddressKnown() {
+      return this.$store.state.activeAddressKnown;
+    },
     map() {
       return this.$store.state.map.map;
     },
@@ -103,6 +115,18 @@ export default {
 
 #intro-container {
   height: 100%;
+}
+
+.loading-mask {
+  /*display: inline;*/
+  position: absolute;
+  top: 0;
+  height: 450%;
+  width: 100%;
+  background: rgba(0, 0 ,0 , 0.5);
+  z-index: 1000;
+  text-align: center;
+  vertical-align: middle;
 }
 
 // .introduction {

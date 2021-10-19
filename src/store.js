@@ -17,6 +17,8 @@ function createStore(config) {
 
   const initialState = {
     appName: 'pde',
+    loadingData: false,
+    activeAddressKnown: false,
     isMobileOrTablet: isMobileDevice(),
     leftPanel: true,
     ownerSearchModal: false,
@@ -83,6 +85,12 @@ function createStore(config) {
       // }
     },
     mutations: {
+      setLoadingData(state, payload) {
+        state.loadingData = payload;
+      },
+      setActiveAddressKnown(state, payload) {
+        state.activeAddressKnown = payload;
+      },
       setLeftPanel(state, payload) {
         state.leftPanel = payload;
       },
