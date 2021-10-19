@@ -176,6 +176,9 @@ export default {
     },
     foundItemsLength() {
       if (this.$store.state.shapeSearch.data != null) {
+        if (this.$store.state.condoUnits.units.length) {
+          return 2;
+        }
         return this.$store.state.shapeSearch.data.rows.length;
       } else if (this.$store.state.geocode.data != null && this.$store.state.geocode.data != "") {
         let geocodeArray = [];
@@ -193,6 +196,9 @@ export default {
       } else if (this.$store.state.ownerSearch.data != null) {
         return this.$store.state.ownerSearch.data.length;
       } else if (this.$store.state.blockSearch.data != null) {
+        if (this.$store.state.condoUnits.units) {
+          return 2;
+        }
         return this.$store.state.blockSearch.data.length;
       }
     },
@@ -408,6 +414,9 @@ export default {
     },
     foundItemsLength(nextFoundItemsLength) {
       console.log('watch foundItemsLength is firing, nextFoundItemsLength:', nextFoundItemsLength, 'lastSearchMethod:', this.lastSearchMethod, 'bufferMode:', this.$store.state.bufferMode);
+      if (!nextFoundItemsLength) {
+        return;
+      }
       if (nextFoundItemsLength === 1 && this.$store.state.bufferMode === false) {
         this.onDataChange('oneItem');
       } else {
