@@ -536,9 +536,12 @@ export default {
         this.$store.commit('setLeftPanel', false);
       } else {
         console.log('onDataChange else is running, type:', type)
-        if (this.lastSearchMethod === 'shape search') {
+        if (['shape search', 'buffer search'].includes(this.lastSearchMethod)) {
           this.$store.commit('setActiveFeature', { featureId: 'feat-shape-0' });
           this.$store.commit('setActiveModal', { featureId: 'feat-shape-0' });
+        } else if (this.lastSearchMethod === 'block search') {
+          this.$store.commit('setActiveFeature', { featureId: 'feat-block-0' });
+          this.$store.commit('setActiveModal', { featureId: 'feat-block-0' });
         } else {
           this.$store.commit('setActiveFeature', { featureId: 'feat-geocode-0' });
           this.$store.commit('setActiveModal', { featureId: 'feat-geocode-0' });
