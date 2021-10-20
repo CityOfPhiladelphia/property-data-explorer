@@ -5,7 +5,7 @@
   >
     <!-- v-show="loadingData" -->
     <div
-      v-show="!activeAddressKnown"
+      v-show="this.$store.state.activeModal.featureId != null && !activeAddressKnown"
       class="loading-mask"
     />
 
