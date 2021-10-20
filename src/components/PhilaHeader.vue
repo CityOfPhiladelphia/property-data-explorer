@@ -19,21 +19,6 @@
       </div>
       <div class="cell medium-auto small-21">
         <div class="grid-x grid-padding-x align-middle">
-          <!-- <div class="cell shrink hide-for-small-only">
-            <a
-              :href="appLogoLink"
-              class="logo flex-child-auto"
-            >
-              <img
-                :src="appLogo"
-                :alt="appLogoAlt"
-                class="app-logo"
-              >
-            </a>
-          </div>
-          <div class="cell shrink hide-for-small-only">
-            <div class="app-divide flex-child-auto" />
-          </div> -->
           <div class="cell shrink">
             <section class="title-container flex-child-auto">
               <a
@@ -46,7 +31,9 @@
                   class="app-logo"
                 >
               </a>
-              <div class="app-divide" />
+              <div
+                class="app-divide"
+              />
               <a
                 href="/"
                 onclick="location.reload()"
@@ -65,18 +52,6 @@
               </a>
             </section>
           </div>
-          <!-- <div class="cell large-auto small-auto small-centered text-center">
-            <combo-search
-              :dropdown="dropdownData"
-              :search-string="searchString"
-              :dropdown-selected="dropdownSelected"
-              @trigger-combo-search="comboSearchTriggered"
-              @trigger-clear-search="clearSearchTriggered"
-            />
-            <div class="search">
-              <slot name="search" />
-            </div>
-          </div> -->
         </div>
       </div>
     </div>
@@ -84,9 +59,6 @@
       v-show="!isOpen"
       class="stripe"
     />
-    <!-- <div
-      class="white-stripe"
-    /> -->
     <div
       v-show="isOpen"
       class="mobile-menu-content-container show-for-small-only"
@@ -110,16 +82,10 @@
 </template>
 
 <script>
-// TODO: move logo, link etc to app config.
+
 import Logo from '@/assets/city-of-philadelphia-logo.png';
-// import AddressInput from '@phila/vue-comps/src/components/AddressInput.vue'
-// import Paragraph from '@phila/vue-comps/src/components/Paragraph.vue'
-// import '@phila/vue-comps'
 
 export default {
-  // components: {
-  //   ComboSearch: () => import(/* webpackChunkName: "pvc_ComboSearch" */'@phila/vue-comps/src/components/ComboSearch.vue'),
-  // },
   props: {
     appLink: {
       type: String,
@@ -185,6 +151,9 @@ export default {
     searchType() {
       return this.$store.state.searchType;
     },
+    isMobileOrTablet() {
+      return this.$store.state.isMobileOrTablet;
+    },
   },
   watch: {
     address(nextAddress) {
@@ -197,14 +166,6 @@ export default {
       this.searchTypeChanged(nextSearchType);
     },
   },
-  // created() {
-  //   Object.keys(this.dropdownData).forEach(item => {
-  //     if (this.$route.query[item]) {
-  //       this.searchString = this.$route.query[item];
-  //       this.dropdownData[item].selected = true;
-  //     }
-  //   });
-  // },
   methods: {
     searchTypeChanged(nextSearchType) {
       console.log('searchTypeChanged, nextSearchType:', nextSearchType);
@@ -213,19 +174,11 @@ export default {
         console.log('in loop, dropdown:', dropdown);
         delete startQuery[dropdown];
       }
-      // this.$router.push({ query: startQuery });
       this.searchString = '';
     },
-    // comboSearchTriggered(query) {
-    //   // console.log('in comboSearchTriggered, query:', query, 'this.searchType:', this.searchType, '{...this.$route.query}:', { ...this.$route.query }, '{...query}:', { ...query });
-    //   this.$router.push({ query: { ...this.$route.query, ...query }});
-    //   this.searchString = query[this.searchType];
-    // },
     clearSearchTriggered() {
-      // console.log('in clearSearchTriggered, this.$route.query:', this.$route.query);
       let startQuery = { ...this.$route.query };
       delete startQuery[this.searchType];
-      // this.$router.push({ query: startQuery });
       this.searchString = '';
     },
     compLogo(){
@@ -275,7 +228,7 @@ export default {
   }
 
   .title-container{
-    display: inline-flex;
+    // display: inline-flex;
     word-break: break-word;
 
     h1, h2{
@@ -346,8 +299,7 @@ export default {
   }
 }
 
-.app-divide{
-  display: inline-block;
+.app-divide {
   margin: 0 1rem;
   vertical-align: middle;
 
@@ -355,6 +307,7 @@ export default {
     border-left:1px solid white;
   }
 }
+
 .stripe {
   min-height: 5px;
   background: color(electric-blue);
@@ -400,6 +353,11 @@ export default {
 }
 
 @media screen and (min-width: 750px) {
+
+  .app-divide {
+    display: inline-block;
+  }
+
   .sub-title {
     display: none;
   }
