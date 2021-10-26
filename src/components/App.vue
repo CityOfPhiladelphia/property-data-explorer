@@ -546,7 +546,7 @@ export default {
         this.closePropertyModal();
         this.$store.commit('setLeftPanel', false);
         if (this.lastSearchMethod === 'block search') {
-          this.$controller.setRouteByBlockSearch();
+          this.$controller.setRouteByBlockSearch(this.$store.state.blockSearch.input);
         } else if (this.lastSearchMethod === 'shape search') {
           this.$controller.setRouteByShapeSearch();
         } else if (this.lastSearchMethod === 'buffer search') {
@@ -556,14 +556,16 @@ export default {
           this.$controller.setRouteByGeocode();
         }
       } else {
-        console.log('onDataChange else is running, type:', type)
+        console.log('onDataChange else is running, type:', type, 'this.lastSearchMethod:', this.lastSearchMethod);
         if (['shape search', 'buffer search'].includes(this.lastSearchMethod)) {
           this.$store.commit('setActiveFeature', { featureId: 'feat-shape-0' });
           this.$store.commit('setActiveModal', { featureId: 'feat-shape-0' });
           this.$controller.setRouteByOpaNumber(this.$store.state.parcels.pwd[0].properties.BRT_ID);
-        } else if (this.lastSearchMethod === 'block search') {
+        } else if (['block search', 'blockSearch'].includes(this.lastSearchMethod)) {
+          console.log('onDataChange else is running, type:', type, 'lastSearchMethod is block search');
           this.$store.commit('setActiveFeature', { featureId: 'feat-block-0' });
           this.$store.commit('setActiveModal', { featureId: 'feat-block-0' });
+          this.$controller.setRouteByOpaNumber(this.$store.state.blockSearch.data[0].properties.opa_account_num);
         } else {
           this.$store.commit('setActiveFeature', { featureId: 'feat-geocode-0' });
           this.$store.commit('setActiveModal', { featureId: 'feat-geocode-0' });
