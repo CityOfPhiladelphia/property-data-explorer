@@ -151,9 +151,11 @@ export default {
         }
       } else if (state.lastSearchMethod === 'owner search' || state.lastSearchMethod === 'block search' ) {
         let searchValue = state.lastSearchMethod === 'owner search' ? "ownerSearch" : "blockSearch"
-        feature = state[searchValue].data.filter(object => {
-          return object._featureId === state.activeModal.featureId;
-        })[0];
+        if (state[searchValue].data) {
+          feature = state[searchValue].data.filter(object => {
+            return object._featureId === state.activeModal.featureId;
+          })[0];
+        }
       } else if ([ 'shape search', 'buffer search' ].includes(state.lastSearchMethod)) {
         // console.log('App.vue computed activeModalFeature is running after buffer search');
         if (state.shapeSearch.data) {
