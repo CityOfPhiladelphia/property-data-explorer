@@ -909,8 +909,20 @@ export default {
       return false;
     },
     closeModal(state) {
+      console.log('PropertyCard.vue closeModal is running');
       this.$store.state.activeModal.featureId = null;
       this.$store.commit('setActiveFeature', null);
+
+      if (this.lastSearchMethod === 'block search') {
+        this.$controller.setRouteByBlockSearch();
+      } else if (this.lastSearchMethod === 'shape search') {
+        this.$controller.setRouteByShapeSearch();
+      } else if (this.lastSearchMethod === 'buffer search') {
+        this.$controller.setRouteByBufferSearch();
+      } else {
+        this.$controller.setRouteByGeocode();
+      }
+
       this.$nextTick(() => {
         this.$store.state.map.map.invalidateSize();
       });

@@ -659,7 +659,7 @@ export default {
              state.sources.opa_public.targets[this.activeOpaId(state, item)].data;
     },
     addCondoRecords(state, item) {
-      // console.log('addCondoRecords is running, item:', item);
+      console.log('addCondoRecords is running, item:', item);
 
       this.$data.showTable = false;
       this.$data.condoExpanded = true;
@@ -783,7 +783,16 @@ export default {
 
     },
     rowClick(state, item) {
-      console.log("DataPanel.vue Row Click")
+      let parcel_number;
+      if (item.parcel_number) {
+        parcel_number = item.parcel_number;
+      } else {
+        parcel_number = item.properties.opa_account_num;
+      }
+      console.log('DataPanel.vue Row Click, item:', item, 'item.properties:', item.properties, 'parcel_number:', parcel_number);
+      if (parcel_number) {
+        this.$controller.setRouteByOpaNumber(parcel_number);
+      }
       let coords = [];
       if( typeof this.geocodeItems[0] != 'undefined') {
         Array.prototype.push.apply(coords, [ this.geocodeItems[0].geometry.coordinates[0],this.geocodeItems[0].geometry.coordinates[1] ]);

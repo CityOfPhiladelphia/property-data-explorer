@@ -39,6 +39,7 @@ let config = {
   router: {
     enabled: true,
     type: 'vue',
+    geocode: 'opa',
   },
   app: {
     title: 'Property Data Explorer',

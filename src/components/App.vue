@@ -459,7 +459,7 @@ export default {
     this.onResize();
     this.$store.commit('setActiveParcelLayer', 'pwd');
     let query = this.$route.query;
-    // console.log('App.vue mounted is running, this.$route.query:', this.$route.query);
+    console.log('App.vue mounted is running, this.$route.query:', this.$route.query);
     if (query.shape) {
       // this.leftPanel = false;
       // this.$store.commit('setLeftPanel', false);
@@ -508,6 +508,8 @@ export default {
       // console.log('query.owner:', query.owner);
       this.$controller.handleSearchFormSubmit(query.block);
       this.onDataChange('blockSearch');
+    } else if (query.p) {
+      this.$controller.handleSearchFormSubmit(query.p);
     }
   },
   // beforeMount(){
@@ -543,17 +545,31 @@ export default {
         // this.leftPanel = false;
         this.closePropertyModal();
         this.$store.commit('setLeftPanel', false);
+        if (this.lastSearchMethod === 'block search') {
+          this.$controller.setRouteByBlockSearch();
+        } else if (this.lastSearchMethod === 'shape search') {
+          this.$controller.setRouteByShapeSearch();
+        } else if (this.lastSearchMethod === 'buffer search') {
+          this.$controller.setRouteByBufferSearch();
+        } else {
+        // } else if (this.lastSearchMethod === 'geocode') {
+          this.$controller.setRouteByGeocode();
+        }
       } else {
         console.log('onDataChange else is running, type:', type)
         if (['shape search', 'buffer search'].includes(this.lastSearchMethod)) {
           this.$store.commit('setActiveFeature', { featureId: 'feat-shape-0' });
           this.$store.commit('setActiveModal', { featureId: 'feat-shape-0' });
+          this.$controller.setRouteByOpaNumber(this.$store.state.parcels.pwd[0].properties.BRT_ID);
         } else if (this.lastSearchMethod === 'block search') {
           this.$store.commit('setActiveFeature', { featureId: 'feat-block-0' });
           this.$store.commit('setActiveModal', { featureId: 'feat-block-0' });
         } else {
           this.$store.commit('setActiveFeature', { featureId: 'feat-geocode-0' });
           this.$store.commit('setActiveModal', { featureId: 'feat-geocode-0' });
+          if (this.$store.state.geocode.data.properties.opa_account_num) {
+            this.$controller.setRouteByOpaNumber(this.$store.state.geocode.data.properties.opa_account_num);
+          }
         }
         this.$data.hasData = true;
         this.$store.commit('setFullScreenMapEnabled', true);
