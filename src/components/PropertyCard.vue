@@ -914,7 +914,7 @@ export default {
       this.$store.commit('setActiveFeature', null);
 
       if (this.lastSearchMethod === 'block search') {
-        this.$controller.setRouteByBlockSearch();
+        this.$controller.setRouteByBlockSearch(this.$store.state.blockSearch.input);
       } else if (this.lastSearchMethod === 'shape search') {
         this.$controller.setRouteByShapeSearch();
       } else if (this.lastSearchMethod === 'buffer search') {
