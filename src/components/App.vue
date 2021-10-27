@@ -121,7 +121,6 @@ export default {
       'top': 3,
       'bottom': 2,
       hasData: false,
-      isModalOpen: false,
       leftPanel: true,
     };
   },
@@ -177,7 +176,7 @@ export default {
       return this.$store.state.popover.options;
     },
     foundItemsLength() {
-      console.log('App.vue computed foundItemsLength, this.$store.state.condoUnits.units:', this.$store.state.condoUnits.units);
+      // console.log('App.vue computed foundItemsLength, this.$store.state.condoUnits.units:', this.$store.state.condoUnits.units);
       if (this.$store.state.shapeSearch.data != null) {
         if (Object.keys(this.$store.state.condoUnits.units).length) {
           return 2;
@@ -196,8 +195,6 @@ export default {
         }
         return geocodeArray.length;
 
-      // } else if (this.$store.state.ownerSearch.data != null) {
-      //   return this.$store.state.ownerSearch.data.length;
       } else if (this.$store.state.blockSearch.data != null) {
         if (this.$store.state.condoUnits.units) {
           return 2;
@@ -341,16 +338,11 @@ export default {
       return this.fullScreenMapEnabled ? 'bottom-none': "";
     },
     shouldKeepLeftPanel() {
-      // if (this.$store.state.sources.opa_assessment.status || this.$store.state.cyclomedia.active && this.$store.state.activeModal.featureId !== null) {
-      // if (this.$store.state.cyclomedia.active && this.$store.state.activeModal.featureId !== null) {
-      //   console.log('App.vue shouldKeepLeftPanel first if');
-      //   return false;
-      // } else if (!this.$store.state.leftPanel) {
       if (!this.$store.state.leftPanel) {
-        console.log('App.vue shouldKeepLeftPanel if');
+        // console.log('App.vue shouldKeepLeftPanel if');
         return false;
       }
-      console.log('App.vue shouldKeepLeftPanel outside if');
+      // console.log('App.vue shouldKeepLeftPanel outside if');
       return true;
     },
     shouldLoadCyclomediaWidget() {
@@ -367,7 +359,6 @@ export default {
       }
       const center = this.$config.map.center;
       return center;
-
     },
     cycloRotationAngle() {
       return this.$store.state.cyclomedia.orientation.yaw * (180/3.14159265359);
@@ -379,7 +370,6 @@ export default {
       return this.$store.state.sources.opa_assessment;
     },
     opaStatus() {
-      // return this.$store.state.sources.opa_assessment.status;
       if (this.opa && this.opa.status) {
         return this.opa.status;
       }
@@ -387,42 +377,31 @@ export default {
     },
   },
   watch: {
-    // '$route': function(route) {
-    //   console.log('watch route is firing');
-    //   // return route.fullPath === '/' ? this.$store.commit('setLeftPanel', true) : "";
-    //   return route.fullPath === '/' ? this.openLeftPanel(true) : this.openLeftPanel(false);
-    // },
     leftPanel: function(){
       // console.log("intro page watcher: ", this.leftPanel)
       this.leftPanel === false ? this.closeModal() : ""
     },
     activeModal() {
-      console.log('watch activeModal is firing');
-      // this.$controller.activeFeatureChange();
-      // this.$store.state.activeModal.featureId !== null ? this.openLeftPanel(true): this.openLeftPanel(false);
+      // console.log('watch activeModal is firing');
       if (this.$store.state.activeModal.featureId !== null) {
-        console.log('open panel - this.$store.state.activeModal.featureId !== null:', this.$store.state.activeModal.featureId);
+        // console.log('open panel - this.$store.state.activeModal.featureId !== null:', this.$store.state.activeModal.featureId);
         this.openLeftPanel(true);
       } else {
-        console.log('close panel - this.$store.state.activeModal.featureId is null:', this.$store.state.activeModal.featureId);
+        // console.log('close panel - this.$store.state.activeModal.featureId is null:', this.$store.state.activeModal.featureId);
         this.openLeftPanel(false);
       }
     },
     drawShape(nextDrawShape) {
       if (nextDrawShape !== null) {
-        // this.onDataChange('shapeSearch');
         this.$controller.handleDrawnShape();
         this.$store.commit('setShapeSearchStatus', 'waiting');
       }
     },
     foundItemsLength(nextFoundItemsLength) {
-      // debugger;
-      console.log('watch foundItemsLength is firing, nextFoundItemsLength:', nextFoundItemsLength, 'lastSearchMethod:', this.lastSearchMethod, 'bufferMode:', this.$store.state.bufferMode);
+      // console.log('watch foundItemsLength is firing, nextFoundItemsLength:', nextFoundItemsLength, 'lastSearchMethod:', this.lastSearchMethod, 'bufferMode:', this.$store.state.bufferMode);
       if (!nextFoundItemsLength) {
-        // debugger;
         return;
       }
-      // if (nextFoundItemsLength === 1 && this.$store.state.lastSearchMethod !== 'shape search') {
       if (nextFoundItemsLength === 1 && this.$store.state.bufferMode === false) {
         this.onDataChange('oneItem');
       } else {
@@ -441,18 +420,17 @@ export default {
     },
     shouldKeepLeftPanel(nextShouldKeepLeftPanel) {
       if (nextShouldKeepLeftPanel === false) {
-        console.log('in watch shouldKeepLeftPanel if, next:', nextShouldKeepLeftPanel);
+        // console.log('in watch shouldKeepLeftPanel if, next:', nextShouldKeepLeftPanel);
         this.$data.leftPanel = false;
       }
     },
     activeModalFeature(nextActiveModalFeature) {
-      console.log('watch activeModalFeature is firing, nextActiveModalFeature:', nextActiveModalFeature);
+      // console.log('watch activeModalFeature is firing, nextActiveModalFeature:', nextActiveModalFeature);
       this.$store.commit('setActiveModalFeature', nextActiveModalFeature);
       this.$controller.activeFeatureChange();
     },
   },
   mounted() {
-
     //Adding this function as an event listener so that it can be used to clear when property modal errors on open as well.
     window.addEventListener("keydown", function(e) {
       return e.keyCode === 27 ? this.closePropertyModal() : "";
@@ -461,42 +439,23 @@ export default {
     this.onResize();
     this.$store.commit('setActiveParcelLayer', 'pwd');
     let query = this.$route.query;
-    console.log('App.vue mounted is running, this.$route.query:', this.$route.query);
+    // console.log('App.vue mounted is running, this.$route.query:', this.$route.query);
     if (query.shape) {
-      // this.leftPanel = false;
-      // this.$store.commit('setLeftPanel', false);
-      // let shape = query.shape;
-      // shape = shape.slice(2, shape.length-2);
-      // shape = shape.split('],[');
-      // let test = [];
-      // for (let point of shape) {
-      //   test.push(point.split(','));
-      // }
-      // let _latlngs = [];
-      // for (let item of test) {
-      //   let latlng = new LatLng(parseFloat(item[0]), parseFloat(item[1]));
-      //   _latlngs.push(latlng);
-      // }
-      // const points = { _latlngs };
       this.$controller.handleDrawnShape();
-      // this.$controller.getParcelsByPoints(points);
       this.onDataChange('shapeSearch');
     } else if (query.address) {
-      // this.leftPanel = false;
       this.closePropertyModal();
       this.$store.commit('setLeftPanel', false);
       // console.log('query.address:', query.address);
       this.$controller.handleSearchFormSubmit(query.address);
       this.onDataChange('geocode');
     } else if (query.owner) {
-      // this.leftPanel = false;
       this.closePropertyModal();
       this.$store.commit('setLeftPanel', false);
       // console.log('query.owner:', query.owner);
       this.$controller.handleSearchFormSubmit(query.owner);
       this.onDataChange('ownerSearch');
     } else if (query.buffer) {
-      // this.leftPanel = false;
       this.closePropertyModal();
       this.$store.commit('setLeftPanel', false);
       this.$store.commit('setBufferMode', true);
@@ -504,7 +463,6 @@ export default {
       this.onDataChange('bufferSearch');
       this.$store.commit('setLastSearchMethod', 'buffer search');
     } else if (query.block) {
-      // this.leftPanel = false;
       this.closePropertyModal();
       this.$store.commit('setLeftPanel', false);
       // console.log('query.owner:', query.owner);
@@ -514,9 +472,6 @@ export default {
       this.$controller.handleSearchFormSubmit(query.p);
     }
   },
-  // beforeMount(){
-  //   return this.$store.state.isMobileOrTablet ? this.$store.commit('setLeftPanel', false) : "";
-  // },
   created() {
     window.addEventListener('resize', this.onResize);
   },
@@ -535,8 +490,6 @@ export default {
       console.log('App.vue openLeftPanel is running, value:', value);
       this.$data.leftPanel = value
       this.$store.commit('setFullScreenMapEnabled', value);
-      // value = true ? this.$store.commit('setCyclomediaActive', false ): "";
-      // this seems weird that a store function is returned
       this.$store.commit('setLeftPanel', value);
     },
     onDataChange(type) {
@@ -544,7 +497,6 @@ export default {
         console.log('onDataChange if is running, type:', type)
         this.$data.hasData = true;
         this.$store.commit('setFullScreenMapEnabled', false);
-        // this.leftPanel = false;
         this.closePropertyModal();
         this.$store.commit('setLeftPanel', false);
         if (this.lastSearchMethod === 'block search') {
@@ -554,7 +506,6 @@ export default {
         } else if (this.lastSearchMethod === 'buffer search') {
           this.$controller.setRouteByBufferSearch();
         } else {
-        // } else if (this.lastSearchMethod === 'geocode') {
           this.$controller.setRouteByGeocode();
         }
       } else {
@@ -564,7 +515,7 @@ export default {
           this.$store.commit('setActiveModal', { featureId: 'feat-shape-0' });
           this.$controller.setRouteByOpaNumber(this.$store.state.parcels.pwd[0].properties.BRT_ID);
         } else if (['block search', 'blockSearch'].includes(this.lastSearchMethod)) {
-          console.log('onDataChange else is running, type:', type, 'lastSearchMethod is block search');
+          // console.log('onDataChange else is running, type:', type, 'lastSearchMethod is block search');
           this.$store.commit('setActiveFeature', { featureId: 'feat-block-0' });
           this.$store.commit('setActiveModal', { featureId: 'feat-block-0' });
           this.$controller.setRouteByOpaNumber(this.$store.state.blockSearch.data[0].properties.opa_account_num);
@@ -577,8 +528,6 @@ export default {
         }
         this.$data.hasData = true;
         this.$store.commit('setFullScreenMapEnabled', true);
-        // this.leftPanel = false;
-        // this.closePropertyModal();
         this.$store.commit('setLeftPanel', true);
       }
     },
@@ -598,15 +547,12 @@ export default {
       }
     },
     toggleModal() {
-      this.isModalOpen = !this.isModalOpen;
       this.toggleBodyClass('no-scroll');
     },
     showModal() {
-      this.isModalOpen = true;
       this.toggleBodyClass('no-scroll');
     },
     closeModal() {
-      this.isModalOpen = false;
       this.toggleBodyClass('no-scroll');
     },
     toggleBodyClass(className) {

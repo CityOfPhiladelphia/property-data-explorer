@@ -213,24 +213,18 @@
             static="true"
             @handle-search-form-submit="handleSearchFormSubmit"
           />
-          <!-- :width-from-config="addressInputWidth" -->
 
           <buffer-control
             :button-height="'45px'"
             :button-width="'100%'"
             :position="'topleft'"
             :class="buttonClass + ' buffer-control ' + bufferButtonActiveClass"
-            @click="handleBufferClick"
           />
 
-          <div
-            class="draw-control"
-            @click="handleDrawControlClick"
-          >
+          <div class="draw-control">
             <draw-control
               :control="true"
               :position="'topleft'"
-              @click="handleDrawControlClick"
             />
           </div>
 
@@ -628,7 +622,7 @@ export default {
       }
     },
     geocodeResult(nextGeocodeResult) {
-      console.log('watch geocodeResult is running, nextGeocodeResult:', nextGeocodeResult);
+      // console.log('watch geocodeResult is running, nextGeocodeResult:', nextGeocodeResult);
       if (Object.keys(nextGeocodeResult).length > 0) {
         this.lastGeocodeResult = nextGeocodeResult;
         if (nextGeocodeResult._featureId) {
@@ -642,7 +636,7 @@ export default {
       }
     },
     geojsonParcels(nextGeojson) {
-      console.log('watch geojsonParcels is running, nextGeojson:', nextGeojson);
+      // console.log('watch geojsonParcels is running, nextGeojson:', nextGeojson);
       if (!this.$store.state.mapViewWasSetOnAppLoad && this.lastSearchMethod === 'shape search') {
         console.log('watch geojsonParcels is affecting things');
         this.setMapToBounds();
@@ -653,7 +647,7 @@ export default {
       }
     },
     leftPanel(nextLeftPanel) {
-      console.log('MapPanel.vue watch leftPanel is firing, nextLeftPanel:', nextLeftPanel);
+      // console.log('MapPanel.vue watch leftPanel is firing, nextLeftPanel:', nextLeftPanel);
       if (this.$store.state.geocode.data && Object.keys(this.$store.state.geocode.data).length > 0) {
         this.lastGeocodeResult = this.$store.state.geocode.data;
         if (this.$store.state.geocode.data._featureId) {
@@ -719,12 +713,6 @@ export default {
     handleSearchFormSubmit(value) {
       // console.log('MapPanel.vue handleSearchFormSubmit is running');
       this.$controller.handleSearchFormSubmit(value);
-    },
-    handleBufferClick() {
-      console.log('handleBufferClick is running');
-    },
-    handleDrawControlClick() {
-      console.log('handleDrawControlClick is running');
     },
     fillColorForOverlayMarker(markerId, activeFeature) {
       // get map overlay style and hover style for table
