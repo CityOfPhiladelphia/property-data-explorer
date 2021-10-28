@@ -111,12 +111,13 @@ let config = {
       options: {
         params: {
           q: function(input){
-            if (typeof input === 'string') {
-              return "select * from assessments where parcel_number IN('"+ input +"')";
+            if (input) {
+              if (typeof input === 'string') {
+                return "select * from assessments where parcel_number IN('"+ input +"')";
+              }
+              var inputEncoded = "'" + input.join("','") + "'";
+              return "select * from assessments where parcel_number IN("+ inputEncoded +")";
             }
-            var inputEncoded = "'" + input.join("','") + "'";
-            return "select * from assessments where parcel_number IN("+ inputEncoded +")";
-
           },
         },
         success: function(data) {
@@ -130,12 +131,13 @@ let config = {
       options: {
         params: {
           q: function(input){
-            if (typeof input === 'string') {
-              return "select * from RTT_SUMMARY where opa_account_num = '"+ input +"' AND document_type = 'DEED'";
+            if (input) {
+              if (typeof input === 'string') {
+                return "select * from RTT_SUMMARY where opa_account_num = '"+ input +"' AND document_type = 'DEED'";
+              }
+              var inputEncoded = "'" + input.join("','") + "'";
+              return "select * from RTT_SUMMARY where opa_account_num IN("+ inputEncoded +") AND document_type = 'DEED'";
             }
-            var inputEncoded = "'" + input.join("','") + "'";
-            return "select * from RTT_SUMMARY where opa_account_num IN("+ inputEncoded +") AND document_type = 'DEED'";
-
           },
         },
         success: function(data) {

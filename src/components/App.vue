@@ -402,7 +402,11 @@ export default {
       if (!nextFoundItemsLength) {
         return;
       }
-      if (nextFoundItemsLength === 1 && this.$store.state.bufferMode === false) {
+      let geocodeType;
+      if (this.$store.state.geocode.data) {
+        geocodeType = this.$store.state.geocode.data.ais_feature_type;
+      }
+      if (nextFoundItemsLength === 1 && this.$store.state.bufferMode === false && geocodeType !== 'intersection') {
         this.onDataChange('oneItem');
       } else {
         this.onDataChange('multiItem');

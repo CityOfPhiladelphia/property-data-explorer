@@ -7,7 +7,13 @@
     <div
       v-show="this.$store.state.activeModal.featureId != null && !activeAddressKnown"
       class="loading-mask"
-    />
+    >
+      <font-awesome-icon
+        icon="spinner"
+        size="6x"
+        aria-hidden="true"
+      />
+    </div>
 
     <property-card
       v-show="this.$store.state.activeModal.featureId !== null"
@@ -127,6 +133,7 @@ export default {
   z-index: 1000;
   text-align: center;
   vertical-align: middle;
+  padding-top: 250px;
 }
 
 // .introduction {
