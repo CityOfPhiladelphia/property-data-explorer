@@ -377,6 +377,23 @@ export default {
     },
   },
   watch: {
+    // $route (to, from){
+    //   console.log('watch $route, to:', to, 'from:', from);
+    // },
+    geocodeStatus(nextGeocodeStatus) {
+      console.log('watch geocodeStatus, nextGeocodeStatus:', nextGeocodeStatus);
+      if (nextGeocodeStatus === 'success') {
+        let geocodeType;
+        if (this.$store.state.geocode.data) {
+          geocodeType = this.$store.state.geocode.data.ais_feature_type;
+        }
+        if (this.foundItemsLength === 1 && this.$store.state.bufferMode === false && geocodeType !== 'intersection') {
+          this.onDataChange('oneItem');
+        } else {
+          this.onDataChange('multiItem');
+        }
+      }
+    },
     leftPanel: function(){
       // console.log("intro page watcher: ", this.leftPanel)
       this.leftPanel === false ? this.closeModal() : ""
@@ -524,6 +541,7 @@ export default {
           this.$store.commit('setActiveModal', { featureId: 'feat-block-0' });
           this.$controller.setRouteByOpaNumber(this.$store.state.blockSearch.data[0].properties.opa_account_num);
         } else {
+          console.log('onDataChange else else is running, this.$store.state.geocode.data.properties.opa_account_num:', this.$store.state.geocode.data.properties.opa_account_num);
           this.$store.commit('setActiveFeature', { featureId: 'feat-geocode-0' });
           this.$store.commit('setActiveModal', { featureId: 'feat-geocode-0' });
           if (this.$store.state.geocode.data.properties.opa_account_num) {
