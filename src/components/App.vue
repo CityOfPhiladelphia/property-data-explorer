@@ -379,6 +379,9 @@ export default {
   watch: {
     // $route (to, from){
     //   console.log('watch $route, to:', to, 'from:', from);
+    //   if (to.fullPath !== from.fullPath) {
+    //     this.reactToRoute2()
+    //   }
     // },
     geocodeStatus(nextGeocodeStatus) {
       console.log('watch geocodeStatus, nextGeocodeStatus:', nextGeocodeStatus);
@@ -415,7 +418,7 @@ export default {
       }
     },
     foundItemsLength(nextFoundItemsLength) {
-      // console.log('watch foundItemsLength is firing, nextFoundItemsLength:', nextFoundItemsLength, 'lastSearchMethod:', this.lastSearchMethod, 'bufferMode:', this.$store.state.bufferMode);
+      console.log('watch foundItemsLength is firing, nextFoundItemsLength:', nextFoundItemsLength, 'lastSearchMethod:', this.lastSearchMethod, 'bufferMode:', this.$store.state.bufferMode);
       if (!nextFoundItemsLength) {
         return;
       }
@@ -456,42 +459,10 @@ export default {
     window.addEventListener("keydown", function(e) {
       return e.keyCode === 27 ? this.closePropertyModal() : "";
     }.bind(this), false);
-
+    window.onpopstate = this.handlePopStateChange;
     this.onResize();
     this.$store.commit('setActiveParcelLayer', 'pwd');
-    let query = this.$route.query;
-    // console.log('App.vue mounted is running, this.$route.query:', this.$route.query);
-    if (query.shape) {
-      this.$controller.handleDrawnShape();
-      this.onDataChange('shapeSearch');
-    } else if (query.address) {
-      this.closePropertyModal();
-      this.$store.commit('setLeftPanel', false);
-      // console.log('query.address:', query.address);
-      this.$controller.handleSearchFormSubmit(query.address);
-      this.onDataChange('geocode');
-    } else if (query.owner) {
-      this.closePropertyModal();
-      this.$store.commit('setLeftPanel', false);
-      // console.log('query.owner:', query.owner);
-      this.$controller.handleSearchFormSubmit(query.owner);
-      this.onDataChange('ownerSearch');
-    } else if (query.buffer) {
-      this.closePropertyModal();
-      this.$store.commit('setLeftPanel', false);
-      this.$store.commit('setBufferMode', true);
-      this.$controller.handleSearchFormSubmit(query.buffer);
-      this.onDataChange('bufferSearch');
-      this.$store.commit('setLastSearchMethod', 'buffer search');
-    } else if (query.block) {
-      this.closePropertyModal();
-      this.$store.commit('setLeftPanel', false);
-      // console.log('query.owner:', query.owner);
-      this.$controller.handleSearchFormSubmit(query.block);
-      this.onDataChange('blockSearch');
-    } else if (query.p) {
-      this.$controller.handleSearchFormSubmit(query.p);
-    }
+    this.reactToRoute();
   },
   created() {
     window.addEventListener('resize', this.onResize);
@@ -500,6 +471,82 @@ export default {
     window.removeEventListener('resize', this.onResize);
   },
   methods: {
+    // handlePopStateChange() {
+    //   console.log('handlePopStateChange');
+    // },
+    reactToRoute() {
+      let query = this.$route.query;
+      console.log('App.vue reactToRoute is running, this.$route.query:', this.$route.query);
+      if (query.shape) {
+        this.$controller.handleDrawnShape();
+        this.onDataChange('shapeSearch');
+      } else if (query.address) {
+        this.closePropertyModal();
+        this.$store.commit('setLeftPanel', false);
+        // console.log('query.address:', query.address);
+        this.$controller.handleSearchFormSubmit(query.address);
+        this.onDataChange('geocode');
+      } else if (query.owner) {
+        this.closePropertyModal();
+        this.$store.commit('setLeftPanel', false);
+        // console.log('query.owner:', query.owner);
+        this.$controller.handleSearchFormSubmit(query.owner);
+        this.onDataChange('ownerSearch');
+      } else if (query.buffer) {
+        this.closePropertyModal();
+        this.$store.commit('setLeftPanel', false);
+        this.$store.commit('setBufferMode', true);
+        this.$controller.handleSearchFormSubmit(query.buffer);
+        this.onDataChange('bufferSearch');
+        this.$store.commit('setLastSearchMethod', 'buffer search');
+      } else if (query.block) {
+        this.closePropertyModal();
+        this.$store.commit('setLeftPanel', false);
+        // console.log('query.owner:', query.owner);
+        this.$controller.handleSearchFormSubmit(query.block);
+        this.onDataChange('blockSearch');
+      } else if (query.p) {
+        this.$controller.handleSearchFormSubmit(query.p);
+      }
+    },
+    handlePopStateChange() {
+      let query = this.$route.query;
+      console.log('App.vue handlePopStateChange is running, this.route:', this.$route, 'this.$route.query:', this.$route.query);
+      if (query.shape) {
+        this.$controller.handleDrawnShape();
+        // this.onDataChange('shapeSearch');
+      } else if (query.address) {
+        this.closePropertyModal();
+        this.$store.commit('setLeftPanel', false);
+        let aisAddress = this.$store.state.geocode.data.properties.street_address;
+        console.log('handlePopStateChange query.address:', query.address, 'aisAddress:', aisAddress);
+        if (query.address !== aisAddress) {
+          this.$controller.handleSearchFormSubmit(query.address);
+        }
+        // this.onDataChange('geocode');
+      } else if (query.owner) {
+        this.closePropertyModal();
+        this.$store.commit('setLeftPanel', false);
+        // console.log('query.owner:', query.owner);
+        this.$controller.handleSearchFormSubmit(query.owner);
+        // this.onDataChange('ownerSearch');
+      } else if (query.buffer) {
+        this.closePropertyModal();
+        this.$store.commit('setLeftPanel', false);
+        this.$store.commit('setBufferMode', true);
+        this.$controller.handleSearchFormSubmit(query.buffer);
+        // this.onDataChange('bufferSearch');
+        this.$store.commit('setLastSearchMethod', 'buffer search');
+      } else if (query.block) {
+        this.closePropertyModal();
+        this.$store.commit('setLeftPanel', false);
+        console.log('handlePopStateChange, query.block:', query.block);
+        this.$controller.handleSearchFormSubmit(query.block);
+        // this.onDataChange('blockSearch');
+      } else if (query.p) {
+        this.$controller.handleSearchFormSubmit(query.p);
+      }
+    },
     closePropertyModal() {
       this.$store.state.activeModal.featureId = null;
       this.$store.commit('setActiveFeature', null);
