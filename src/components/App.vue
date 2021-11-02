@@ -150,6 +150,7 @@ export default {
         }
       } else if (state.lastSearchMethod === 'owner search' || state.lastSearchMethod === 'block search' ) {
         let searchValue = state.lastSearchMethod === 'owner search' ? "ownerSearch" : "blockSearch"
+        console.log('in computed activeModalFeature, state.lastSearchMethod:', state.lastSearchMethod, 'searchValue:', searchValue);
         if (state[searchValue].data) {
           feature = state[searchValue].data.filter(object => {
             return object._featureId === state.activeModal.featureId;
@@ -163,7 +164,7 @@ export default {
           })[0];
         }
       }
-      // console.log('activeModalFeature computed is running, feature:', feature);
+      console.log('activeModalFeature computed is running, feature:', feature);
       return feature;
     },
     popoverOpen() {
@@ -449,9 +450,11 @@ export default {
       }
     },
     activeModalFeature(nextActiveModalFeature) {
-      // console.log('watch activeModalFeature is firing, nextActiveModalFeature:', nextActiveModalFeature);
-      this.$store.commit('setActiveModalFeature', nextActiveModalFeature);
-      this.$controller.activeFeatureChange();
+      console.log('watch activeModalFeature is firing, nextActiveModalFeature:', nextActiveModalFeature);
+      if (nextActiveModalFeature) {
+        this.$store.commit('setActiveModalFeature', nextActiveModalFeature);
+        this.$controller.activeFeatureChange();
+      }
     },
   },
   mounted() {

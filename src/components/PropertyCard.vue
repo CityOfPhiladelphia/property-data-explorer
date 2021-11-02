@@ -891,7 +891,7 @@ export default {
   },
   watch: {
     activeAddress(nextActiveAddress) {
-      // console.log('PropertyCard.vue watch activeAddress, nextActiveAddress:', nextActiveAddress);
+      console.log('PropertyCard.vue watch activeAddress, nextActiveAddress:', nextActiveAddress);
       if (nextActiveAddress) {
         this.$store.commit('setActiveAddressKnown', true);
       } else {
