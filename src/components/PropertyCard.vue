@@ -327,12 +327,12 @@ export default {
     activeAddress() {
       let feature = this.activeModalFeature;
       let address;
-      // console.log("active modal feature: ", this.activeModalFeature)
-      if (feature && [ 'geocode', 'reverseGeocode', 'owner search', 'block search' ].includes(this.lastSearchMethod)) {
+      if (feature && feature.properties && [ 'geocode', 'reverseGeocode', 'owner search', 'block search' ].includes(this.lastSearchMethod)) {
         address = feature.properties.street_address;
-      } else if (feature) {
+      } else if (feature && feature.address_std) {
         address = feature.address_std;
       }
+      console.log('activeAddress computed is running, address:', address, 'this.activeModalFeature: ', this.activeModalFeature, 'this.lastSearchMethod:', this.lastSearchMethod);
       return address;
     },
     headerLineTwo() {
