@@ -398,6 +398,21 @@ export default {
         }
       }
     },
+    blockSearchStatus(nextBlockSearchStatus) {
+      console.log('watch blockSearchStatus, nextBlockSearchStatus:', nextBlockSearchStatus);
+      if (nextBlockSearchStatus === 'error') {
+        console.log('blockSearchError');
+        // let geocodeType;
+        // if (this.$store.state.geocode.data) {
+        //   geocodeType = this.$store.state.geocode.data.ais_feature_type;
+        // }
+        // if (this.foundItemsLength === 1 && this.$store.state.bufferMode === false && geocodeType !== 'intersection') {
+        //   this.onDataChange('oneItem');
+        // } else {
+        this.onDataChange('multiItem');
+        // }
+      }
+    },
     leftPanel: function(){
       // console.log("intro page watcher: ", this.leftPanel)
       this.leftPanel === false ? this.closeModal() : ""
@@ -586,7 +601,7 @@ export default {
           this.$store.commit('setActiveModal', { featureId: 'feat-shape-0' });
           this.$controller.setRouteByOpaNumber(this.$store.state.parcels.pwd[0].properties.BRT_ID);
         } else if (['block search', 'blockSearch'].includes(this.lastSearchMethod)) {
-          // console.log('onDataChange else is running, type:', type, 'lastSearchMethod is block search');
+          console.log('onDataChange else is running, type:', type, 'lastSearchMethod is block search');
           this.$store.commit('setActiveFeature', { featureId: 'feat-block-0' });
           this.$store.commit('setActiveModal', { featureId: 'feat-block-0' });
           this.$controller.setRouteByOpaNumber(this.$store.state.blockSearch.data[0].properties.opa_account_num);
