@@ -5,7 +5,7 @@
   >
     <!-- v-show="loadingData" -->
     <div
-      v-show="this.$store.state.activeModal.featureId != null && !activeAddressKnown"
+      v-show="this.$store.state.activeModal.featureId != null && !activeAddressKnown || condoUnitsStatus == 'waiting'"
       class="loading-mask"
     >
       <font-awesome-icon
@@ -79,6 +79,9 @@ export default {
     },
   },
   computed: {
+    condoUnitsStatus() {
+      return this.$store.state.condoUnits.status;
+    },
     loadingData() {
       return this.$store.state.loadingData;
     },
