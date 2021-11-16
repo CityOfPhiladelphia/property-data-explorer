@@ -18,15 +18,16 @@
 
     <owner-search-modal />
 
-    <!-- <div :class="'cell medium-auto medium-cell-block-container main-content'"> -->
     <div class="cell medium-auto medium-cell-block-container main-content">
       <div :class="mainContentClass">
 
         <left-panel
           v-show="leftPanel"
+          :foundItemsLength="foundItemsLength"
         />
 
         <map-panel>
+
           <cyclomedia-widget
             v-if="shouldLoadCyclomediaWidget"
             v-show="cyclomediaActive"
@@ -120,7 +121,6 @@ export default {
       'top': 3,
       'bottom': 2,
       hasData: false,
-      isModalOpen: false,
       leftPanel: true,
     };
   },
@@ -143,7 +143,6 @@ export default {
           // console.log('first if is running');
           feature = state.geocode.related.filter(object => {
             return object._featureId === state.activeModal.featureId;
-            // return object._featureId === state.activeFeature.featureId
           })[0];
         } else {
           // console.log('second if is running');
@@ -151,15 +150,21 @@ export default {
         }
       } else if (state.lastSearchMethod === 'owner search' || state.lastSearchMethod === 'block search' ) {
         let searchValue = state.lastSearchMethod === 'owner search' ? "ownerSearch" : "blockSearch"
-        feature = state[searchValue].data.filter(object => {
-          return object._featureId === state.activeModal.featureId;
-        })[0];
+        console.log('in computed activeModalFeature, state.lastSearchMethod:', state.lastSearchMethod, 'searchValue:', searchValue);
+        if (state[searchValue].data) {
+          feature = state[searchValue].data.filter(object => {
+            return object._featureId === state.activeModal.featureId;
+          })[0];
+        }
       } else if ([ 'shape search', 'buffer search' ].includes(state.lastSearchMethod)) {
-        feature = state.shapeSearch.data.rows.filter(object => {
-          return object._featureId === state.activeModal.featureId;
-        })[0];
+        // console.log('App.vue computed activeModalFeature is running after buffer search');
+        if (state.shapeSearch.data) {
+          feature = state.shapeSearch.data.rows.filter(object => {
+            return object._featureId === state.activeModal.featureId;
+          })[0];
+        }
       }
-      // console.log('activeModalFeature computed is running, feature:', feature);
+      console.log('activeModalFeature computed is running, feature:', feature);
       return feature;
     },
     popoverOpen() {
@@ -170,6 +175,33 @@ export default {
     },
     popoverOptions() {
       return this.$store.state.popover.options;
+    },
+    foundItemsLength() {
+      // console.log('App.vue computed foundItemsLength, this.$store.state.condoUnits.units:', this.$store.state.condoUnits.units);
+      if (this.$store.state.shapeSearch.data != null) {
+        if (Object.keys(this.$store.state.condoUnits.units).length) {
+          return 2;
+        }
+        return this.$store.state.shapeSearch.data.rows.length;
+      } else if (this.$store.state.geocode.data != null && this.$store.state.geocode.data != "") {
+        let geocodeArray = [];
+        geocodeArray.push(this.$store.state.geocode.data.properties);
+        if (this.$store.state.geocode.related != null ) {
+          this.$store.state.geocode.related.map(a => geocodeArray.push(a));
+          return geocodeArray.length;
+        }
+        if (this.$store.state.condoUnits.units) {
+          // return >1
+          return 2;
+        }
+        return geocodeArray.length;
+
+      } else if (this.$store.state.blockSearch.data != null) {
+        if (this.$store.state.condoUnits.units) {
+          return 2;
+        }
+        return this.$store.state.blockSearch.data.length;
+      }
     },
     summaryOptions() {
       const options = {
@@ -307,16 +339,12 @@ export default {
       return this.fullScreenMapEnabled ? 'bottom-none': "";
     },
     shouldKeepLeftPanel() {
-      if (this.$store.state.sources.opa_assessment.status || this.$store.state.cyclomedia.active && this.$store.state.activeModal.featureId !== null) {
-        // console.log('App.vue shouldKeepLeftPanel first if');
-        return false;
-      } else if (!this.$store.state.leftPanel) {
-        // console.log('App.vue shouldKeepLeftPanel second if');
+      if (!this.$store.state.leftPanel) {
+        // console.log('App.vue shouldKeepLeftPanel if');
         return false;
       }
-      // console.log('App.vue shouldKeepLeftPanel neither if');
+      // console.log('App.vue shouldKeepLeftPanel outside if');
       return true;
-
     },
     shouldLoadCyclomediaWidget() {
       return this.$config.cyclomedia.enabled;
@@ -332,7 +360,6 @@ export default {
       }
       const center = this.$config.map.center;
       return center;
-
     },
     cycloRotationAngle() {
       return this.$store.state.cyclomedia.orientation.yaw * (180/3.14159265359);
@@ -340,30 +367,85 @@ export default {
     cycloHFov() {
       return this.$store.state.cyclomedia.orientation.hFov;
     },
+    opa() {
+      return this.$store.state.sources.opa_assessment;
+    },
+    opaStatus() {
+      if (this.opa && this.opa.status) {
+        return this.opa.status;
+      }
+      return null;
+    },
   },
   watch: {
-    '$route': function(route) {
-      // return route.fullPath === '/' ? this.$store.commit('setLeftPanel', true) : "";
-      return route.fullPath === '/' ? this.openLeftPanel(true) : this.openLeftPanel(false);
+    // $route (to, from){
+    //   console.log('watch $route, to:', to, 'from:', from);
+    //   if (to.fullPath !== from.fullPath) {
+    //     this.reactToRoute2()
+    //   }
+    // },
+    geocodeStatus(nextGeocodeStatus) {
+      console.log('watch geocodeStatus, nextGeocodeStatus:', nextGeocodeStatus);
+      if (nextGeocodeStatus === 'success') {
+        let geocodeType;
+        if (this.$store.state.geocode.data) {
+          geocodeType = this.$store.state.geocode.data.ais_feature_type;
+        }
+        if (this.foundItemsLength === 1 && this.$store.state.bufferMode === false && geocodeType !== 'intersection') {
+          this.onDataChange('oneItem');
+        } else {
+          this.onDataChange('multiItem');
+        }
+      }
+    },
+    blockSearchStatus(nextBlockSearchStatus) {
+      console.log('watch blockSearchStatus, nextBlockSearchStatus:', nextBlockSearchStatus);
+      if (nextBlockSearchStatus === 'error') {
+        console.log('blockSearchError');
+        // let geocodeType;
+        // if (this.$store.state.geocode.data) {
+        //   geocodeType = this.$store.state.geocode.data.ais_feature_type;
+        // }
+        // if (this.foundItemsLength === 1 && this.$store.state.bufferMode === false && geocodeType !== 'intersection') {
+        //   this.onDataChange('oneItem');
+        // } else {
+        this.onDataChange('multiItem');
+        // }
+      }
     },
     leftPanel: function(){
       // console.log("intro page watcher: ", this.leftPanel)
       this.leftPanel === false ? this.closeModal() : ""
     },
     activeModal() {
-      this.$controller.activeFeatureChange();
-      this.$store.state.activeModal.featureId !== null ? this.openLeftPanel(true): this.openLeftPanel(false);
+      // console.log('watch activeModal is firing');
+      if (this.$store.state.activeModal.featureId !== null) {
+        // console.log('open panel - this.$store.state.activeModal.featureId !== null:', this.$store.state.activeModal.featureId);
+        this.openLeftPanel(true);
+      } else {
+        // console.log('close panel - this.$store.state.activeModal.featureId is null:', this.$store.state.activeModal.featureId);
+        this.openLeftPanel(false);
+      }
     },
     drawShape(nextDrawShape) {
       if (nextDrawShape !== null) {
-        this.onDataChange('shapeSearch');
         this.$controller.handleDrawnShape();
         this.$store.commit('setShapeSearchStatus', 'waiting');
       }
     },
-    geocodeStatus(nextGeocodeStatus) {
-      if (nextGeocodeStatus === 'waiting') {
-        this.onDataChange('geocode');
+    foundItemsLength(nextFoundItemsLength) {
+      console.log('watch foundItemsLength is firing, nextFoundItemsLength:', nextFoundItemsLength, 'lastSearchMethod:', this.lastSearchMethod, 'bufferMode:', this.$store.state.bufferMode);
+      if (!nextFoundItemsLength) {
+        return;
+      }
+      let geocodeType;
+      if (this.$store.state.geocode.data) {
+        geocodeType = this.$store.state.geocode.data.ais_feature_type;
+      }
+      if (nextFoundItemsLength === 1 && this.$store.state.bufferMode === false && geocodeType !== 'intersection') {
+        this.onDataChange('oneItem');
+      } else {
+        this.onDataChange('multiItem');
       }
     },
     ownerSearchTotal(newValue) {
@@ -383,74 +465,23 @@ export default {
       }
     },
     activeModalFeature(nextActiveModalFeature) {
-      // console.log('watch activeModalFeature is firing, nextActiveModalFeature:', nextActiveModalFeature);
-      this.$store.commit('setActiveModalFeature', nextActiveModalFeature);
+      console.log('watch activeModalFeature is firing, nextActiveModalFeature:', nextActiveModalFeature);
+      if (nextActiveModalFeature) {
+        this.$store.commit('setActiveModalFeature', nextActiveModalFeature);
+        this.$controller.activeFeatureChange();
+      }
     },
   },
   mounted() {
-
-  //Adding this function as an event listener so that it can be used to clear when property modal errors on open as well.
-  window.addEventListener("keydown", function(e) {
-    return e.keyCode === 27 ? this.closePropertyModal() : "";
+    //Adding this function as an event listener so that it can be used to clear when property modal errors on open as well.
+    window.addEventListener("keydown", function(e) {
+      return e.keyCode === 27 ? this.closePropertyModal() : "";
     }.bind(this), false);
-
+    window.onpopstate = this.handlePopStateChange;
     this.onResize();
     this.$store.commit('setActiveParcelLayer', 'pwd');
-    let query = this.$route.query;
-    // console.log('App.vue mounted is running, this.$route.query:', this.$route.query);
-    if (query.shape) {
-      // this.leftPanel = false;
-      // this.$store.commit('setLeftPanel', false);
-      // let shape = query.shape;
-      // shape = shape.slice(2, shape.length-2);
-      // shape = shape.split('],[');
-      // let test = [];
-      // for (let point of shape) {
-      //   test.push(point.split(','));
-      // }
-      // let _latlngs = [];
-      // for (let item of test) {
-      //   let latlng = new LatLng(parseFloat(item[0]), parseFloat(item[1]));
-      //   _latlngs.push(latlng);
-      // }
-      // const points = { _latlngs };
-      this.$controller.handleDrawnShape();
-      // this.$controller.getParcelsByPoints(points);
-      this.onDataChange('shapeSearch');
-    } else if (query.address) {
-      // this.leftPanel = false;
-      this.closePropertyModal();
-      this.$store.commit('setLeftPanel', false);
-      // console.log('query.address:', query.address);
-      this.$controller.handleSearchFormSubmit(query.address);
-      this.onDataChange('geocode');
-    } else if (query.owner) {
-      // this.leftPanel = false;
-      this.closePropertyModal();
-      this.$store.commit('setLeftPanel', false);
-      // console.log('query.owner:', query.owner);
-      this.$controller.handleSearchFormSubmit(query.owner);
-      this.onDataChange('ownerSearch');
-    } else if (query.buffer) {
-      // this.leftPanel = false;
-      this.closePropertyModal();
-      this.$store.commit('setLeftPanel', false);
-      this.$store.commit('setBufferMode', true);
-      this.$controller.handleSearchFormSubmit(query.buffer);
-      this.onDataChange('bufferSearch');
-      this.$store.commit('setLastSearchMethod', 'buffer search');
-    } else if (query.block) {
-      // this.leftPanel = false;
-      this.closePropertyModal();
-      this.$store.commit('setLeftPanel', false);
-      // console.log('query.owner:', query.owner);
-      this.$controller.handleSearchFormSubmit(query.block);
-      this.onDataChange('blockSearch');
-    }
+    this.reactToRoute();
   },
-  // beforeMount(){
-  //   return this.$store.state.isMobileOrTablet ? this.$store.commit('setLeftPanel', false) : "";
-  // },
   created() {
     window.addEventListener('resize', this.onResize);
   },
@@ -458,6 +489,82 @@ export default {
     window.removeEventListener('resize', this.onResize);
   },
   methods: {
+    // handlePopStateChange() {
+    //   console.log('handlePopStateChange');
+    // },
+    reactToRoute() {
+      let query = this.$route.query;
+      console.log('App.vue reactToRoute is running, this.$route.query:', this.$route.query);
+      if (query.shape) {
+        this.$controller.handleDrawnShape();
+        this.onDataChange('shapeSearch');
+      } else if (query.address) {
+        this.closePropertyModal();
+        this.$store.commit('setLeftPanel', false);
+        // console.log('query.address:', query.address);
+        this.$controller.handleSearchFormSubmit(query.address);
+        this.onDataChange('geocode');
+      } else if (query.owner) {
+        this.closePropertyModal();
+        this.$store.commit('setLeftPanel', false);
+        // console.log('query.owner:', query.owner);
+        this.$controller.handleSearchFormSubmit(query.owner);
+        this.onDataChange('ownerSearch');
+      } else if (query.buffer) {
+        this.closePropertyModal();
+        this.$store.commit('setLeftPanel', false);
+        this.$store.commit('setBufferMode', true);
+        this.$controller.handleSearchFormSubmit(query.buffer);
+        this.onDataChange('bufferSearch');
+        this.$store.commit('setLastSearchMethod', 'buffer search');
+      } else if (query.block) {
+        this.closePropertyModal();
+        this.$store.commit('setLeftPanel', false);
+        // console.log('query.owner:', query.owner);
+        this.$controller.handleSearchFormSubmit(query.block);
+        this.onDataChange('blockSearch');
+      } else if (query.p) {
+        this.$controller.handleSearchFormSubmit(query.p);
+      }
+    },
+    handlePopStateChange() {
+      let query = this.$route.query;
+      console.log('App.vue handlePopStateChange is running, this.route:', this.$route, 'this.$route.query:', this.$route.query);
+      if (query.shape) {
+        this.$controller.handleDrawnShape();
+        // this.onDataChange('shapeSearch');
+      } else if (query.address) {
+        this.closePropertyModal();
+        this.$store.commit('setLeftPanel', false);
+        let aisAddress = this.$store.state.geocode.data.properties.street_address;
+        console.log('handlePopStateChange query.address:', query.address, 'aisAddress:', aisAddress);
+        if (query.address !== aisAddress) {
+          this.$controller.handleSearchFormSubmit(query.address);
+        }
+        // this.onDataChange('geocode');
+      } else if (query.owner) {
+        this.closePropertyModal();
+        this.$store.commit('setLeftPanel', false);
+        // console.log('query.owner:', query.owner);
+        this.$controller.handleSearchFormSubmit(query.owner);
+        // this.onDataChange('ownerSearch');
+      } else if (query.buffer) {
+        this.closePropertyModal();
+        this.$store.commit('setLeftPanel', false);
+        this.$store.commit('setBufferMode', true);
+        this.$controller.handleSearchFormSubmit(query.buffer);
+        // this.onDataChange('bufferSearch');
+        this.$store.commit('setLastSearchMethod', 'buffer search');
+      } else if (query.block) {
+        this.closePropertyModal();
+        this.$store.commit('setLeftPanel', false);
+        console.log('handlePopStateChange, query.block:', query.block);
+        this.$controller.handleSearchFormSubmit(query.block);
+        // this.onDataChange('blockSearch');
+      } else if (query.p) {
+        this.$controller.handleSearchFormSubmit(query.p);
+      }
+    },
     closePropertyModal() {
       this.$store.state.activeModal.featureId = null;
       this.$store.commit('setActiveFeature', null);
@@ -469,16 +576,47 @@ export default {
       console.log('App.vue openLeftPanel is running, value:', value);
       this.$data.leftPanel = value
       this.$store.commit('setFullScreenMapEnabled', value);
-      // value = true ? this.$store.commit('setCyclomediaActive', false ): "";
-      return this.$store.commit('setLeftPanel', value)
+      this.$store.commit('setLeftPanel', value);
     },
     onDataChange(type) {
-      // console.log('onDataChange, type:', type)
-      this.$data.hasData = true;
-      this.$store.commit('setFullScreenMapEnabled', false);
-      // this.leftPanel = false;
-      this.closePropertyModal();
-      this.$store.commit('setLeftPanel', false);
+      if (type !== 'oneItem') {
+        console.log('onDataChange if is running, type:', type)
+        this.$data.hasData = true;
+        this.$store.commit('setFullScreenMapEnabled', false);
+        this.closePropertyModal();
+        this.$store.commit('setLeftPanel', false);
+        if (this.lastSearchMethod === 'block search') {
+          this.$controller.setRouteByBlockSearch(this.$store.state.blockSearch.input);
+        } else if (this.lastSearchMethod === 'shape search') {
+          this.$controller.setRouteByShapeSearch();
+        } else if (this.lastSearchMethod === 'buffer search') {
+          this.$controller.setRouteByBufferSearch();
+        } else {
+          this.$controller.setRouteByGeocode();
+        }
+      } else {
+        console.log('onDataChange else is running, type:', type, 'this.lastSearchMethod:', this.lastSearchMethod);
+        if (['shape search', 'buffer search'].includes(this.lastSearchMethod)) {
+          this.$store.commit('setActiveFeature', { featureId: 'feat-shape-0' });
+          this.$store.commit('setActiveModal', { featureId: 'feat-shape-0' });
+          this.$controller.setRouteByOpaNumber(this.$store.state.parcels.pwd[0].properties.BRT_ID);
+        } else if (['block search', 'blockSearch'].includes(this.lastSearchMethod)) {
+          console.log('onDataChange else is running, type:', type, 'lastSearchMethod is block search');
+          this.$store.commit('setActiveFeature', { featureId: 'feat-block-0' });
+          this.$store.commit('setActiveModal', { featureId: 'feat-block-0' });
+          this.$controller.setRouteByOpaNumber(this.$store.state.blockSearch.data[0].properties.opa_account_num);
+        } else {
+          console.log('onDataChange else else is running, this.$store.state.geocode.data.properties.opa_account_num:', this.$store.state.geocode.data.properties.opa_account_num);
+          this.$store.commit('setActiveFeature', { featureId: 'feat-geocode-0' });
+          this.$store.commit('setActiveModal', { featureId: 'feat-geocode-0' });
+          if (this.$store.state.geocode.data.properties.opa_account_num) {
+            this.$controller.setRouteByOpaNumber(this.$store.state.geocode.data.properties.opa_account_num);
+          }
+        }
+        this.$data.hasData = true;
+        this.$store.commit('setFullScreenMapEnabled', true);
+        this.$store.commit('setLeftPanel', true);
+      }
     },
     clearResults(){
       this.$controller.handleSearchFormSubmit('');
@@ -496,15 +634,12 @@ export default {
       }
     },
     toggleModal() {
-      this.isModalOpen = !this.isModalOpen;
       this.toggleBodyClass('no-scroll');
     },
     showModal() {
-      this.isModalOpen = true;
       this.toggleBodyClass('no-scroll');
     },
     closeModal() {
-      this.isModalOpen = false;
       this.toggleBodyClass('no-scroll');
     },
     toggleBodyClass(className) {

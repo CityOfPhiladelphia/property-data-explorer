@@ -2,7 +2,7 @@
   <div
     id="main"
     v-if="this.$store.state.activeModal.featureId"
-    :class="['openmaps-about', 'openmaps-modal']"
+    :class="containerClass"
   >
     <header class="modal">
       <div class="row expanded">
@@ -22,6 +22,7 @@
       </div>
     </header>
     <div class="fixed-header">
+      <!-- v-if="foundItemsLength > 1" -->
       <div
         class="openmaps-modal-close hide-print"
         :tabindex="1"
@@ -39,18 +40,22 @@
           <div
             v-if="!activeAddress"
             class="default-address-text"
-            :style="defaultAddressTextPlaceholderStyle"
           >
-            {{ this.$config.defaultAddressTextPlaceholder.text }}
+            <font-awesome-icon
+              icon="spinner"
+              aria-hidden="true"
+            />
           </div>
-          <h1 class="address-header-line-1">
-            <font-awesome-icon icon="map-marker-alt" />
-            {{ activeAddress }}
-            <div class="columns small-24 medium-6 flex-div div-padding-and-margin hide-print">
+          <div v-if="activeAddress">
+            <h1 class="address-header-line-1">
+              <font-awesome-icon icon="map-marker-alt" />
+              {{ activeAddress }}
+              <div class="columns small-24 medium-6 flex-div div-padding-and-margin hide-print">
+              </div>
+            </h1>
+            <div class="address-header-line-2">
+              {{ headerLineTwo }}
             </div>
-          </h1>
-          <div class="address-header-line-2">
-            {{ headerLineTwo }}
           </div>
         </div>
         <div>
@@ -81,8 +86,9 @@
       />
 
       <!-- sale vertical table -->
+      <!-- v-if="!this.$store.state.sources.opa_public.targets[activeOpaId].data" -->
       <div
-        v-if="!this.$store.state.sources.opa_public.targets[activeOpaId].data"
+        v-if="!activeOpaData"
         class="spinner-div small-12 cell"
       >
         <font-awesome-icon
@@ -197,8 +203,9 @@
       </div>
 
       <!-- property details vertical table -->
+      <!-- v-if="!this.$store.state.sources.opa_public.targets[activeOpaId].data" -->
       <div
-        v-if="!this.$store.state.sources.opa_public.targets[activeOpaId].data"
+        v-if="!activeOpaData"
         class="spinner-div small-12 cell"
       >
         <font-awesome-icon
@@ -282,7 +289,23 @@ export default {
     VerticalTable: () => import(/* webpackChunkName: "pvc_pcm_VerticalTable" */'@phila/vue-comps/src/components/VerticalTable.vue'),
     VerticalTableLight: () => import(/* webpackChunkName: "pvc_pcm_VerticalTableLight" */'@phila/vue-comps/src/components/VerticalTableLight.vue'),
   },
+  props: {
+    foundItemsLength: {
+      type: Number,
+      default: 1,
+    },
+  },
   computed: {
+    containerClass() {
+      return ['openmaps-about', 'openmaps-modal'];
+    },
+    activeOpaData() {
+      let value = [];
+      if (this.$store.state.sources.opa_public.targets[this.activeOpaId] && this.$store.state.sources.opa_public.targets[this.activeOpaId].data) {
+        value = this.$store.state.sources.opa_public.targets[this.activeOpaId].data;
+      }
+      return value;
+    },
     lastSearchMethod() {
       return this.$store.state.lastSearchMethod;
     },
@@ -290,7 +313,6 @@ export default {
       return this.$store.state.activeModal;
     },
     activeFeatureId() {
-      // console.log('PropertyCard.vue activeFeatureId computed is running');
       return this.activeModal.featureId;
     },
     activeModalFeature() {
@@ -299,9 +321,9 @@ export default {
     activeOpaId() {
       let feature = this.activeModalFeature;
       let opaId;
-      if (![ 'geocode', 'reverseGeocode', 'owner search', 'block search' ].includes(this.lastSearchMethod)) {
+      if (feature && ![ 'geocode', 'reverseGeocode', 'owner search', 'block search' ].includes(this.lastSearchMethod)) {
         opaId = feature.parcel_number;
-      } else {
+      } else if (feature) {
         opaId = feature.properties.opa_account_num;
       }
       return opaId;
@@ -309,20 +331,20 @@ export default {
     activeAddress() {
       let feature = this.activeModalFeature;
       let address;
-      // console.log("active modal feature: ", this.activeModalFeature)
-      if ([ 'geocode', 'reverseGeocode', 'owner search', 'block search' ].includes(this.lastSearchMethod)) {
+      if (feature && feature.properties && [ 'geocode', 'reverseGeocode', 'owner search', 'block search' ].includes(this.lastSearchMethod)) {
         address = feature.properties.street_address;
-      } else {
+      } else if (feature && feature.address_std) {
         address = feature.address_std;
       }
+      console.log('activeAddress computed is running, address:', address, 'this.activeModalFeature: ', this.activeModalFeature, 'this.lastSearchMethod:', this.lastSearchMethod);
       return address;
     },
     headerLineTwo() {
       let feature = this.activeModalFeature;
       let zip;
-      if ([ 'geocode', 'reverseGeocode', 'owner search', 'block search' ].includes(this.lastSearchMethod)) {
+      if (feature && [ 'geocode', 'reverseGeocode', 'owner search', 'block search' ].includes(this.lastSearchMethod)) {
         zip = feature.properties.zip_code + '-' + feature.properties.zip_4;
-      } else {
+      } else if (feature) {
         zip = feature.zip_code.substring(0,5) + '-' + feature.zip_code.substring(5,10);
       }
       return 'PHILADELPHIA, PA ' + zip;
@@ -337,9 +359,11 @@ export default {
       };
     },
     opaPublicData() {
-      let opaData =  [];
-      opaData.push(this.$store.state.sources.opa_public.targets[this.activeOpaId].data);
-      return opaData ;
+      let opaData = [];
+      if (this.$store.state.sources.opa_public.targets && this.$store.state.sources.opa_public.targets[this.activeOpaId]) {
+        opaData.push(this.$store.state.sources.opa_public.targets[this.activeOpaId].data);
+      }
+      return opaData;
     },
     localDetailsVerticalTableSlots() {
       let state = this.$store.state;
@@ -425,7 +449,8 @@ export default {
     propertyDetailsVerticalTableSlots() {
       // console.log('PropertyCard activeFeatureId computed is running')
       let state = this.$store.state;
-      let opaPublicData = state.sources.opa_public.targets[this.activeOpaId].data;
+      let opaPublicData = this.activeOpaData;
+      // let opaPublicData = state.sources.opa_public.targets[this.activeOpaId].data;
       let searchId =  opaPublicData.street_code + opaPublicData.house_number + (opaPublicData.unit != null ?  opaPublicData.unit : '') ;
       return {
         id: 'propertyDetailsTable',
@@ -473,7 +498,7 @@ export default {
           {
             label: 'Number of Stories',
             value: opaPublicData.number_stories === null ? "Not Available" :
-              opaPublicData.number_stories.toString().length > 0 ?
+              opaPublicData.number_stories && opaPublicData.number_stories.toString().length > 0 ?
                 opaPublicData.number_stories === 0 ?
                   opaPublicData.total_livable_area > 0 ? 'Not Available':
                     'None' :
@@ -660,19 +685,23 @@ export default {
             opaPublicData.total_area.toLocaleString('en-US', {
                 minimumFractionDigits: 0,
               }) + ' sq ft',
+              // null,
           },
           {
             label: 'Improvement Area',
             value: opaPublicData.total_livable_area === null ? 'Not Available ' :
-              opaPublicData.total_livable_area
-                .toLocaleString('en-US', {
+              opaPublicData.total_livable_area ?
+                opaPublicData.total_livable_area.toLocaleString('en-US', {
                   minimumFractionDigits: 0,
-                }) + ' sq ft',
+                }) + ' sq ft':
+                null,
           },
           {
             label: 'Frontage',
             value: opaPublicData.frontage === null ? 'Not Available ' :
-              opaPublicData.frontage.toFixed(0) + ' ft',
+              opaPublicData.frontage ?
+              opaPublicData.frontage.toFixed(0) + ' ft' :
+              null,
           },
           {
             label: 'Beginning Point',
@@ -684,13 +713,13 @@ export default {
               let zoningCodeMapTrimmed = opaPublicData.zoning ? helpers.ZONING_CODE_MAP[opaPublicData.zoning.trim()] : 'Not Available'
               if (opaPublicData.zoning) {
                 return '<a target="_blank" \
-                          href="https://atlas.phila.gov/'+ this.activeAddress + '/zoning ">\
+                          href="https://atlas.phila.gov/'+ encodeURIComponent(this.activeAddress) + '/zoning ">\
                          <b>' + opaPublicData.zoning + '-' + zoningCodeMapTrimmed + '</b>\
                          </b> <i class="fa fa-external-link-alt"></i></a>\
                          </a>';
               } else {
                     return '<a target="_blank" \
-                      href="https://atlas.phila.gov/'+ this.activeAddress + '/zoning">\
+                      href="https://atlas.phila.gov/'+ encodeURIComponent(this.activeAddress) + '/zoning">\
                       <b> See Atlas </b>\
                       </b> <i class="fa fa-external-link-alt"></i></a>\
                       </a>';
@@ -711,12 +740,39 @@ export default {
               return opaPublicData.homestead_exemption > 0 ? 'Yes' : 'No';
             },
           },
+          {
+            label: 'Political Divisions',
+            value: function(state) {
+              return "<a href='http://atlas.phila.gov/" + encodeURIComponent(this.activeAddress) + "/voting' target='_blank'>\
+                      Ward: "+nth(opaPublicData.political_ward)+" | Council District: "+ nth(opaPublicData.council_district_2016) +" \
+                      <i class='fa fa-external-link-alt'></i></a>";
+            }.bind(this),
+          },
+          {
+            label: 'School Catchment',
+            value: function() {
+              return "<a href='https://webapps1.philasd.org/school_finder/' target='_blank'>\
+                      Elementary: "+opaPublicData.elementary_school+" | Middle: "+opaPublicData.middle_school+" | HS: "+opaPublicData.high_school+" |\
+                      <i class='fa fa-external-link-alt'></i></a>";
+            }.bind(this),
+          },
+          {
+            label: 'Police District',
+            value: function() {
+              return "<a href='https://www.phillypolice.com/districts/" + nth(opaPublicData.police_district) + "/index.html' target='_blank'>\
+                      " + nth(opaPublicData.police_district) + " District\
+                      <i class='fa fa-external-link-alt'></i></a>";
+            }.bind(this),
+          },
         ],
       };
     },
     saleVerticalTableSlots() {
       let state = this.$store.state;
-      let opaAssessmentData = state.sources.opa_assessment.targets[this.activeOpaId].data;
+      let opaAssessmentData = [];
+      if (state.sources.opa_assessment.targets[this.activeOpaId]) {
+        opaAssessmentData = state.sources.opa_assessment.targets[this.activeOpaId].data;
+      }
       return {
         id: 'saleTable',
         dataSources: [ 'opa_public' ],
@@ -750,7 +806,10 @@ export default {
 
     ownerAddressTableOptions() {
       let state = this.$store.state;
-      let opaPublicData = this.$store.state.sources.opa_public.targets[this.activeOpaId].data;
+      let opaPublicData = [];
+      if (this.$store.state.sources.opa_public.targets && this.$store.state.sources.opa_public.targets[this.activeOpaId]) {
+        opaPublicData = this.$store.state.sources.opa_public.targets[this.activeOpaId].data;
+      }
       return {
         id: 'ownerProperties',
         tableid: 'ddd',
@@ -915,6 +974,16 @@ export default {
       };
     },
   },
+  watch: {
+    activeAddress(nextActiveAddress) {
+      console.log('PropertyCard.vue watch activeAddress, nextActiveAddress:', nextActiveAddress);
+      if (nextActiveAddress) {
+        this.$store.commit('setActiveAddressKnown', true);
+      } else {
+        this.$store.commit('setActiveAddressKnown', false);
+      }
+    },
+  },
   methods: {
     buttonLinkLI(){
       window.open('https://li.phila.gov/property-history/search?address=' + this.activeOpaId, '_blank');
@@ -925,8 +994,20 @@ export default {
       return false;
     },
     closeModal(state) {
+      console.log('PropertyCard.vue closeModal is running');
       this.$store.state.activeModal.featureId = null;
       this.$store.commit('setActiveFeature', null);
+
+      if (this.lastSearchMethod === 'block search') {
+        this.$controller.setRouteByBlockSearch(this.$store.state.blockSearch.input);
+      } else if (this.lastSearchMethod === 'shape search') {
+        this.$controller.setRouteByShapeSearch();
+      } else if (this.lastSearchMethod === 'buffer search') {
+        this.$controller.setRouteByBufferSearch();
+      } else {
+        this.$controller.setRouteByGeocode();
+      }
+
       this.$nextTick(() => {
         this.$store.state.map.map.invalidateSize();
       });
@@ -1030,7 +1111,7 @@ export default {
   td.large-owner>div>div>div, span.large-owner {
     font-size: 24px;
   }
-  
+
 
 }
 
@@ -1428,6 +1509,18 @@ header {
 
 .icon-div {
   margin: 10px;
+}
+
+.loading-mask {
+  /*display: inline;*/
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  background: rgba(0, 0 ,0 , 0.25);
+  z-index: 1000;
+  text-align: center;
+  vertical-align: middle;
 }
 
 .openmaps-modal {

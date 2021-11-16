@@ -1,19 +1,29 @@
 <template>
   <div
     id="intro-container"
-    :class="panelClass"
+    class="small-24 small-order-2 medium-12 medium-order-1"
   >
+    <!-- v-show="loadingData" -->
+    <div
+      v-show="this.$store.state.activeModal.featureId != null && !activeAddressKnown || condoUnitsStatus == 'waiting'"
+      class="loading-mask"
+    >
+      <font-awesome-icon
+        icon="spinner"
+        size="6x"
+        aria-hidden="true"
+      />
+    </div>
+
     <property-card
-      v-if="this.$store.state.activeModal.featureId !== null"
+      v-show="this.$store.state.activeModal.featureId !== null"
+      :foundItemsLength="foundItemsLength"
     />
-    <!-- slot="introPage"
-    screen-percent="2" -->
 
     <div
       v-if="this.$store.state.activeModal.featureId === null"
       class="introduction"
     >
-    <!-- v-if="this.$store.state.activeModal.featureId === null && !this.$store.state.isMobileOrTablet" -->
 
       <div class="intro-blue">
           <i>Use the Property App to get information about a property's ownership,
@@ -62,25 +72,27 @@ export default {
   components: {
     PropertyCard,
   },
+  props: {
+    foundItemsLength: {
+      type: Number,
+      default: 1,
+    },
+  },
   computed: {
+    condoUnitsStatus() {
+      return this.$store.state.condoUnits.status;
+    },
+    loadingData() {
+      return this.$store.state.loadingData;
+    },
+    activeAddressKnown() {
+      return this.$store.state.activeAddressKnown;
+    },
     map() {
       return this.$store.state.map.map;
     },
     isMobileOrTablet() {
       return this.$store.state.isMobileOrTablet;
-    },
-    // fullScreenMapEnabled() {
-    //   return this.$store.state.fullScreenMapEnabled;
-    // },
-    // fullScreenTopicsEnabled() {
-    //   return this.$store.state.fullScreenTopicsEnabled;
-    // },
-    panelClass() {
-      // if (this.fullScreenTopicsEnabled) {
-      //   return 'medium-12 small-24 full-topics-open'
-      // } else {
-      return 'small-24 small-order-2 medium-12 medium-order-1';
-      // }
     },
     sitePath() {
       if (process.env.VUE_APP_PUBLICPATH) {
@@ -88,14 +100,6 @@ export default {
       }
       return '';
     },
-  },
-  watch: {
-    // fullScreenMapEnabled() {
-    //   this.setDivWidth();
-    // },
-    // fullScreenTopicsEnabled() {
-    //   console.log('IntroPage.vue watch fullScreenTopicEnabled is firing');
-    // },
   },
   destroyed() {
     // console.log('intro page destroyed is running');
@@ -120,6 +124,19 @@ export default {
 
 #intro-container {
   height: 100%;
+}
+
+.loading-mask {
+  /*display: inline;*/
+  position: absolute;
+  top: 0;
+  height: 450%;
+  width: 100%;
+  background: rgba(0, 0 ,0 , 0.5);
+  z-index: 1000;
+  text-align: center;
+  vertical-align: middle;
+  padding-top: 250px;
 }
 
 // .introduction {

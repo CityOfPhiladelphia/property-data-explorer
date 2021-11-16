@@ -39,7 +39,7 @@
             data = state.ownerSearch.data;
           } else {
             data = state.blockSearch.data;
-          } 
+          }
           return data
         },
       }"
@@ -91,11 +91,14 @@ export default {
   data() {
     return {
       'showTable': false,
-      'loadingData': false,
+      // 'loadingData': false,
       'condoExpanded': false,
     };
   },
   computed: {
+    loadingData() {
+      return this.$store.state.loadingData;
+    },
     lastSearchMethod() {
       return this.$store.state.lastSearchMethod;
     },
@@ -620,12 +623,15 @@ export default {
     opaStatus(nextOpaStatus) {
       if (nextOpaStatus === 'success') {
         this.$data.showTable = true;
-        this.$data.loadingData = false;
+        // this.$data.loadingData = false;
+        this.$store.commit('setLoadingData', false);
       } else if (nextOpaStatus === 'waiting') {
         // this.$data.condoExpanded = false;
-        this.$data.loadingData = true;
+        // this.$data.loadingData = true;
+        this.$store.commit('setLoadingData', true);
       } else {
-        this.$data.loadingData = false;
+        // this.$data.loadingData = false;
+        this.$store.commit('setLoadingData', false);
       }
     },
     geocodeStatus(nextGeocodeStatus) {
@@ -653,7 +659,7 @@ export default {
              state.sources.opa_public.targets[this.activeOpaId(state, item)].data;
     },
     addCondoRecords(state, item) {
-      // console.log('addCondoRecords is running, item:', item);
+      console.log('addCondoRecords is running, item:', item);
 
       this.$data.showTable = false;
       this.$data.condoExpanded = true;
@@ -777,7 +783,16 @@ export default {
 
     },
     rowClick(state, item) {
-      // console.log("Row Click")
+      let parcel_number;
+      if (item.parcel_number) {
+        parcel_number = item.parcel_number;
+      } else {
+        parcel_number = item.properties.opa_account_num;
+      }
+      console.log('DataPanel.vue Row Click, item:', item, 'item.properties:', item.properties, 'parcel_number:', parcel_number);
+      if (parcel_number) {
+        this.$controller.setRouteByOpaNumber(parcel_number);
+      }
       let coords = [];
       if( typeof this.geocodeItems[0] != 'undefined') {
         Array.prototype.push.apply(coords, [ this.geocodeItems[0].geometry.coordinates[0],this.geocodeItems[0].geometry.coordinates[1] ]);
@@ -817,12 +832,12 @@ export default {
           label: 'Improvement Area (SqFt)',
           value: function(state, item) {
             let livable_area = opaPublicData(state, item).total_livable_area
-            if (typeof livable_area === 'undefined' | livable_area === ""){
+            if (typeof livable_area === 'undefined' || livable_area === "" || livable_area == null){
               return "";
             } else {
-               return livable_area.toLocaleString('en-US', {
-                        maximumFractionDigits: 0,
-                      });;
+              return livable_area.toLocaleString('en-US', {
+                maximumFractionDigits: 0,
+              });;
             }
           },
         },
@@ -1141,7 +1156,7 @@ export default {
             // state.geocode.status === "success"?  id =  item.properties.opa_account_num :
             //   state.ownerSearch.status === "success" ? id =  item.properties.opa_account_num :
             //     id = item.parcel_number;
-            if (typeof state.sources.opa_public.targets[id] != 'undefined' && id != "") {
+            if (typeof state.sources.opa_public.targets[id] != 'undefined' && id != "" && state.sources.opa_public.targets[id].data.zoning != null) {
               return state.sources.opa_public.targets[id].data.zoning.trim();
             } return "";
           },
@@ -1158,7 +1173,7 @@ export default {
             // state.geocode.status === "success"?  id =  item.properties.opa_account_num :
             //   state.ownerSearch.status === "success" ? id =  item.properties.opa_account_num :
             //     id = item.parcel_number;
-            if (typeof state.sources.opa_public.targets[id] != 'undefined' && id != "") {
+            if (typeof state.sources.opa_public.targets[id] != 'undefined' && id != "" && state.sources.opa_public.targets[id].data.zoning != null) {
               const code = state.sources.opa_public.targets[id].data.zoning ;
               return helpers.ZONING_CODE_MAP[code.trim()];
             }  return "";
