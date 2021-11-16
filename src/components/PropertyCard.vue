@@ -219,6 +219,10 @@
         class="break-avoid"
         :slots="propertyDetailsVerticalTableSlots"
       />
+      <vertical-table-light
+        class="break-avoid"
+        :slots="localDetailsVerticalTableSlots"
+      />
       <div class="break-avoid">
         <p>You can download the property assessment dataset in bulk, and get more information about this data at
           <a target="_blank"
@@ -360,6 +364,87 @@ export default {
         opaData.push(this.$store.state.sources.opa_public.targets[this.activeOpaId].data);
       }
       return opaData;
+    },
+    localDetailsVerticalTableSlots() {
+      let state = this.$store.state;
+      let opaPublicData = state.sources.opa_public.targets[this.activeOpaId].data;
+      let trashDay = function(state) {
+        let prop = state.activeModalFeature.properties ? state.activeModalFeature.properties : state.activeModalFeature
+        let trashDay = prop.rubbish_recycle_day ? prop.rubbish_recycle_day : 'Unavailable';
+        let day = 'Unavailable';
+        switch (trashDay) {
+          case 'MON' : day = 'Monday';
+            break;
+          case 'TUES' : day = 'Tuesday';
+            break;
+          case 'WED' : day = 'Wednesday';
+            break;
+          case 'THU' : day = 'Thursday';
+            break;
+          case 'FRI' : day = 'Friday';
+            break;
+          case 'SAT' : day = 'Saturday';
+            break;
+          case 'SUN' : day = 'Sunday';
+            break;
+        }
+        return day;
+      };
+
+      return {
+        id: 'localDetailsTable',
+        dataSources: [ 'opa_public' ],
+        title: 'Local Details',
+        fields: [
+          {
+            label: 'Political Divisions',
+            value: function(state) {
+              return "<a href='http://atlas.phila.gov/"+this.activeAddress+"/voting' target='_blank'>\
+                      Ward: "+nth(opaPublicData.political_ward)+" | Council District: "+ nth(opaPublicData.council_district_2016) +" \
+                      <i class='fa fa-external-link-alt'></i></a>";
+            }.bind(this),
+          },
+          {
+            label: 'School Catchment',
+            value: function() {
+              return "<a href='https://webapps1.philasd.org/school_finder/' target='_blank'>\
+                      Elementary: "+opaPublicData.elementary_school+" | Middle: "+opaPublicData.middle_school+" | HS: "+opaPublicData.high_school+" |\
+                      <i class='fa fa-external-link-alt'></i></a>";
+            }.bind(this),
+          },
+          {
+            label: 'Police District',
+            value: function() {
+              return "<a href='https://www.phillypolice.com/districts/" + nth(opaPublicData.police_district) + "/index.html' target='_blank'>\
+                      " + nth(opaPublicData.police_district) + " District\
+                      <i class='fa fa-external-link-alt'></i></a>";
+            }.bind(this),
+          },
+          {
+            label: 'Trash Day',
+            value: function() {
+              // TODO Clean up this link and add function for the day of week, check other search types for mapping prop
+              return "<a href='https://www.phila.gov/services/trash-recycling-city-upkeep/residential-trash-and-recycling/find-your-trash-and-recycling-collection-day/#/' target='_blank'>"
+                      + trashDay(state) +
+                      " <i class='fa fa-external-link-alt'></i></a>";
+            }.bind(this),
+          },
+          {
+            label: 'L&I District',
+            value: function() {
+              let prop = state.activeModalFeature.properties ? state.activeModalFeature.properties : state.activeModalFeature
+              return prop.li_district ? prop.li_district : "Unavailable"
+            }.bind(this),
+          },
+          {
+            label: 'Census Tract',
+            value: function() {
+              let prop = state.activeModalFeature.properties ? state.activeModalFeature.properties : state.activeModalFeature
+              return prop.census_tract_2010 ? prop.census_tract_2010 : prop.census_tract ? prop.census_tract : "Unavailable";
+            }.bind(this),
+          },
+        ],
+      }
     },
     propertyDetailsVerticalTableSlots() {
       // console.log('PropertyCard activeFeatureId computed is running')
@@ -596,8 +681,8 @@ export default {
           },
           {
             label: 'Lot Size',
-            value: opaPublicData.total_area ?
-              opaPublicData.total_area.toLocaleString('en-US', {
+            value: opaPublicData.total_area === null ? 'Not Available':
+            opaPublicData.total_area.toLocaleString('en-US', {
                 minimumFractionDigits: 0,
               }) + ' sq ft' :
               null,
