@@ -684,8 +684,8 @@ export default {
             value: opaPublicData.total_area === null ? 'Not Available':
             opaPublicData.total_area.toLocaleString('en-US', {
                 minimumFractionDigits: 0,
-              }) + ' sq ft' :
-              null,
+              }) + ' sq ft',
+              // null,
           },
           {
             label: 'Improvement Area',
