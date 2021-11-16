@@ -3,7 +3,7 @@ name: Build, Check And Deploy to Dev
 on:
   push:
     branches:
-      - test-api
+      - restructure
 
 jobs:
   build:
@@ -35,7 +35,7 @@ jobs:
         aws s3 sync dist s3://$AWS_S3_BUCKET --region us-east-1 --delete
       env:
         AWS_DEFAULT_REGION: 'us-east-1'
-        AWS_S3_BUCKET: property-data-explorer-api-testing
+        AWS_S3_BUCKET: property-data-explorer-restructure
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 

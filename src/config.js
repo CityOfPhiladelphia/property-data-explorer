@@ -14,9 +14,15 @@ const customComps = {
 };
 
 
-var BASE_CONFIG_URL = 'https://cdn.jsdelivr.net/gh/cityofphiladelphia/pde_base_config@3cb644750f4db8619a5b41f5369d1e280678f7bb/config.js';
+// var BASE_CONFIG_URL = 'https://cdn.jsdelivr.net/gh/cityofphiladelphia/pde_base_config@3cb644750f4db8619a5b41f5369d1e280678f7bb/config.js';
 
 let config = {
+  carto: {
+    baseurl: 'https://phl.carto.com/api/v2/sql',
+  },
+  defaultAddressTextPlaceholder: {
+    text: 'Address',
+  },
   resetDataOnGeocode: true,
   customComps,
   geocoder: {
@@ -30,12 +36,13 @@ let config = {
       opa_only: true,
     },
   },
-  baseConfig: BASE_CONFIG_URL,
+  // baseConfig: BASE_CONFIG_URL,
   // baseConfig: '//raw.githubusercontent.com/stevetotheizz0/atlas_base_config/master/config.js',
   gatekeeperKey: process.env.VUE_APP_GATEKEEPER_KEY,
   router: {
     enabled: true,
     type: 'vue',
+    geocode: 'opa',
   },
   app: {
     title: 'Property Data Explorer',
@@ -107,12 +114,13 @@ let config = {
       options: {
         params: {
           q: function(input){
-            if (typeof input === 'string') {
-              return "select * from assessments where parcel_number IN('"+ input +"')";
+            if (input) {
+              if (typeof input === 'string') {
+                return "select * from assessments where parcel_number IN('"+ input +"')";
+              }
+              var inputEncoded = "'" + input.join("','") + "'";
+              return "select * from assessments where parcel_number IN("+ inputEncoded +")";
             }
-            var inputEncoded = "'" + input.join("','") + "'";
-            return "select * from assessments where parcel_number IN("+ inputEncoded +")";
-
           },
         },
         success: function(data) {
@@ -126,12 +134,13 @@ let config = {
       options: {
         params: {
           q: function(input){
-            if (typeof input === 'string') {
-              return "select * from RTT_SUMMARY where opa_account_num = '"+ input +"' AND document_type = 'DEED'";
+            if (input) {
+              if (typeof input === 'string') {
+                return "select * from RTT_SUMMARY where opa_account_num = '"+ input +"' AND document_type = 'DEED'";
+              }
+              var inputEncoded = "'" + input.join("','") + "'";
+              return "select * from RTT_SUMMARY where opa_account_num IN("+ inputEncoded +") AND document_type = 'DEED'";
             }
-            var inputEncoded = "'" + input.join("','") + "'";
-            return "select * from RTT_SUMMARY where opa_account_num IN("+ inputEncoded +") AND document_type = 'DEED'";
-
           },
         },
         success: function(data) {

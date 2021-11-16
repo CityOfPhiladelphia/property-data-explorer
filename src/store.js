@@ -17,6 +17,8 @@ function createStore(config) {
 
   const initialState = {
     appName: 'pde',
+    loadingData: false,
+    activeAddressKnown: false,
     isMobileOrTablet: isMobileDevice(),
     leftPanel: true,
     ownerSearchModal: false,
@@ -83,6 +85,12 @@ function createStore(config) {
       // }
     },
     mutations: {
+      setLoadingData(state, payload) {
+        state.loadingData = payload;
+      },
+      setActiveAddressKnown(state, payload) {
+        state.activeAddressKnown = payload;
+      },
       setLeftPanel(state, payload) {
         state.leftPanel = payload;
       },
@@ -156,11 +164,13 @@ function createStore(config) {
         state.activeFeature = nextActiveFeature;
       },
       setActiveModal(state, payload) {
+        // console.log('store.js setActiveModal is running, payload:', payload);
         const { featureId } = payload || {};
         const nextActiveFeature = { featureId };
         state.activeModal = nextActiveFeature;
       },
       setActiveModalFeature(state, payload) {
+        // console.log('store.js setActiveModalFeature is running, payload:', payload);
         state.activeModalFeature = payload;
       },
       setImageOverlay(state, payload) {
@@ -173,6 +183,8 @@ function createStore(config) {
       setPropertyBalance(state, payload) {
         state.appData.propertyBalance = payload;
       },
+
+      // this is redundant with PVD
       setDidToggleModal(state, name) {
         // console.log('setDidToggleModal, name:', name, 'open:', open);
         // console.log('setDidToggleModal, name:', name);
