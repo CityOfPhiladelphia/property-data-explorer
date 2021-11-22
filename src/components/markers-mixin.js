@@ -102,7 +102,9 @@ export default {
           shadow: true,
           size: 50,
         };
-        const addressMarker = { latlng, key, color, markerType, icon };
+        const addressMarker = {
+          latlng, key, color, markerType, icon
+        };
         markers.push(addressMarker);
       }
       return markers;

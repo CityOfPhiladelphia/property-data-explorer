@@ -13,7 +13,70 @@
       id="map-tag"
       class="grid-x"
     >
-      <map_
+
+      <MglMap
+        :map-style.sync="this.$config.mbStyle"
+        :zoom="this.$store.state.map.zoom"
+        :center="this.$store.state.map.center"
+        @click="handleMapClick"
+        @moveend="this.handleMapMove"
+        @load="this.onMapLoaded"
+        @preload="this.onMapPreloaded"
+      >
+
+        <MglRasterLayer
+          v-for="(basemapSource, key) in basemapSources"
+          v-if="shouldShowRasterLayer && activeBasemap === key"
+          :key="key"
+          :sourceId="activeBasemap"
+          :layerId="activeBasemap"
+          :layer="basemapSource.layer"
+          :source="basemapSource.source"
+          :before="firstOverlay"
+        />
+
+        <MglRasterLayer
+          v-for="(basemapLabelSource, key) in basemapLabelSources"
+          v-if="shouldShowRasterLayer && tiledLayers.includes(key)"
+          :key="key"
+          :sourceId="key"
+          :layerId="key"
+          :layer="basemapLabelSource.layer"
+          :source="basemapLabelSource.source"
+          :before="firstOverlay"
+        />
+
+        <MglMarker
+          v-for="(marker) in markersForAddress"
+          :key="marker.key"
+          :coordinates="[marker.latlng[1], marker.latlng[0]]"
+          :color="marker.color"
+          :icon="marker.icon"
+          :anchor="'bottom'"
+        />
+
+        <mapbox-basemap-select-control />
+
+        <MglButtonControl
+          :button-id="'buttonId-01'"
+          :button-class="'right top-button-1'"
+          :image-link="basemapImageLink"
+          :image-align="'top'"
+          @click="handleBasemapToggleClick"
+        />
+
+        <MglButtonControl
+          v-if="shouldShowCyclomediaButton"
+          :button-id="'buttonId-03'"
+          :button-class="cyclomediaActive ? 'right top-button-2 active' : 'right top-button-2 inactive'"
+          :image-link="sitePath + '/images/cyclomedia.png'"
+          @click="handleCyclomediaButtonClick"
+        />
+
+      </MglMap>
+
+
+      <!-- <map_
         id="map-object"
         :class="mapPanelClass + ' ' + drawButtonActiveClass"
         :center="this.$store.state.map.center"
@@ -26,7 +89,6 @@
         @l-moveend="handleMapMove"
       >
 
-        <!-- loading mask -->
         <div
           v-show="isGeocoding"
           class="mb-map-loading-mask"
@@ -37,7 +99,6 @@
           </div>
         </div>
 
-        <!-- basemaps -->
         <esri-tiled-map-layer
           v-for="(basemap, key) in this.$config.map.basemaps"
           v-if="activeBasemap === key"
@@ -47,7 +108,6 @@
           :attribution="basemap.attribution"
         />
 
-        <!-- basemap labels and parcels outlines -->
         <esri-tiled-map-layer
           v-for="(tiledLayer, key) in this.$config.map.tiledLayers"
           v-if="tiledLayers.includes(key)"
@@ -57,15 +117,6 @@
           :attribution="tiledLayer.attribution"
         />
 
-        <!-- <esri-tiled-overlay v-for="(tiledLayer, key) in this.$config.map.tiledOverlays"
-                            v-if="activeTiledOverlays.includes(key)"
-                            :key="key"
-                            :url="tiledLayer.url"
-                            :zIndex="tiledLayer.zIndex"
-                            :opacity="tiledLayer.opacity"
-        /> -->
-
-        <!-- dorParcels, pwdParcels, vacantLand, vacantBuilding -->
         <esri-feature-layer
           v-for="(featureLayer, key) in this.$config.map.featureLayers"
           v-if="shouldShowFeatureLayer(key, featureLayer.minZoom)"
@@ -85,7 +136,6 @@
           :interactive="featureLayer.interactive"
         />
 
-        <!-- reactive geojson parcels -->
         <geojson
           v-for="geojsonFeature in geojsonParcels"
           :key="geojsonFeature.properties.PARCELID"
@@ -105,7 +155,6 @@
           :latlngs="currentBuffer"
         />
 
-        <!-- vector markers -->
         <vector-marker
           v-for="marker in markersForAddress"
           :key="marker.key"
@@ -115,7 +164,6 @@
           :interactive="false"
         />
 
-        <!-- buffer search needs a marker that can't be the geocode marker -->
         <vector-marker
           v-for="marker in markersForBufferSearch"
           v-if="lastSearchMethod === 'buffer search'"
@@ -125,7 +173,6 @@
           :icon="marker.icon"
         />
 
-        <!-- vector markers -->
         <vector-marker
           v-for="marker in markersForTopic"
           :key="marker.key"
@@ -134,8 +181,6 @@
           :icon="marker.icon"
         />
 
-        <!-- CONTROLS: -->
-        <!-- basemap control -->
         <control-corner
           :v-side="'top'"
           :h-side="'almostright'"
@@ -192,7 +237,6 @@
           />
         </div>
 
-        <!-- location marker -->
         <circle-marker
           v-if="this.$store.state.map.location.lat != null"
           :key="Math.random()"
@@ -235,7 +279,6 @@
           :position="addressInputPosition"
         />
 
-        <!-- marker using a png and ablility to rotate it -->
         <png-marker
           v-if="cyclomediaActive"
           :icon="sitePath + 'images/camera.png'"
@@ -243,7 +286,6 @@
           :rotation-angle="cycloRotationAngle"
         />
 
-        <!-- marker using custom code extending icons - https://github.com/iatkin/leaflet-svgicon -->
         <svg-view-cone-marker
           v-if="cyclomediaActive"
           :latlng="cycloLatlng"
@@ -273,7 +315,7 @@
           :weight="1"
           @l-click="handleCyclomediaRecordingClick"
         />
-      </map_>
+      </map_> -->
 
       <slot
       class="widget-slot"
@@ -289,9 +331,12 @@
 <script>
 // import * as L from 'leaflet';
 import { featureGroup, geoJSON, marker } from 'leaflet';
-import 'leaflet/dist/leaflet.css';
+// import 'leaflet/dist/leaflet.css';
 
-const FeatureGroup = featureGroup;
+import 'maplibre-gl/dist/maplibre-gl.css';
+// import 'mapbox-gl/dist/mapbox-gl.css';
+
+// const FeatureGroup = featureGroup;
 const GeoJSON = geoJSON;
 const Lmarker = marker;
 // const FeatureGroup = L.default.featureGroup;
@@ -319,7 +364,6 @@ import LegendControl from '@phila/vue-mapping/src/components/LegendControl.vue';
 import MapAddressInput from '@phila/vue-mapping/src/components/MapAddressInput.vue';
 import DrawControl from '@phila/vue-mapping/src/components/DrawControl.vue';
 import BufferControl from '@phila/vue-mapping/src/components/BufferControl.vue';
-
 
 export default {
   name: 'MapPanel',
@@ -351,6 +395,28 @@ export default {
     MeasureControl,
     LegendControl,
     MapAddressInput,
+    MglMap: () => import(/* webpackChunkName: "pvm_MglMap" */'@phila/vue-mapping/src/mapbox/map/MaplibreGlMap.vue'),
+    // MglMap: () => import(/* webpackChunkName: "pvm_MglMap" */'@phila/vue-mapping/src/mapbox/map/GlMap.vue'),
+    MglMarker: () => import(/* webpackChunkName: "pvm_MglMarker" */'@phila/vue-mapping/src/mapbox/UI/Marker.vue'),
+    MglIcon: () => import(/* webpackChunkName: "mbmp_pvm_MglIcon" */'@phila/vue-mapping/src/mapbox/UI/Icon.vue'),
+    MglCircleMarker: () => import(/* webpackChunkName: "pvm_MglCircleMarker" */'@phila/vue-mapping/src/mapbox/UI/CircleMarker.vue'),
+    MglTriangleMarker: () => import(/* webpackChunkName: "pvm_MglTriangleMarker" */'@phila/vue-mapping/src/mapbox/UI/TriangleMarker.vue'),
+    MglNavigationControl: () => import(/* webpackChunkName: "pvm_MglNavigationControl" */'@phila/vue-mapping/src/mapbox/UI/controls/NavigationControl'),
+    MglGeolocateControl: () => import(/* webpackChunkName: "pvm_MglGeolocateControl" */'@phila/vue-mapping/src/mapbox/UI/controls/GeolocateControl'),
+    MglDistanceMeasureControl: () => import(/* webpackChunkName: "pvm_MglDrawDistanceMeasureControl" */'@phila/vue-mapping/src/mapbox/UI/controls/DistanceMeasureControl.vue'),
+    MglRasterLayer: () => import(/* webpackChunkName: "pvm_MglRasterLayer" */'@phila/vue-mapping/src/mapbox/layer/RasterLayer.vue'),
+    MglButtonControl: () => import(/* webpackChunkName: "pvm_MglButtonControl" */'@phila/vue-mapping/src/mapbox/UI/controls/ButtonControl.vue'),
+    MglControlContainer: () => import(/* webpackChunkName: "pvm_MglControlContainer" */'@phila/vue-mapping/src/mapbox/UI/controls/ControlContainer.vue'),
+    MglImageLayer: () => import(/* webpackChunkName: "pvm_MglImageLayer" */'@phila/vue-mapping/src/mapbox/layer/ImageLayer'),
+    MglVectorLayer: () => import(/* webpackChunkName: "pvm_MglVectorLayer" */'@phila/vue-mapping/src/mapbox/layer/VectorLayer'),
+    MbIcon: () => import(/* webpackChunkName: "pvm_MbIcon" */'@phila/vue-mapping/src/mapbox/UI/MbIcon'),
+    MbMeasureTool: () => import(/* webpackChunkName: "pvm_MbMeasureTool" */'@phila/vue-mapping/src/mapbox/MbMeasureTool'),
+    MglGeojsonLayer: () => import(/* webpackChunkName: "pvm_MglGeojsonLayer" */'@phila/vue-mapping/src/mapbox/layer/GeojsonLayer'),
+    MglPopup: () => import(/* webpackChunkName: "pvm_MglPopup" */'@phila/vue-mapping/src/mapbox/UI/Popup'),
+    OverlayLegend: () => import(/* webpackChunkName: "pvm_OverlayLegend" */'@phila/vue-mapping/src/mapbox/OverlayLegend'),
+    MapboxAddressInput: () => import(/* webpackChunkName: "pvm_MapboxAddressInput" */'@phila/vue-mapping/src/mapbox/MapboxAddressInput'),
+    MapboxBasemapSelectControl: () => import(/* webpackChunkName: "pvm_MapboxBasemapSelectControl" */'@phila/vue-mapping/src/mapbox/UI/controls/BasemapSelectControl'),
+    MglFontAwesomeMarker: () => import(/* webpackChunkName: "pvm_MglFontAwesomeMarker" */'@phila/vue-mapping/src/mapbox/UI/FontAwesomeMarker.vue'),
   },
   mixins: [
     markersMixin,
@@ -382,6 +448,48 @@ export default {
   },
 
   computed: {
+    basemapImageLink() {
+      if (this.activeBasemap === 'pwd' || this.activeBasemap === 'dor') {
+        return window.location.origin + '/images/imagery_small.png';
+      } else {
+        return window.location.origin + '/images/basemap_small.png';
+      }
+    },
+    basemapSources() {
+      return this.$config.basemapSources;
+    },
+    basemapLabelSources() {
+      return this.$config.basemapLabelSources;
+    },
+    overlaySources() {
+      return this.$config.overlaySources;
+    },
+    shouldShowRasterLayer() {
+      let value = true;
+      if (this.$config.map.tiles === 'hosted') {
+        value = false;
+      }
+      return value;
+    },
+    firstOverlay() {
+      let map = this.$store.map;
+      let overlay;
+      if (this.$config.overlaySources) {
+        let overlaySources = Object.keys(this.$config.overlaySources);
+        if (map) {
+          let overlays = map.getStyle().layers.filter(function(layer) {
+            // console.log('layer.id:', layer.id, 'overlaySources:', overlaySources);
+            return overlaySources.includes(layer.id);//[0].id;
+          });
+          if (overlays.length) {
+            overlay = overlays[0].id;
+          }
+        }
+      }
+      return overlay;
+    },
+
+
     leftPanel() {
       return this.$store.state.leftPanel;
     },
@@ -701,6 +809,23 @@ export default {
     const map = this.$store.state.map.map;
   },
   methods: {
+    onMapLoaded(event) {
+      console.log('onMapLoaded is running, event.map:', event.map, this.$store.state.map);
+      this.$store.map = event.map;
+    },
+    onMapPreloaded(event) {
+      let logo = document.getElementsByClassName('mapboxgl-ctrl-logo');
+      // console.log('MapPanel onMapPreloaded, logo:', logo, 'logo.length:', logo.length, 'logo.item(0):', logo.item(0));
+      logo[0].remove();
+      let attrib = document.getElementsByClassName('mapboxgl-ctrl-attrib');
+      attrib[0].remove();
+    },
+    handleBasemapToggleClick() {
+      // console.log('handleBasemapToggleClick, this.$store.map.getStyle().layers:', this.$store.map.getStyle().layers);
+      const prevShouldShowBasemapSelectControl = this.$store.state.map.shouldShowBasemapSelectControl;
+      const nextShouldShowBasemapSelectControl = !prevShouldShowBasemapSelectControl;
+      this.$store.commit('setShouldShowBasemapSelectControl', nextShouldShowBasemapSelectControl);
+    },
     handleCyclomediaButtonClick(e) {
       // console.log('handleCyclomediaButtonClick is running');
       if (!this.cyclomediaInitializationBegun) {
@@ -731,12 +856,12 @@ export default {
     setMapToBounds() {
       // console.log('setMapToBounds is running, this.geojsonParcels:', this.geojsonParcels);
       let featureArray = [];
-      for (let geojsonFeature of this.geojsonParcels) {
-        featureArray.push(GeoJSON(geojsonFeature));
-      }
-      const group = new FeatureGroup(featureArray);
-      const bounds = group.getBounds();
-      this.$store.commit('setMapBounds', bounds);
+      // for (let geojsonFeature of this.geojsonParcels) {
+      //   featureArray.push(GeoJSON(geojsonFeature));
+      // }
+      // const group = new FeatureGroup(featureArray);
+      // const bounds = group.getBounds();
+      // this.$store.commit('setMapBounds', bounds);
     },
     configForBasemap(basemap) {
       return this.$config.map.basemaps[basemap] || {};
@@ -779,6 +904,18 @@ export default {
 </script>
 
 <style lang="scss">
+
+  .top-button-1 {
+    top: 0px;
+  }
+
+  .top-button-2 {
+    top: 46px;
+  }
+
+  // .top-button-3 {
+  //   top: 92px;
+  // }
 
   .map-panel-class {
     position: relative;
