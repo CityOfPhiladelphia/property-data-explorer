@@ -40,7 +40,7 @@ export default {
   props: {
     feedbackLink: {
       type: String,
-      default: 'https://cityofphila.typeform.com/to/MBB0EW',
+      default: 'https://phila.formstack.com/forms/property_data_explorer_feedback',
     },
   },
   computed: {
