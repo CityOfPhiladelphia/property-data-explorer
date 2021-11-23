@@ -153,6 +153,7 @@ function createStore(config) {
         state.map.map = payload.map;
       },
       setMapBounds(state, payload) {
+        console.log('PDE store.js setMapBounds is running');
         state.map.bounds = payload;
       },
       setMapBoundsBasedOnShape(state, payload) {

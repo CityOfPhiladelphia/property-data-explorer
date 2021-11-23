@@ -11,7 +11,7 @@ export default {
     enabled: true,
   },
   drawControl: true,
-  initialImagery: 'imagery2018',
+  initialImagery: 'imagery2020',
   containerClass: 'map-container',
   containerClassWCyclo: 'height-50',
   scales: {

@@ -16,6 +16,7 @@
 
       <MglMap
         :map-style.sync="this.$config.mbStyle"
+        :bounds="boundsProp"
         :zoom="this.$store.state.map.zoom"
         :center="this.$store.state.map.center"
         @click="handleMapClick"
@@ -329,6 +330,17 @@
 </template>
 
 <script>
+
+
+import bbox from '@turf/bbox';
+import bboxPolygon from '@turf/bbox-polygon';
+import destination from '@turf/destination';
+import distance from '@turf/distance';
+import midpoint from '@turf/midpoint';
+import area from '@turf/area';
+// import convertArea from '@turf/convertArea';
+import { point, polygon, convertArea, featureCollection } from '@turf/helpers';
+
 // import * as L from 'leaflet';
 import { featureGroup, geoJSON, marker } from 'leaflet';
 // import 'leaflet/dist/leaflet.css';
@@ -336,7 +348,7 @@ import { featureGroup, geoJSON, marker } from 'leaflet';
 import 'maplibre-gl/dist/maplibre-gl.css';
 // import 'mapbox-gl/dist/mapbox-gl.css';
 
-// const FeatureGroup = featureGroup;
+const FeatureGroup = featureGroup;
 const GeoJSON = geoJSON;
 const Lmarker = marker;
 // const FeatureGroup = L.default.featureGroup;
@@ -345,7 +357,7 @@ const Lmarker = marker;
 
 // mixins
 import markersMixin from './markers-mixin';
-import cyclomediaMixin from '@phila/vue-mapping/src/cyclomedia/map-panel-mixin.js';
+import cyclomediaMixin from '@phila/vue-mapping/src/cyclomedia/map-panel-mixin-update.js';
 
 
 // components
@@ -448,6 +460,26 @@ export default {
   },
 
   computed: {
+    // geocodeZoom() {
+    //   if (this.$config.map.geocodeZoom) {
+    //     return this.$config.map.geocodeZoom;
+    //   }
+    //   return 18;
+    // },
+    boundsProp() {
+      let bounds = this.$store.state.map.bounds;
+      // console.log('boundsProps, bounds:', bounds);
+      let finalBounds;
+
+      if (bounds._northEast && bounds._northEast.lat != null) {
+        finalBounds = [[ bounds._southWest.lng, bounds._southWest.lat ], [ bounds._northEast.lng, bounds._northEast.lat ]];
+      } else if (bounds._northEast && bounds._northEast.lat == null) {
+        // finalBounds = [[ -75.0936906502695, 39.999379013777684 ], [ -75.23325134973207, 39.9072659724458 ]];
+      } else {
+        finalBounds = bounds;
+      }
+      return finalBounds;
+    },
     basemapImageLink() {
       if (this.activeBasemap === 'pwd' || this.activeBasemap === 'dor') {
         return window.location.origin + '/images/imagery_small.png';
@@ -730,15 +762,17 @@ export default {
       }
     },
     geocodeResult(nextGeocodeResult) {
-      // console.log('watch geocodeResult is running, nextGeocodeResult:', nextGeocodeResult);
+      console.log('watch geocodeResult is running, nextGeocodeResult:', nextGeocodeResult);
       if (Object.keys(nextGeocodeResult).length > 0) {
         this.lastGeocodeResult = nextGeocodeResult;
         if (nextGeocodeResult._featureId) {
           let store = this.$store;
+          let config = this.$config;
           const myMethod = (function() {
+            // console.log('myMethod is running, store:', store, 'store.state:', store.state, 'config:', config);
             store.commit('setMapCenter', nextGeocodeResult.geometry.coordinates);
-            store.commit('setMapZoom', this.geocodeZoom);
-          }).bind(store);
+            store.commit('setMapZoom', config.map.zoom);
+          }).bind(store, config);
           setTimeout(myMethod, 250);
         }
       }
@@ -760,10 +794,11 @@ export default {
         this.lastGeocodeResult = this.$store.state.geocode.data;
         if (this.$store.state.geocode.data._featureId) {
           let store = this.$store;
+          let config = this.$config;
           const myMethod = (function() {
             store.commit('setMapCenter', store.state.geocode.data.geometry.coordinates);
-            store.commit('setMapZoom', this.geocodeZoom);
-          }).bind(store);
+            store.commit('setMapZoom', config.map.zoom);
+          }).bind(store, config);
           setTimeout(myMethod, 250);
         }
       }
@@ -807,6 +842,7 @@ export default {
   mounted() {
     // console.log('MapPanel mounted is running, DrawControl', DrawControl)
     const map = this.$store.state.map.map;
+    this.$store.commit('setImagery', 'imagery2020');
   },
   methods: {
     onMapLoaded(event) {
@@ -856,12 +892,17 @@ export default {
     setMapToBounds() {
       // console.log('setMapToBounds is running, this.geojsonParcels:', this.geojsonParcels);
       let featureArray = [];
-      // for (let geojsonFeature of this.geojsonParcels) {
-      //   featureArray.push(GeoJSON(geojsonFeature));
-      // }
+      for (let geojsonFeature of this.geojsonParcels) {
+        featureArray.push(GeoJSON(geojsonFeature));
+      }
+
+      const theFeatureCollection = featureCollection(featureArray);
+      console.log('featureArray:', featureArray, 'theFeatureCollection:', theFeatureCollection);
+      const bounds = bbox(theFeatureCollection);
+
       // const group = new FeatureGroup(featureArray);
       // const bounds = group.getBounds();
-      // this.$store.commit('setMapBounds', bounds);
+      this.$store.commit('setMapBounds', bounds);
     },
     configForBasemap(basemap) {
       return this.$config.map.basemaps[basemap] || {};
@@ -885,8 +926,8 @@ export default {
       }
     },
     handleMapMove(e) {
-      // console.log('handleMapMove is firing')
-      const map = this.$store.state.map.map;
+      console.log('handleMapMove is firing, this.$store.map:', this.$store.map, 'this.$store.state.map:', this.$store.state.map);
+      const map = this.$store.map;
       const center = map.getCenter();
       const { lat, lng } = center;
       const coords = [ lng, lat ];
