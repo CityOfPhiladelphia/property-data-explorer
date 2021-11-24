@@ -58,6 +58,24 @@
 
         <mapbox-basemap-select-control />
 
+        <MglGeojsonLayer
+          key="'dorParcelFill'"
+          :source-id="'geojsonParcel'"
+          :source="geojsonParcelSource"
+          :layer-id="'geojsonParcelFill'"
+          :layer="geojsonParcelFillLayer"
+          :clear-source="false"
+        />
+
+        <MglGeojsonLayer
+          key="'dorParcelLine'"
+          :source-id="'geojsonParcel'"
+          :source="geojsonParcelSource"
+          :layer-id="'geojsonParcelLine'"
+          :layer="geojsonParcelLineLayer"
+          :clear-source="true"
+        />
+
         <MglButtonControl
           :button-id="'buttonId-01'"
           :button-class="'right top-button-1'"
@@ -455,6 +473,37 @@ export default {
         'buttonWidth': '45px',
         'buttonLineHeight': '45px',
       },
+      geojsonParcelSource: {
+        'type': 'geojson',
+        'data': {
+          'type': 'Feature',
+          'geometry': {
+            'type': 'Polygon',
+            'coordinates': [],
+          },
+        },
+      },
+      geojsonParcelFillLayer: {
+        'id': 'geojsonParcelFill',
+        'type': 'fill',
+        // 'source': 'geojsonParcel',
+        'layout': {},
+        'paint': {
+          'fill-color': 'blue',
+          // 'fill-color': 'rgb(0,102,255)',
+          'fill-opacity': 0.3,
+        },
+      },
+      geojsonParcelLineLayer: {
+        'id': 'geojsonParcelLine',
+        'type': 'line',
+        // 'source': 'geojsonParcel',
+        'layout': {},
+        'paint': {
+          'line-color': 'blue',
+          'line-width': 2,
+        },
+      },
     };
     return data;
   },
@@ -779,6 +828,13 @@ export default {
     },
     geojsonParcels(nextGeojson) {
       // console.log('watch geojsonParcels is running, nextGeojson:', nextGeojson);
+      if (nextGeojson[0]) {
+        // console.log('watch geojsonParcels is running, nextGeojson:', nextGeojson, 'nextGeojson[0].geojson:', nextGeojson[0].geojson);
+        this.$data.geojsonParcelSource.data.geometry.coordinates = nextGeojson[0].geometry.coordinates;
+      } else {
+        this.$data.geojsonParcelSource.data.geometry.coordinates = [];
+      }
+      
       if (!this.$store.state.mapViewWasSetOnAppLoad && this.lastSearchMethod === 'shape search') {
         console.log('watch geojsonParcels is affecting things');
         this.setMapToBounds();
