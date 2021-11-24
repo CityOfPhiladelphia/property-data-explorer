@@ -59,22 +59,24 @@
         <mapbox-basemap-select-control />
 
         <MglGeojsonLayer
+          v-for="(geojsonParcelSource, index) in geojsonParcelSources"
+          :key="'dorParcelLine'+index"
+          :source-id="'geojsonParcel'+index"
+          :source="geojsonParcelSource"
+          :layer-id="'geojsonParcelLine'+index"
+          :layer="geojsonParcelLineLayer"
+          :clear-source="true"
+        />
+
+        <!-- v-for="geojsonParcelSource in geojsonParcelSources" -->
+        <!-- <MglGeojsonLayer
           key="'dorParcelFill'"
           :source-id="'geojsonParcel'"
           :source="geojsonParcelSource"
           :layer-id="'geojsonParcelFill'"
           :layer="geojsonParcelFillLayer"
           :clear-source="false"
-        />
-
-        <MglGeojsonLayer
-          key="'dorParcelLine'"
-          :source-id="'geojsonParcel'"
-          :source="geojsonParcelSource"
-          :layer-id="'geojsonParcelLine'"
-          :layer="geojsonParcelLineLayer"
-          :clear-source="true"
-        />
+        /> -->
 
         <MglButtonControl
           :button-id="'buttonId-01'"
@@ -107,12 +109,12 @@
           :class="buttonClass + ' buffer-control ' + bufferButtonActiveClass"
         />
 
-        <div class="draw-control">
-          <draw-control
-            :control="true"
-            :position="'top-left'"
-          />
-        </div>
+        <!-- <div class="draw-control"> -->
+        <!-- <draw-control
+          :control="true"
+          :position="'top-left'"
+        /> -->
+        <!-- </div> -->
 
       </MglMap>
 
@@ -495,16 +497,16 @@ export default {
         'buttonWidth': '45px',
         'buttonLineHeight': '45px',
       },
-      geojsonParcelSource: {
-        'type': 'geojson',
-        'data': {
-          'type': 'Feature',
-          'geometry': {
-            'type': 'Polygon',
-            'coordinates': [],
-          },
-        },
-      },
+      // geojsonParcelSource: {
+      //   'type': 'geojson',
+      //   'data': {
+      //     'type': 'Feature',
+      //     'geometry': {
+      //       'type': 'Polygon',
+      //       'coordinates': [],
+      //     },
+      //   },
+      // },
       geojsonParcelFillLayer: {
         'id': 'geojsonParcelFill',
         'type': 'fill',
@@ -850,12 +852,12 @@ export default {
     },
     geojsonParcels(nextGeojson) {
       // console.log('watch geojsonParcels is running, nextGeojson:', nextGeojson);
-      if (nextGeojson[0]) {
-        // console.log('watch geojsonParcels is running, nextGeojson:', nextGeojson, 'nextGeojson[0].geojson:', nextGeojson[0].geojson);
-        this.$data.geojsonParcelSource.data.geometry.coordinates = nextGeojson[0].geometry.coordinates;
-      } else {
-        this.$data.geojsonParcelSource.data.geometry.coordinates = [];
-      }
+      // if (nextGeojson[0]) {
+      //   // console.log('watch geojsonParcels is running, nextGeojson:', nextGeojson, 'nextGeojson[0].geojson:', nextGeojson[0].geojson);
+      //   this.$data.geojsonParcelSource.data.geometry.coordinates = nextGeojson[0].geometry.coordinates;
+      // } else {
+      //   this.$data.geojsonParcelSource.data.geometry.coordinates = [];
+      // }
 
       if (!this.$store.state.mapViewWasSetOnAppLoad && this.lastSearchMethod === 'shape search') {
         console.log('watch geojsonParcels is affecting things');

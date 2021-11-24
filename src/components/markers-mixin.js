@@ -161,6 +161,25 @@ export default {
       return features;
     },
 
+    geojsonParcelSources() {
+      let value = []
+      for (let parcel of this.geojsonParcels) {
+        value.push(
+          {
+            'type': 'geojson',
+            'data': {
+              'type': 'Feature',
+              'geometry': {
+                'type': 'Polygon',
+                'coordinates': parcel.geometry.coordinates,
+              },
+            },
+          },
+        )
+      }
+      return value;
+    },
+
     markersForTopic() {
       const markers = [];
 
