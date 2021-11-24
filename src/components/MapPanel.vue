@@ -92,6 +92,12 @@
           @click="handleCyclomediaButtonClick"
         />
 
+        <mapbox-address-input
+          :placeholder="addressInputPlaceholder"
+          :width-from-config="addressInputWidth"
+          @handle-search-form-submit="handleSearchFormSubmit"
+        />
+
       </MglMap>
 
 
@@ -834,7 +840,7 @@ export default {
       } else {
         this.$data.geojsonParcelSource.data.geometry.coordinates = [];
       }
-      
+
       if (!this.$store.state.mapViewWasSetOnAppLoad && this.lastSearchMethod === 'shape search') {
         console.log('watch geojsonParcels is affecting things');
         this.setMapToBounds();
