@@ -98,6 +98,22 @@
           @handle-search-form-submit="handleSearchFormSubmit"
         />
 
+        <buffer-control
+          :button-height="'45px'"
+          :button-width="'100%'"
+          :position="'top-left'"
+          :top="'80px'"
+          :left="'30px'"
+          :class="buttonClass + ' buffer-control ' + bufferButtonActiveClass"
+        />
+
+        <div class="draw-control">
+          <draw-control
+            :control="true"
+            :position="'top-left'"
+          />
+        </div>
+
       </MglMap>
 
 
