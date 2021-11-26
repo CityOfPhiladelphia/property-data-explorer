@@ -15,14 +15,14 @@
     >
 
       <MglMap
-        :map-style.sync="this.$config.mbStyle"
+        :map-style.sync="$config.mbStyle"
         :bounds="boundsProp"
-        :zoom="this.$store.state.map.zoom"
-        :center="this.$store.state.map.center"
+        :zoom="$store.state.map.zoom"
+        :center="$store.state.map.center"
         @click="handleMapClick"
-        @moveend="this.handleMapMove"
-        @load="this.onMapLoaded"
-        @preload="this.onMapPreloaded"
+        @moveend="handleMapMove"
+        @load="onMapLoaded"
+        @preload="onMapPreloaded"
       >
 
         <MglRasterLayer
@@ -842,7 +842,7 @@ export default {
           let store = this.$store;
           let config = this.$config;
           const myMethod = (function() {
-            // console.log('myMethod is running, store:', store, 'store.state:', store.state, 'config:', config);
+            console.log('myMethod is running, store:', store, 'nextGeocodeResult:', nextGeocodeResult, 'store.state:', store.state, 'config:', config);
             store.commit('setMapCenter', nextGeocodeResult.geometry.coordinates);
             store.commit('setMapZoom', config.map.zoom);
           }).bind(store, config);
