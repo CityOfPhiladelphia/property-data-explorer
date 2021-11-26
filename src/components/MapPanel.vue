@@ -68,15 +68,15 @@
           :clear-source="true"
         />
 
-        <!-- v-for="geojsonParcelSource in geojsonParcelSources" -->
-        <!-- <MglGeojsonLayer
-          key="'dorParcelFill'"
-          :source-id="'geojsonParcel'"
+        <MglGeojsonLayer
+          v-for="(geojsonParcelSource, index) in geojsonParcelSources"
+          :key="'dorParcelFill'+index"
+          :source-id="'geojsonParcel'+index"
           :source="geojsonParcelSource"
-          :layer-id="'geojsonParcelFill'"
+          :layer-id="'geojsonParcelFill'+index"
           :layer="geojsonParcelFillLayer"
           :clear-source="false"
-        /> -->
+        />
 
         <MglButtonControl
           :button-id="'buttonId-01'"
