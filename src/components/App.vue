@@ -569,7 +569,8 @@ export default {
       this.$store.state.activeModal.featureId = null;
       this.$store.commit('setActiveFeature', null);
       this.$nextTick(() => {
-        this.$store.state.map.map.invalidateSize();
+        // this.$store.state.map.map.invalidateSize();
+        this.$store.map.resize();
       });
     },
     openLeftPanel(value){
