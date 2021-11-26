@@ -163,19 +163,21 @@ export default {
 
     geojsonParcelSources() {
       let value = []
-      for (let parcel of this.geojsonParcels) {
-        value.push(
-          {
-            'type': 'geojson',
-            'data': {
-              'type': 'Feature',
-              'geometry': {
-                'type': 'Polygon',
-                'coordinates': parcel.geometry.coordinates,
+      if (this.geojsonParcels) {
+        for (let parcel of this.geojsonParcels) {
+          value.push(
+            {
+              'type': 'geojson',
+              'data': {
+                'type': 'Feature',
+                'geometry': {
+                  'type': 'Polygon',
+                  'coordinates': parcel.geometry.coordinates,
+                },
               },
             },
-          },
-        )
+          )
+        }
       }
       return value;
     },
