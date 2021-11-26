@@ -1009,7 +1009,8 @@ export default {
       }
 
       this.$nextTick(() => {
-        this.$store.state.map.map.invalidateSize();
+        this.$store.map.resize();
+        // this.$store.state.map.map.invalidateSize();
       });
     },
     print() {

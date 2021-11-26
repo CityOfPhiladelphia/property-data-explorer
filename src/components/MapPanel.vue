@@ -882,10 +882,14 @@ export default {
           setTimeout(myMethod, 250);
         }
       }
+      this.$nextTick(() => {
+        this.$store.map.resize();
+      });
     },
     cyclomediaActive(value) {
       this.$nextTick(() => {
-        this.$store.state.map.map.invalidateSize();
+        this.$store.map.resize();
+        // this.$store.state.map.map.invalidateSize();
       });
     },
   },
@@ -970,7 +974,7 @@ export default {
       return curStyle.fillColor;
     },
     setMapToBounds() {
-      // console.log('setMapToBounds is running, this.geojsonParcels:', this.geojsonParcels);
+      console.log('setMapToBounds is running, this.geojsonParcels:', this.geojsonParcels);
       let featureArray = [];
       for (let geojsonFeature of this.geojsonParcels) {
         featureArray.push(GeoJSON(geojsonFeature));

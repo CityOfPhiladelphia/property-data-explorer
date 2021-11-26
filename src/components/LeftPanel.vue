@@ -103,7 +103,8 @@ export default {
   },
   destroyed() {
     // console.log('intro page destroyed is running');
-    this.map.invalidateSize();
+    // this.map.invalidateSize();
+    this.$store.map.resize();
   },
 };
 
