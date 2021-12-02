@@ -110,10 +110,12 @@
         />
 
         <!-- <div class="draw-control"> -->
-        <!-- <draw-control
+        <draw-control
           :control="true"
           :position="'top-left'"
-        /> -->
+          @drawModeChange="handleDrawModeChange"
+        />
+        <!-- :position="'bottom-left'" -->
         <!-- </div> -->
 
       </MglMap>
@@ -416,7 +418,7 @@ import CyclomediaButton from '@phila/vue-mapping/src/cyclomedia/Button.vue';
 import MeasureControl from '@phila/vue-mapping/src/components/MeasureControl.vue';
 import LegendControl from '@phila/vue-mapping/src/components/LegendControl.vue';
 import MapAddressInput from '@phila/vue-mapping/src/components/MapAddressInput.vue';
-import DrawControl from '@phila/vue-mapping/src/components/DrawControl.vue';
+import DrawControl from '@phila/vue-mapping/src/mapbox/UI/controls/MbDrawControl.vue';
 import BufferControl from '@phila/vue-mapping/src/components/BufferControl.vue';
 
 export default {
@@ -527,6 +529,13 @@ export default {
           'line-color': 'blue',
           'line-width': 2,
         },
+      },
+      draw: {
+        mode: null,
+        selection: null,
+        currentShape: null,
+        labelLayers: [],
+        currentArea: null,
       },
     };
     return data;
@@ -1005,8 +1014,27 @@ export default {
       return false;
     },
     handleMapClick(e) {
-      if(this.$store.state.drawStart === null) {
+      let drawMode = this.$data.draw.mode;
+      let drawLayers = this.$store.map.queryRenderedFeatures(e.mapboxEvent.point).filter(feature => [ 'mapbox-gl-draw-cold', 'mapbox-gl-draw-hot' ].includes(feature.source));
+      console.log('MapPanel.vue handleMapClick, drawLayers:', drawLayers, 'drawMode:', drawMode, 'e:', e, 'this.$store.map.getStyle():', this.$store.map.getStyle(), 'this.$store.state.drawStart:', this.$store.state.drawStart);
+
+      if (!drawLayers.length && drawMode !== 'draw_polygon') {
         this.$controller.handleMapClick(e);
+      }
+      // if (drawMode === 'draw_polygon') {
+      //   this.getDrawDistances(e);
+      // }
+      // if(this.$store.state.drawStart === null) {
+      //   this.$controller.handleMapClick(e);
+      // }
+    },
+    handleDrawModeChange(e) {
+      console.log('handleDrawModeChange is running, e:', e, 'e.mode:', e.mode, 'this.$store.map.getStyle():', this.$store.map.getStyle());
+      this.$data.draw.mode = e.mode;
+      let currentShape = this.$data.draw.currentShape;
+
+      if (e.mode === 'simple_select' && currentShape) {
+        this.handleDrawFinish();
       }
     },
     handleMapMove(e) {

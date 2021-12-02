@@ -135,7 +135,7 @@ export default {
     // returns geojson parcels to be rendered on the map along with
     // necessary props.
     geojsonParcels() {
-      // console.log('recalculating geojsonParcels');
+      console.log('markers-mixin.js, recalculating geojsonParcels');
       let features;
       if(this.pwdParcel){
         let props = {};
@@ -162,6 +162,7 @@ export default {
     },
 
     geojsonParcelSources() {
+      console.log('markers-mixin.js, recalculating geojsonParcelSources');
       let value = []
       if (this.geojsonParcels) {
         for (let parcel of this.geojsonParcels) {
