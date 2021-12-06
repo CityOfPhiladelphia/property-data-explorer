@@ -120,6 +120,7 @@
           :class="buttonClass + ' buffer-control ' + bufferButtonActiveClass"
           @drawModeChange="handleDrawModeChange"
           @drawButtonClicked="handleDrawButtonClick"
+          @drawFinish="handleDrawFinish"
         />
         <!-- :position="'bottom-left'" -->
         <!-- </div> -->
@@ -539,7 +540,7 @@ export default {
       draw: {
         mode: null,
         selection: null,
-        currentShape: null,
+        // currentShape: null,
         labelLayers: [],
         currentArea: null,
       },
@@ -1035,13 +1036,19 @@ export default {
       // }
     },
     handleDrawModeChange(e) {
-      console.log('handleDrawModeChange is running, e:', e, 'e.mode:', e.mode, 'this.$store.map.getStyle():', this.$store.map.getStyle());
+      console.log('MapPanel.vue handleDrawModeChange is running, e:', e, 'e.mode:', e.mode, 'this.$store.map.getStyle():', this.$store.map.getStyle());
       this.$data.draw.mode = e.mode;
-      let currentShape = this.$data.draw.currentShape;
+      // let currentShape = this.$data.draw.currentShape;
 
-      if (e.mode === 'simple_select' && currentShape) {
+      if (e.mode === 'simple_select') {// && currentShape) {
         this.handleDrawFinish();
       }
+    },
+    handleDrawFinish(e) {
+      let draw = this.$store.state.draw;
+      let data = draw.getAll();
+      console.log('MapPanel.vue handleDrawFinish is running, data:', data);
+      this.$store.commit('setDrawShape', data.features[0].geometry.coordinates[0]);
     },
     handleDrawButtonClick() {
       console.log('MapPanel.vue handleDrawButtonClick is running');
