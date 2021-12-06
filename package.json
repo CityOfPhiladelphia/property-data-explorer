@@ -17,7 +17,7 @@
     "@fortawesome/pro-solid-svg-icons": "^5.8.2",
     "@phila/vue-comps": "3.0.0",
     "@phila/vue-datafetch": "2.2.3",
-    "@phila/vue-mapping": "https://github.com/CityOfPhiladelphia/phila-vue-mapping#c6bbaa335fbac4ba4a57cff9ade7d77a391f26a1",
+    "@phila/vue-mapping": "https://github.com/CityOfPhiladelphia/phila-vue-mapping#2497108780f2e90ca83c8a0eaa52e46765ca81c4",
     "accounting": "^0.4.1",
     "core-js": "^3.4.7",
     "leaflet": "1.7.1",

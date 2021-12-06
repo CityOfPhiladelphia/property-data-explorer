@@ -112,8 +112,14 @@
         <!-- <div class="draw-control"> -->
         <draw-control
           :control="true"
+          :button-height="'45px'"
+          :button-width="'100%'"
           :position="'top-left'"
+          :top="'94px'"
+          :left="'30px'"
+          :class="buttonClass + ' buffer-control ' + bufferButtonActiveClass"
           @drawModeChange="handleDrawModeChange"
+          @drawButtonClicked="handleDrawButtonClick"
         />
         <!-- :position="'bottom-left'" -->
         <!-- </div> -->
@@ -1037,6 +1043,9 @@ export default {
         this.handleDrawFinish();
       }
     },
+    handleDrawButtonClick() {
+      console.log('MapPanel.vue handleDrawButtonClick is running');
+    },
     handleMapMove(e) {
       console.log('handleMapMove is firing, this.$store.map:', this.$store.map, 'this.$store.state.map:', this.$store.state.map);
       const map = this.$store.map;
@@ -1320,7 +1329,7 @@ export default {
           display: flex;
         }
         &:after {
-          content: "Select Radius";
+          // content: "Select Radius";
           font-weight: normal;
           padding: 3px 10px 0 10px;
           position: relative;
