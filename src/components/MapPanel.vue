@@ -1022,18 +1022,13 @@ export default {
     },
     handleMapClick(e) {
       let drawMode = this.$data.draw.mode;
-      let drawLayers = this.$store.map.queryRenderedFeatures(e.mapboxEvent.point).filter(feature => [ 'mapbox-gl-draw-cold', 'mapbox-gl-draw-hot' ].includes(feature.source));
+      // let drawLayers = this.$store.map.queryRenderedFeatures(e.mapboxEvent.point).filter(feature => [ 'mapbox-gl-draw-cold', 'mapbox-gl-draw-hot' ].includes(feature.source));
       console.log('MapPanel.vue handleMapClick, drawLayers:', drawLayers, 'drawMode:', drawMode, 'e:', e, 'this.$store.map.getStyle():', this.$store.map.getStyle(), 'this.$store.state.drawStart:', this.$store.state.drawStart);
 
-      if (!drawLayers.length && drawMode !== 'draw_polygon') {
+      // if (!drawLayers.length && drawMode !== 'draw_polygon') {
+      if (drawMode !== 'draw_polygon') {
         this.$controller.handleMapClick(e);
       }
-      // if (drawMode === 'draw_polygon') {
-      //   this.getDrawDistances(e);
-      // }
-      // if(this.$store.state.drawStart === null) {
-      //   this.$controller.handleMapClick(e);
-      // }
     },
     handleDrawModeChange(e) {
       console.log('MapPanel.vue handleDrawModeChange is running, e:', e, 'e.mode:', e.mode, 'this.$store.map.getStyle():', this.$store.map.getStyle());
@@ -1049,6 +1044,7 @@ export default {
       let data = draw.getAll();
       console.log('MapPanel.vue handleDrawFinish is running, data:', data);
       this.$store.commit('setDrawShape', data.features[0].geometry.coordinates[0]);
+      this.$store.state.draw.trash();
     },
     handleDrawButtonClick() {
       console.log('MapPanel.vue handleDrawButtonClick is running');
