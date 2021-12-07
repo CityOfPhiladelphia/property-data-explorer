@@ -430,7 +430,7 @@ export default {
     drawShape(nextDrawShape) {
       if (nextDrawShape !== null) {
         this.$controller.handleDrawnShape();
-        this.$store.commit('setShapeSearchStatus', 'waiting');
+        // this.$store.commit('setShapeSearchStatus', 'waiting');
       }
     },
     foundItemsLength(nextFoundItemsLength) {
@@ -496,6 +496,7 @@ export default {
       let query = this.$route.query;
       console.log('App.vue reactToRoute is running, this.$route.query:', this.$route.query);
       if (query.shape) {
+        // this.$store.commit('setDrawShape', query.shape);
         this.$controller.handleDrawnShape();
         this.onDataChange('shapeSearch');
       } else if (query.address) {
