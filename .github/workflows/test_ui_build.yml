@@ -1,7 +1,7 @@
 name: UI Test
 
 on:
-  pull_request:
+  push:
     branches:
       - master
 
@@ -33,7 +33,7 @@ jobs:
         VUE_APP_CYCLOMEDIA_PASSWORD: ${{ secrets.VUE_APP_CYCLOMEDIA_PASSWORD }}
         VUE_APP_CYCLOMEDIA_USERNAME: ${{ secrets.VUE_APP_CYCLOMEDIA_USERNAME }}
         VUE_APP_GATEKEEPER_KEY: ${{ secrets.VUE_APP_GATEKEEPER_KEY }}
-   
+
     - name: Deploy screenshots on fail
       if: failure()
       run: |
