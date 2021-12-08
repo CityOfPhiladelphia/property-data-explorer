@@ -161,27 +161,27 @@ export default {
       return features;
     },
 
-    geojsonParcelSources() {
-      console.log('markers-mixin.js, recalculating geojsonParcelSources');
-      let value = []
-      if (this.geojsonParcels) {
-        for (let parcel of this.geojsonParcels) {
-          value.push(
-            {
-              'type': 'geojson',
-              'data': {
-                'type': 'Feature',
-                'geometry': {
-                  'type': 'Polygon',
-                  'coordinates': parcel.geometry.coordinates,
-                },
-              },
-            },
-          )
-        }
-      }
-      return value;
-    },
+    // geojsonParcelSources() {
+    //   console.log('markers-mixin.js, recalculating geojsonParcelSources');
+    //   let value = []
+    //   if (this.geojsonParcels) {
+    //     for (let parcel of this.geojsonParcels) {
+    //       value.push(
+    //         {
+    //           'type': 'geojson',
+    //           'data': {
+    //             'type': 'Feature',
+    //             'geometry': {
+    //               'type': 'Polygon',
+    //               'coordinates': parcel.geometry.coordinates,
+    //             },
+    //           },
+    //         },
+    //       )
+    //     }
+    //   }
+    //   return value;
+    // },
 
     markersForTopic() {
       const markers = [];

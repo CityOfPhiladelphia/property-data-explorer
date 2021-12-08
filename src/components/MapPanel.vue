@@ -75,7 +75,7 @@
           :source="geojsonParcelSource"
           :layer-id="'geojsonParcelFill'+index"
           :layer="geojsonParcelFillLayer"
-          :clear-source="false"
+          :clear-source="true"
         />
 
         <MglButtonControl
@@ -506,7 +506,8 @@ export default {
         'buttonWidth': '45px',
         'buttonLineHeight': '45px',
       },
-      // geojsonParcelSource: {
+      geojsonParcelSources: null,
+      // geojsonParcelSources: {
       //   'type': 'geojson',
       //   'data': {
       //     'type': 'Feature',
@@ -874,6 +875,23 @@ export default {
       // } else {
       //   this.$data.geojsonParcelSource.data.geometry.coordinates = [];
       // }
+      let value = []
+      for (let parcel of nextGeojson) {
+        console.log('in loop, parcel:', parcel);
+        value.push(
+          {
+            'type': 'geojson',
+            'data': {
+              'type': 'Feature',
+              'geometry': {
+                'type': 'Polygon',
+                'coordinates': parcel.geometry.coordinates,
+              },
+            },
+          },
+        )
+      }
+      this.geojsonParcelSources = value;
 
       if (!this.$store.state.mapViewWasSetOnAppLoad && this.lastSearchMethod === 'shape search') {
         console.log('watch geojsonParcels is affecting things');
