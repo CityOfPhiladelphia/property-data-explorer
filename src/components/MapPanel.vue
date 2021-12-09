@@ -594,7 +594,14 @@ export default {
       return value;
     },
     basemapsBefore() {
-      let value = [ 'gl-draw-polygon-fill-inactive.cold', 'gl-draw-line', 'gl-draw-polygon-fill', 'geojsonParcelFill', 'geojsonParcelLine' ];
+      let value = [
+        'gl-draw-line.hot',
+        'gl-draw-polygon-fill.hot',
+        'gl-draw-polygon-stroke-active.hot',
+        'gl-draw-polygon-and-line-vertex-halo-active.hot',
+        'gl-draw-polygon-and-line-vertex-active.hot',
+        'gl-draw-line-static',
+      ];
       if (this.imageOverlay != null) {
         value.push(this.imageOverlay);
       }
