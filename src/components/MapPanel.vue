@@ -33,7 +33,7 @@
           :layerId="activeBasemap"
           :layer="basemapSource.layer"
           :source="basemapSource.source"
-          :before="firstOverlay"
+          :before="basemapsBefore"
         />
 
         <MglRasterLayer
@@ -44,7 +44,7 @@
           :layerId="key"
           :layer="basemapLabelSource.layer"
           :source="basemapLabelSource.source"
-          :before="firstOverlay"
+          :before="basemapsBefore"
         />
 
         <MglMarker
@@ -593,24 +593,20 @@ export default {
       }
       return value;
     },
-    firstOverlay() {
-      let map = this.$store.map;
-      let overlay;
-      if (this.$config.overlaySources) {
-        let overlaySources = Object.keys(this.$config.overlaySources);
-        if (map) {
-          let overlays = map.getStyle().layers.filter(function(layer) {
-            // console.log('layer.id:', layer.id, 'overlaySources:', overlaySources);
-            return overlaySources.includes(layer.id);//[0].id;
-          });
-          if (overlays.length) {
-            overlay = overlays[0].id;
-          }
+    basemapsBefore() {
+      let value = [ 'gl-draw-polygon-fill-inactive.cold', 'gl-draw-line', 'gl-draw-polygon-fill', 'geojsonParcelFill', 'geojsonParcelLine' ];
+      if (this.imageOverlay != null) {
+        value.push(this.imageOverlay);
+      }
+      if (this.geojsonParcels) {
+        // console.log('computing basemapsBefore, this.geojsonParcels.length:', this.geojsonParcels.length);
+        for (let i=0; i<this.geojsonParcels.length; i++) {
+          value.push('geojsonParcelLine' + i);
+          value.push('geojsonParcelFill' + i);
         }
       }
-      return overlay;
+      return value;
     },
-
 
     leftPanel() {
       return this.$store.state.leftPanel;
