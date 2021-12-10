@@ -86,6 +86,16 @@
           :clear-source="true"
         />
 
+        <MglGeojsonLayer
+          v-for="(geojsonParcelSource, index) in geojsonActiveParcelSources"
+          :key="'dorParcelLine'+index"
+          :source-id="'geojsonParcel'+index"
+          :source="geojsonParcelSource"
+          :layer-id="'geojsonParcelLine'+index"
+          :layer="geojsonParcelLineLayer"
+          :clear-source="true"
+        />
+
         <MglButtonControl
           v-show="!this.fullScreenTopicsEnabled"
           :button-id="'buttonId-01'"
@@ -279,16 +289,6 @@ export default {
         'buttonLineHeight': '45px',
       },
       geojsonParcelSources: null,
-      // geojsonParcelSources: {
-      //   'type': 'geojson',
-      //   'data': {
-      //     'type': 'Feature',
-      //     'geometry': {
-      //       'type': 'Polygon',
-      //       'coordinates': [],
-      //     },
-      //   },
-      // },
       geojsonParcelFillLayer: {
         'id': 'geojsonParcelFill',
         'type': 'fill',
@@ -307,6 +307,28 @@ export default {
         'layout': {},
         'paint': {
           'line-color': 'blue',
+          'line-width': 2,
+        },
+      },
+      geojsonActiveParcelSources: null,
+      geojsonActiveParcelFillLayer: {
+        'id': 'geojsonActiveParcelFill',
+        'type': 'fill',
+        // 'source': 'geojsonParcel',
+        'layout': {},
+        'paint': {
+          'fill-color': 'yellow',
+          // 'fill-color': 'rgb(0,102,255)',
+          'fill-opacity': 0.3,
+        },
+      },
+      geojsonActiveParcelLineLayer: {
+        'id': 'geojsonActiveParcelLine',
+        'type': 'line',
+        // 'source': 'geojsonParcel',
+        'layout': {},
+        'paint': {
+          'line-color': 'yellow',
           'line-width': 2,
         },
       },
@@ -665,12 +687,6 @@ export default {
     },
     geojsonParcels(nextGeojson) {
       // console.log('watch geojsonParcels is running, nextGeojson:', nextGeojson);
-      // if (nextGeojson[0]) {
-      //   // console.log('watch geojsonParcels is running, nextGeojson:', nextGeojson, 'nextGeojson[0].geojson:', nextGeojson[0].geojson);
-      //   this.$data.geojsonParcelSource.data.geometry.coordinates = nextGeojson[0].geometry.coordinates;
-      // } else {
-      //   this.$data.geojsonParcelSource.data.geometry.coordinates = [];
-      // }
       let value = []
       for (let parcel of nextGeojson) {
         console.log('in loop, parcel:', parcel);
@@ -759,6 +775,29 @@ export default {
     this.$store.commit('setImagery', 'imagery2020');
   },
   methods: {
+    updateMarkerStyle(marker) {
+      console.log('updateMarkerStyle is running, marker:', marker);
+      let value = []
+      // for (let parcel of nextGeojson) {
+      //   console.log('in loop, parcel:', parcel);
+      //   value.push(
+      //     {
+      //       'type': 'geojson',
+      //       'data': {
+      //         'type': 'Feature',
+      //         'geometry': {
+      //           'type': 'Polygon',
+      //           'coordinates': parcel.geometry.coordinates,
+      //         },
+      //       },
+      //     },
+      //   )
+      // }
+      this.geojsonActiveParcelSources = value;
+    },
+    updateMarkerFillColor() {
+      console.log('updateMarkerFillColor is running');
+    },
     onMapLoaded(event) {
       console.log('onMapLoaded is running, event.map:', event.map, this.$store.state.map);
       this.$store.map = event.map;

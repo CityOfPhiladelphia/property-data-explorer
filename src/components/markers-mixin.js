@@ -8,10 +8,14 @@ export default {
 
   watch: {
     activeFeature(nextActiveFeature, prevActiveFeature) {
-      // console.log('WATCH active feature', prevActiveFeature, '=>', nextActiveFeature);
+      console.log('WATCH active feature', prevActiveFeature, '=>', nextActiveFeature);
 
-      const layerMap = this.$store.state.map.map._layers;
-      const layers = Object.values(layerMap);
+      let layerMap;
+      let layers = [];
+      // let layers = this.getVisibleMarkers();
+
+      // console.log('watch activeFeature, this.$store.map.getStyle():', this.$store.map.getStyle(), 'this.$store.map:', this.$store.map);
+      // console.log('WATCH active feature', prevActiveFeature, '=>', nextActiveFeature, 'layers:', layers);
 
       let updateFeaturePrev,
         updateFeatureNext,
@@ -24,41 +28,41 @@ export default {
         // console.log('first');
         updateFeaturePrev = prevActiveFeature;
         featureIdPrev = this.identifyMarker(prevActiveFeature);
-        matchingLayerPrev = layers.filter(layer => {
-          const options = layer.options || {};
-          const data = options.data;
-          // console.log("data: ", data)
-          if (!data) {
-            return;
+        for (let layer of layers) {
+          if (layer.attributes.feature.value === featureIdPrev) {
+            matchingLayerPrev = {
+              options: {
+                data: {
+                  featureId: featureIdPrev,
+                  tableId: tableId,
+                  layer: layer,
+                },
+              },
+            };
           }
-          const layerFeatureId = data.PARCELID;
-          // console.log("layerFeatureId: ", layerFeatureId, "featureIdPrev: ", featureIdPrev)
-          return layerFeatureId === featureIdPrev;
-        })[0];
+        }
         // console.log("matchingLayerPrev", matchingLayerPrev)
-        this.updateMarkerFillColor(matchingLayerPrev);
+        // this.updateMarkerFillColor(matchingLayerPrev);
+        this.updateMarkerStyle(prevActiveFeature);
       }
 
       if (nextActiveFeature && nextActiveFeature.featureId) {
         updateFeatureNext = nextActiveFeature;
         featureIdNext = this.identifyMarker(updateFeatureNext);
         // console.log('second, nextActiveFeature.featureId:', nextActiveFeature.featureId, 'featureIdNext:', featureIdNext);
-        matchingLayerNext = layers.filter(layer => {
-          const options = layer.options || {};
-          const data = options.data;
-          // console.log("data: ", data)
-          if (!data) {
-            return;
+        for (let layer of layers) {
+          if (layer.attributes.feature.value === featureIdNext) {
+            matchingLayerNext = {
+              options: {
+                data: {
+                  featureId: featureIdNext,
+                  tableId: tableId,
+                  layer: layer,
+                },
+              },
+            };
           }
-          // console.log(layer)
-          const layerFeatureId = layer.options.data.PARCELID;
-          // const layerFeatureId = layer.feature.properties.PARCELID;
-          // console.log("layerFeatureId: ", layerFeatureId, "featureIdNext: ", featureIdNext, 'nextActiveFeature.featureId:', nextActiveFeature.featureId);
-          if (layerFeatureId === nextActiveFeature.featureId || layerFeatureId === featureIdNext) {
-            return true;
-          }
-          // return layerFeatureId === featureIdNext;
-        })[0];
+        }
         // console.log('matchingLayerNext:', matchingLayerNext);
         this.updateMarkerFillColor(matchingLayerNext);
         // this.bringMarkerToFront(matchingLayerNext);
@@ -370,6 +374,24 @@ export default {
     },
   },
   methods: {
+    getVisibleMarkers() {
+      // console.log('getVisibleMarkers is running');
+      let map = this.$store.map;
+      var cc = map.getContainer();
+      var els = cc.getElementsByClassName('circle-div');
+      var ccRect = cc.getBoundingClientRect();
+      var visibles = [];
+      for (var i = 0; i < els.length; i++) {
+        var el = els.item(i);
+        var elRect = el.getBoundingClientRect();
+        this.intersectRect(ccRect, elRect) && visibles.push(el);
+      }
+      if (visibles.length > 0) {
+        // console.log('visibles:', visibles);
+      }
+      return visibles;
+    },
+
     identifyMarker(feature) {
       // console.log('identifyMarker starting: feature.featureId', feature.featureId, 'feature.featureId.toString().slice(0,6):', feature.featureId.toString().slice(0,6));
       let featureId;
