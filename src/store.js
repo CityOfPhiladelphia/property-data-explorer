@@ -16,6 +16,7 @@ function createStore(config) {
   const parcels = pvdStore.createParcels(config);
 
   const initialState = {
+    isLarge: null,
     appName: 'pde',
     loadingData: false,
     activeAddressKnown: false,
@@ -85,6 +86,9 @@ function createStore(config) {
       // }
     },
     mutations: {
+      setIsLarge(state, payload) {
+        state.isLarge = payload;
+      },
       setLoadingData(state, payload) {
         state.loadingData = payload;
       },

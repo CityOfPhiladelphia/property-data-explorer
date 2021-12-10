@@ -32,7 +32,7 @@
             v-if="shouldLoadCyclomediaWidget"
             v-show="cyclomediaActive"
             slot="cycloWidget"
-            :orientation="this.$config.cyclomedia.orientation"
+            :orientation="currentCycloOrientation"
             screen-percent="2"
           />
 
@@ -117,7 +117,7 @@ export default {
   data() {
     return {
       publicPath: '@/assets/',
-      isLarge: true,
+      // isLarge: true,
       'top': 3,
       'bottom': 2,
       hasData: false,
@@ -125,6 +125,18 @@ export default {
     };
   },
   computed: {
+    isLarge() {
+      return this.$store.state.isLarge;
+    },
+    currentCycloOrientation() {
+      let value;
+      if (this.isLarge && !this.leftPanel) {
+        value = 'horizontal';
+      } else {
+        value = 'vertical';
+      }
+      return value;
+    },
     lastSearchMethod() {
       return this.$store.state.lastSearchMethod;
     },
@@ -630,9 +642,11 @@ export default {
     onResize() {
       if (window.innerWidth > 749) {
         this.$data.isMapVisible = true;
-        this.$data.isLarge = true;
+        // this.$data.isLarge = true;
+        this.$store.commit('setIsLarge', true);
       } else {
-        this.$data.isLarge = false;
+        // this.$data.isLarge = false;
+        this.$store.commit('setIsLarge', false);
       }
     },
     toggleModal() {
