@@ -62,7 +62,9 @@
           :anchor="'bottom'"
         />
 
-        <mapbox-basemap-select-control />
+        <mapbox-basemap-select-control
+          v-show="!this.fullScreenTopicsEnabled"
+        />
 
         <MglGeojsonLayer
           v-for="(geojsonParcelSource, index) in geojsonParcelSources"
@@ -85,6 +87,7 @@
         />
 
         <MglButtonControl
+          v-show="!this.fullScreenTopicsEnabled"
           :button-id="'buttonId-01'"
           :button-class="'right top-button-1'"
           :image-link="basemapImageLink"
@@ -94,6 +97,7 @@
 
         <MglButtonControl
           v-if="shouldShowCyclomediaButton"
+          v-show="!this.fullScreenTopicsEnabled"
           :button-id="'buttonId-03'"
           :button-class="cyclomediaActive ? 'right top-button-2 active' : 'right top-button-2 inactive'"
           :image-link="sitePath + '/images/cyclomedia.png'"
@@ -101,12 +105,14 @@
         />
 
         <mapbox-address-input
+          v-show="!this.fullScreenTopicsEnabled"
           :placeholder="addressInputPlaceholder"
           :width-from-config="addressInputWidth"
           @handle-search-form-submit="handleSearchFormSubmit"
         />
 
         <buffer-control
+          v-show="!this.fullScreenTopicsEnabled"
           :button-height="'45px'"
           :button-width="'100%'"
           :position="'top-left'"
@@ -117,6 +123,7 @@
 
         <!-- <div class="draw-control"> -->
         <draw-control
+          v-show="!this.fullScreenTopicsEnabled"
           :control="true"
           :button-height="'45px'"
           :button-width="'100%'"
@@ -629,6 +636,12 @@ export default {
     },
   },
   watch: {
+    fullScreenTopicsEnabled(nextFullScreenTopicsEnabled) {
+      this.$store.map.resize();
+    },
+    fullScreenMapEnabled(nextFullScreenMapEnabled) {
+      this.$store.map.resize();
+    },
     geocodeGeom(nextGeocodeGeom) {
       if (nextGeocodeGeom) {
         this.lastGeocodeGeom = nextGeocodeGeom;
