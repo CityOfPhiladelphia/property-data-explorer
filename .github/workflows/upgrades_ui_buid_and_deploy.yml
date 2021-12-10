@@ -3,7 +3,7 @@ name: Build, Check And Deploy to Dev
 on:
   push:
     branches:
-      - test-mapbox
+      - fix-map-panel
 
 jobs:
   build:
