@@ -13,7 +13,7 @@ export default {
   drawControl: true,
   initialImagery: 'imagery2020',
   containerClass: 'map-container',
-  containerClassWCyclo: 'height50',
+  containerClassWCyclo: 'map-container',
   scales: {
     22: 282.124305,
     21: 564.24861,

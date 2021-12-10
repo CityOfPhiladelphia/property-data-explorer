@@ -33,7 +33,7 @@
             v-show="cyclomediaActive"
             slot="cycloWidget"
             :orientation="currentCycloOrientation"
-            screen-percent="2"
+            :screen-percent="currentScreenPercent"
           />
 
         </map-panel>
@@ -134,6 +134,15 @@ export default {
         value = 'horizontal';
       } else {
         value = 'vertical';
+      }
+      return value;
+    },
+    currentScreenPercent() {
+      let value;
+      if (!this.isLarge) {
+        value = 1;
+      } else {
+        value = 2;
       }
       return value;
     },

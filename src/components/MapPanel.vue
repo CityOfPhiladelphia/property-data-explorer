@@ -885,11 +885,11 @@ export default {
 
   .map-panel-class {
     // display: inline-block
-    // position: relative;
+    position: relative;
   }
 
   .map-panel-class-50 {
-    // position: relative;
+    position: relative;
     height: 50% !important;
   }
 
