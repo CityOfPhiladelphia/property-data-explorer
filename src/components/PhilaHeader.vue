@@ -42,9 +42,6 @@
                 <!-- :to="appLink" -->
                 <h1 class="title">
                   {{ appTitle }}
-                    <div id="demo-badge">
-                      BETA
-                    </div>
                 </h1>
                 <h2 class="sub-title">
                   {{ subTitle }}
@@ -244,28 +241,6 @@ export default {
 
     .title {
       display: inline-block;
-    }
-
-    // .tagline{
-    //   display: inline-block;
-    // }
-
-    #demo-badge{
-      /*text-transform: capitalize;*/
-      white-space: nowrap;
-      height: 22px;
-      width: 48px;
-      text-align: center;
-      line-height: 1.5rem;
-      display: inline-block;
-      font-size: 12px;
-      font-family: Arial, Helvetica, sans-serif;
-      font-weight: 800;
-      vertical-align: middle;
-      margin-left: 8px;
-      border-radius: 1px;
-      color: black;
-      background: #FF8D00;
     }
 
   }
