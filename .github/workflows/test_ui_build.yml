@@ -23,10 +23,10 @@ jobs:
         printf "@fortawesome:registry=https://npm.fontawesome.com/\n//npm.fontawesome.com/:_authToken=${FONTAWESOME_NPM_AUTH_TOKEN}" >> ~/.npmrc
         npm install
         npm run build
-        # npm run serve &
-        # cd Test
-        # npm install
-        # npm run test-local
+        npm run serve &
+        cd Test
+        npm install
+        npm run test-local
       env:
         FONTAWESOME_NPM_AUTH_TOKEN: ${{ secrets.FONTAWESOME_NPM_AUTH_TOKEN }}
         VUE_APP_CYCLOMEDIA_API_KEY: ${{ secrets.VUE_APP_CYCLOMEDIA_API_KEY }}
