@@ -10,9 +10,6 @@ test("Search page different verifications", async (t: TestController) => {
   await Searchpage.verifySearchbyShapePlusBuffer(t);
   await Searchpage.verifySearchByAddressPlusBuffer(t);
   await Searchpage.verifySearchByOPAplusBufferplusShape(t);
-  // await Searchpage.verifySearchByAddressplusOwner(t);
   await Searchpage.verifySearchByAddressplusShape(t);
-  // await Searchpage.verifySearchByOwnerplusShape(t);
- 
 });
  

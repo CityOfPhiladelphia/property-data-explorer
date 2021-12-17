@@ -30,11 +30,7 @@ export default class HomePage {
     await t.click(this.mailingLables);
     await t.wait(2000);
     const tableValues = await this.table.innerText;
-    await t.expect(tableValues).contains(testSearchData.opaAddress)
-    var tablecount = await this.table.count;
-    for (var i=0; i < tablecount; i++)
-    await t.click(this.table.nth(i))
-    await t.expect(tableValues).contains(testSearchData.opaAddress);
+    await t.expect(tableValues).contains(testSearchData.address)
    
   }
 

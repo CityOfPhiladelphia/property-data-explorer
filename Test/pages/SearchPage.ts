@@ -100,25 +100,16 @@ export default class SearchPage {
     await t.expect(tableBufferSearchValues).contains(testSearchData.address);
     await t.wait(2000);
     await t.click(this.polygonSearch);
-    await t.click('#map', { offsetX: 450, offsetY: 150 })
+    await t.click('#map', { offsetX: 550, offsetY: 150 })
     await t.wait(1000);
-    await t.click('#map', { offsetX: 550, offsetY: 250 })
-    await t.wait(1000);
-    await t.click('#map', { offsetX: 750, offsetY: 150 })
-    await t.wait(1000);
-    await t.click('#map', { offsetX: 450, offsetY: 150 })
+    await t.click('#map', { offsetX: 650, offsetY: 150 })
+    await t.wait(2000);
+    await t.click('#map', { offsetX: 600, offsetY: 200 })
+    await t.wait(2000);
+    await t.click('#map', { offsetX: 550, offsetY: 150 })
     await t.wait(2000);
     const tableOPAShapeValues = await this.table.innerText;
     await t.expect(tableOPAShapeValues).ok();
-  }
-  public verifySearchByAddressplusOwner = async (t: TestController) => {
-    await t.navigateTo(`${process.env.TEST_URL}`);
-    await t.typeText(this.searchMap, testSearchData.AddressOwner);
-    await t.click(this.searchmapButton);
-    await t.wait(1000);
-    const tableOwnerValues = await this.table.innerText;
-    await t.expect(tableOwnerValues).contains(testSearchData.addressBuffer);
-
   }
   public verifySearchByAddressplusShape = async (t: TestController) => {
     await t.navigateTo(`${process.env.TEST_URL}`);
@@ -129,28 +120,16 @@ export default class SearchPage {
     await t.expect(tableAddresValues).contains(testSearchData.addressBufferVerify)
     await t.wait(2000);
     await t.click(this.polygonSearch);
-    await t.click('#map', { offsetX: 450, offsetY: 150 })
-    await t.wait(1000);
-    await t.click('#map', { offsetX: 550, offsetY: 250 })
-    await t.wait(1000);
-    await t.click('#map', { offsetX: 600, offsetY: 200 })
-    await t.wait(1000);
-    await t.click('#map', { offsetX: 750, offsetY: 130 })
-    await t.wait(1000);
-    await t.click('#map', { offsetX: 450, offsetY: 150 })
+    await t.click('#map', { offsetX: 550, offsetY: 150 })
+    await t.wait(2000);
+    await t.click('#map', { offsetX: 600, offsetY: 150 })
+    await t.wait(2000);
+    await t.click('#map', { offsetX: 500, offsetY: 200 })
+    await t.wait(2000);
+    await t.click('#map', { offsetX: 550, offsetY: 150 })
     await t.wait(3000);
     const tableOPAShapeAddressValues = await this.table.innerText;
     await t.expect(tableOPAShapeAddressValues).ok();
 
   }
-  public verifySearchByOwnerplusShape = async (t: TestController) => {
-    await t.navigateTo(`${process.env.TEST_URL}`);
-    await t.typeText(this.searchMap, testSearchData.owner);
-    await t.click(this.searchmapButton);
-    await t.wait(2000);
-    const tableOwnerShapeValues = await this.table.innerText;
-    await t.expect(tableOwnerShapeValues).contains(testSearchData.owner);
-
-  }
-  
 }
