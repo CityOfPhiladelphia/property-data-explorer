@@ -1,4 +1,4 @@
-# Property (Beta)
+# Property
 
 Updated application for property.phila.gov
 
