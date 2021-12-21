@@ -118,7 +118,7 @@ export default {
   },
   methods: {
     identifyRow(featureId) {
-      // console.log("identifyRow starting", featureId)
+      console.log("identifyRow starting", featureId);
       let rowId;
       if (this.$store.state.geocode.status === "success" && this.$store.state.lastSearchMethod !== 'shape search' && this.$store.state.lastSearchMethod !== 'buffer search') {
         // console.log(this.$store.state.geocode.data)
@@ -198,9 +198,12 @@ export default {
       // console.log('handleMarkerMouseover is starting');
       if (!this.isMobileOrTablet) {
         // console.log('handleMarkerMouseover actions are running, e.target.options:', e.target.options);
-        const { target } = e;
-        // console.log('PARCEL ID target:', target);
-        const featureId  = this.identifyRow(target.options.data.PARCELID);
+        // const { target } = e;
+        console.log('handleMarkerMouseover, e:', e, 'e.mapboxEvent:', e.mapboxEvent, 'e.mapboxEvent.features[0].properties.parcelId:', e.mapboxEvent.features[0].properties.parcelId);
+        // const featureId  = this.identifyRow(target.options.data.PARCELID);
+        let value = e.mapboxEvent.features[0].properties.parcelId;
+        // const featureId  = this.identifyRow(e.layerId);
+        const featureId  = this.identifyRow(value);
         // console.log('featureId: ', featureId, "target: ", target);
         this.$store.commit('setActiveFeature',  { featureId } );
       }

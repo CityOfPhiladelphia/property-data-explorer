@@ -80,7 +80,10 @@
           :layer-id="'geojsonParcelFill'+index"
           :layer="geojsonParcelFillLayer"
           :clear-source="true"
+          @mouseenter="handleMarkerMouseover"
+          @mouseleave="handleMarkerMouseout"
         />
+        <!-- :parcelId="geojsonParcelSource" -->
 
         <MglGeojsonLayer
           v-for="(geojsonActiveParcelSource, index) in geojsonActiveParcelSources"
@@ -698,6 +701,9 @@ export default {
               'geometry': {
                 'type': 'Polygon',
                 'coordinates': parcel.geometry.coordinates,
+              },
+              'properties': {
+                'parcelId': parcel.properties.PARCELID,
               },
             },
           },
