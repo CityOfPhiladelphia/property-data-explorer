@@ -83,7 +83,6 @@
           @mouseenter="handleMarkerMouseover"
           @mouseleave="handleMarkerMouseout"
         />
-        <!-- :parcelId="geojsonParcelSource" -->
 
         <MglGeojsonLayer
           v-for="(geojsonActiveParcelSource, index) in geojsonActiveParcelSources"
@@ -704,6 +703,7 @@ export default {
               },
               'properties': {
                 'parcelId': parcel.properties.PARCELID,
+                'featureId': parcel.properties._featureId,
               },
             },
           },

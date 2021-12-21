@@ -92,17 +92,32 @@ export default {
     geojsonParcels() {
       console.log('markers-mixin.js, recalculating geojsonParcels');
       let features;
+      let shapes;
+      if (!this.$store.state.shapeSearch.data) {
+        return;
+      } else {
+        shapes = this.$store.state.shapeSearch.data.rows;
+      }
       if(this.pwdParcel){
         let props = {};
-        // console.log("this.pwdParcel: ", this.pwdParcel);
+        console.log("this.pwdParcel: ", this.pwdParcel);
         features = this.pwdParcel;
-        props.color = 'blue';
-        props.fillColor = 'blue';
-        props.weight = 2;
-        props.opacity = 1;
-        props.fillOpacity = 0.3;
+        // props.color = 'blue';
+        // props.fillColor = 'blue';
+        // props.weight = 2;
+        // props.opacity = 1;
+        // props.fillOpacity = 0.3;
         if(features.length > 1) {
-          features.forEach( feature => Object.assign(feature.properties, props));
+          // features.forEach( feature => Object.assign(feature.properties, props));
+          for (let feature of features) {
+            console.log('feature:', feature, 'shapes:', shapes);
+            for (let shape of shapes) {
+              if (shape.pwd_parcel_id === feature.properties.PARCELID) {
+                feature.properties._featureId = shape._featureId;
+                break;
+              }
+            }
+          }
         } else if (typeof features[0] !== 'undefined') {
           // console.log("features:", features)
           Object.assign(features[0].properties, props);
@@ -195,6 +210,7 @@ export default {
       }
     },
     handleMarkerMouseover: throttle(function (e) {
+    // handleMarkerMouseover(e) {
       // console.log('handleMarkerMouseover is starting');
       if (!this.isMobileOrTablet) {
         // console.log('handleMarkerMouseover actions are running, e.target.options:', e.target.options);
@@ -205,17 +221,22 @@ export default {
         // const featureId  = this.identifyRow(e.layerId);
         const featureId  = this.identifyRow(value);
         // console.log('featureId: ', featureId, "target: ", target);
-        this.$store.commit('setActiveFeature',  { featureId } );
+        this.$store.commit('setActiveFeature', { featureId });
       }
-    }, 200,
+    }, 20,
     ),
     handleMarkerMouseout(e) {
-      // console.log('handleMarkerMouseout is starting');
-      // if (!this.isMobileOrTablet) {
-      // console.log('handleMarkerMouseout actions are running');
-      const { target } = e;
-      this.$store.commit('setActiveFeature', null);
-      // }
+      if (!this.isMobileOrTablet) {
+        console.log('handleMarkerMouseout is starting, e:', e);
+        let value = e.component.source.data.properties.featureId;
+        console.log('handleMarkerMouseout is starting, e:', e, 'value:', value);
+        // if (!this.isMobileOrTablet) {
+        // console.log('handleMarkerMouseout actions are running');
+        // const { target } = e;
+        if (this.activeFeature.featureId === value) {
+          this.$store.commit('setActiveFeature', null);
+        }
+      }
     },
   },
 };
