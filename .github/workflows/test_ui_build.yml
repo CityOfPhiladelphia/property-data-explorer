@@ -13,16 +13,15 @@ jobs:
     steps:
     - uses: actions/checkout@v1
 
-    - name: Use Node.js 8.x
+    - name: Use Node.js 14.x
       uses: actions/setup-node@v1
       with:
-        node-version: '8.x'
+        node-version: '14.x'
 
     - name: Install app and test
       run: |
         printf "@fortawesome:registry=https://npm.fontawesome.com/\n//npm.fontawesome.com/:_authToken=${FONTAWESOME_NPM_AUTH_TOKEN}" >> ~/.npmrc
         npm install
-        npm run build
         npm run serve &
         cd Test
         npm install
