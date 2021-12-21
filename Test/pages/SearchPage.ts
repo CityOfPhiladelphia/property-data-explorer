@@ -22,7 +22,7 @@ export default class SearchPage {
   public verifySearchByCondoAddress = async (t: TestController) => {
     await t.typeText(this.searchMap, testSearchData.condoAddress1);
     await t.click(this.searchmapButton);
-    await t.wait(4000);
+    await t.wait(5000);
     await t.click(this.downloadCSV);
     await t.click(this.mailingLables);
     const tableValues = await this.table.innerText;
