@@ -10,6 +10,9 @@
       "name": "json",
       "output": "reports/report.json"
       }],
+        "compilerOptions": {
+          "esModuleInterop": true
+        },
   "skipJsErrors": true,
   "screenshots": {
       "path": "screenshots",
