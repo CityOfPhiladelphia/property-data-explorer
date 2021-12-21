@@ -62,10 +62,6 @@
           :anchor="'bottom'"
         />
 
-        <mapbox-basemap-select-control
-          v-show="!this.fullScreenTopicsEnabled"
-        />
-
         <MglGeojsonLayer
           v-for="(geojsonParcelSource, index) in geojsonParcelSources"
           :key="'dorParcelLine'+index"
@@ -113,6 +109,10 @@
           :image-link="basemapImageLink"
           :image-align="'top'"
           @click="handleBasemapToggleClick"
+        />
+
+        <mapbox-basemap-select-control
+          v-show="imageryShowing && !this.fullScreenTopicsEnabled"
         />
 
         <MglButtonControl
@@ -277,12 +277,6 @@ export default {
     markersMixin,
     cyclomediaMixin,
   ],
-  // props: {
-  //   leftPanel: {
-  //     type: Boolean,
-  //     value: true,
-  //   },
-  // },
   data() {
     const data = {
       zoomToShape: {
@@ -302,18 +296,15 @@ export default {
       geojsonParcelFillLayer: {
         'id': 'geojsonParcelFill',
         'type': 'fill',
-        // 'source': 'geojsonParcel',
         'layout': {},
         'paint': {
           'fill-color': 'blue',
-          // 'fill-color': 'rgb(0,102,255)',
           'fill-opacity': 0.3,
         },
       },
       geojsonParcelLineLayer: {
         'id': 'geojsonParcelLine',
         'type': 'line',
-        // 'source': 'geojsonParcel',
         'layout': {},
         'paint': {
           'line-color': 'blue',
@@ -324,18 +315,15 @@ export default {
       geojsonActiveParcelFillLayer: {
         'id': 'geojsonActiveParcelFill',
         'type': 'fill',
-        // 'source': 'geojsonParcel',
         'layout': {},
         'paint': {
           'fill-color': 'yellow',
-          // 'fill-color': 'rgb(0,102,255)',
           'fill-opacity': 0.3,
         },
       },
       geojsonActiveParcelLineLayer: {
         'id': 'geojsonActiveParcelLine',
         'type': 'line',
-        // 'source': 'geojsonParcel',
         'layout': {},
         'paint': {
           'line-color': 'yellow',
@@ -345,7 +333,6 @@ export default {
       draw: {
         mode: null,
         selection: null,
-        // currentShape: null,
         labelLayers: [],
         currentArea: null,
       },
@@ -354,12 +341,6 @@ export default {
   },
 
   computed: {
-    // geocodeZoom() {
-    //   if (this.$config.map.geocodeZoom) {
-    //     return this.$config.map.geocodeZoom;
-    //   }
-    //   return 18;
-    // },
     isLarge() {
       return this.$store.state.isLarge;
     },
@@ -385,6 +366,15 @@ export default {
         finalBounds = bounds;
       }
       return finalBounds;
+    },
+    imageryShowing() {
+      let value;
+      if (this.activeBasemap === 'pwd' || this.activeBasemap === 'dor') {
+        value = false;
+      } else {
+        value = true;
+      }
+      return value;
     },
     basemapImageLink() {
       if (this.activeBasemap === 'pwd' || this.activeBasemap === 'dor') {
@@ -785,29 +775,6 @@ export default {
     this.$store.commit('setImagery', 'imagery2020');
   },
   methods: {
-    updateMarkerStyle(marker) {
-      console.log('updateMarkerStyle is running, marker:', marker);
-      let value = []
-      // for (let parcel of nextGeojson) {
-      //   console.log('in loop, parcel:', parcel);
-      //   value.push(
-      //     {
-      //       'type': 'geojson',
-      //       'data': {
-      //         'type': 'Feature',
-      //         'geometry': {
-      //           'type': 'Polygon',
-      //           'coordinates': parcel.geometry.coordinates,
-      //         },
-      //       },
-      //     },
-      //   )
-      // }
-      this.geojsonActiveParcelSources = value;
-    },
-    updateMarkerFillColor() {
-      console.log('updateMarkerFillColor is running');
-    },
     onMapLoaded(event) {
       console.log('onMapLoaded is running, event.map:', event.map, this.$store.state.map);
       this.$store.map = event.map;
@@ -837,20 +804,6 @@ export default {
     handleSearchFormSubmit(value) {
       // console.log('MapPanel.vue handleSearchFormSubmit is running');
       this.$controller.handleSearchFormSubmit(value);
-    },
-    fillColorForOverlayMarker(markerId, activeFeature) {
-      // get map overlay style and hover style for table
-      const mapOverlay = this.$config.mapOverlay;
-      const { style, hoverStyle } = mapOverlay;
-
-      // compare id to active feature id
-      // console.log("this.identifyMarker(activeFeatureId): ", this.identifyMarker(activeFeature))
-      const useHoverStyle = (
-        activeFeature.featureId ? markerId === this.identifyMarker(activeFeature) : null
-      );
-      const curStyle = useHoverStyle ? hoverStyle : style;
-
-      return curStyle.fillColor;
     },
     setMapToBounds() {
       console.log('setMapToBounds is running, this.geojsonParcels:', this.geojsonParcels);

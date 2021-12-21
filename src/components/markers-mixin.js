@@ -1,7 +1,3 @@
-import VectorIcon from 'leaflet-vector-icon';
-import { divIcon } from 'leaflet';
-import { Marker } from 'leaflet';
-
 import throttle from 'lodash-es/throttle';
 
 export default {
@@ -10,47 +6,13 @@ export default {
     activeFeature(nextActiveFeature, prevActiveFeature) {
       console.log('WATCH active feature', prevActiveFeature, '=>', nextActiveFeature);
 
-      let layerMap;
-      let layers = [];
-      // let layers = this.getVisibleMarkers();
-
-      // console.log('watch activeFeature, this.$store.map.getStyle():', this.$store.map.getStyle(), 'this.$store.map:', this.$store.map);
-      // console.log('WATCH active feature', prevActiveFeature, '=>', nextActiveFeature, 'layers:', layers);
-
-      let updateFeaturePrev,
-        updateFeatureNext,
-        featureIdPrev,
-        featureIdNext,
-        matchingLayerNext,
-        matchingLayerPrev;
-
       if (prevActiveFeature && prevActiveFeature.featureId) {
-        // console.log('first');
-        updateFeaturePrev = prevActiveFeature;
         this.geojsonActiveParcelSources = [];
-        // featureIdPrev = this.identifyMarker(prevActiveFeature);
-        // for (let layer of layers) {
-        //   if (layer.attributes.feature.value === featureIdPrev) {
-        //     matchingLayerPrev = {
-        //       options: {
-        //         data: {
-        //           featureId: featureIdPrev,
-        //           tableId: tableId,
-        //           layer: layer,
-        //         },
-        //       },
-        //     };
-        //   }
-        // }
-        // console.log("matchingLayerPrev", matchingLayerPrev)
-        // this.updateMarkerFillColor(matchingLayerPrev);
-        // this.updateMarkerStyle(prevActiveFeature);
       }
 
       if (nextActiveFeature && nextActiveFeature.featureId) {
-        updateFeatureNext = nextActiveFeature.featureId;
+        let updateFeatureNext = nextActiveFeature.featureId;
 
-        // let value =
         let shapes = this.$store.state.shapeSearch.data.rows;
         let pwdParcels = this.$store.state.parcels.pwd;
         let currentShape;
@@ -78,27 +40,7 @@ export default {
             },
           },
         ];
-
-        // featureIdNext = this.identifyMarker(updateFeatureNext);
-        // console.log('second, nextActiveFeature.featureId:', nextActiveFeature.featureId, 'featureIdNext:', featureIdNext);
-        // for (let layer of layers) {
-        //   if (layer.attributes.feature.value === featureIdNext) {
-        //     matchingLayerNext = {
-        //       options: {
-        //         data: {
-        //           featureId: featureIdNext,
-        //           tableId: tableId,
-        //           layer: layer,
-        //         },
-        //       },
-        //     };
-        //   }
-        // }
-        // console.log('matchingLayerNext:', matchingLayerNext);
-        // this.updateMarkerFillColor(matchingLayerNext);
-        // this.bringMarkerToFront(matchingLayerNext);
       }
-
     },
   },
   computed: {
@@ -145,28 +87,6 @@ export default {
       return markers;
     },
 
-    markersForBufferSearch() {
-      // console.log('markers-mixin.js markersForBufferSearch computed is running');
-      const markers = [];
-      // geocoded address marker
-      const geocodeGeom = this.lastGeocodeGeom;
-      if (this.identifyFeature === 'address-marker' && Object.keys(geocodeGeom).length > 0) {
-        const latlng = [ ...geocodeGeom.coordinates ].reverse();
-        const key = this.lastGeocodeResult.properties.street_address;
-        const color = '#2176d2';
-        const markerType = 'geocode';
-        const icon = {
-          prefix: 'fas',
-          icon: 'map-marker-alt',
-          shadow: true,
-          size: 50,
-        };
-        const addressMarker = { latlng, key, color, markerType, icon };
-        markers.push(addressMarker);
-      }
-      return markers;
-    },
-
     // returns geojson parcels to be rendered on the map along with
     // necessary props.
     geojsonParcels() {
@@ -195,280 +115,8 @@ export default {
       // console.log("feature from geojsonParcels: ", features)
       return features;
     },
-
-    // geojsonParcelSources() {
-    //   console.log('markers-mixin.js, recalculating geojsonParcelSources');
-    //   let value = []
-    //   if (this.geojsonParcels) {
-    //     for (let parcel of this.geojsonParcels) {
-    //       value.push(
-    //         {
-    //           'type': 'geojson',
-    //           'data': {
-    //             'type': 'Feature',
-    //             'geometry': {
-    //               'type': 'Polygon',
-    //               'coordinates': parcel.geometry.coordinates,
-    //             },
-    //           },
-    //         },
-    //       )
-    //     }
-    //   }
-    //   return value;
-    // },
-
-    markersForTopic() {
-      const markers = [];
-
-      // marker for topic from config
-      const topicMarkers = this.activeTopicConfig.markersForTopic;
-      if (topicMarkers) {
-        const state = this.$store.state;
-        const topicData = topicMarkers.data(state);
-        if (topicData !== null) {
-
-          const latlng = [ topicData[topicMarkers.lat], topicData[topicMarkers.lng] ];
-          const key = topicData[topicMarkers.key];
-          const color = topicMarkers.color || 'green';
-          const markerType = 'overlay';
-          const icon = topicMarkers.icon;
-          const markerObject = { latlng, key, color, markerType, icon };
-          markers.push(markerObject);
-          // }
-        }
-      }
-      return markers;
-    },
-
-    circleMarkers() {
-      const filteredData = this.$store.state.horizontalTables.filteredData;
-      // const filteredData = this.filteredData;
-      let circleMarkers = [];
-
-      // get visible tables based on active topic
-      const tableIds = this.$store.getters.visibleTableIds;
-
-      // console.log('computed circleMarkers is rerunning, filteredData:', filteredData, 'tableIds:', tableIds);
-
-      for (let tableId of tableIds) {
-        const tableConfig = this.getConfigForTable(tableId) || {};
-        // console.log('tableId:', tableId, 'tableConfig:', tableConfig);
-        const mapOverlay = (tableConfig.options || {}).mapOverlay;
-
-        if (!mapOverlay || mapOverlay.marker !== 'circle') {
-          continue;
-        }
-
-        const items = filteredData[tableId];
-
-        if (items.length < 1) {
-          continue;
-        }
-
-        const style = mapOverlay.style;
-
-        // go through rows
-        for (let item of items) {
-          // console.log('tableId', tableId)
-          let latlng;
-
-          // TODO - get geometry field name from config
-          if (item.geometry) {
-            const [ x, y ] = item.geometry.coordinates;
-            latlng = [ y, x ];
-          } else if (item.lat) {
-            latlng = [ item.lat, item.lng ];
-            // if (item.point_x) {
-            //   latlng = [item.point_y, item.point_x];
-            // } else if (item.geocode_x) {
-            //   latlng = [item.geocode_y, item.geocode_x];
-            // }
-          }
-
-          // check for active feature TODO - bind style props to state
-          let props = Object.assign({}, style);
-          props.latlng = latlng;
-          props.featureId = item._featureId;
-          props.tableId = tableId;
-          circleMarkers.push(props);
-        }
-      }
-
-      return circleMarkers;
-    },
-
-    tableMarkers() {
-      const filteredData = this.$store.state.horizontalTables.filteredData;
-      // const filteredData = this.filteredData;
-      let tableMarkers = [];
-
-      // get visible tables based on active topic
-      const tableIds = this.$store.getters.visibleTableIds;
-
-      // console.log('computed tableIdMarkers is rerunning, filteredData:', filteredData, 'tableIds:', tableIds);
-
-      for (let tableId of tableIds) {
-        const tableConfig = this.getConfigForTable(tableId) || {};
-        // console.log('tableId:', tableId, 'tableConfig:', tableConfig);
-        const mapOverlay = (tableConfig.options || {}).mapOverlay;
-
-        if (!mapOverlay || mapOverlay.marker !== 'vector') {
-          continue;
-        }
-
-        const items = filteredData[tableId];
-
-        if (items.length < 1) {
-          continue;
-        }
-
-        const style = mapOverlay.style;
-
-        // go through rows
-        for (let item of items) {
-          // console.log('tableId', tableId)
-          let latlng;
-
-          // TODO - get geometry field name from config
-          if (item.geometry) {
-            const [ x, y ] = item.geometry.coordinates;
-            latlng = [ y, x ];
-          } else if (item.lat) {
-            latlng = [ item.lat, item.lng ];
-            // if (item.point_x) {
-            //   latlng = [item.point_y, item.point_x];
-            // } else if (item.geocode_x) {
-            //   latlng = [item.geocode_y, item.geocode_x];
-            // }
-          }
-
-          // check for active feature TODO - bind style props to state
-          let props = Object.assign({}, style);
-          props.latlng = latlng;
-          props.featureId = item._featureId;
-          props.tableId = tableId;
-          tableMarkers.push(props);
-        }
-      }
-
-      return tableMarkers;
-    },
-
-
-    // returns other geojson from config
-    geojsonForTopic() {
-      const features = [];
-      const topicGeojson = this.activeTopicConfig.geojsonForTopic;
-      if (topicGeojson) {
-        const state = this.$store.state;
-        const topicData = topicGeojson.data(state);
-        if (topicData !== null) {
-          for (let geojson of topicData) {
-            let props = Object.assign({}, topicGeojson.style);
-            props.key = geojson[topicGeojson.key];
-            props.geojson = geojson;
-            features.push(props);
-          }
-        }
-      }
-      return features;
-    },
-
-    // these geojson features will have mouseover and mouseout events,
-    // for highlighting horizontal table rows
-    reactiveGeojsonFeatures() {
-      const features = [];
-      let style;
-
-      if (this.$store.state.shapeSearch.data !== null) {
-
-        let item = this.$store.state.shapeSearch.data.rows;
-        let props = Object.assign({}, style);
-
-        props.featureId = item._featureId || null;
-        features.push(props);
-      }
-      return features;
-
-    },
-
-    leafletMarkers() {
-      // console.log("leafletMarkers is running")
-      const markers = [];
-
-      markers.push.apply(markers, this.markers);
-      // console.log("this.geojsonParcels: ", this.geojsonParcels)
-      markers.push.apply(markers, this.geojsonParcels);
-
-      return markers;
-    },
   },
   methods: {
-    getVisibleMarkers() {
-      // console.log('getVisibleMarkers is running');
-      let map = this.$store.map;
-      var cc = map.getContainer();
-      var els = cc.getElementsByClassName('circle-div');
-      var ccRect = cc.getBoundingClientRect();
-      var visibles = [];
-      for (var i = 0; i < els.length; i++) {
-        var el = els.item(i);
-        var elRect = el.getBoundingClientRect();
-        this.intersectRect(ccRect, elRect) && visibles.push(el);
-      }
-      if (visibles.length > 0) {
-        // console.log('visibles:', visibles);
-      }
-      return visibles;
-    },
-
-    identifyMarker(feature) {
-      // console.log('identifyMarker starting: feature.featureId', feature.featureId, 'feature.featureId.toString().slice(0,6):', feature.featureId.toString().slice(0,6));
-      let featureId;
-      if (this.$store.state.geocode.status === "success" && this.$store.state.lastSearchMethod !== 'shape search' && this.$store.state.lastSearchMethod !== 'buffer search') {
-        const geocodeId = this.$store.state.geocode.data._featureId;
-        // console.log('identifyMarker, geocode.status is success, geocodeId:', geocodeId);
-        // featureId = this.$store.state.geocode.data._featureId === parseInt(feature.featureId.toString().slice(0,6)) ?
-        if (geocodeId === feature.featureId || geocodeId === parseInt(feature.featureId.toString().slice(0,6))) {
-          featureId = parseInt(this.$store.state.geocode.data.properties.pwd_parcel_id);
-          // featureId = geocodeId;
-        } else {
-          featureId = null;
-        }
-        // Number(this.$store.state.geocode.data.properties.pwd_parcel_id) : null
-
-
-      } else if (this.$store.state.ownerSearch.status === "success") {
-        let result = this.$store.state.ownerSearch.data.filter( function(object) {
-          return object._featureId === feature.featureId;
-        });
-        // console.log(result)
-        featureId = result.length > 0 ? Number(result[0].properties.pwd_parcel_id) : null;
-
-
-      } else if (this.$store.state.blockSearch.status === "success") {
-        let result = this.$store.state.blockSearch.data.filter( function(object) {
-          return object._featureId === feature.featureId;
-        });
-        featureId = result.length > 0 ? Number(result[0].properties.pwd_parcel_id) : null;
-
-      } else if (this.$store.state.shapeSearch.status === "success") {
-        let result = this.$store.state.shapeSearch.data.rows.filter( function(object) {
-          // return object._featureId === parseInt(feature.featureId.toString().slice(0,6));
-          return object._featureId === feature.featureId;
-        });
-        if(typeof result[0] != 'undefined'){
-          featureId = Number(result[0].pwd_parcel_id);
-        } else {
-          return;
-        }
-      } else {
-        featureId = null;
-      }
-      // console.log('end of identifyMarker, featureId:', featureId);
-      return featureId;
-    },
     identifyRow(featureId) {
       // console.log("identifyRow starting", featureId)
       let rowId;
@@ -546,18 +194,6 @@ export default {
         }
       }
     },
-    bringMarkerToFront(circleMarker) {
-      // put marker on top
-      const el = circleMarker._path;
-
-      // remove from parent
-      const group = circleMarker._renderer._rootGroup;
-      group.removeChild(el);
-
-      // append to end (which brings it to the front)
-      group.appendChild(el);
-    },
-    // handleMarkerMouseover(e) {
     handleMarkerMouseover: throttle(function (e) {
       // console.log('handleMarkerMouseover is starting');
       if (!this.isMobileOrTablet) {
@@ -577,42 +213,6 @@ export default {
       const { target } = e;
       this.$store.commit('setActiveFeature', null);
       // }
-    },
-    updateMarkerFillColor(marker) {
-      // console.log('updateMarkerFillColor is running, marker:', marker)
-      // get next fill color
-      // console.log("Marker: ", marker)
-      // console.log(this.$store.state.geocode.data._featureId)
-      if(typeof marker != 'undefined') {
-        // console.log("marker.options.data: ", marker.options.data)
-        const featureId = Number(marker.options.data.PARCELID);
-        const activeFeature = this.$store.state.activeFeature;
-        // highlight. we're doing this here (non-reactively) because binding the
-        // fill color property was not performing well enough.
-        const nextStyle = Object.assign({}, marker.options);
-        // console.log("Marker: ", marker)
-        // console.log("fillColor: ", nextFillColor, "nextStyle: ", nextStyle)
-        const nextFillColor = this.fillColorForOverlayMarker(featureId, activeFeature);
-        nextStyle.fillColor = nextFillColor;
-        marker.setStyle(nextStyle);
-        // console.log("nextFillColor: ", nextFillColor)
-      }
-    },
-    styleForMarker(markerId) {
-      // get map overlay style and hover style for table
-      const mapOverlay = this.$config.mapOverlay;
-      const { style, hoverStyle } = mapOverlay;
-      // console.log("style: ", style, "hoverStyle: ", hoverStyle)
-
-      // compare id to active feature id
-      const activeFeature = this.activeFeature;
-      const useHoverStyle = (
-        markerId === activeFeature.featureId
-      );
-      // console.log("markerId: ", markerId, "activeFeature.featureId: ", activeFeature.featureId)
-      const curStyle = useHoverStyle ? hoverStyle : style;
-
-      return curStyle;
     },
   },
 };
