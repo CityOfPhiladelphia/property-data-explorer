@@ -27,44 +27,75 @@ export default {
       if (prevActiveFeature && prevActiveFeature.featureId) {
         // console.log('first');
         updateFeaturePrev = prevActiveFeature;
-        featureIdPrev = this.identifyMarker(prevActiveFeature);
-        for (let layer of layers) {
-          if (layer.attributes.feature.value === featureIdPrev) {
-            matchingLayerPrev = {
-              options: {
-                data: {
-                  featureId: featureIdPrev,
-                  tableId: tableId,
-                  layer: layer,
-                },
-              },
-            };
-          }
-        }
+        this.geojsonActiveParcelSources = [];
+        // featureIdPrev = this.identifyMarker(prevActiveFeature);
+        // for (let layer of layers) {
+        //   if (layer.attributes.feature.value === featureIdPrev) {
+        //     matchingLayerPrev = {
+        //       options: {
+        //         data: {
+        //           featureId: featureIdPrev,
+        //           tableId: tableId,
+        //           layer: layer,
+        //         },
+        //       },
+        //     };
+        //   }
+        // }
         // console.log("matchingLayerPrev", matchingLayerPrev)
         // this.updateMarkerFillColor(matchingLayerPrev);
-        this.updateMarkerStyle(prevActiveFeature);
+        // this.updateMarkerStyle(prevActiveFeature);
       }
 
       if (nextActiveFeature && nextActiveFeature.featureId) {
-        updateFeatureNext = nextActiveFeature;
-        featureIdNext = this.identifyMarker(updateFeatureNext);
-        // console.log('second, nextActiveFeature.featureId:', nextActiveFeature.featureId, 'featureIdNext:', featureIdNext);
-        for (let layer of layers) {
-          if (layer.attributes.feature.value === featureIdNext) {
-            matchingLayerNext = {
-              options: {
-                data: {
-                  featureId: featureIdNext,
-                  tableId: tableId,
-                  layer: layer,
-                },
-              },
-            };
+        updateFeatureNext = nextActiveFeature.featureId;
+
+        // let value =
+        let shapes = this.$store.state.shapeSearch.data.rows;
+        let pwdParcels = this.$store.state.parcels.pwd;
+        let currentShape;
+        for (let shape of shapes) {
+          if (shape._featureId === updateFeatureNext) {
+            for (let parcel of pwdParcels) {
+              if (parcel.properties.PARCELID === shape.pwd_parcel_id) {
+                currentShape = parcel;
+                break;
+              }
+            }
+            break;
           }
         }
+        console.log('markers-mixin.js watch activeFeature, updateFeatureNext:', updateFeatureNext, 'shapes:', shapes, 'currentShape:', currentShape);
+        this.geojsonActiveParcelSources = [
+          {
+            'type': 'geojson',
+            'data': {
+              'type': 'Feature',
+              'geometry': {
+                'type': 'Polygon',
+                'coordinates': currentShape.geometry.coordinates,
+              },
+            },
+          },
+        ];
+
+        // featureIdNext = this.identifyMarker(updateFeatureNext);
+        // console.log('second, nextActiveFeature.featureId:', nextActiveFeature.featureId, 'featureIdNext:', featureIdNext);
+        // for (let layer of layers) {
+        //   if (layer.attributes.feature.value === featureIdNext) {
+        //     matchingLayerNext = {
+        //       options: {
+        //         data: {
+        //           featureId: featureIdNext,
+        //           tableId: tableId,
+        //           layer: layer,
+        //         },
+        //       },
+        //     };
+        //   }
+        // }
         // console.log('matchingLayerNext:', matchingLayerNext);
-        this.updateMarkerFillColor(matchingLayerNext);
+        // this.updateMarkerFillColor(matchingLayerNext);
         // this.bringMarkerToFront(matchingLayerNext);
       }
 

@@ -87,12 +87,22 @@
         />
 
         <MglGeojsonLayer
-          v-for="(geojsonParcelSource, index) in geojsonActiveParcelSources"
-          :key="'dorParcelLine'+index"
-          :source-id="'geojsonParcel'+index"
-          :source="geojsonParcelSource"
-          :layer-id="'geojsonParcelLine'+index"
-          :layer="geojsonParcelLineLayer"
+          v-for="(geojsonActiveParcelSource, index) in geojsonActiveParcelSources"
+          :key="'activeParcelLine'+index"
+          :source-id="'geojsonActiveParcel'+index"
+          :source="geojsonActiveParcelSource"
+          :layer-id="'geojsonActiveParcelLine'+index"
+          :layer="geojsonActiveParcelLineLayer"
+          :clear-source="true"
+        />
+
+        <MglGeojsonLayer
+          v-for="(geojsonActiveParcelSource, index) in geojsonActiveParcelSources"
+          :key="'activeParcelFill'+index"
+          :source-id="'geojsonActiveParcel'+index"
+          :source="geojsonActiveParcelSource"
+          :layer-id="'geojsonActiveParcelFill'+index"
+          :layer="geojsonActiveParcelFillLayer"
           :clear-source="true"
         />
 
@@ -686,7 +696,7 @@ export default {
       }
     },
     geojsonParcels(nextGeojson) {
-      // console.log('watch geojsonParcels is running, nextGeojson:', nextGeojson);
+      console.log('watch geojsonParcels is running, nextGeojson:', nextGeojson);
       let value = []
       for (let parcel of nextGeojson) {
         console.log('in loop, parcel:', parcel);
