@@ -13,7 +13,10 @@ export default {
       if (nextActiveFeature && nextActiveFeature.featureId) {
         let updateFeatureNext = nextActiveFeature.featureId;
 
-        let shapes = this.$store.state.shapeSearch.data.rows;
+        let shapes = [];
+        if (this.$store.state.shapeSearch.data) {
+          shapes = this.$store.state.shapeSearch.data.rows;
+        }
         let pwdParcels = this.$store.state.parcels.pwd;
         let currentShape;
         for (let shape of shapes) {
@@ -28,18 +31,20 @@ export default {
           }
         }
         console.log('markers-mixin.js watch activeFeature, updateFeatureNext:', updateFeatureNext, 'shapes:', shapes, 'currentShape:', currentShape);
-        this.geojsonActiveParcelSources = [
-          {
-            'type': 'geojson',
-            'data': {
-              'type': 'Feature',
-              'geometry': {
-                'type': 'Polygon',
-                'coordinates': currentShape.geometry.coordinates,
+        if (currentShape) {
+          this.geojsonActiveParcelSources = [
+            {
+              'type': 'geojson',
+              'data': {
+                'type': 'Feature',
+                'geometry': {
+                  'type': 'Polygon',
+                  'coordinates': currentShape.geometry.coordinates,
+                },
               },
             },
-          },
-        ];
+          ];
+        }
       }
     },
   },
@@ -92,10 +97,8 @@ export default {
     geojsonParcels() {
       console.log('markers-mixin.js, recalculating geojsonParcels');
       let features;
-      let shapes;
-      if (!this.$store.state.shapeSearch.data) {
-        return;
-      } else {
+      let shapes = [];
+      if (this.$store.state.shapeSearch.data) {
         shapes = this.$store.state.shapeSearch.data.rows;
       }
       if(this.pwdParcel){
