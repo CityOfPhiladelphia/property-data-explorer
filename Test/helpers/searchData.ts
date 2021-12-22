@@ -11,7 +11,7 @@ class SearchData {
   public tablePolygontextVerify: string;
   public addressBuffer: string;
   public addressBufferVerify: string;
-  public owner: string;
+  public polyaddress: string;
   constructor(parameters: SearchData = {} as SearchData) {
     const {
       address,
@@ -26,7 +26,7 @@ class SearchData {
       tablePolygontextVerify,
       addressBuffer,
       addressBufferVerify,
-      owner,
+      polyaddress,
     } = parameters;
 
     this.address = address as string;
@@ -41,7 +41,7 @@ class SearchData {
     this.tablePolygontextVerify = tablePolygontextVerify as string;
     this.addressBuffer = addressBuffer as string;
     this.addressBufferVerify = addressBufferVerify as string;
-    this.owner = owner as string;
+    this.polyaddress = polyaddress as string;
   }
 }
 
@@ -61,6 +61,6 @@ export const testSearchData: SearchData = {
   tablePolygontextVerify: "1400 John F Kennedy Blvd",
   addressBuffer: "1931 Pine St",
   addressBufferVerify: "1918 Delancey Pl",
-  owner: "ZACHARIAH THOMAS"
+  polyaddress: "1101 Arch St"
 };
 

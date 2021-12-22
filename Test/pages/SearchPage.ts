@@ -64,9 +64,9 @@ export default class SearchPage {
     await t.expect(tablePolySearchValues).contains(testSearchData.tablePolygontextVerify);
     await t.click(this.btnBuffer);
     await t.click('#map')
-    await t.wait(2000);
+    await t.wait(4000);
     const tableBufferSearchValues = this.table.innerText
-    await t.expect(tableBufferSearchValues).contains(testSearchData.tablePolygontextVerify);
+    await t.expect(tableBufferSearchValues).contains(testSearchData.polyaddress);
 
   }
 
