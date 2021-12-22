@@ -13,18 +13,18 @@ jobs:
     steps:
     - uses: actions/checkout@v1
 
-    - name: Use Node.js 14.x
+    - name: Use Node.js 10.x
       uses: actions/setup-node@v1
       with:
-        node-version: '14.x'
+        node-version: '10.x'
 
     - name: Install app and test
       run: |
         printf "@fortawesome:registry=https://npm.fontawesome.com/\n//npm.fontawesome.com/:_authToken=${FONTAWESOME_NPM_AUTH_TOKEN}" >> ~/.npmrc
         npm install 
         npm run serve &
-        cd Test &
-        npm install &
+        cd Test 
+        npm install 
         npm run test-local
       env:
         FONTAWESOME_NPM_AUTH_TOKEN: ${{ secrets.FONTAWESOME_NPM_AUTH_TOKEN }}
