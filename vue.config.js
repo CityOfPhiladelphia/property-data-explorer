@@ -2,9 +2,6 @@ const Visualizer = require('webpack-visualizer-plugin');
 
 module.exports = {
   publicPath: '/',
-  devServer: {
-    progress: false
-  },
   configureWebpack: {
     plugins: [
       new Visualizer({ filename: './statistics.html' }),
@@ -12,6 +9,7 @@ module.exports = {
   },
   chainWebpack: (config) => {
     config.plugins.delete('prefetch');
+    config.plugins.delete('progress');
   },
   css: {
     loaderOptions: {
