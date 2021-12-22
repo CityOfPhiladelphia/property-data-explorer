@@ -12,25 +12,43 @@ export default {
 
       if (nextActiveFeature && nextActiveFeature.featureId) {
         let updateFeatureNext = nextActiveFeature.featureId;
-
-        let shapes = [];
-        if (this.$store.state.shapeSearch.data) {
-          shapes = this.$store.state.shapeSearch.data.rows;
-        }
         let pwdParcels = this.$store.state.parcels.pwd;
         let currentShape;
-        for (let shape of shapes) {
-          if (shape._featureId === updateFeatureNext) {
-            for (let parcel of pwdParcels) {
-              if (parcel.properties.PARCELID === shape.pwd_parcel_id) {
-                currentShape = parcel;
-                break;
+        let shapes = [];
+
+        if (this.$store.state.shapeSearch.data) {
+          shapes = this.$store.state.shapeSearch.data.rows;
+          for (let shape of shapes) {
+            if (shape._featureId === updateFeatureNext) {
+              for (let parcel of pwdParcels) {
+                if (parcel.properties.PARCELID === shape.pwd_parcel_id) {
+                  currentShape = parcel;
+                  break;
+                }
               }
+              break;
             }
-            break;
           }
+        } else if (this.$store.state.blockSearch.data) {
+          shapes = this.$store.state.blockSearch.data;
+          // console.log('activeFeature, shapes:', shapes);
+          for (let shape of shapes) {
+            if (shape._featureId == updateFeatureNext) {
+              for (let parcel of pwdParcels) {
+                // console.log('activeFeature shape loop, inside if, shape._featureId:', shape._featureId, 'updateNeatureNext:', updateFeatureNext, 'parcel.properties.PARCELID:', parcel.properties.PARCELID, 'shape.properties.pwd_parcel_id:', shape.properties.pwd_parcel_id);
+                if (parcel.properties.PARCELID == shape.properties.pwd_parcel_id) {
+                  currentShape = parcel;
+                  break;
+                }
+              }
+              break;
+            }
+          }
+        } else {
+          currentShape = pwdParcels[0];
         }
-        console.log('markers-mixin.js watch activeFeature, updateFeatureNext:', updateFeatureNext, 'shapes:', shapes, 'currentShape:', currentShape);
+
+        // console.log('markers-mixin.js watch activeFeature, updateFeatureNext:', updateFeatureNext, 'shapes:', shapes, 'currentShape:', currentShape);
         if (currentShape) {
           this.geojsonActiveParcelSources = [
             {
@@ -98,26 +116,34 @@ export default {
       console.log('markers-mixin.js, recalculating geojsonParcels');
       let features;
       let shapes = [];
+      let blockShapes = [];
       if (this.$store.state.shapeSearch.data) {
         shapes = this.$store.state.shapeSearch.data.rows;
+      } else if (this.$store.state.blockSearch.data) {
+        blockShapes = this.$store.state.blockSearch.data;
       }
-      if(this.pwdParcel){
+      if (this.pwdParcel){
         let props = {};
-        console.log("this.pwdParcel: ", this.pwdParcel);
+        console.log('markers-mixin.js, recalculating geojsonParcels, this.pwdParcel:', this.pwdParcel);
         features = this.pwdParcel;
-        // props.color = 'blue';
-        // props.fillColor = 'blue';
-        // props.weight = 2;
-        // props.opacity = 1;
-        // props.fillOpacity = 0.3;
         if(features.length > 1) {
           // features.forEach( feature => Object.assign(feature.properties, props));
           for (let feature of features) {
-            console.log('feature:', feature, 'shapes:', shapes);
-            for (let shape of shapes) {
-              if (shape.pwd_parcel_id === feature.properties.PARCELID) {
-                feature.properties._featureId = shape._featureId;
-                break;
+            // console.log('feature:', feature, 'shapes:', shapes);
+            if (shapes.length) {
+              for (let shape of shapes) {
+                if (shape.pwd_parcel_id === feature.properties.PARCELID) {
+                  feature.properties._featureId = shape._featureId;
+                  break;
+                }
+              }
+            } else if (blockShapes.length) {
+              for (let shape of blockShapes) {
+                // console.log('blockShapes loop, shape.properties.pwd_parcel_id:', shape.properties.pwd_parcel_id, 'feature.properties.PARCELID:', feature.properties.PARCELID);
+                if (shape.properties.pwd_parcel_id == feature.properties.PARCELID) {
+                  feature.properties._featureId = shape._featureId;
+                  break;
+                }
               }
             }
           }
@@ -125,12 +151,13 @@ export default {
           // console.log("features:", features)
           Object.assign(features[0].properties, props);
           features = [ features[0] ];
+          features[0].properties._featureId = 'feat-geocode-0';
         } else {
           Object.assign(features.properties, props);
           features = [ features ];
         }
       }
-      // console.log("feature from geojsonParcels: ", features)
+      console.log('markers-mixin.js, recalculating geojsonParcels, features: ', features);
       return features;
     },
   },
