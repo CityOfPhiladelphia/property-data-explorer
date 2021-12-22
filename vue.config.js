@@ -6,6 +6,9 @@ module.exports = {
     plugins: [
       new Visualizer({ filename: './statistics.html' }),
     ],
+    devServer: {
+      progress: false
+    },
   },
   chainWebpack: (config) => {
     config.plugins.delete('prefetch');
