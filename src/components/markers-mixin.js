@@ -11,8 +11,19 @@ export default {
       }
 
       if (nextActiveFeature && nextActiveFeature.featureId) {
+
         let updateFeatureNext = nextActiveFeature.featureId;
         let pwdParcels = this.$store.state.parcels.pwd;
+
+        let parseFeatureNext, numberFeatureNext;
+        if (typeof updateFeatureNext == 'string') {
+          parseFeatureNext = updateFeatureNext.split('-');
+        }
+        if (parseFeatureNext && parseFeatureNext.length) {
+          numberFeatureNext = parseFloat(parseFeatureNext[0]);
+        }
+        console.log('watch active feature, parseFeatureNext:', parseFeatureNext);
+
         let currentShape;
         let shapes = [];
 
@@ -21,7 +32,7 @@ export default {
           for (let shape of shapes) {
             if (shape._featureId === updateFeatureNext) {
               for (let parcel of pwdParcels) {
-                if (parcel.properties.PARCELID === shape.pwd_parcel_id) {
+                if (parcel.properties.PARCELID === shape.pwd_parcel_id || parcel.properties.PARCELID === numberFeatureNext) {
                   currentShape = parcel;
                   break;
                 }
