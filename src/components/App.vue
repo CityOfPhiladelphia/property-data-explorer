@@ -631,6 +631,7 @@ export default {
         } else {
           console.log('onDataChange else else is running, this.$store.state.geocode.data.properties.opa_account_num:', this.$store.state.geocode.data.properties.opa_account_num);
           // this.$store.commit('setActiveFeature', { featureId: 'feat-geocode-0' });
+          this.$store.commit('setActiveFeature', null);
           this.$store.commit('setActiveModal', { featureId: 'feat-geocode-0' });
           if (this.$store.state.geocode.data.properties.opa_account_num) {
             this.$controller.setRouteByOpaNumber(this.$store.state.geocode.data.properties.opa_account_num);
