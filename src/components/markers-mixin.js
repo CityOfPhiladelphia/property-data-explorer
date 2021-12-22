@@ -263,7 +263,7 @@ export default {
         // if (!this.isMobileOrTablet) {
         // console.log('handleMarkerMouseout actions are running');
         // const { target } = e;
-        if (this.activeFeature.featureId === value) {
+        if (this.$store.state.lastSearchMethod == 'geocode' || this.activeFeature.featureId === value) {
           this.$store.commit('setActiveFeature', null);
         }
       }
