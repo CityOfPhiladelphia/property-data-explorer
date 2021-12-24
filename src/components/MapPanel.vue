@@ -152,7 +152,7 @@
           :position="'top-left'"
           :top="'94px'"
           :left="'30px'"
-          :class="buttonClass + ' buffer-control ' + bufferButtonActiveClass"
+          :class="buttonClass + ' leaflet-draw ' + drawButtonActiveClass"
           @drawModeChange="handleDrawModeChange"
           @drawButtonClicked="handleDrawButtonClick"
           @drawFinish="handleDrawFinish"
@@ -1053,16 +1053,21 @@ export default {
 
     .leaflet-bar.leaflet-draw-toolbar>a.leaflet-draw-draw-polygon,
     .leaflet-bar.leaflet-control.buffer-control button,
+    .leaflet-bar.leaflet-control.leaflet-draw button,
     .leaflet-bar.leaflet-control.buffer-control .leaflet-buffer-actions {
       border-radius: 0;
     }
 
-    .leaflet-bar.leaflet-control.buffer-control :focus {
+    .leaflet-bar.leaflet-control.buffer-control :focus,
+    .leaflet-bar.leaflet-control.leaflet-draw :focus {
       outline: none;
     }
 
     .leaflet-control-container div .pvm-container-non-mobile,
     div.buffer-control.leaflet-bar.inactive-buffer-button,
+    div.leaflet-draw.leaflet-bar.inactive-buffer-button,
+    div.buffer-control.leaflet-bar.inactive-draw-button,
+    div.leaflet-draw.leaflet-bar.inactive-draw-button,
     .inactive-draw-button .leaflet-draw .leaflet-draw-section {
       &:hover:after {
         font-family: "Open Sans" !important;
@@ -1092,12 +1097,13 @@ export default {
     div.buffer-control.leaflet-bar.inactive-buffer-button {
       &:hover:after {
         content: "Select a point on the map to show all parcels within 250-foot radius.";
-        width: 183%;
+        width: 213%;
         height: 45px;
       }
     }
 
     div.buffer-control.leaflet-bar div.leaflet-buffer-actions,
+    div.leaflet-draw.leaflet-bar div.leaflet-buffer-actions,
     .leaflet-draw-section .leaflet-draw-actions {
       font-family: 'Open Sans';
       background: #d3d3d3;
@@ -1122,7 +1128,8 @@ export default {
       }
     }
 
-    div.buffer-control.leaflet-bar {
+    div.buffer-control.leaflet-bar,
+    div.leaflet-draw.leaflet-bar {
       display: flex;
       border: none;
       button{
@@ -1175,9 +1182,12 @@ export default {
       }
     }
 
-    .inactive-draw-button .leaflet-draw .leaflet-draw-section {
+    // .inactive-draw-button .leaflet-draw .leaflet-draw-section {
+    div.leaflet-draw.inactive-draw-button {
       &:hover:after {
         content: "Draw a shape on the map.";
+        width: 80%;
+        height: 45px;
       }
     }
 
