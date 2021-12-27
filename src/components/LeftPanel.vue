@@ -162,15 +162,15 @@ export default {
   height: 15px;
 }
 
-.padded-list {
-  padding-left: 14px;
-  li {
-    padding: 16px 20px 0 14px;
-  }
-  li:nth-child(4){
-    list-style-image: url("../../public/images/Hexagon.png");
-    }
-}
+// .padded-list {
+//   padding-left: 14px;
+//   li {
+//     padding: 16px 20px 0 14px;
+//   }
+//   li:nth-child(4){
+//     list-style-image: url("../../public/images/Hexagon.png");
+//     }
+// }
 
 @media print {
   #intro-container {

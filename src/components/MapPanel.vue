@@ -147,14 +147,14 @@
           @click="handleBufferButtonClick"
         />
 
-        <MglButtonControl
+        <!-- <MglButtonControl
           v-if="!isLarge"
           key="'draw-button'"
           :button-id="'buttonId-05'"
           :button-class="cyclomediaActive ? 'right top-button-4 active' : 'right top-button-4 inactive'"
           :image-link="sitePath + '/images/hexagon2.png'"
           @click="handleDrawButtonClick"
-        />
+        /> -->
 
         <mapbox-address-input
           v-show="!this.fullScreenTopicsEnabled"
@@ -176,15 +176,16 @@
 
         <!-- <div class="draw-control"> -->
         <!-- v-show="!this.fullScreenTopicsEnabled" -->
+        <!-- v-show="isLarge" -->
         <draw-control
-          v-show="isLarge"
           :control="true"
           :button-height="'45px'"
           :button-width="'100%'"
           :position="'top-left'"
           :top="'94px'"
           :left="'30px'"
-          :class="buttonClass + ' leaflet-draw ' + drawButtonActiveClass"
+          :isLarge="isLarge"
+          :class="buttonClass + ' leaflet-draw ' + isLargeClass + ' ' + drawButtonActiveClass"
           @drawModeChange="handleDrawModeChange"
           @drawButtonClicked="handleDrawButtonClick"
           @drawFinish="handleDrawFinish"
@@ -387,6 +388,15 @@ export default {
   computed: {
     isLarge() {
       return this.$store.state.isLarge;
+    },
+    isLargeClass() {
+      let value;
+      if (this.isLarge) {
+        value = 'is-large';
+      } else {
+        value = 'is-small';
+      }
+      return value;
     },
     currentCycloOrientation() {
       let value;
@@ -1285,54 +1295,54 @@ export default {
       }
     }
 
-    .leaflet-draw.leaflet-control {
-      display: flex;
-      .leaflet-draw-draw-polygon {
-        width: 100%;
-        height: 100%;
-      }
-      .leaflet-draw-section {
-        display: flex;
-        .leaflet-draw-toolbar {
-          border: none;
-        }
-        a.leaflet-draw-toolbar-button-enabled {
-          max-height: 45px;
-          background-color: white !important;
-          border: 2px solid color(dark-ben-franklin);
-          background-image: url("../assets/search-button-images/spritesheet-2-blue.png") !important;
-          &:after {
-            padding: 3px 8px 3px 8px;
-            background: white !important;
-            padding-top: 4px;
-            padding-bottom: 2px;
-            color: color(dark-ben-franklin);
-          }
-        }
-        .leaflet-draw-draw-polygon {
-          background-image: url("../assets/search-button-images/spritesheet-2-white.png");
-          background-color: color(dark-ben-franklin);
-          &:after {
-            content: "Draw Boundaries";
-            padding: 5px 10px 5px 10px;
-            color: white;
-            font-weight: normal !important;
-            background: color(dark-ben-franklin);
-            display: flex;
-            align-items: center;
-            margin-left: 40px;
-          }
-        }
-        .leaflet-draw-actions {
-          left: 227px;
-          height: 45px;
-          a {
-            top: 15%;
-            position: relative;
-          }
-        }
-      }
-    }
+    // .leaflet-draw.leaflet-control {
+    //   display: flex;
+    //   .leaflet-draw-draw-polygon {
+    //     width: 100%;
+    //     height: 100%;
+    //   }
+    //   .leaflet-draw-section {
+    //     display: flex;
+    //     .leaflet-draw-toolbar {
+    //       border: none;
+    //     }
+    //     a.leaflet-draw-toolbar-button-enabled {
+    //       max-height: 45px;
+    //       background-color: white !important;
+    //       border: 2px solid color(dark-ben-franklin);
+    //       background-image: url("../assets/search-button-images/spritesheet-2-blue.png") !important;
+    //       &:after {
+    //         padding: 3px 8px 3px 8px;
+    //         background: white !important;
+    //         padding-top: 4px;
+    //         padding-bottom: 2px;
+    //         color: color(dark-ben-franklin);
+    //       }
+    //     }
+    //     .leaflet-draw-draw-polygon {
+    //       background-image: url("../assets/search-button-images/spritesheet-2-white.png");
+    //       background-color: color(dark-ben-franklin);
+    //       &:after {
+    //         content: "Draw Boundaries";
+    //         padding: 5px 10px 5px 10px;
+    //         color: white;
+    //         font-weight: normal !important;
+    //         background: color(dark-ben-franklin);
+    //         display: flex;
+    //         align-items: center;
+    //         margin-left: 40px;
+    //       }
+    //     }
+    //     .leaflet-draw-actions {
+    //       left: 227px;
+    //       height: 45px;
+    //       a {
+    //         top: 15%;
+    //         position: relative;
+    //       }
+    //     }
+    //   }
+    // }
   }
   // END OF CSS FOR LARGE SCREEN APP
 
@@ -1344,80 +1354,82 @@ export default {
       height: 50%;
     }
 
-    .leaflet-control-zoom, .leaflet-control-zoom {
-      display: none !important;
-    }
+    // .leaflet-control-zoom, .leaflet-control-zoom {
+    //   display: none !important;
+    // }
 
-    .leaflet-control-container>.leaflet-top.leaflet-left {
-      right: 0;
-    }
+    // .leaflet-control-container>.leaflet-top.leaflet-left {
+    //   right: 0;
+    // }
 
-    .buffer-control, .leaflet-draw {
-      position: absolute;
-      bottom: 0px;
-      padding-bottom: 10px;
-      z-index: 500;
-      right: 0;
-    }
+    // .buffer-control, .leaflet-draw {
+    //   position: absolute;
+    //   right: 0;
+    //   // bottom: 0px;
+    //   // padding-bottom: 10px;
+    //   // z-index: 500;
+    // }
 
-    .buffer-control {
-      top: 78px;
-      left: unset;
-    }
+    // .buffer-control {
+    //   top: 78px;
+    //   left: unset;
+    // }
 
     .leaflet-draw {
-      top: 116px;
+      position: absolute;
+      right: 0;
+      top: 138px;
     }
 
-    .mobile-corner.leaflet-almostright {
-      position: absolute;
-      top: 50px;
-      right: 60px;
-      padding-bottom: 10px;
-      z-index: 500;
-    }
+    // .mobile-corner.leaflet-almostright {
+    //   position: absolute;
+    //   top: 50px;
+    //   right: 60px;
+    //   padding-bottom: 10px;
+    //   z-index: 500;
+    // }
 
-    .leaflet-almostbottom {
-      position: absolute;
-      bottom: 10px;
-      left: 0px;
-      padding-bottom: 10px;
-      z-index: 500;
-    }
+    // .leaflet-almostbottom {
+    //   position: absolute;
+    //   bottom: 10px;
+    //   left: 0px;
+    //   padding-bottom: 10px;
+    //   z-index: 500;
+    // }
 
     // BOTH TOOLS
-    .leaflet-draw-toolbar.leaflet-bar.leaflet-draw-toolbar-top,
-    .leaflet-bar.easy-button-container.leaflet-control {
-      width: 30px !important;
-      height: 30px !important;
-      margin-right: 10px;
-    }
+    // .leaflet-draw-toolbar.leaflet-bar.leaflet-draw-toolbar-top,
+    // .leaflet-bar.easy-button-container.leaflet-control {
+    //   width: 36px !important;
+    //   height: 36px !important;
+    //   margin-right: 10px;
+    // }
 
     // BUFFER TOOL
     .leaflet-bar.easy-button-container.leaflet-control > button {
-      width: 26px !important;
-      height: 26px !important;
+      // width: 26px !important;
+      // height: 26px !important;
     }
 
     // DRAW TOOL
-    .leaflet-draw-draw-polygon {
-      width: 26px !important;
-      height: 26px !important;
-    }
+    // .leaflet-draw-draw-polygon {
+    //   width: 26px !important;
+    //   height: 26px !important;
+    // }
 
-    .leaflet-touch .leaflet-draw-toolbar .leaflet-draw-draw-polygon {
-      background-position: -31px -1px;
-    }
+    // .leaflet-touch .leaflet-draw-toolbar .leaflet-draw-draw-polygon {
+    //   background-position: -31px -1px;
+    // }
 
     // IMAGERY AND CYCLOMEDIA BUTTONS
-    .button-state > img {
-      height: 26px;
-    }
+    // .button-state > img {
+    //   height: 26px;
+    // }
 
     // CYCLOMEDIA BUTTON
-    .leaflet-touch .leaflet-bar button {
-      line-height: unset;
-    }
+    // .leaflet-touch .leaflet-bar button {
+    //   line-height: unset;
+    // }
   }
   // END OF CSS FOR SMALL SCREEN APP
 
