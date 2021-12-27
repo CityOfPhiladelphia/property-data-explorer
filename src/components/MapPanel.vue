@@ -116,6 +116,7 @@
 
         <MglButtonControl
           v-show="!this.fullScreenTopicsEnabled"
+          key="'imagery-button'"
           :button-id="'buttonId-01'"
           :button-class="'right top-button-1'"
           :image-link="basemapImageLink"
@@ -130,10 +131,29 @@
         <MglButtonControl
           v-if="shouldShowCyclomediaButton"
           v-show="!this.fullScreenTopicsEnabled"
+          key="'cyclo-button'"
           :button-id="'buttonId-03'"
           :button-class="cyclomediaActive ? 'right top-button-2 active' : 'right top-button-2 inactive'"
           :image-link="sitePath + '/images/cyclomedia.png'"
           @click="handleCyclomediaButtonClick"
+        />
+
+        <MglButtonControl
+          v-if="!isLarge"
+          key="'buffer-button'"
+          :button-id="'buttonId-04'"
+          :button-class="cyclomediaActive ? 'right top-button-3 active' : 'right top-button-3 inactive'"
+          :image-link="sitePath + '/images/circle2.png'"
+          @click="handleBufferButtonClick"
+        />
+
+        <MglButtonControl
+          v-if="!isLarge"
+          key="'draw-button'"
+          :button-id="'buttonId-05'"
+          :button-class="cyclomediaActive ? 'right top-button-4 active' : 'right top-button-4 inactive'"
+          :image-link="sitePath + '/images/hexagon2.png'"
+          @click="handleDrawButtonClick"
         />
 
         <mapbox-address-input
@@ -143,8 +163,9 @@
           @handle-search-form-submit="handleSearchFormSubmit"
         />
 
+        <!-- v-show="!this.fullScreenTopicsEnabled" -->
         <buffer-control
-          v-show="!this.fullScreenTopicsEnabled"
+          v-show="isLarge"
           :button-height="'45px'"
           :button-width="'100%'"
           :position="'top-left'"
@@ -154,8 +175,9 @@
         />
 
         <!-- <div class="draw-control"> -->
+        <!-- v-show="!this.fullScreenTopicsEnabled" -->
         <draw-control
-          v-show="!this.fullScreenTopicsEnabled"
+          v-show="isLarge"
           :control="true"
           :button-height="'45px'"
           :button-width="'100%'"
@@ -828,6 +850,18 @@ export default {
     this.$store.commit('setImagery', 'imagery2020');
   },
   methods: {
+    handleBufferButtonClick(e) {
+      // console.log('handleBufferButtonClick is running, Object.keys(this.$store.state):', Object.keys(this.$store.state));
+      const bufferMode = this.$store.state.bufferMode;
+      this.$store.commit('setBufferMode', !bufferMode);
+      if (Object.keys(this.$store.state).includes('drawStart')) {
+        this.$store.commit('setDrawStart', null);
+        const cancelButton = document.querySelector('[title="Cancel drawing"]');
+        if (cancelButton) {
+          cancelButton.click();
+        }
+      }
+    },
     onMapLoaded(event) {
       console.log('onMapLoaded is running, event.map:', event.map, this.$store.state.map);
       this.$store.map = event.map;
@@ -947,9 +981,13 @@ export default {
     top: 46px;
   }
 
-  // .top-button-3 {
-  //   top: 92px;
-  // }
+  .top-button-3 {
+    top: 92px;
+  }
+
+  .top-button-4 {
+    top: 138px;
+  }
 
   .map-panel-class {
     // display: inline-block
