@@ -104,6 +104,16 @@
           :clear-source="true"
         />
 
+        <MglGeojsonLayer
+          v-if="currentBuffer"
+          :key="'geojsonBufferShape'"
+          :source-id="'geojsonBufferShape'"
+          :source="geojsonBufferShapeSource"
+          :layer-id="'geojsonBufferShapeFill'"
+          :layer="geojsonBufferShapeFillLayer"
+          :clear-source="true"
+        />
+
         <MglButtonControl
           v-show="!this.fullScreenTopicsEnabled"
           :button-id="'buttonId-01'"
@@ -330,6 +340,16 @@ export default {
         'paint': {
           'line-color': 'yellow',
           'line-width': 2,
+        },
+      },
+      geojsonBufferShapeSource: null,
+      geojsonBufferShapeFillLayer: {
+        'id': 'geojsonBufferShapeFill',
+        'type': 'fill',
+        'layout': {},
+        'paint': {
+          'fill-color': 'gray',
+          'fill-opacity': 0.3,
         },
       },
       draw: {
@@ -658,8 +678,35 @@ export default {
       }
       return '';
     },
+    currentBuffer() {
+      let values = this.$store.state.bufferShape;
+      let valuesFlipped;
+      if (values) {
+        valuesFlipped = [];
+        for (let value of values) {
+          let valueFlipped = [];
+          valueFlipped[0] = value[1];
+          valueFlipped[1] = value[0];
+          valuesFlipped.push(valueFlipped);
+        }
+      }
+      return valuesFlipped;
+    },
   },
   watch: {
+    currentBuffer(nextCurrentBuffer) {
+      let value = {
+        'type': 'geojson',
+        'data': {
+          'type': 'Feature',
+          'geometry': {
+            'type': 'Polygon',
+            'coordinates': [ nextCurrentBuffer ],
+          },
+        },
+      };
+      this.geojsonBufferShapeSource = value;
+    },
     fullScreenTopicsEnabled(nextFullScreenTopicsEnabled) {
       this.$store.map.resize();
     },
