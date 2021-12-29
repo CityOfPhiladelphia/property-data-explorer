@@ -1149,7 +1149,8 @@ export default {
     .leaflet-bar.leaflet-draw-toolbar>a.leaflet-draw-draw-polygon,
     .leaflet-bar.leaflet-control.buffer-control button,
     .leaflet-bar.leaflet-control.leaflet-draw button,
-    .leaflet-bar.leaflet-control.buffer-control .leaflet-buffer-actions {
+    .leaflet-bar.leaflet-control.buffer-control .leaflet-buffer-actions,
+    .leaflet-draw-actions {
       border-radius: 0;
     }
 
@@ -1199,7 +1200,8 @@ export default {
 
     div.buffer-control.leaflet-bar div.leaflet-buffer-actions,
     div.leaflet-draw.leaflet-bar div.leaflet-buffer-actions,
-    .leaflet-draw-section .leaflet-draw-actions {
+    // .leaflet-draw-section .leaflet-draw-actions {
+    div.leaflet-draw-actions {
       font-family: 'Open Sans';
       background: #d3d3d3;
       margin-left: 2px;
@@ -1273,6 +1275,20 @@ export default {
         ul, li, a {
           line-height: 45px;
           text-align: center;
+        }
+      }
+      .leaflet-draw-actions {
+        left: 224px;
+        li {
+          padding-left: 8px;
+          padding-right: 8px;
+        }
+        ul {
+          padding-left: 3px;
+          padding-right: 3px;
+        }
+        ul, li, a {
+          line-height: 45px;
         }
       }
     }
