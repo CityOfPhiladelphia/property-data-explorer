@@ -61,6 +61,6 @@ export const testSearchData: SearchData = {
   tablePolygontextVerify: "1400 John F Kennedy Blvd",
   addressBuffer: "1931 Pine St",
   addressBufferVerify: "1918 Delancey Pl",
-  polyaddress: "1101 Arch St"
+  polyaddress: "1315 Market St"
 };
 
