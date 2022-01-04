@@ -958,6 +958,7 @@ export default {
       console.log('MapPanel.vue handleDrawFinish is running, data:', data);
       this.$store.commit('setDrawShape', data.features[0].geometry.coordinates[0]);
       this.$store.state.draw.trash();
+      this.$store.commit('setDrawStart', false);
     },
     handleDrawButtonClick() {
       console.log('MapPanel.vue handleDrawButtonClick is running');
