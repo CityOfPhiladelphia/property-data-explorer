@@ -1290,7 +1290,7 @@ export default {
         }
       }
       .leaflet-draw-actions {
-        left: 224px;
+        left: 238px;
         li {
           padding-left: 8px;
           padding-right: 8px;
