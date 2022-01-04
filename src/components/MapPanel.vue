@@ -497,7 +497,7 @@ export default {
     },
     drawButtonActiveClass() {
       // console.log("bufferButtonActiveClass: ", this.$store.state.bufferMode);
-      return this.$store.state.drawStart === null ? 'inactive-draw-button' : '';
+      return this.$store.state.drawStart === null || this.$store.state.drawStart === false ? 'inactive-draw-button' : '';
     },
     buttonClass() {
       if (this.isMobileOrTablet) {
@@ -1298,6 +1298,7 @@ export default {
     div.leaflet-draw.inactive-draw-button {
       &:hover:after {
         content: "Draw a shape on the map.";
+        // font-size: 12px;
         width: 80%;
         height: 45px;
       }
