@@ -1183,6 +1183,7 @@ export default {
         display: flex;
         color: #000;
         padding: 7px;
+        // margin-left: -50px;
       }
     }
 
@@ -1203,6 +1204,7 @@ export default {
     div.buffer-control.leaflet-bar.inactive-buffer-button {
       &:hover:after {
         content: "Select a point on the map to show all parcels within 250-foot radius.";
+        font-size: 12px;
         width: 213%;
         height: 45px;
       }
@@ -1307,8 +1309,9 @@ export default {
     div.leaflet-draw.inactive-draw-button {
       &:hover:after {
         content: "Draw a shape on the map.";
-        // font-size: 12px;
-        width: 80%;
+        font-size: 12px;
+        // width: 68%;
+        // width: 200px;
         height: 45px;
       }
     }
