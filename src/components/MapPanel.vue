@@ -955,7 +955,14 @@ export default {
     handleDrawFinish(e) {
       let draw = this.$store.state.draw;
       let data = draw.getAll();
-      console.log('MapPanel.vue handleDrawFinish is running, data:', data);
+      let coordinates = data.features[0].geometry.coordinates[0];
+      console.log('MapPanel.vue handleDrawFinish is running, coordinates:', coordinates, 'coordinates.length-2:', coordinates.length-2, 'e:', e);
+      if (e && e.target.innerText === 'Finish') {
+        coordinates.splice(coordinates.length-2, 1);
+        console.log('MapPanel.vue handleDrawFinish, button was clicked, coordinates:', coordinates);
+      }
+      // setShapeSearchInput is in @phila/vue-datafetch store.js for routing
+      this.$store.commit('setShapeSearchInput', data.features[0].geometry.coordinates[0]);
       this.$store.commit('setDrawShape', data.features[0].geometry.coordinates[0]);
       this.$store.state.draw.trash();
       this.$store.commit('setDrawStart', false);
