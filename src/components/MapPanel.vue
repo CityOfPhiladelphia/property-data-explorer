@@ -769,24 +769,26 @@ export default {
     geojsonParcels(nextGeojson) {
       console.log('watch geojsonParcels is running, nextGeojson:', nextGeojson);
       let value = []
-      for (let parcel of nextGeojson) {
-        console.log('in loop, parcel:', parcel);
-        value.push(
-          {
-            'type': 'geojson',
-            'data': {
-              'type': 'Feature',
-              'geometry': {
-                'type': 'Polygon',
-                'coordinates': parcel.geometry.coordinates,
-              },
-              'properties': {
-                'parcelId': parcel.properties.PARCELID,
-                'featureId': parcel.properties._featureId,
+      if (nextGeojson && nextGeojson.length) {
+        for (let parcel of nextGeojson) {
+          console.log('in loop, parcel:', parcel);
+          value.push(
+            {
+              'type': 'geojson',
+              'data': {
+                'type': 'Feature',
+                'geometry': {
+                  'type': 'Polygon',
+                  'coordinates': parcel.geometry.coordinates,
+                },
+                'properties': {
+                  'parcelId': parcel.properties.PARCELID,
+                  'featureId': parcel.properties._featureId,
+                },
               },
             },
-          },
-        )
+          )
+        }
       }
       this.geojsonParcelSources = value;
 
