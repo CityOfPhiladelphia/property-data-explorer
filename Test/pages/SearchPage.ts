@@ -8,6 +8,7 @@ export default class SearchPage {
   mailingLables: Selector = Selector("svg[data-icon='download']");
   downloadCSV: Selector = Selector("svg[data-icon='envelope']");
   table: Selector = Selector('table');
+  propCardAddress: Selector = Selector("h1[class='address-header-line-1'");
   tableRowCount: Selector = Selector('table tr');
   polygonSearch: Selector = Selector(".leaflet-draw-draw-polygon");
   finishIcon: Selector = Selector(".leaflet-draw-actions > li:nth-child(1) > a");
@@ -23,8 +24,6 @@ export default class SearchPage {
     await t.typeText(this.searchMap, testSearchData.condoAddress1);
     await t.click(this.searchmapButton);
     await t.wait(5000);
-    await t.click(this.downloadCSV);
-    await t.click(this.mailingLables);
     const tableValues = await this.table.innerText;
     await t.expect(tableValues).contains(testSearchData.condoAddress1)
     await t.click(this.btnAddUnitresults);
@@ -33,7 +32,49 @@ export default class SearchPage {
     await t.expect(tableRowcount).eql(271);
     const tablerowValues = await this.table.innerText;
     await t.expect(tablerowValues).contains(testSearchData.condoAddressverify)
+    await t.click(this.downloadCSV);
+    await t.click(this.mailingLables);
   }
+  public verifySearchByCondoAddress2 = async (t: TestController) => {
+    await t.typeText(this.searchMap, testSearchData.condoAddress2);
+    await t.click(this.searchmapButton);
+    await t.wait(5000);
+    const tableValues = await this.table.innerText;
+    await t.expect(tableValues).contains(testSearchData.condoAddress2)
+    await t.click(this.btnAddUnitresults);
+    await t.wait(4000);
+    const tableRowcount = await this.tableRowCount.count;
+    await t.expect(tableRowcount).eql(271);
+    const tablerowValues = await this.table.innerText;
+    await t.expect(tablerowValues).contains(testSearchData.condoAddressverify2)
+  }
+
+  public verifySearchByBlock = async (t: TestController) => {
+    await t.navigateTo(`${process.env.TEST_URL}`);
+    await t.typeText(this.searchMap, testSearchData.blockSearch);
+    await t.click(this.searchmapButton);
+    await t.wait(3000);
+    const propCardAddress = await this.propCardAddress.innerText;
+    await t.expect(propCardAddress).contains(testSearchData.blockSearchValue);
+  }
+  public verifyMultResultsAddressSearch = async (t: TestController) => {
+    await t.navigateTo(`${process.env.TEST_URL}`);
+    await t.typeText(this.searchMap, testSearchData.twoResultsSearch);
+    await t.click(this.searchmapButton);
+    await t.wait(3000);
+    const tableRowcount = await this.tableRowCount.count;
+    await t.expect(tableRowcount).eql(2);
+  }
+  public oneCondoBuilding = async (t: TestController) => {
+    await t.navigateTo(`${process.env.TEST_URL}`);
+    await t.typeText(this.searchMap, testSearchData.oneCondo);
+    await t.click(this.searchmapButton);
+    await t.wait(3000);
+    const oneCondoAddress = await this.propCardAddress.innerText;
+    await t.expect(oneCondoAddress).contains(testSearchData.oneCondoAddress);
+  }
+
+
 
   public verifySearchByBuffer = async (t: TestController) => {
     await t.navigateTo(`${process.env.TEST_URL}`);
@@ -49,7 +90,7 @@ export default class SearchPage {
     await t.click(this.polygonSearch);
     await t.wait(3000);
     await t.expect(this.finishIcon.visible).ok();
-    await t.expect(this.deleteIcon.visible).ok();
+    // await t.expect(this.deleteIcon.visible).ok();
     await t.expect(this.cancelIcon.visible).ok();
     await t.wait(1000);
     await t.click('#map', { offsetX: 250, offsetY: 250 })
@@ -130,6 +171,5 @@ export default class SearchPage {
     await t.wait(3000);
     const tableOPAShapeAddressValues = await this.table.innerText;
     await t.expect(tableOPAShapeAddressValues).ok();
-
   }
 }
