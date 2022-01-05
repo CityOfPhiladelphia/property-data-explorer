@@ -366,7 +366,10 @@ export default {
     },
     localDetailsVerticalTableSlots() {
       let state = this.$store.state;
-      let opaPublicData = state.sources.opa_public.targets[this.activeOpaId].data;
+      let opaPublicData = {};
+      if (state.sources.opa_public.targets[this.activeOpaId]) {
+        opaPublicData = state.sources.opa_public.targets[this.activeOpaId].data;
+      }
       let trashDay = function(state) {
         let prop = state.activeModalFeature.properties ? state.activeModalFeature.properties : state.activeModalFeature
         let trashDay = prop.rubbish_recycle_day ? prop.rubbish_recycle_day : 'Unavailable';
@@ -680,7 +683,7 @@ export default {
           },
           {
             label: 'Lot Size',
-            value: opaPublicData.total_area === null ? 'Not Available':
+            value: opaPublicData.total_area === undefined || opaPublicData.total_area === null ? 'Not Available':
             opaPublicData.total_area.toLocaleString('en-US', {
                 minimumFractionDigits: 0,
               }) + ' sq ft',

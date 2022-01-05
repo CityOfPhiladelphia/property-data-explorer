@@ -396,6 +396,9 @@ export default {
         } else {
           this.onDataChange('multiItem');
         }
+      } else if (nextGeocodeStatus === 'error' && this.lastSearchMethod === 'reverseGeocode') {
+        console.log('App.vue watch geocodeStatus is error, this.lastSearchMethod:', this.lastSearchMethod);
+        this.onDataChange();
       }
     },
     blockSearchStatus(nextBlockSearchStatus) {
