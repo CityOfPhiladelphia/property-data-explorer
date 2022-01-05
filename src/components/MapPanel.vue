@@ -9,15 +9,10 @@
       v-once
     />
 
-    <!-- <div
-      class="grid-x"
-    > -->
     <div
       id="map-tag"
       :class="mapPanelClass"
     >
-    <!-- :class="'grid-x ' + mapPanelClass" -->
-    <!-- class="grid-x" -->
 
       <MglMap
         :map-style.sync="$config.mbStyle"
@@ -163,7 +158,6 @@
           @handle-search-form-submit="handleSearchFormSubmit"
         />
 
-        <!-- v-show="!this.fullScreenTopicsEnabled" -->
         <buffer-control
           v-show="isLarge"
           :button-height="'45px'"
@@ -173,10 +167,8 @@
           :left="'30px'"
           :class="buttonClass + ' buffer-control ' + bufferButtonActiveClass"
         />
+        <!-- @bufferButtonClick="handleBufferButtonClick" -->
 
-        <!-- <div class="draw-control"> -->
-        <!-- v-show="!this.fullScreenTopicsEnabled" -->
-        <!-- v-show="isLarge" -->
         <draw-control
           :control="true"
           :button-height="'45px'"
@@ -187,22 +179,17 @@
           :isLarge="isLarge"
           :class="buttonClass + ' leaflet-draw ' + isLargeClass + ' ' + drawButtonActiveClass"
           @drawModeChange="handleDrawModeChange"
-          @drawButtonClicked="handleDrawButtonClick"
           @drawFinish="handleDrawFinish"
         />
-        <!-- :position="'bottom-left'" -->
-        <!-- </div> -->
+        <!-- @drawButtonClicked="handleDrawButtonClick" -->
 
       </MglMap>
-
 
     </div>
     <slot
       class="widget-slot"
       name="cycloWidget"
     />
-
-
 
   </div>
 </template>
@@ -867,6 +854,8 @@ export default {
       const bufferMode = this.$store.state.bufferMode;
       this.$store.commit('setBufferMode', !bufferMode);
       if (Object.keys(this.$store.state).includes('drawStart')) {
+        this.$store.state.draw.trash();
+        this.$store.state.draw.changeMode('simple_select');
         this.$store.commit('setDrawStart', null);
         const cancelButton = document.querySelector('[title="Cancel drawing"]');
         if (cancelButton) {
@@ -947,31 +936,37 @@ export default {
     },
     handleDrawModeChange(e) {
       console.log('MapPanel.vue handleDrawModeChange is running, e:', e, 'e.mode:', e.mode, 'this.$store.map.getStyle():', this.$store.map.getStyle());
-      this.$data.draw.mode = e.mode;
-      // let currentShape = this.$data.draw.currentShape;
+      if (e.mode !== 'simple_select' && this.$store.state.bufferMode) {
+        this.$store.commit('setBufferMode', false);
+      }
 
-      if (e.mode === 'simple_select') {// && currentShape) {
+      this.$data.draw.mode = e.mode;
+
+      if (e.mode === 'simple_select') {
         this.handleDrawFinish();
       }
     },
     handleDrawFinish(e) {
       let draw = this.$store.state.draw;
       let data = draw.getAll();
-      let coordinates = data.features[0].geometry.coordinates[0];
-      console.log('MapPanel.vue handleDrawFinish is running, coordinates:', coordinates, 'coordinates.length-2:', coordinates.length-2, 'e:', e);
-      if (e && e.target.innerText === 'Finish') {
-        coordinates.splice(coordinates.length-2, 1);
-        console.log('MapPanel.vue handleDrawFinish, button was clicked, coordinates:', coordinates);
+      let coordinates;
+      if (data && data.features.length && data.features[0].geometry) {
+        coordinates = data.features[0].geometry.coordinates[0];
+        console.log('MapPanel.vue handleDrawFinish is running, coordinates:', coordinates, 'e:', e);
+        if (e && e.target.innerText === 'Finish') {
+          coordinates.splice(coordinates.length-2, 1);
+          console.log('MapPanel.vue handleDrawFinish, button was clicked, coordinates:', coordinates);
+        }
+        // setShapeSearchInput is in @phila/vue-datafetch store.js for routing
+        this.$store.commit('setShapeSearchInput', data.features[0].geometry.coordinates[0]);
+        this.$store.commit('setDrawShape', data.features[0].geometry.coordinates[0]);
       }
-      // setShapeSearchInput is in @phila/vue-datafetch store.js for routing
-      this.$store.commit('setShapeSearchInput', data.features[0].geometry.coordinates[0]);
-      this.$store.commit('setDrawShape', data.features[0].geometry.coordinates[0]);
       this.$store.state.draw.trash();
       this.$store.commit('setDrawStart', false);
     },
-    handleDrawButtonClick() {
-      console.log('MapPanel.vue handleDrawButtonClick is running');
-    },
+    // handleDrawButtonClick() {
+    //   console.log('MapPanel.vue handleDrawButtonClick is running');
+    // },
     handleMapMove(e) {
       console.log('handleMapMove is firing, this.$store.map:', this.$store.map, 'this.$store.state.map:', this.$store.state.map);
       const map = this.$store.map;
