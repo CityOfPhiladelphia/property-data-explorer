@@ -33,7 +33,15 @@ export default {
         // console.log('opa-public in if condo is running');
         // opa.push(state.geocode.related[0]);
         let idNumber = state.parcels.pwd ? Number(state.parcels.pwd[0].properties.PARCELID) : state.geocode.data.properties.dor_parcel_id;
+        let unitKeys = Object.keys(state.condoUnits.units);
+        console.log('opa-public.js idNumber:', idNumber, 'unitKeys:', unitKeys);
+        // if (Object.keys(state.condoUnits.units)
         opa.push(state.condoUnits.units[idNumber][0]);
+        // if (unitKeys[0] !== '') {
+        //   opa.push(state.condoUnits.units[idNumber][0]);
+        // } else {
+        //   opa.push(state.condoUnits.units[''][0]);
+        // }
       }
       return opa;
 
