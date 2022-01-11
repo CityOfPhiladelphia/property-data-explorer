@@ -26,6 +26,17 @@
         @preload="onMapPreloaded"
       >
 
+        <!-- loading mask -->
+        <div
+          v-show="isGeocoding"
+          class="mb-map-loading-mask"
+        >
+          <div :class="loadingMaskLeft">
+            <i class="fa fa-spinner fa-4x spin" />
+            <h1>Finding address...</h1>
+          </div>
+        </div>
+
         <MglRasterLayer
           v-for="(basemapSource, key) in basemapSources"
           v-if="shouldShowRasterLayer && activeBasemap === key"
