@@ -242,7 +242,6 @@
 
         <div>
           <h3>Not finding the information you're looking for?</h3>
-          For the legacy Property application, try <a href="https://property.phila.gov" target="_blank">property.phila.gov</a>.<br>
           For more information specific to this property, try <a href="https://atlas.phila.gov" target="_blank">atlas.phila.gov</a>
         </div>
       </div>
@@ -367,7 +366,10 @@ export default {
     },
     localDetailsVerticalTableSlots() {
       let state = this.$store.state;
-      let opaPublicData = state.sources.opa_public.targets[this.activeOpaId].data;
+      let opaPublicData = {};
+      if (state.sources.opa_public.targets[this.activeOpaId]) {
+        opaPublicData = state.sources.opa_public.targets[this.activeOpaId].data;
+      }
       let trashDay = function(state) {
         let prop = state.activeModalFeature.properties ? state.activeModalFeature.properties : state.activeModalFeature
         let trashDay = prop.rubbish_recycle_day ? prop.rubbish_recycle_day : 'Unavailable';
@@ -681,7 +683,7 @@ export default {
           },
           {
             label: 'Lot Size',
-            value: opaPublicData.total_area === null ? 'Not Available':
+            value: opaPublicData.total_area === undefined || opaPublicData.total_area === null ? 'Not Available':
             opaPublicData.total_area.toLocaleString('en-US', {
                 minimumFractionDigits: 0,
               }) + ' sq ft',

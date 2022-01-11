@@ -124,8 +124,8 @@ export default {
       // if (!this.$data.condoExpanded && this.geocode.data && this.$store.state.condoUnits.units && this.$store.state.parcels.pwd && this.$store.state.parcels.pwd[0].properties && this.$store.state.lastSearchMethod === 'geocode') {
       if (!this.$data.condoExpanded && this.geocode.data && this.$store.state.condoUnits.units && this.$store.state.parcels.pwd && this.$store.state.parcels.pwd[0].properties) {
       // if (this.geocode.data && this.$store.state.condoUnits.units && this.$store.state.parcels.pwd && this.$store.state.parcels.pwd[0].properties) {
-        // console.log('in geocodeItems, in if');
         const parentCondo = this.geocode.data;
+        console.log('in geocodeItems, in if, parentCondo:', parentCondo);
         for (let i in parentCondo.properties) {
           parentCondo.properties[i] = "";
         }
@@ -139,7 +139,7 @@ export default {
         // parentCondo.condo = true;
         data.push(parentCondo);
       } else {
-        // console.log('in geocodeItems, in else, this.geocode.data:', this.geocode.data, 'this.geocode.related:', this.geocode.related);
+        console.log('in geocodeItems, in else, this.geocode.data:', this.geocode.data, 'this.geocode.related:', this.geocode.related);
         if (this.geocode.data) {
           data.push(this.geocode.data);
         }
