@@ -413,6 +413,11 @@ export default {
     //     this.reactToRoute2()
     //   }
     // },
+    shapeSearchStatus(nextShapeSearchStatus) {
+      if (nextShapeSearchStatus === 'too many') {
+        this.onDataChange();
+      }
+    },
     geocodeStatus(nextGeocodeStatus) {
       console.log('watch geocodeStatus, nextGeocodeStatus:', nextGeocodeStatus);
       if (nextGeocodeStatus === 'success') {
