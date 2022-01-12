@@ -44,15 +44,10 @@
       </div>
 
       <div class="cell small-9 medium-3 text-center">
-        <font-awesome-icon
-          icon="hexagon"
-          class="fa-3x"
-          aria-hidden="true"
-        />
-        <!-- <img
+        <img
           class="pentagon-image"
           :src="'images/pentagon.png'"
-        /> -->
+        />
       </div>
       <div class="cell small-15 medium-21 text-div">
         <p><b>Draw a shape on the map</b></p>

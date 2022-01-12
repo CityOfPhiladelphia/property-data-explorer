@@ -3,7 +3,7 @@ name: Build, Check And Deploy to Dev
 on:
   push:
     branches:
-      - clear-data-bug
+      - restructure
 
 jobs:
   build:
