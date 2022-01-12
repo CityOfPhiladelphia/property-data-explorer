@@ -800,11 +800,12 @@ export default {
   },
   watch: {
     watchedZoom(nextWatchedZoom) {
+      console.log('watch watchedZoom is firing, nextWatchedZoom:', nextWatchedZoom);
       if (this.cyclomediaActive) {
         this.handleCycloChanges();
       }
       let map = this.$store.map;
-      if (map) {
+      if (nextWatchedZoom && map) {
         this.$store.map.setZoom(nextWatchedZoom);
       }
     },
