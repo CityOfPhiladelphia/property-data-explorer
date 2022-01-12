@@ -251,29 +251,39 @@
           :h-fov="cycloHFov"
         />
 
-        <div v-once>
-          <cyclomedia-button
-            v-if="shouldShowCyclomediaButton"
-            v-once
-            :position="'topright'"
-            :link="'cyclomedia'"
-            :img-src="sitePath + 'images/cyclomedia.png'"
-            @handle-cyclomedia-button-click="handleCyclomediaButtonClick"
-          />
-        </div>
-
-        <cyclomedia-recording-circle
-          v-for="recording in cyclomediaRecordings"
+        <MglGeojsonLayer
           v-if="cyclomediaActive"
-          :key="recording.imageId"
-          :image-id="recording.imageId"
-          :latlng="[recording.lat, recording.lng]"
-          :size="1.2"
-          :color="'#3388ff'"
-          :weight="1"
-          @l-click="handleCyclomediaRecordingClick"
+          :source-id="'cameraPoint'"
+          :source="geojsonCameraSource"
+          :layer-id="'cameraPoints'"
+          :layer="geojsonCameraLayer"
+          :icon="sitePath + '/images/camera.png'"
         />
-      </map_>
+        <!-- :icon="sitePath + 'images/camera.png'" -->
+
+        <MglGeojsonLayer
+          v-if="cyclomediaActive"
+          :source-id="'viewcone'"
+          :source="geojsonViewconeSource"
+          :layer-id="'viewcones'"
+          :layer="geojsonViewconeLayer"
+        />
+
+        <MglCircleMarker
+          v-for="recording in cyclomediaRecordings"
+          :key="recording.imageId"
+          :coordinates="[recording.lng, recording.lat]"
+          :image-id="recording.imageId"
+          :size="14"
+          :fill-color="'#3388ff'"
+          :color="'black'"
+          :weight="1"
+          :opacity="0.5"
+          @click="handleCyclomediaRecordingClick"
+        />
+
+
+      </MglMap>
 
       <slot
       class="widget-slot"
@@ -376,6 +386,103 @@ export default {
         'buttonHeight': '45px',
         'buttonWidth': '45px',
         'buttonLineHeight': '45px',
+      },
+      watchedZoom: null,
+      geojsonCameraSource: {
+        'type': 'geojson',
+        'data': {
+          'type': 'Feature',
+          'geometry': {
+            'type': 'Point',
+            'coordinates': [],
+          },
+        },
+      },
+      geojsonCameraLayer: {
+        'id': 'cameraPoints',
+        'type': 'symbol',
+        'source': 'cameraPoint',
+        'layout': {
+          'icon-image': 'cameraMarker',
+          'icon-size': 0.09,
+          // 'icon-size': 0.13,
+          'icon-rotate': 0,
+          'icon-rotation-alignment': 'map',
+        },
+      },
+      geojsonViewconeSource: {
+        'type': 'geojson',
+        'data': {
+          'type': 'Feature',
+          'geometry': {
+            'type': 'Polygon',
+            'coordinates': [[]],
+          },
+        },
+      },
+      geojsonViewconeLayer: {
+        'id': 'viewcones',
+        'type': 'fill',
+        'source': 'viewcone',
+        'layout': {},
+        'paint': {
+          'fill-color': 'rgb(0,102,255)',
+          'fill-opacity': 0.2,
+        },
+      },
+      geojsonParcelSources: null,
+      geojsonParcelFillLayer: {
+        'id': 'geojsonParcelFill',
+        'type': 'fill',
+        'layout': {},
+        'paint': {
+          'fill-color': 'blue',
+          'fill-opacity': 0.3,
+        },
+      },
+      geojsonParcelLineLayer: {
+        'id': 'geojsonParcelLine',
+        'type': 'line',
+        'layout': {},
+        'paint': {
+          'line-color': 'blue',
+          'line-width': 2,
+        },
+      },
+      geojsonActiveParcelSources: null,
+      geojsonActiveParcelFillLayer: {
+        'id': 'geojsonActiveParcelFill',
+        'type': 'fill',
+        'layout': {},
+        'paint': {
+          'fill-color': 'yellow',
+          'fill-opacity': 0.3,
+        },
+      },
+      geojsonActiveParcelLineLayer: {
+        'id': 'geojsonActiveParcelLine',
+        'type': 'line',
+        'layout': {},
+        'paint': {
+          'line-color': 'yellow',
+          'line-width': 2,
+        },
+      },
+      geojsonBufferShapeSource: null,
+      geojsonBufferShapeFillLayer: {
+        'id': 'geojsonBufferShapeFill',
+        'type': 'fill',
+        'layout': {},
+        'paint': {
+          'fill-color': 'gray',
+          'fill-opacity': 0.3,
+        },
+      },
+      draw: {
+        mode: null,
+        selection: null,
+        labelLayers: [],
+        currentArea: null,
       },
     };
     return data;
@@ -594,10 +701,10 @@ export default {
       if (this.$store.state.cyclomedia.orientation.xyz !== null) {
         const xyz = this.$store.state.cyclomedia.orientation.xyz;
         return [ xyz[1], xyz[0] ];
+      } else if (this.$config && this.$config.map) {
+        const center = this.$config.map.center;
+        return center;
       }
-      const center = this.$config.map.center;
-      return center;
-
     },
     cycloRotationAngle() {
       return this.$store.state.cyclomedia.orientation.yaw;// * (180/3.14159265359);
@@ -616,6 +723,50 @@ export default {
     },
   },
   watch: {
+    watchedZoom(nextWatchedZoom) {
+      console.log('watch watchedZoom is firing, nextWatchedZoom:', nextWatchedZoom);
+      if (this.cyclomediaActive) {
+        this.handleCycloChanges();
+      }
+      let map = this.$store.map;
+      if (nextWatchedZoom && map) {
+        this.$store.map.setZoom(nextWatchedZoom);
+      }
+    },
+    cycloLatlng(nextCycloLatlng) {
+      // console.log('watch cycloLatlng, nextCycloLatlng:', nextCycloLatlng, 'this.$data.geojsonCameraSource:', this.$data.geojsonCameraSource);
+      this.$data.geojsonCameraSource.data.geometry.coordinates = [ nextCycloLatlng[1], nextCycloLatlng[0] ];
+      this.handleCycloChanges();
+      // console.log('watch cycloLatlng end');
+    },
+    cycloRotationAngle(nextCycloRotationAngle) {
+      // console.log('watch cycloRotationAngle is firing, nextCycloRotationAngle:', nextCycloRotationAngle);
+      this.$data.geojsonCameraLayer.layout['icon-rotate'] = nextCycloRotationAngle;
+      this.handleCycloChanges();
+    },
+    cycloHFov(nextCycloHFov) {
+      // console.log('watch cycloHFov is running, nextCycloHFov:', nextCycloHFov);
+      this.handleCycloChanges();
+    },
+    currentBuffer(nextCurrentBuffer) {
+      let value = {
+        'type': 'geojson',
+        'data': {
+          'type': 'Feature',
+          'geometry': {
+            'type': 'Polygon',
+            'coordinates': [ nextCurrentBuffer ],
+          },
+        },
+      };
+      this.geojsonBufferShapeSource = value;
+    },
+    fullScreenTopicsEnabled(nextFullScreenTopicsEnabled) {
+      this.$store.map.resize();
+    },
+    fullScreenMapEnabled(nextFullScreenMapEnabled) {
+      this.$store.map.resize();
+    },
     geocodeGeom(nextGeocodeGeom) {
       if (nextGeocodeGeom) {
         this.lastGeocodeGeom = nextGeocodeGeom;
@@ -626,6 +777,7 @@ export default {
       if (Object.keys(nextGeocodeResult).length > 0) {
         this.lastGeocodeResult = nextGeocodeResult;
         if (nextGeocodeResult._featureId) {
+          this.$data.watchedZoom = this.geocodeZoom;
           let store = this.$store;
           const myMethod = (function() {
             store.commit('setMapCenter', nextGeocodeResult.geometry.coordinates);
@@ -701,6 +853,93 @@ export default {
     const map = this.$store.state.map.map;
   },
   methods: {
+    handleBufferButtonClick(e) {
+      // console.log('handleBufferButtonClick is running, Object.keys(this.$store.state):', Object.keys(this.$store.state));
+      const bufferMode = this.$store.state.bufferMode;
+      this.$store.commit('setBufferMode', !bufferMode);
+      if (Object.keys(this.$store.state).includes('drawStart')) {
+        this.$store.state.draw.trash();
+        this.$store.state.draw.changeMode('simple_select');
+        this.$store.commit('setDrawStart', null);
+        const cancelButton = document.querySelector('[title="Cancel drawing"]');
+        if (cancelButton) {
+          cancelButton.click();
+        }
+      }
+    },
+    onMapLoaded(event) {
+      console.log('onMapLoaded is running, event.map:', event.map, this.$store.state.map);
+      this.$store.map = event.map;
+    },
+    onMapPreloaded(event) {
+      let logo = document.getElementsByClassName('mapboxgl-ctrl-logo');
+      // console.log('MapPanel onMapPreloaded, logo:', logo, 'logo.length:', logo.length, 'logo.item(0):', logo.item(0));
+      logo[0].remove();
+      let attrib = document.getElementsByClassName('mapboxgl-ctrl-attrib');
+      attrib[0].remove();
+    },
+    handleBasemapToggleClick() {
+      // console.log('handleBasemapToggleClick, this.$store.map.getStyle().layers:', this.$store.map.getStyle().layers);
+      const prevShouldShowBasemapSelectControl = this.$store.state.map.shouldShowBasemapSelectControl;
+      const nextShouldShowBasemapSelectControl = !prevShouldShowBasemapSelectControl;
+      this.$store.commit('setShouldShowBasemapSelectControl', nextShouldShowBasemapSelectControl);
+    },
+    handleCycloChanges() {
+      // console.log('handleCycloChanges is running');
+      const halfAngle = this.cycloHFov / 2.0;
+      let angle1 = this.cycloRotationAngle - halfAngle;
+      let angle2 = this.cycloRotationAngle + halfAngle;
+      // console.log('handleCycloChanges, halfAngle:', halfAngle, 'angle1:', angle1, 'this.cycloRotationAngle:', this.cycloRotationAngle, 'angle2:', angle2);
+
+      let distance;
+      if (this.$data.watchedZoom < 9) {
+        distance = 2000 * (21 - this.$data.watchedZoom);
+      } else if (this.$data.watchedZoom < 10) {
+        distance = 1000 * (21 - this.$data.watchedZoom);
+      } else if (this.$data.watchedZoom < 11) {
+        distance = 670 * (21 - this.$data.watchedZoom);
+      } else if (this.$data.watchedZoom < 12) {
+        distance = 420 * (21 - this.$data.watchedZoom);
+      } else if (this.$data.watchedZoom < 13) {
+        distance = 270 * (21 - this.$data.watchedZoom);
+      } else if (this.$data.watchedZoom < 14) {
+        distance = 150 * (21 - this.$data.watchedZoom);
+      } else if (this.$data.watchedZoom < 15) {
+        distance = 100 * (21 - this.$data.watchedZoom);
+      } else if (this.$data.watchedZoom < 16) {
+        distance = 55 * (21 - this.$data.watchedZoom);
+      } else if (this.$data.watchedZoom < 17) {
+        distance = 30 * (21 - this.$data.watchedZoom);
+      } else if (this.$data.watchedZoom < 18) {
+        distance = 25 * (21 - this.$data.watchedZoom);
+      } else if (this.$data.watchedZoom < 20.4) {
+        distance = 15 * (21 - this.$data.watchedZoom);
+      } else {
+        distance = 10;
+      }
+
+      // console.log('handleCycloChanges is running, this.$data.watchedZoom:', this.$data.watchedZoom, 'distance:', distance);
+      let options = { units: 'feet' };
+
+      if (!this.cycloLatlng) {
+        return;
+      }
+
+      var destination1 = destination([ this.cycloLatlng[1], this.cycloLatlng[0] ], distance, angle1, options);
+      var destination2 = destination([ this.cycloLatlng[1], this.cycloLatlng[0] ], distance, angle2, options);
+      // console.log('cyclocenter:', [this.cycloLatlng[1], this.cycloLatlng[0]], 'destination1:', destination1.geometry.coordinates, 'destination2:', destination2.geometry.coordinates);
+      // console.log('destination1:', destination1.geometry.coordinates, 'destination2:', destination2.geometry.coordinates);
+
+      this.$data.geojsonViewconeSource.data.geometry.coordinates = [
+        [
+          [ this.cycloLatlng[1], this.cycloLatlng[0] ],
+          [ destination1.geometry.coordinates[0], destination1.geometry.coordinates[1] ],
+          [ destination2.geometry.coordinates[0], destination2.geometry.coordinates[1] ],
+          [ this.cycloLatlng[1], this.cycloLatlng[0] ],
+        ],
+      ];
+    },
+
     handleCyclomediaButtonClick(e) {
       // console.log('handleCyclomediaButtonClick is running');
       if (!this.cyclomediaInitializationBegun) {
@@ -765,6 +1004,9 @@ export default {
       const center = map.getCenter();
       const { lat, lng } = center;
       const coords = [ lng, lat ];
+
+      const zoom = map.getZoom();
+      this.$data.watchedZoom = zoom;
 
       const cyclomediaConfig = this.$config.cyclomedia || {};
 
