@@ -16,7 +16,6 @@ function createStore(config) {
   const parcels = pvdStore.createParcels(config);
 
   const initialState = {
-    isLarge: null,
     appName: 'pde',
     loadingData: false,
     activeAddressKnown: false,
@@ -86,9 +85,6 @@ function createStore(config) {
       // }
     },
     mutations: {
-      setIsLarge(state, payload) {
-        state.isLarge = payload;
-      },
       setLoadingData(state, payload) {
         state.loadingData = payload;
       },
@@ -157,7 +153,6 @@ function createStore(config) {
         state.map.map = payload.map;
       },
       setMapBounds(state, payload) {
-        console.log('PDE store.js setMapBounds is running');
         state.map.bounds = payload;
       },
       setMapBoundsBasedOnShape(state, payload) {

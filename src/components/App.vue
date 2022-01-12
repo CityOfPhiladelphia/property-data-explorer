@@ -32,8 +32,8 @@
             v-if="shouldLoadCyclomediaWidget"
             v-show="cyclomediaActive"
             slot="cycloWidget"
-            :orientation="currentCycloOrientation"
-            :screen-percent="currentScreenPercent"
+            :orientation="this.$config.cyclomedia.orientation"
+            screen-percent="2"
           />
 
         </map-panel>
@@ -117,7 +117,7 @@ export default {
   data() {
     return {
       publicPath: '@/assets/',
-      // isLarge: true,
+      isLarge: true,
       'top': 3,
       'bottom': 2,
       hasData: false,
@@ -125,27 +125,6 @@ export default {
     };
   },
   computed: {
-    isLarge() {
-      return this.$store.state.isLarge;
-    },
-    currentCycloOrientation() {
-      let value;
-      if (this.isLarge && !this.leftPanel) {
-        value = 'horizontal';
-      } else {
-        value = 'vertical';
-      }
-      return value;
-    },
-    currentScreenPercent() {
-      let value;
-      if (!this.isLarge) {
-        value = 1;
-      } else {
-        value = 2;
-      }
-      return value;
-    },
     lastSearchMethod() {
       return this.$store.state.lastSearchMethod;
     },
@@ -198,14 +177,10 @@ export default {
       return this.$store.state.popover.options;
     },
     foundItemsLength() {
-      console.log('App.vue pvd computed foundItemsLength, this.$store.state.condoUnits.units:', this.$store.state.condoUnits.units);
+      // console.log('App.vue computed foundItemsLength, this.$store.state.condoUnits.units:', this.$store.state.condoUnits.units);
       if (this.$store.state.shapeSearch.data != null) {
         if (Object.keys(this.$store.state.condoUnits.units).length) {
-          if (this.lastSearchMethod !== 'buffer search') {
-            return 2;
-          } else {
-            return 3;
-          }
+          return 2;
         }
         return this.$store.state.shapeSearch.data.rows.length;
       } else if (this.$store.state.geocode.data != null && this.$store.state.geocode.data != "") {
@@ -217,11 +192,7 @@ export default {
         }
         if (this.$store.state.condoUnits.units) {
           // return >1
-          if (this.lastSearchMethod !== 'buffer search') {
-            return 2;
-          } else {
-            return 3;
-          }
+          return 2;
         }
         return geocodeArray.length;
 
@@ -413,11 +384,6 @@ export default {
     //     this.reactToRoute2()
     //   }
     // },
-    shapeSearchStatus(nextShapeSearchStatus) {
-      if (nextShapeSearchStatus === 'too many') {
-        this.onDataChange();
-      }
-    },
     geocodeStatus(nextGeocodeStatus) {
       console.log('watch geocodeStatus, nextGeocodeStatus:', nextGeocodeStatus);
       if (nextGeocodeStatus === 'success') {
@@ -428,12 +394,8 @@ export default {
         if (this.foundItemsLength === 1 && this.$store.state.bufferMode === false && geocodeType !== 'intersection') {
           this.onDataChange('oneItem');
         } else {
-          console.log('App.vue pvd watch geocodeStatus is calling onDataChange with multiItem');
           this.onDataChange('multiItem');
         }
-      } else if (nextGeocodeStatus === 'error' && this.lastSearchMethod === 'reverseGeocode') {
-        console.log('App.vue watch geocodeStatus is error, this.lastSearchMethod:', this.lastSearchMethod);
-        this.onDataChange();
       }
     },
     blockSearchStatus(nextBlockSearchStatus) {
@@ -468,7 +430,7 @@ export default {
     drawShape(nextDrawShape) {
       if (nextDrawShape !== null) {
         this.$controller.handleDrawnShape();
-        // this.$store.commit('setShapeSearchStatus', 'waiting');
+        this.$store.commit('setShapeSearchStatus', 'waiting');
       }
     },
     foundItemsLength(nextFoundItemsLength) {
@@ -483,7 +445,6 @@ export default {
       if (nextFoundItemsLength === 1 && this.$store.state.bufferMode === false && geocodeType !== 'intersection') {
         this.onDataChange('oneItem');
       } else {
-        console.log('App.vue pvd watch foundItemsLength is calling onDataChange with multiItem, nextFoundItemsLength:', nextFoundItemsLength);
         this.onDataChange('multiItem');
       }
     },
@@ -535,7 +496,6 @@ export default {
       let query = this.$route.query;
       console.log('App.vue reactToRoute is running, this.$route.query:', this.$route.query);
       if (query.shape) {
-        // this.$store.commit('setDrawShape', query.shape);
         this.$controller.handleDrawnShape();
         this.onDataChange('shapeSearch');
       } else if (query.address) {
@@ -569,7 +529,7 @@ export default {
     },
     handlePopStateChange() {
       let query = this.$route.query;
-      console.log('App.vue pvd router handlePopStateChange is running, this.route:', this.$route, 'this.$route.query:', this.$route.query);
+      console.log('App.vue handlePopStateChange is running, this.route:', this.$route, 'this.$route.query:', this.$route.query);
       if (query.shape) {
         this.$controller.handleDrawnShape();
         // this.onDataChange('shapeSearch');
@@ -609,8 +569,7 @@ export default {
       this.$store.state.activeModal.featureId = null;
       this.$store.commit('setActiveFeature', null);
       this.$nextTick(() => {
-        // this.$store.state.map.map.invalidateSize();
-        this.$store.map.resize();
+        this.$store.state.map.map.invalidateSize();
       });
     },
     openLeftPanel(value){
@@ -621,7 +580,7 @@ export default {
     },
     onDataChange(type) {
       if (type !== 'oneItem') {
-        console.log('onDataChange if is running pvd router, type:', type, 'this.lastSearchMethod:', this.lastSearchMethod);
+        console.log('onDataChange if is running, type:', type)
         this.$data.hasData = true;
         this.$store.commit('setFullScreenMapEnabled', false);
         this.closePropertyModal();
@@ -631,7 +590,6 @@ export default {
         } else if (this.lastSearchMethod === 'shape search') {
           this.$controller.setRouteByShapeSearch();
         } else if (this.lastSearchMethod === 'buffer search') {
-          console.log('App.vue onDataChange is calling pvd router setRouteByBufferSearch');
           this.$controller.setRouteByBufferSearch();
         } else {
           this.$controller.setRouteByGeocode();
@@ -649,8 +607,7 @@ export default {
           this.$controller.setRouteByOpaNumber(this.$store.state.blockSearch.data[0].properties.opa_account_num);
         } else {
           console.log('onDataChange else else is running, this.$store.state.geocode.data.properties.opa_account_num:', this.$store.state.geocode.data.properties.opa_account_num);
-          // this.$store.commit('setActiveFeature', { featureId: 'feat-geocode-0' });
-          this.$store.commit('setActiveFeature', null);
+          this.$store.commit('setActiveFeature', { featureId: 'feat-geocode-0' });
           this.$store.commit('setActiveModal', { featureId: 'feat-geocode-0' });
           if (this.$store.state.geocode.data.properties.opa_account_num) {
             this.$controller.setRouteByOpaNumber(this.$store.state.geocode.data.properties.opa_account_num);
@@ -671,11 +628,9 @@ export default {
     onResize() {
       if (window.innerWidth > 749) {
         this.$data.isMapVisible = true;
-        // this.$data.isLarge = true;
-        this.$store.commit('setIsLarge', true);
+        this.$data.isLarge = true;
       } else {
-        // this.$data.isLarge = false;
-        this.$store.commit('setIsLarge', false);
+        this.$data.isLarge = false;
       }
     },
     toggleModal() {
