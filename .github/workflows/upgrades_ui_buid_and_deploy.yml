@@ -3,7 +3,7 @@ name: Build, Check And Deploy to Dev
 on:
   push:
     branches:
-      - clear-data-bug
+      - fix-map-panel
 
 jobs:
   build:
@@ -13,10 +13,10 @@ jobs:
     steps:
     - uses: actions/checkout@v1
 
-    - name: Use Node.js 14.x
+    - name: Use Node.js 8.x
       uses: actions/setup-node@v1
       with:
-        node-version: '14.x'
+        node-version: '8.x'
 
     - name: npm install, and build
       run: |
@@ -35,7 +35,7 @@ jobs:
         aws s3 sync dist s3://$AWS_S3_BUCKET --region us-east-1 --delete
       env:
         AWS_DEFAULT_REGION: 'us-east-1'
-        AWS_S3_BUCKET: property-data-explorer-restructure
+        AWS_S3_BUCKET: property-data-explorer-upgrades
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 

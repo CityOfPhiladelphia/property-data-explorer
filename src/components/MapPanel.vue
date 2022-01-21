@@ -11,19 +11,19 @@
 
     <div
       id="map-tag"
-      class="grid-x"
+      :class="mapPanelClass"
     >
-      <map_
-        id="map-object"
-        :class="mapPanelClass + ' ' + drawButtonActiveClass"
-        :center="this.$store.state.map.center"
-        :zoom="this.$store.state.map.zoom"
-        attribution-position="bottomleft"
-        zoom-control-position="bottomleft"
-        :min-zoom="this.$config.map.minZoom"
-        :max-zoom="this.$config.map.maxZoom"
-        @l-click="handleMapClick"
-        @l-moveend="handleMapMove"
+
+      <MglMap
+        :map-style.sync="$config.mbStyle"
+        :bounds="boundsProp"
+        :zoom="$store.state.map.zoom"
+        :center="$store.state.map.center"
+        :cyclo-orientation="currentCycloOrientation"
+        @click="handleMapClick"
+        @moveend="handleMapMove"
+        @load="onMapLoaded"
+        @preload="onMapPreloaded"
       >
 
         <!-- loading mask -->
@@ -37,259 +37,224 @@
           </div>
         </div>
 
-        <!-- basemaps -->
-        <esri-tiled-map-layer
-          v-for="(basemap, key) in this.$config.map.basemaps"
-          v-if="activeBasemap === key"
+        <MglRasterLayer
+          v-for="(basemapSource, key) in basemapSources"
+          v-if="shouldShowRasterLayer && activeBasemap === key"
           :key="key"
-          :url="basemap.url"
-          :max-zoom="basemap.maxZoom"
-          :attribution="basemap.attribution"
+          :sourceId="activeBasemap"
+          :layerId="activeBasemap"
+          :layer="basemapSource.layer"
+          :source="basemapSource.source"
+          :before="basemapsBefore"
         />
 
-        <!-- basemap labels and parcels outlines -->
-        <esri-tiled-map-layer
-          v-for="(tiledLayer, key) in this.$config.map.tiledLayers"
-          v-if="tiledLayers.includes(key)"
+        <MglRasterLayer
+          v-for="(basemapLabelSource, key) in basemapLabelSources"
+          v-if="shouldShowRasterLayer && tiledLayers.includes(key)"
           :key="key"
-          :url="tiledLayer.url"
-          :z-index="tiledLayer.zIndex"
-          :attribution="tiledLayer.attribution"
+          :sourceId="key"
+          :layerId="key"
+          :layer="basemapLabelSource.layer"
+          :source="basemapLabelSource.source"
+          :before="basemapsBefore"
         />
 
-        <!-- <esri-tiled-overlay v-for="(tiledLayer, key) in this.$config.map.tiledOverlays"
-                            v-if="activeTiledOverlays.includes(key)"
-                            :key="key"
-                            :url="tiledLayer.url"
-                            :zIndex="tiledLayer.zIndex"
-                            :opacity="tiledLayer.opacity"
+        <MglMarker
+          v-for="(marker) in markersForAddress"
+          :key="marker.key"
+          :coordinates="[marker.latlng[1], marker.latlng[0]]"
+          :color="marker.color"
+          :icon="marker.icon"
+          :anchor="'bottom'"
+        />
+
+        <MglGeojsonLayer
+          v-for="(geojsonParcelSource, index) in geojsonParcelSources"
+          :key="'dorParcelLine'+index"
+          :source-id="'geojsonParcel'+index"
+          :source="geojsonParcelSource"
+          :layer-id="'geojsonParcelLine'+index"
+          :layer="geojsonParcelLineLayer"
+          :clear-source="true"
+        />
+
+        <MglGeojsonLayer
+          v-for="(geojsonParcelSource, index) in geojsonParcelSources"
+          :key="'dorParcelFill'+index"
+          :source-id="'geojsonParcel'+index"
+          :source="geojsonParcelSource"
+          :layer-id="'geojsonParcelFill'+index"
+          :layer="geojsonParcelFillLayer"
+          :clear-source="true"
+          @mouseenter="handleMarkerMouseover"
+          @mouseleave="handleMarkerMouseout"
+        />
+
+        <MglGeojsonLayer
+          v-for="(geojsonActiveParcelSource, index) in geojsonActiveParcelSources"
+          :key="'activeParcelLine'+index"
+          :source-id="'geojsonActiveParcel'+index"
+          :source="geojsonActiveParcelSource"
+          :layer-id="'geojsonActiveParcelLine'+index"
+          :layer="geojsonActiveParcelLineLayer"
+          :clear-source="true"
+        />
+
+        <MglGeojsonLayer
+          v-for="(geojsonActiveParcelSource, index) in geojsonActiveParcelSources"
+          :key="'activeParcelFill'+index"
+          :source-id="'geojsonActiveParcel'+index"
+          :source="geojsonActiveParcelSource"
+          :layer-id="'geojsonActiveParcelFill'+index"
+          :layer="geojsonActiveParcelFillLayer"
+          :clear-source="true"
+        />
+
+        <MglGeojsonLayer
+          v-if="currentBuffer"
+          :key="'geojsonBufferShape'"
+          :source-id="'geojsonBufferShape'"
+          :source="geojsonBufferShapeSource"
+          :layer-id="'geojsonBufferShapeFill'"
+          :layer="geojsonBufferShapeFillLayer"
+          :clear-source="true"
+        />
+
+        <MglButtonControl
+          v-show="!this.fullScreenTopicsEnabled"
+          key="'imagery-button'"
+          :button-id="'buttonId-01'"
+          :button-class="'right top-button-1'"
+          :image-link="basemapImageLink"
+          :image-align="'top'"
+          @click="handleBasemapToggleClick"
+        />
+
+        <mapbox-basemap-select-control
+          v-show="imageryShowing && !this.fullScreenTopicsEnabled"
+        />
+
+        <MglButtonControl
+          v-if="shouldShowCyclomediaButton"
+          v-show="!this.fullScreenTopicsEnabled"
+          key="'cyclo-button'"
+          :button-id="'buttonId-03'"
+          :button-class="cyclomediaActive ? 'right top-button-2 active' : 'right top-button-2 inactive'"
+          :image-link="sitePath + '/images/cyclomedia.png'"
+          @click="handleCyclomediaButtonClick"
+        />
+
+        <MglButtonControl
+          v-if="!isLarge"
+          key="'buffer-button'"
+          :button-id="'buttonId-04'"
+          :button-class="cyclomediaActive ? 'right top-button-3 active' : 'right top-button-3 inactive'"
+          :image-link="sitePath + '/images/circle2.png'"
+          @click="handleBufferButtonClick"
+        />
+
+        <!-- <MglButtonControl
+          v-if="!isLarge"
+          key="'draw-button'"
+          :button-id="'buttonId-05'"
+          :button-class="cyclomediaActive ? 'right top-button-4 active' : 'right top-button-4 inactive'"
+          :image-link="sitePath + '/images/hexagon2.png'"
+          @click="handleDrawButtonClick"
         /> -->
 
-        <!-- dorParcels, pwdParcels, vacantLand, vacantBuilding -->
-        <esri-feature-layer
-          v-for="(featureLayer, key) in this.$config.map.featureLayers"
-          v-if="shouldShowFeatureLayer(key, featureLayer.minZoom)"
-          :key="key"
-          :layer-name="key"
-          :url="featureLayer.url"
-          :color="featureLayer.color"
-          :fill-color="featureLayer.color"
-          :fill-opacity="featureLayer.fillOpacity"
-          :weight="featureLayer.weight"
-          :style_="featureLayer.style"
-          :min-zoom="featureLayer.minZoom"
-          :max-zoom="featureLayer.maxZoom"
-          :z-index="featureLayer.zIndex"
-          :marker-type="featureLayer.markerType"
-          :radius="featureLayer.radius"
-          :interactive="featureLayer.interactive"
+        <mapbox-address-input
+          v-show="!this.fullScreenTopicsEnabled"
+          :placeholder="addressInputPlaceholder"
+          :width-from-config="addressInputWidth"
+          @handle-search-form-submit="handleSearchFormSubmit"
         />
 
-        <!-- reactive geojson parcels -->
-        <geojson
-          v-for="geojsonFeature in geojsonParcels"
-          :key="geojsonFeature.properties.PARCELID"
-          :geojson="geojsonFeature"
-          :fill-color="geojsonFeature.properties.fillColor"
-          :color="geojsonFeature.properties.color"
-          :weight="geojsonFeature.properties.weight"
-          :opacity="geojsonFeature.properties.opacity"
-          :fill-opacity="geojsonFeature.properties.fillOpacity"
-          :data="geojsonFeature.properties"
-          @l-mouseover="handleMarkerMouseover"
-          @l-mouseout="handleMarkerMouseout"
+        <buffer-control
+          v-show="isLarge"
+          :button-height="'45px'"
+          :button-width="'100%'"
+          :position="'top-left'"
+          :top="'80px'"
+          :left="'30px'"
+          :class="buttonClass + ' buffer-control ' + bufferButtonActiveClass"
         />
+        <!-- @bufferButtonClick="handleBufferButtonClick" -->
 
-        <polygon_
-          v-if="currentBuffer !== null"
-          :latlngs="currentBuffer"
+        <draw-control
+          :control="true"
+          :button-height="'45px'"
+          :button-width="'100%'"
+          :position="'top-left'"
+          :top="'94px'"
+          :left="'30px'"
+          :isLarge="isLarge"
+          :class="buttonClass + ' leaflet-draw ' + isLargeClass + ' ' + drawButtonActiveClass"
+          @drawModeChange="handleDrawModeChange"
+          @drawFinish="handleDrawFinish"
         />
+        <!-- @drawButtonClicked="handleDrawButtonClick" -->
 
-        <!-- vector markers -->
-        <vector-marker
-          v-for="marker in markersForAddress"
-          :key="marker.key"
-          :latlng="marker.latlng"
-          :marker-color="marker.color"
-          :icon="marker.icon"
-          :interactive="false"
-        />
-
-        <!-- buffer search needs a marker that can't be the geocode marker -->
-        <vector-marker
-          v-for="marker in markersForBufferSearch"
-          v-if="lastSearchMethod === 'buffer search'"
-          :key="marker.key + '1'"
-          :latlng="marker.latlng"
-          :marker-color="marker.color"
-          :icon="marker.icon"
-        />
-
-        <!-- vector markers -->
-        <vector-marker
-          v-for="marker in markersForTopic"
-          :key="marker.key"
-          :latlng="marker.latlng"
-          :marker-color="marker.color"
-          :icon="marker.icon"
-        />
-
-        <!-- CONTROLS: -->
-        <!-- basemap control -->
-        <control-corner
-          :v-side="'top'"
-          :h-side="'almostright'"
-        />
-
-        <control-corner
-          :v-side="'almosttop'"
-          :h-side="'almostright'"
-        />
-
-        <control-corner
-          :v-side="'top'"
-          :h-side="'nearleft'"
-        />
-
-        <control-corner
-          :v-side="'top'"
-          :h-side="'nearleft2'"
-        />
-
-        <control-corner
-          :v-side="'almostbottom'"
-          :h-side="'left'"
-        />
-
-        <div v-once>
-          <basemap-toggle-control
-            v-if="shouldShowImageryToggle"
-            v-once
-            :position="'topright'"
-          />
-        </div>
-
-        <div v-once>
-          <basemap-select-control :position="basemapSelectControlPosition" />
-        </div>
-
-        <div v-once>
-          <legend-control
-            v-for="legendControl in Object.keys(legendControls)"
-            :key="legendControl"
-            :position="'bottomleft'"
-            :options="legendControls[legendControl].options"
-            :items="legendControls[legendControl].data"
-          />
-        </div>
-
-        <div v-once>
-          <location-control
-            v-if="geolocationEnabled"
-            v-once
-            :position="'almostbottomleft'"
-            :title="'Locate me'"
-          />
-        </div>
-
-        <!-- location marker -->
-        <circle-marker
-          v-if="this.$store.state.map.location.lat != null"
-          :key="Math.random()"
-          :latlng="locationMarker.latlng"
-          :radius="locationMarker.radius"
-          :fill-color="locationMarker.fillColor"
-          :color="locationMarker.color"
-          :weight="locationMarker.weight"
-          :opacity="locationMarker.opacity"
-          :fill-opacity="locationMarker.fillOpacity"
-        />
-
-        <div>
-          <map-address-input
-            :position="'topleft'"
-            :placeholder="addressInputPlaceholder"
-            :width-from-config="addressInputWidth"
-            static="true"
-            @handle-search-form-submit="handleSearchFormSubmit"
-          />
-
-          <buffer-control
-            :button-height="'45px'"
-            :button-width="'100%'"
-            :position="'topleft'"
-            :class="buttonClass + ' buffer-control ' + bufferButtonActiveClass"
-          />
-
-          <div class="draw-control">
-            <draw-control
-              :control="true"
-              :position="'topleft'"
-            />
-          </div>
-
-        </div>
-
-        <address-candidate-list
-          v-if="addressAutocompleteEnabled"
-          :position="addressInputPosition"
-        />
-
-        <!-- marker using a png and ablility to rotate it -->
-        <png-marker
+        <MglGeojsonLayer
           v-if="cyclomediaActive"
-          :icon="sitePath + 'images/camera.png'"
-          :latlng="cycloLatlng"
-          :rotation-angle="cycloRotationAngle"
+          :source-id="'cameraPoint'"
+          :source="geojsonCameraSource"
+          :layer-id="'cameraPoints'"
+          :layer="geojsonCameraLayer"
+          :icon="sitePath + '/images/camera.png'"
         />
+        <!-- :icon="sitePath + 'images/camera.png'" -->
 
-        <!-- marker using custom code extending icons - https://github.com/iatkin/leaflet-svgicon -->
-        <svg-view-cone-marker
+        <MglGeojsonLayer
           v-if="cyclomediaActive"
-          :latlng="cycloLatlng"
-          :rotation-angle="cycloRotationAngle"
-          :h-fov="cycloHFov"
+          :source-id="'viewcone'"
+          :source="geojsonViewconeSource"
+          :layer-id="'viewcones'"
+          :layer="geojsonViewconeLayer"
         />
 
-        <div v-once>
-          <cyclomedia-button
-            v-if="shouldShowCyclomediaButton"
-            v-once
-            :position="'topright'"
-            :link="'cyclomedia'"
-            :img-src="sitePath + 'images/cyclomedia.png'"
-            @handle-cyclomedia-button-click="handleCyclomediaButtonClick"
-          />
-        </div>
-
-        <cyclomedia-recording-circle
+        <MglCircleMarker
           v-for="recording in cyclomediaRecordings"
-          v-if="cyclomediaActive"
           :key="recording.imageId"
+          :coordinates="[recording.lng, recording.lat]"
           :image-id="recording.imageId"
-          :latlng="[recording.lat, recording.lng]"
-          :size="1.2"
-          :color="'#3388ff'"
+          :size="14"
+          :fill-color="'#3388ff'"
+          :color="'black'"
           :weight="1"
-          @l-click="handleCyclomediaRecordingClick"
+          :opacity="0.5"
+          @click="handleCyclomediaRecordingClick"
         />
-      </map_>
 
-      <slot
-      class="widget-slot"
-      name="cycloWidget"
-      />
+
+      </MglMap>
 
     </div>
-
+    <slot
+      class="widget-slot"
+      name="cycloWidget"
+    />
 
   </div>
 </template>
 
 <script>
+
+
+import bbox from '@turf/bbox';
+import bboxPolygon from '@turf/bbox-polygon';
+import destination from '@turf/destination';
+import distance from '@turf/distance';
+import midpoint from '@turf/midpoint';
+import area from '@turf/area';
+// import convertArea from '@turf/convertArea';
+import { point, polygon, convertArea, featureCollection } from '@turf/helpers';
+
 // import * as L from 'leaflet';
 import { featureGroup, geoJSON, marker } from 'leaflet';
-import 'leaflet/dist/leaflet.css';
+// import 'leaflet/dist/leaflet.css';
+
+import 'maplibre-gl/dist/maplibre-gl.css';
+// import 'mapbox-gl/dist/mapbox-gl.css';
 
 const FeatureGroup = featureGroup;
 const GeoJSON = geoJSON;
@@ -300,7 +265,7 @@ const Lmarker = marker;
 
 // mixins
 import markersMixin from './markers-mixin';
-import cyclomediaMixin from '@phila/vue-mapping/src/cyclomedia/map-panel-mixin.js';
+import cyclomediaMixin from '@phila/vue-mapping/src/cyclomedia/map-panel-mixin-update.js';
 
 
 // components
@@ -317,9 +282,8 @@ import CyclomediaButton from '@phila/vue-mapping/src/cyclomedia/Button.vue';
 import MeasureControl from '@phila/vue-mapping/src/components/MeasureControl.vue';
 import LegendControl from '@phila/vue-mapping/src/components/LegendControl.vue';
 import MapAddressInput from '@phila/vue-mapping/src/components/MapAddressInput.vue';
-import DrawControl from '@phila/vue-mapping/src/components/DrawControl.vue';
+import DrawControl from '@phila/vue-mapping/src/mapbox/UI/controls/MbDrawControl.vue';
 import BufferControl from '@phila/vue-mapping/src/components/BufferControl.vue';
-
 
 export default {
   name: 'MapPanel',
@@ -351,17 +315,33 @@ export default {
     MeasureControl,
     LegendControl,
     MapAddressInput,
+    MglMap: () => import(/* webpackChunkName: "pvm_MglMap" */'@phila/vue-mapping/src/mapbox/map/MaplibreGlMap.vue'),
+    // MglMap: () => import(/* webpackChunkName: "pvm_MglMap" */'@phila/vue-mapping/src/mapbox/map/GlMap.vue'),
+    MglMarker: () => import(/* webpackChunkName: "pvm_MglMarker" */'@phila/vue-mapping/src/mapbox/UI/Marker.vue'),
+    MglIcon: () => import(/* webpackChunkName: "mbmp_pvm_MglIcon" */'@phila/vue-mapping/src/mapbox/UI/Icon.vue'),
+    MglCircleMarker: () => import(/* webpackChunkName: "pvm_MglCircleMarker" */'@phila/vue-mapping/src/mapbox/UI/CircleMarker.vue'),
+    MglTriangleMarker: () => import(/* webpackChunkName: "pvm_MglTriangleMarker" */'@phila/vue-mapping/src/mapbox/UI/TriangleMarker.vue'),
+    MglNavigationControl: () => import(/* webpackChunkName: "pvm_MglNavigationControl" */'@phila/vue-mapping/src/mapbox/UI/controls/NavigationControl'),
+    MglGeolocateControl: () => import(/* webpackChunkName: "pvm_MglGeolocateControl" */'@phila/vue-mapping/src/mapbox/UI/controls/GeolocateControl'),
+    MglDistanceMeasureControl: () => import(/* webpackChunkName: "pvm_MglDrawDistanceMeasureControl" */'@phila/vue-mapping/src/mapbox/UI/controls/DistanceMeasureControl.vue'),
+    MglRasterLayer: () => import(/* webpackChunkName: "pvm_MglRasterLayer" */'@phila/vue-mapping/src/mapbox/layer/RasterLayer.vue'),
+    MglButtonControl: () => import(/* webpackChunkName: "pvm_MglButtonControl" */'@phila/vue-mapping/src/mapbox/UI/controls/ButtonControl.vue'),
+    MglControlContainer: () => import(/* webpackChunkName: "pvm_MglControlContainer" */'@phila/vue-mapping/src/mapbox/UI/controls/ControlContainer.vue'),
+    MglImageLayer: () => import(/* webpackChunkName: "pvm_MglImageLayer" */'@phila/vue-mapping/src/mapbox/layer/ImageLayer'),
+    MglVectorLayer: () => import(/* webpackChunkName: "pvm_MglVectorLayer" */'@phila/vue-mapping/src/mapbox/layer/VectorLayer'),
+    MbIcon: () => import(/* webpackChunkName: "pvm_MbIcon" */'@phila/vue-mapping/src/mapbox/UI/MbIcon'),
+    MbMeasureTool: () => import(/* webpackChunkName: "pvm_MbMeasureTool" */'@phila/vue-mapping/src/mapbox/MbMeasureTool'),
+    MglGeojsonLayer: () => import(/* webpackChunkName: "pvm_MglGeojsonLayer" */'@phila/vue-mapping/src/mapbox/layer/GeojsonLayer'),
+    MglPopup: () => import(/* webpackChunkName: "pvm_MglPopup" */'@phila/vue-mapping/src/mapbox/UI/Popup'),
+    OverlayLegend: () => import(/* webpackChunkName: "pvm_OverlayLegend" */'@phila/vue-mapping/src/mapbox/OverlayLegend'),
+    MapboxAddressInput: () => import(/* webpackChunkName: "pvm_MapboxAddressInput" */'@phila/vue-mapping/src/mapbox/MapboxAddressInput'),
+    MapboxBasemapSelectControl: () => import(/* webpackChunkName: "pvm_MapboxBasemapSelectControl" */'@phila/vue-mapping/src/mapbox/UI/controls/BasemapSelectControl'),
+    MglFontAwesomeMarker: () => import(/* webpackChunkName: "pvm_MglFontAwesomeMarker" */'@phila/vue-mapping/src/mapbox/UI/FontAwesomeMarker.vue'),
   },
   mixins: [
     markersMixin,
     cyclomediaMixin,
   ],
-  // props: {
-  //   leftPanel: {
-  //     type: Boolean,
-  //     value: true,
-  //   },
-  // },
   data() {
     const data = {
       zoomToShape: {
@@ -377,11 +357,197 @@ export default {
         'buttonWidth': '45px',
         'buttonLineHeight': '45px',
       },
+      watchedZoom: null,
+      geojsonCameraSource: {
+        'type': 'geojson',
+        'data': {
+          'type': 'Feature',
+          'geometry': {
+            'type': 'Point',
+            'coordinates': [],
+          },
+        },
+      },
+      geojsonCameraLayer: {
+        'id': 'cameraPoints',
+        'type': 'symbol',
+        'source': 'cameraPoint',
+        'layout': {
+          'icon-image': 'cameraMarker',
+          'icon-size': 0.09,
+          // 'icon-size': 0.13,
+          'icon-rotate': 0,
+          'icon-rotation-alignment': 'map',
+        },
+      },
+      geojsonViewconeSource: {
+        'type': 'geojson',
+        'data': {
+          'type': 'Feature',
+          'geometry': {
+            'type': 'Polygon',
+            'coordinates': [[]],
+          },
+        },
+      },
+      geojsonViewconeLayer: {
+        'id': 'viewcones',
+        'type': 'fill',
+        'source': 'viewcone',
+        'layout': {},
+        'paint': {
+          'fill-color': 'rgb(0,102,255)',
+          'fill-opacity': 0.2,
+        },
+      },
+      geojsonParcelSources: null,
+      geojsonParcelFillLayer: {
+        'id': 'geojsonParcelFill',
+        'type': 'fill',
+        'layout': {},
+        'paint': {
+          'fill-color': 'blue',
+          'fill-opacity': 0.3,
+        },
+      },
+      geojsonParcelLineLayer: {
+        'id': 'geojsonParcelLine',
+        'type': 'line',
+        'layout': {},
+        'paint': {
+          'line-color': 'blue',
+          'line-width': 2,
+        },
+      },
+      geojsonActiveParcelSources: null,
+      geojsonActiveParcelFillLayer: {
+        'id': 'geojsonActiveParcelFill',
+        'type': 'fill',
+        'layout': {},
+        'paint': {
+          'fill-color': 'yellow',
+          'fill-opacity': 0.3,
+        },
+      },
+      geojsonActiveParcelLineLayer: {
+        'id': 'geojsonActiveParcelLine',
+        'type': 'line',
+        'layout': {},
+        'paint': {
+          'line-color': 'yellow',
+          'line-width': 2,
+        },
+      },
+      geojsonBufferShapeSource: null,
+      geojsonBufferShapeFillLayer: {
+        'id': 'geojsonBufferShapeFill',
+        'type': 'fill',
+        'layout': {},
+        'paint': {
+          'fill-color': 'gray',
+          'fill-opacity': 0.3,
+        },
+      },
+      draw: {
+        mode: null,
+        selection: null,
+        labelLayers: [],
+        currentArea: null,
+      },
     };
     return data;
   },
 
   computed: {
+    isLarge() {
+      return this.$store.state.isLarge;
+    },
+    isLargeClass() {
+      let value;
+      if (this.isLarge) {
+        value = 'is-large';
+      } else {
+        value = 'is-small';
+      }
+      return value;
+    },
+    currentCycloOrientation() {
+      let value;
+      if (this.isLarge && !this.leftPanel) {
+        value = 'horizontal';
+      } else {
+        value = 'vertical';
+      }
+      return value;
+    },
+    boundsProp() {
+      let bounds = this.$store.state.map.bounds;
+      // console.log('boundsProps, bounds:', bounds);
+      let finalBounds;
+
+      if (bounds._northEast && bounds._northEast.lat != null) {
+        finalBounds = [[ bounds._southWest.lng, bounds._southWest.lat ], [ bounds._northEast.lng, bounds._northEast.lat ]];
+      } else if (bounds._northEast && bounds._northEast.lat == null) {
+        // finalBounds = [[ -75.0936906502695, 39.999379013777684 ], [ -75.23325134973207, 39.9072659724458 ]];
+      } else {
+        finalBounds = bounds;
+      }
+      return finalBounds;
+    },
+    imageryShowing() {
+      let value;
+      if (this.activeBasemap === 'pwd' || this.activeBasemap === 'dor') {
+        value = false;
+      } else {
+        value = true;
+      }
+      return value;
+    },
+    basemapImageLink() {
+      if (this.activeBasemap === 'pwd' || this.activeBasemap === 'dor') {
+        return window.location.origin + '/images/imagery_small.png';
+      } else {
+        return window.location.origin + '/images/basemap_small.png';
+      }
+    },
+    basemapSources() {
+      return this.$config.basemapSources;
+    },
+    basemapLabelSources() {
+      return this.$config.basemapLabelSources;
+    },
+    overlaySources() {
+      return this.$config.overlaySources;
+    },
+    shouldShowRasterLayer() {
+      let value = true;
+      if (this.$config.map.tiles === 'hosted') {
+        value = false;
+      }
+      return value;
+    },
+    basemapsBefore() {
+      let value = [
+        'gl-draw-line.hot',
+        'gl-draw-polygon-fill.hot',
+        'gl-draw-polygon-stroke-active.hot',
+        'gl-draw-polygon-and-line-vertex-halo-active.hot',
+        'gl-draw-polygon-and-line-vertex-active.hot',
+        'gl-draw-line-static',
+      ];
+      if (this.imageOverlay != null) {
+        value.push(this.imageOverlay);
+      }
+      if (this.geojsonParcels) {
+        // console.log('computing basemapsBefore, this.geojsonParcels.length:', this.geojsonParcels.length);
+        for (let i=0; i<this.geojsonParcels.length; i++) {
+          value.push('geojsonParcelLine' + i);
+          value.push('geojsonParcelFill' + i);
+        }
+      }
+      return value;
+    },
+
     leftPanel() {
       return this.$store.state.leftPanel;
     },
@@ -404,7 +570,7 @@ export default {
     },
     drawButtonActiveClass() {
       // console.log("bufferButtonActiveClass: ", this.$store.state.bufferMode);
-      return this.$store.state.drawStart === null ? 'inactive-draw-button' : '';
+      return this.$store.state.drawStart === null || this.$store.state.drawStart === false ? 'inactive-draw-button' : '';
     },
     buttonClass() {
       if (this.isMobileOrTablet) {
@@ -471,15 +637,18 @@ export default {
       if (this.leftPanel) {
         return 'small-24 small-order-1 medium-12 medium-order-2';
       }
-      return 'small-24 small-order-1 medium-24 medium-order-2';
+      return 'small-24 small-order-1 medium-24 medium-order-2 grid-x';
     },
     mapPanelClass() {
-      if (this.leftPanel && this.$store.state.cyclomedia.active) {
-        return 'small-24 medium-24 map-panel-class-50';
-      } else if (this.$store.state.cyclomedia.active) {
+      if (!this.leftPanel && this.isLarge && this.$store.state.cyclomedia.active) {
+        // return 'small-24 medium-24 map-panel-class-50';
         return 'small-24 medium-12 map-panel-class';
+      } else if (this.$store.state.cyclomedia.active) {
+        return 'small-24 medium-24 map-panel-class-50';
+      } else {
+        return 'small-24 medium-24 map-panel-class';
       }
-      return 'small-24 medium-24 map-panel-class';
+      // return 'small-24 medium-24 map-panel-class';
     },
     loadingMaskLeft() {
       if (this.$store.state.cyclomedia.active) {
@@ -594,10 +763,10 @@ export default {
       if (this.$store.state.cyclomedia.orientation.xyz !== null) {
         const xyz = this.$store.state.cyclomedia.orientation.xyz;
         return [ xyz[1], xyz[0] ];
+      } else if (this.$config && this.$config.map) {
+        const center = this.$config.map.center;
+        return center;
       }
-      const center = this.$config.map.center;
-      return center;
-
     },
     cycloRotationAngle() {
       return this.$store.state.cyclomedia.orientation.yaw;// * (180/3.14159265359);
@@ -614,29 +783,114 @@ export default {
       }
       return '';
     },
+    currentBuffer() {
+      let values = this.$store.state.bufferShape;
+      let valuesFlipped;
+      if (values) {
+        valuesFlipped = [];
+        for (let value of values) {
+          let valueFlipped = [];
+          valueFlipped[0] = value[1];
+          valueFlipped[1] = value[0];
+          valuesFlipped.push(valueFlipped);
+        }
+      }
+      return valuesFlipped;
+    },
   },
   watch: {
+    watchedZoom(nextWatchedZoom) {
+      console.log('watch watchedZoom is firing, nextWatchedZoom:', nextWatchedZoom);
+      if (this.cyclomediaActive) {
+        this.handleCycloChanges();
+      }
+      let map = this.$store.map;
+      if (nextWatchedZoom && map) {
+        this.$store.map.setZoom(nextWatchedZoom);
+      }
+    },
+    cycloLatlng(nextCycloLatlng) {
+      // console.log('watch cycloLatlng, nextCycloLatlng:', nextCycloLatlng, 'this.$data.geojsonCameraSource:', this.$data.geojsonCameraSource);
+      this.$data.geojsonCameraSource.data.geometry.coordinates = [ nextCycloLatlng[1], nextCycloLatlng[0] ];
+      this.handleCycloChanges();
+      // console.log('watch cycloLatlng end');
+    },
+    cycloRotationAngle(nextCycloRotationAngle) {
+      // console.log('watch cycloRotationAngle is firing, nextCycloRotationAngle:', nextCycloRotationAngle);
+      this.$data.geojsonCameraLayer.layout['icon-rotate'] = nextCycloRotationAngle;
+      this.handleCycloChanges();
+    },
+    cycloHFov(nextCycloHFov) {
+      // console.log('watch cycloHFov is running, nextCycloHFov:', nextCycloHFov);
+      this.handleCycloChanges();
+    },
+    currentBuffer(nextCurrentBuffer) {
+      let value = {
+        'type': 'geojson',
+        'data': {
+          'type': 'Feature',
+          'geometry': {
+            'type': 'Polygon',
+            'coordinates': [ nextCurrentBuffer ],
+          },
+        },
+      };
+      this.geojsonBufferShapeSource = value;
+    },
+    fullScreenTopicsEnabled(nextFullScreenTopicsEnabled) {
+      this.$store.map.resize();
+    },
+    fullScreenMapEnabled(nextFullScreenMapEnabled) {
+      this.$store.map.resize();
+    },
     geocodeGeom(nextGeocodeGeom) {
       if (nextGeocodeGeom) {
         this.lastGeocodeGeom = nextGeocodeGeom;
       }
     },
     geocodeResult(nextGeocodeResult) {
-      // console.log('watch geocodeResult is running, nextGeocodeResult:', nextGeocodeResult);
+      console.log('watch geocodeResult is running, nextGeocodeResult:', nextGeocodeResult);
       if (Object.keys(nextGeocodeResult).length > 0) {
         this.lastGeocodeResult = nextGeocodeResult;
         if (nextGeocodeResult._featureId) {
+          this.$data.watchedZoom = this.geocodeZoom;
           let store = this.$store;
+          let config = this.$config;
           const myMethod = (function() {
+            console.log('myMethod is running, store:', store, 'nextGeocodeResult:', nextGeocodeResult, 'store.state:', store.state, 'config:', config);
             store.commit('setMapCenter', nextGeocodeResult.geometry.coordinates);
-            store.commit('setMapZoom', this.geocodeZoom);
-          }).bind(store);
+            store.commit('setMapZoom', config.map.zoom);
+          }).bind(store, config);
           setTimeout(myMethod, 250);
         }
       }
     },
     geojsonParcels(nextGeojson) {
-      // console.log('watch geojsonParcels is running, nextGeojson:', nextGeojson);
+      console.log('watch geojsonParcels is running, nextGeojson:', nextGeojson);
+      let value = []
+      if (nextGeojson && nextGeojson.length) {
+        for (let parcel of nextGeojson) {
+          console.log('in loop, parcel:', parcel);
+          value.push(
+            {
+              'type': 'geojson',
+              'data': {
+                'type': 'Feature',
+                'geometry': {
+                  'type': 'Polygon',
+                  'coordinates': parcel.geometry.coordinates,
+                },
+                'properties': {
+                  'parcelId': parcel.properties.PARCELID,
+                  'featureId': parcel.properties._featureId,
+                },
+              },
+            },
+          )
+        }
+      }
+      this.geojsonParcelSources = value;
+
       if (!this.$store.state.mapViewWasSetOnAppLoad && this.lastSearchMethod === 'shape search') {
         console.log('watch geojsonParcels is affecting things');
         this.setMapToBounds();
@@ -652,17 +906,22 @@ export default {
         this.lastGeocodeResult = this.$store.state.geocode.data;
         if (this.$store.state.geocode.data._featureId) {
           let store = this.$store;
+          let config = this.$config;
           const myMethod = (function() {
             store.commit('setMapCenter', store.state.geocode.data.geometry.coordinates);
-            store.commit('setMapZoom', this.geocodeZoom);
-          }).bind(store);
+            store.commit('setMapZoom', config.map.zoom);
+          }).bind(store, config);
           setTimeout(myMethod, 250);
         }
       }
+      this.$nextTick(() => {
+        this.$store.map.resize();
+      });
     },
     cyclomediaActive(value) {
       this.$nextTick(() => {
-        this.$store.state.map.map.invalidateSize();
+        this.$store.map.resize();
+        // this.$store.state.map.map.invalidateSize();
       });
     },
   },
@@ -699,8 +958,96 @@ export default {
   mounted() {
     // console.log('MapPanel mounted is running, DrawControl', DrawControl)
     const map = this.$store.state.map.map;
+    this.$store.commit('setImagery', 'imagery2020');
   },
   methods: {
+    handleBufferButtonClick(e) {
+      // console.log('handleBufferButtonClick is running, Object.keys(this.$store.state):', Object.keys(this.$store.state));
+      const bufferMode = this.$store.state.bufferMode;
+      this.$store.commit('setBufferMode', !bufferMode);
+      if (Object.keys(this.$store.state).includes('drawStart')) {
+        this.$store.state.draw.trash();
+        this.$store.state.draw.changeMode('simple_select');
+        this.$store.commit('setDrawStart', null);
+        const cancelButton = document.querySelector('[title="Cancel drawing"]');
+        if (cancelButton) {
+          cancelButton.click();
+        }
+      }
+    },
+    onMapLoaded(event) {
+      console.log('onMapLoaded is running, event.map:', event.map, this.$store.state.map);
+      this.$store.map = event.map;
+    },
+    onMapPreloaded(event) {
+      let logo = document.getElementsByClassName('mapboxgl-ctrl-logo');
+      // console.log('MapPanel onMapPreloaded, logo:', logo, 'logo.length:', logo.length, 'logo.item(0):', logo.item(0));
+      logo[0].remove();
+      let attrib = document.getElementsByClassName('mapboxgl-ctrl-attrib');
+      attrib[0].remove();
+    },
+    handleBasemapToggleClick() {
+      // console.log('handleBasemapToggleClick, this.$store.map.getStyle().layers:', this.$store.map.getStyle().layers);
+      const prevShouldShowBasemapSelectControl = this.$store.state.map.shouldShowBasemapSelectControl;
+      const nextShouldShowBasemapSelectControl = !prevShouldShowBasemapSelectControl;
+      this.$store.commit('setShouldShowBasemapSelectControl', nextShouldShowBasemapSelectControl);
+    },
+    handleCycloChanges() {
+      // console.log('handleCycloChanges is running');
+      const halfAngle = this.cycloHFov / 2.0;
+      let angle1 = this.cycloRotationAngle - halfAngle;
+      let angle2 = this.cycloRotationAngle + halfAngle;
+      // console.log('handleCycloChanges, halfAngle:', halfAngle, 'angle1:', angle1, 'this.cycloRotationAngle:', this.cycloRotationAngle, 'angle2:', angle2);
+
+      let distance;
+      if (this.$data.watchedZoom < 9) {
+        distance = 2000 * (21 - this.$data.watchedZoom);
+      } else if (this.$data.watchedZoom < 10) {
+        distance = 1000 * (21 - this.$data.watchedZoom);
+      } else if (this.$data.watchedZoom < 11) {
+        distance = 670 * (21 - this.$data.watchedZoom);
+      } else if (this.$data.watchedZoom < 12) {
+        distance = 420 * (21 - this.$data.watchedZoom);
+      } else if (this.$data.watchedZoom < 13) {
+        distance = 270 * (21 - this.$data.watchedZoom);
+      } else if (this.$data.watchedZoom < 14) {
+        distance = 150 * (21 - this.$data.watchedZoom);
+      } else if (this.$data.watchedZoom < 15) {
+        distance = 100 * (21 - this.$data.watchedZoom);
+      } else if (this.$data.watchedZoom < 16) {
+        distance = 55 * (21 - this.$data.watchedZoom);
+      } else if (this.$data.watchedZoom < 17) {
+        distance = 30 * (21 - this.$data.watchedZoom);
+      } else if (this.$data.watchedZoom < 18) {
+        distance = 25 * (21 - this.$data.watchedZoom);
+      } else if (this.$data.watchedZoom < 20.4) {
+        distance = 15 * (21 - this.$data.watchedZoom);
+      } else {
+        distance = 10;
+      }
+
+      // console.log('handleCycloChanges is running, this.$data.watchedZoom:', this.$data.watchedZoom, 'distance:', distance);
+      let options = { units: 'feet' };
+
+      if (!this.cycloLatlng) {
+        return;
+      }
+
+      var destination1 = destination([ this.cycloLatlng[1], this.cycloLatlng[0] ], distance, angle1, options);
+      var destination2 = destination([ this.cycloLatlng[1], this.cycloLatlng[0] ], distance, angle2, options);
+      // console.log('cyclocenter:', [this.cycloLatlng[1], this.cycloLatlng[0]], 'destination1:', destination1.geometry.coordinates, 'destination2:', destination2.geometry.coordinates);
+      // console.log('destination1:', destination1.geometry.coordinates, 'destination2:', destination2.geometry.coordinates);
+
+      this.$data.geojsonViewconeSource.data.geometry.coordinates = [
+        [
+          [ this.cycloLatlng[1], this.cycloLatlng[0] ],
+          [ destination1.geometry.coordinates[0], destination1.geometry.coordinates[1] ],
+          [ destination2.geometry.coordinates[0], destination2.geometry.coordinates[1] ],
+          [ this.cycloLatlng[1], this.cycloLatlng[0] ],
+        ],
+      ];
+    },
+
     handleCyclomediaButtonClick(e) {
       // console.log('handleCyclomediaButtonClick is running');
       if (!this.cyclomediaInitializationBegun) {
@@ -714,28 +1061,19 @@ export default {
       // console.log('MapPanel.vue handleSearchFormSubmit is running');
       this.$controller.handleSearchFormSubmit(value);
     },
-    fillColorForOverlayMarker(markerId, activeFeature) {
-      // get map overlay style and hover style for table
-      const mapOverlay = this.$config.mapOverlay;
-      const { style, hoverStyle } = mapOverlay;
-
-      // compare id to active feature id
-      // console.log("this.identifyMarker(activeFeatureId): ", this.identifyMarker(activeFeature))
-      const useHoverStyle = (
-        activeFeature.featureId ? markerId === this.identifyMarker(activeFeature) : null
-      );
-      const curStyle = useHoverStyle ? hoverStyle : style;
-
-      return curStyle.fillColor;
-    },
     setMapToBounds() {
-      // console.log('setMapToBounds is running, this.geojsonParcels:', this.geojsonParcels);
+      console.log('setMapToBounds is running, this.geojsonParcels:', this.geojsonParcels);
       let featureArray = [];
       for (let geojsonFeature of this.geojsonParcels) {
         featureArray.push(GeoJSON(geojsonFeature));
       }
-      const group = new FeatureGroup(featureArray);
-      const bounds = group.getBounds();
+
+      const theFeatureCollection = featureCollection(featureArray);
+      console.log('featureArray:', featureArray, 'theFeatureCollection:', theFeatureCollection);
+      const bounds = bbox(theFeatureCollection);
+
+      // const group = new FeatureGroup(featureArray);
+      // const bounds = group.getBounds();
       this.$store.commit('setMapBounds', bounds);
     },
     configForBasemap(basemap) {
@@ -755,16 +1093,57 @@ export default {
       return false;
     },
     handleMapClick(e) {
-      if(this.$store.state.drawStart === null) {
+      let drawMode = this.$data.draw.mode;
+      let drawLayers = this.$store.map.queryRenderedFeatures(e.mapboxEvent.point).filter(feature => [ 'mapbox-gl-draw-cold', 'mapbox-gl-draw-hot' ].includes(feature.source));
+      console.log('MapPanel.vue handleMapClick, drawMode:', drawMode, 'e:', e, 'this.$store.map.getStyle():', this.$store.map.getStyle(), 'this.$store.state.drawStart:', this.$store.state.drawStart);
+
+      if (!drawLayers.length && drawMode !== 'draw_polygon') {
+      // if (drawMode !== 'draw_polygon') {
         this.$controller.handleMapClick(e);
       }
     },
+    handleDrawModeChange(e) {
+      console.log('MapPanel.vue handleDrawModeChange is running, e:', e, 'e.mode:', e.mode, 'this.$store.map.getStyle():', this.$store.map.getStyle());
+      if (e.mode !== 'simple_select' && this.$store.state.bufferMode) {
+        this.$store.commit('setBufferMode', false);
+      }
+
+      this.$data.draw.mode = e.mode;
+
+      if (e.mode === 'simple_select') {
+        this.handleDrawFinish();
+      }
+    },
+    handleDrawFinish(e) {
+      let draw = this.$store.state.draw;
+      let data = draw.getAll();
+      let coordinates;
+      if (data && data.features.length && data.features[0].geometry) {
+        coordinates = data.features[0].geometry.coordinates[0];
+        console.log('MapPanel.vue handleDrawFinish is running, coordinates:', coordinates, 'e:', e);
+        if (e && e.target.innerText === 'Finish') {
+          coordinates.splice(coordinates.length-2, 1);
+          console.log('MapPanel.vue handleDrawFinish, button was clicked, coordinates:', coordinates);
+        }
+        // setShapeSearchInput is in @phila/vue-datafetch store.js for routing
+        this.$store.commit('setShapeSearchInput', data.features[0].geometry.coordinates[0]);
+        this.$store.commit('setDrawShape', data.features[0].geometry.coordinates[0]);
+      }
+      this.$store.state.draw.trash();
+      this.$store.commit('setDrawStart', false);
+    },
+    // handleDrawButtonClick() {
+    //   console.log('MapPanel.vue handleDrawButtonClick is running');
+    // },
     handleMapMove(e) {
-      // console.log('handleMapMove is firing')
-      const map = this.$store.state.map.map;
+      console.log('handleMapMove is firing, this.$store.map:', this.$store.map, 'this.$store.state.map:', this.$store.state.map);
+      const map = this.$store.map;
       const center = map.getCenter();
       const { lat, lng } = center;
       const coords = [ lng, lat ];
+
+      const zoom = map.getZoom();
+      this.$data.watchedZoom = zoom;
 
       const cyclomediaConfig = this.$config.cyclomedia || {};
 
@@ -780,13 +1159,30 @@ export default {
 
 <style lang="scss">
 
+  .top-button-1 {
+    top: 0px;
+  }
+
+  .top-button-2 {
+    top: 46px;
+  }
+
+  .top-button-3 {
+    top: 92px;
+  }
+
+  .top-button-4 {
+    top: 138px;
+  }
+
   .map-panel-class {
+    // display: inline-block
     position: relative;
   }
 
   .map-panel-class-50 {
     position: relative;
-    height: 50%;
+    height: 50% !important;
   }
 
   #map-tag {
@@ -928,16 +1324,22 @@ export default {
 
     .leaflet-bar.leaflet-draw-toolbar>a.leaflet-draw-draw-polygon,
     .leaflet-bar.leaflet-control.buffer-control button,
-    .leaflet-bar.leaflet-control.buffer-control .leaflet-buffer-actions {
+    .leaflet-bar.leaflet-control.leaflet-draw button,
+    .leaflet-bar.leaflet-control.buffer-control .leaflet-buffer-actions,
+    .leaflet-draw-actions {
       border-radius: 0;
     }
 
-    .leaflet-bar.leaflet-control.buffer-control :focus {
+    .leaflet-bar.leaflet-control.buffer-control :focus,
+    .leaflet-bar.leaflet-control.leaflet-draw :focus {
       outline: none;
     }
 
     .leaflet-control-container div .pvm-container-non-mobile,
     div.buffer-control.leaflet-bar.inactive-buffer-button,
+    div.leaflet-draw.leaflet-bar.inactive-buffer-button,
+    div.buffer-control.leaflet-bar.inactive-draw-button,
+    div.leaflet-draw.leaflet-bar.inactive-draw-button,
     .inactive-draw-button .leaflet-draw .leaflet-draw-section {
       &:hover:after {
         font-family: "Open Sans" !important;
@@ -947,6 +1349,7 @@ export default {
         display: flex;
         color: #000;
         padding: 7px;
+        // margin-left: -50px;
       }
     }
 
@@ -967,13 +1370,16 @@ export default {
     div.buffer-control.leaflet-bar.inactive-buffer-button {
       &:hover:after {
         content: "Select a point on the map to show all parcels within 250-foot radius.";
-        width: 183%;
+        font-size: 12px;
+        width: 213%;
         height: 45px;
       }
     }
 
     div.buffer-control.leaflet-bar div.leaflet-buffer-actions,
-    .leaflet-draw-section .leaflet-draw-actions {
+    div.leaflet-draw.leaflet-bar div.leaflet-buffer-actions,
+    // .leaflet-draw-section .leaflet-draw-actions {
+    div.leaflet-draw-actions {
       font-family: 'Open Sans';
       background: #d3d3d3;
       margin-left: 2px;
@@ -997,7 +1403,8 @@ export default {
       }
     }
 
-    div.buffer-control.leaflet-bar {
+    div.buffer-control.leaflet-bar,
+    div.leaflet-draw.leaflet-bar {
       display: flex;
       border: none;
       button{
@@ -1030,7 +1437,7 @@ export default {
           display: flex;
         }
         &:after {
-          content: "Select Radius";
+          // content: "Select Radius";
           font-weight: normal;
           padding: 3px 10px 0 10px;
           position: relative;
@@ -1048,11 +1455,30 @@ export default {
           text-align: center;
         }
       }
+      .leaflet-draw-actions {
+        left: 238px;
+        li {
+          padding-left: 8px;
+          padding-right: 8px;
+        }
+        ul {
+          padding-left: 3px;
+          padding-right: 3px;
+        }
+        ul, li, a {
+          line-height: 45px;
+        }
+      }
     }
 
-    .inactive-draw-button .leaflet-draw .leaflet-draw-section {
+    // .inactive-draw-button .leaflet-draw .leaflet-draw-section {
+    div.leaflet-draw.inactive-draw-button {
       &:hover:after {
         content: "Draw a shape on the map.";
+        font-size: 12px;
+        // width: 68%;
+        // width: 200px;
+        height: 45px;
       }
     }
 
@@ -1065,54 +1491,54 @@ export default {
       }
     }
 
-    .leaflet-draw.leaflet-control {
-      display: flex;
-      .leaflet-draw-draw-polygon {
-        width: 100%;
-        height: 100%;
-      }
-      .leaflet-draw-section {
-        display: flex;
-        .leaflet-draw-toolbar {
-          border: none;
-        }
-        a.leaflet-draw-toolbar-button-enabled {
-          max-height: 45px;
-          background-color: white !important;
-          border: 2px solid color(dark-ben-franklin);
-          background-image: url("../assets/search-button-images/spritesheet-2-blue.png") !important;
-          &:after {
-            padding: 3px 8px 3px 8px;
-            background: white !important;
-            padding-top: 4px;
-            padding-bottom: 2px;
-            color: color(dark-ben-franklin);
-          }
-        }
-        .leaflet-draw-draw-polygon {
-          background-image: url("../assets/search-button-images/spritesheet-2-white.png");
-          background-color: color(dark-ben-franklin);
-          &:after {
-            content: "Draw Boundaries";
-            padding: 5px 10px 5px 10px;
-            color: white;
-            font-weight: normal !important;
-            background: color(dark-ben-franklin);
-            display: flex;
-            align-items: center;
-            margin-left: 40px;
-          }
-        }
-        .leaflet-draw-actions {
-          left: 227px;
-          height: 45px;
-          a {
-            top: 15%;
-            position: relative;
-          }
-        }
-      }
-    }
+    // .leaflet-draw.leaflet-control {
+    //   display: flex;
+    //   .leaflet-draw-draw-polygon {
+    //     width: 100%;
+    //     height: 100%;
+    //   }
+    //   .leaflet-draw-section {
+    //     display: flex;
+    //     .leaflet-draw-toolbar {
+    //       border: none;
+    //     }
+    //     a.leaflet-draw-toolbar-button-enabled {
+    //       max-height: 45px;
+    //       background-color: white !important;
+    //       border: 2px solid color(dark-ben-franklin);
+    //       background-image: url("../assets/search-button-images/spritesheet-2-blue.png") !important;
+    //       &:after {
+    //         padding: 3px 8px 3px 8px;
+    //         background: white !important;
+    //         padding-top: 4px;
+    //         padding-bottom: 2px;
+    //         color: color(dark-ben-franklin);
+    //       }
+    //     }
+    //     .leaflet-draw-draw-polygon {
+    //       background-image: url("../assets/search-button-images/spritesheet-2-white.png");
+    //       background-color: color(dark-ben-franklin);
+    //       &:after {
+    //         content: "Draw Boundaries";
+    //         padding: 5px 10px 5px 10px;
+    //         color: white;
+    //         font-weight: normal !important;
+    //         background: color(dark-ben-franklin);
+    //         display: flex;
+    //         align-items: center;
+    //         margin-left: 40px;
+    //       }
+    //     }
+    //     .leaflet-draw-actions {
+    //       left: 227px;
+    //       height: 45px;
+    //       a {
+    //         top: 15%;
+    //         position: relative;
+    //       }
+    //     }
+    //   }
+    // }
   }
   // END OF CSS FOR LARGE SCREEN APP
 
@@ -1124,80 +1550,82 @@ export default {
       height: 50%;
     }
 
-    .leaflet-control-zoom, .leaflet-control-zoom {
-      display: none !important;
-    }
+    // .leaflet-control-zoom, .leaflet-control-zoom {
+    //   display: none !important;
+    // }
 
-    .leaflet-control-container>.leaflet-top.leaflet-left {
-      right: 0;
-    }
+    // .leaflet-control-container>.leaflet-top.leaflet-left {
+    //   right: 0;
+    // }
 
-    .buffer-control, .leaflet-draw {
-      position: absolute;
-      bottom: 0px;
-      padding-bottom: 10px;
-      z-index: 500;
-      right: 0;
-    }
+    // .buffer-control, .leaflet-draw {
+    //   position: absolute;
+    //   right: 0;
+    //   // bottom: 0px;
+    //   // padding-bottom: 10px;
+    //   // z-index: 500;
+    // }
 
-    .buffer-control {
-      top: 78px;
-      left: unset;
-    }
+    // .buffer-control {
+    //   top: 78px;
+    //   left: unset;
+    // }
 
     .leaflet-draw {
-      top: 116px;
+      position: absolute;
+      right: 0;
+      top: 138px;
     }
 
-    .mobile-corner.leaflet-almostright {
-      position: absolute;
-      top: 50px;
-      right: 60px;
-      padding-bottom: 10px;
-      z-index: 500;
-    }
+    // .mobile-corner.leaflet-almostright {
+    //   position: absolute;
+    //   top: 50px;
+    //   right: 60px;
+    //   padding-bottom: 10px;
+    //   z-index: 500;
+    // }
 
-    .leaflet-almostbottom {
-      position: absolute;
-      bottom: 10px;
-      left: 0px;
-      padding-bottom: 10px;
-      z-index: 500;
-    }
+    // .leaflet-almostbottom {
+    //   position: absolute;
+    //   bottom: 10px;
+    //   left: 0px;
+    //   padding-bottom: 10px;
+    //   z-index: 500;
+    // }
 
     // BOTH TOOLS
-    .leaflet-draw-toolbar.leaflet-bar.leaflet-draw-toolbar-top,
-    .leaflet-bar.easy-button-container.leaflet-control {
-      width: 30px !important;
-      height: 30px !important;
-      margin-right: 10px;
-    }
+    // .leaflet-draw-toolbar.leaflet-bar.leaflet-draw-toolbar-top,
+    // .leaflet-bar.easy-button-container.leaflet-control {
+    //   width: 36px !important;
+    //   height: 36px !important;
+    //   margin-right: 10px;
+    // }
 
     // BUFFER TOOL
     .leaflet-bar.easy-button-container.leaflet-control > button {
-      width: 26px !important;
-      height: 26px !important;
+      // width: 26px !important;
+      // height: 26px !important;
     }
 
     // DRAW TOOL
-    .leaflet-draw-draw-polygon {
-      width: 26px !important;
-      height: 26px !important;
-    }
+    // .leaflet-draw-draw-polygon {
+    //   width: 26px !important;
+    //   height: 26px !important;
+    // }
 
-    .leaflet-touch .leaflet-draw-toolbar .leaflet-draw-draw-polygon {
-      background-position: -31px -1px;
-    }
+    // .leaflet-touch .leaflet-draw-toolbar .leaflet-draw-draw-polygon {
+    //   background-position: -31px -1px;
+    // }
 
     // IMAGERY AND CYCLOMEDIA BUTTONS
-    .button-state > img {
-      height: 26px;
-    }
+    // .button-state > img {
+    //   height: 26px;
+    // }
 
     // CYCLOMEDIA BUTTON
-    .leaflet-touch .leaflet-bar button {
-      line-height: unset;
-    }
+    // .leaflet-touch .leaflet-bar button {
+    //   line-height: unset;
+    // }
   }
   // END OF CSS FOR SMALL SCREEN APP
 

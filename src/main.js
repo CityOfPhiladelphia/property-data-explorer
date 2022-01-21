@@ -7,6 +7,11 @@ _____________  ____ ______   ____________/  |_ ___.__. _______   ____\_ |__   __
 |__|                |__|        \/             \/                   \/    \/
 */
 
+// turn off console logging in production
+const { hostname='' } = location;
+if (hostname !== 'localhost' && !hostname.match(/(\d+\.){3}\d+/)) {
+  console.log = console.info = console.debug = console.error = function () {};
+}
 
 import Vue from 'vue';
 import axios from 'axios';
