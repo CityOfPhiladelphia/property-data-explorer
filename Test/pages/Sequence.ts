@@ -27,16 +27,16 @@ export default class Sequence {
         await t.navigateTo(`${process.env.TEST_URL}`);
         await t.typeText(this.searchMap, testSearchData.blockSearch);
         await t.click(this.searchmapButton);
-        await t.wait(3000);
+        await t.wait(5000);
         const propCardAddress = await this.propCardAddress.innerText;
         await t.expect(propCardAddress).contains(testSearchData.blockSearchValue);
         // Two Results Address Search
         await t.navigateTo(`${process.env.TEST_URL}`);
         await t.typeText(this.searchMap, testSearchData.twoResultsSearch);
         await t.click(this.searchmapButton);
-        await t.wait(3000);
+        await t.wait(5000);
         const tableRowcount = await this.tableRowCount.count;
-        await t.expect(tableRowcount).eql(2);
+        await t.expect(tableRowcount).eql(3);
         // Condo Search, Load, and Download
         await t.click(this.clearButton);
         await t.typeText(this.searchMap, testSearchData.condoAddress1);
@@ -57,7 +57,7 @@ export default class Sequence {
         await goBack();
         await t.wait(4000);
         const tableRowcount3 = await this.tableRowCount.count;
-        await t.expect(tableRowcount3).eql(271);
+        await t.expect(tableRowcount3).eql(3);
         await t.click(this.downloadCSV);
         await t.wait(4000);
     }

@@ -25,8 +25,6 @@ class SearchData {
       blockSearch,
       blockSearchValue,
       twoResultsSearch,
-      oneCondo,
-      oneCondoAddress,
       opaAddress,
       opaAccount,
       opaAccountValue,
@@ -47,8 +45,6 @@ class SearchData {
     this.blockSearch = blockSearch as string;
     this.blockSearchValue = blockSearchValue as string;
     this.twoResultsSearch = twoResultsSearch as string;
-    this.oneCondo = oneCondo as string;
-    this.oneCondoAddress = oneCondoAddress as string;
     this.opaAddress = opaAddress as string;
     this.opaAccount = opaAccount as string;
     this.opaAccountValue = opaAccountValue as string;
@@ -73,8 +69,6 @@ export const testSearchData: SearchData = {
   blockSearch: "Block: 1400 JOHN F KENNEDY BLVD",
   blockSearchValue: "1400 JOHN F KENNEDY BLVD",
   twoResultsSearch: "1111 Herbert St",
-  oneCondo: "1301-25 Chestnut St",
-  oneCondoAddress: "1301-25 CHESTNUT ST # A",
   opaAddress: "Street Address",
   opaAccount: "OPA Account #",
   opaAccountValue: "883309050",
@@ -85,10 +79,9 @@ export const testSearchData: SearchData = {
   condoAddress1: "1414 S Penn Sq",
   condoAddressverify: "1414 S Penn Sq Unit 11a",
   condoAddress2: "220 Locust St",
-  condoAddressverify2: "220 LOCUST ST # 5HS",
+  condoAddressverify2: "220 Locust St # 5hs",
   tablePolygontextVerify: "1400 John F Kennedy Blvd",
   addressBuffer: "1931 Pine St",
   addressBufferVerify: "1918 Delancey Pl",
   polyaddress: "1315 Market St"
 };
-

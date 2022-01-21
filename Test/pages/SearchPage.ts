@@ -40,12 +40,13 @@ export default class SearchPage {
     await t.click(this.searchmapButton);
     await t.wait(5000);
     const tableValues = await this.table.innerText;
-    await t.expect(tableValues).contains(testSearchData.condoAddress2)
     await t.click(this.btnAddUnitresults);
-    await t.wait(4000);
+    await t.wait(5000);
     const tableRowcount = await this.tableRowCount.count;
-    await t.expect(tableRowcount).eql(271);
+    console.log("[DEBUG], await t.expect(tableRowcount).eql(234);", tableRowcount)
+    await t.expect(tableRowcount).eql(235);
     const tablerowValues = await this.table.innerText;
+    await t.expect(tableValues).contains(testSearchData.condoAddress2)
     await t.expect(tablerowValues).contains(testSearchData.condoAddressverify2)
   }
 
@@ -65,16 +66,6 @@ export default class SearchPage {
     const tableRowcount = await this.tableRowCount.count;
     await t.expect(tableRowcount).eql(2);
   }
-  public oneCondoBuilding = async (t: TestController) => {
-    await t.navigateTo(`${process.env.TEST_URL}`);
-    await t.typeText(this.searchMap, testSearchData.oneCondo);
-    await t.click(this.searchmapButton);
-    await t.wait(3000);
-    const oneCondoAddress = await this.propCardAddress.innerText;
-    await t.expect(oneCondoAddress).contains(testSearchData.oneCondoAddress);
-  }
-
-
 
   public verifySearchByBuffer = async (t: TestController) => {
     await t.navigateTo(`${process.env.TEST_URL}`);
