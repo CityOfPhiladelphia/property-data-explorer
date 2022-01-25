@@ -10,7 +10,7 @@ test("Search page different verifications", async (t: TestController) => {
   await Searchpage.verifySearchByCondoAddress2(t);
   // Test moved to sequence.ts
   // await Searchpage.verifySearchByBlock(t);
-  await Searchpage.oneCondoBuilding(t);
+  // await Searchpage.oneCondoBuilding(t);
   // Test moved to sequence.ts
   // await Searchpage.verifyMultResultsAddressSearch(t);
   await Searchpage.verifySearchByBuffer(t);
