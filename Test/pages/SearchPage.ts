@@ -110,8 +110,9 @@ export default class SearchPage {
     const tableAddressValues = await this.table.innerText;
     await t.expect(tableAddressValues).contains(testSearchData.addressBuffer)
     await t.click(this.btnBuffer);
-    await t.click('#map');
     await t.wait(2000);
+    await t.click('#map');
+    await t.wait(4000);
     const tableBufferValues = await this.table.innerText;
     await t.expect(tableBufferValues).contains(testSearchData.addressBuffer);
     await t.expect(tableBufferValues).contains(testSearchData.addressBufferVerify);
