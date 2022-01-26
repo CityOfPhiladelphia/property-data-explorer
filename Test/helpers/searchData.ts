@@ -64,7 +64,6 @@ class SearchData {
 
 // enter the search data of Market Address.
 export const testSearchData: SearchData = {
-
   address: "1234 Market St",
   blockSearch: "Block: 1400 JOHN F KENNEDY BLVD",
   blockSearchValue: "1400 JOHN F KENNEDY BLVD",
@@ -74,8 +73,7 @@ export const testSearchData: SearchData = {
   opaAccountValue: "883309050",
   opaAddressValue: "1234 MARKET ST",
   parcelId: "001S070144",
-  AddressOwner:
-    "1931 Pine st BONOVITZ SHELDON JILL F ",
+  AddressOwner: "1931 Pine st BONOVITZ SHELDON JILL F ",
   condoAddress1: "1414 S Penn Sq",
   condoAddressverify: "1414 S Penn Sq Unit 11a",
   condoAddress2: "220 Locust St",
@@ -83,5 +81,7 @@ export const testSearchData: SearchData = {
   tablePolygontextVerify: "1400 John F Kennedy Blvd",
   addressBuffer: "1931 Pine St",
   addressBufferVerify: "1918 Delancey Pl",
-  polyaddress: "1315 Market St"
+  polyaddress: "1315 Market St",
+  oneCondo: "",
+  oneCondoAddress: ""
 };

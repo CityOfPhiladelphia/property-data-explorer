@@ -1,5 +1,5 @@
 import "dotenv/config";
-import Sequence from "../pages/Sequence";
+import Sequence from "../pages/SequencePage";
 
 fixture`Sequence verification`.page(`${process.env.TEST_URL}`);
 
