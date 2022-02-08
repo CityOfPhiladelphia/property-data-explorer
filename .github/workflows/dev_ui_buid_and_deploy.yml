@@ -31,13 +31,15 @@ jobs:
         VUE_APP_GATEKEEPER_KEY: ${{ secrets.VUE_APP_GATEKEEPER_KEY }}
 
     - name: Deploy to Dev s3
-      run: |
-        aws s3 sync dist s3://$AWS_S3_BUCKET --region us-east-1 --delete
       env:
         AWS_DEFAULT_REGION: 'us-east-1'
         AWS_S3_BUCKET: property-data-explorer
+        AWS_CLOUDFRONT_DISTRIBUTION: E24E87OWNXV2TI
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      run: |
+        aws s3 sync dist s3://$AWS_S3_BUCKET --region us-east-1 --delete
+        aws cloudfront create-invalidation --distribution-id $AWS_CLOUDFRONT_DISTRIBUTION --paths "/*"
 
     - name: MS Teams Card
       uses: toko-bifrost/ms-teams-deploy-card@master
