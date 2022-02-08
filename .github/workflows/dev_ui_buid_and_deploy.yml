@@ -30,7 +30,7 @@ jobs:
         VUE_APP_CYCLOMEDIA_USERNAME: ${{ secrets.VUE_APP_CYCLOMEDIA_USERNAME }}
         VUE_APP_GATEKEEPER_KEY: ${{ secrets.VUE_APP_GATEKEEPER_KEY }}
 
-    - name: Deploy to Dev s3
+    - name: Deploy to Dev s3, and Invalidate Cloudfront
       env:
         AWS_DEFAULT_REGION: 'us-east-1'
         AWS_S3_BUCKET: property-data-explorer
