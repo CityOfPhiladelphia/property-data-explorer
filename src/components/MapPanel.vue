@@ -226,6 +226,11 @@
           @click="handleCyclomediaRecordingClick"
         />
 
+        <MglNavigationControl position="bottom-left" />
+        <MglGeolocateControl
+          position="bottom-left"
+          :position-options="geolocationPositionOptions"
+        />
 
       </MglMap>
 
@@ -345,6 +350,10 @@ export default {
   ],
   data() {
     const data = {
+      geolocationPositionOptions: {
+        enableHighAccuracy: true,
+        timeout: 6000,
+      },
       zoomToShape: {
         geojsonParcels: [],
         markersForAddress: [],
