@@ -170,7 +170,7 @@
         />
 
         <buffer-control
-          v-show="isLarge"
+          v-show="isLarge && !this.fullScreenTopicsEnabled"
           :button-height="'45px'"
           :button-width="'100%'"
           :position="'top-left'"
@@ -181,6 +181,7 @@
         <!-- @bufferButtonClick="handleBufferButtonClick" -->
 
         <draw-control
+          v-show="!this.fullScreenTopicsEnabled"
           :control="true"
           :button-height="'45px'"
           :button-width="'100%'"
