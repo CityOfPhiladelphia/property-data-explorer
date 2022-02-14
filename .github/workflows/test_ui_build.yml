@@ -12,9 +12,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
-    - uses: webfactory/ssh-agent@v0.4.1
-      with:
-        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
     - name: Use Node.js 14.x
       uses: actions/setup-node@v1
       with:
