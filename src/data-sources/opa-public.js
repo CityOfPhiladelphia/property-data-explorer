@@ -32,8 +32,17 @@ export default {
       // if (state.geocode.data.condo != null && state.geocode.data.condo == true || typeof state.geocode.data.condo !== undefined && state.geocode.data.condo == true) {
         // console.log('opa-public in if condo is running');
         // opa.push(state.geocode.related[0]);
-        let idNumber = state.parcels.pwd ? Number(state.parcels.pwd[0].properties.PARCELID) : state.geocode.data.properties.dor_parcel_id;
-        opa.push(state.condoUnits.units[idNumber][0]);
+        // let idNumber = state.parcels.pwd ? Number(state.parcels.pwd[0].properties.PARCELID) : state.geocode.data.properties.dor_parcel_id;
+        // console.log('idNumber:', idNumber);
+        // opa.push(state.condoUnits.units[idNumber][0]);
+
+        if (state.parcels.pwd[0].properties.PARCELID && state.condoUnits.units[state.parcels.pwd[0].properties.PARCELID]) {
+          console.log('opa-public 1');
+          opa.push(state.condoUnits.units[state.parcels.pwd[0].properties.PARCELID][0]);
+        } else if (state.geocode.data.properties.dor_parcel_id && state.condoUnits.units[state.geocode.data.properties.dor_parcel_id]) {
+          console.log('opa-public 2');
+          opa.push(state.condoUnits.units[state.geocode.data.properties.dor_parcel_id][0]);
+        }
       }
       return opa;
 

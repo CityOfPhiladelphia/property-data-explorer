@@ -124,7 +124,7 @@ export default {
       // if (!this.$data.condoExpanded && this.geocode.data && this.$store.state.condoUnits.units && this.$store.state.parcels.pwd && this.$store.state.parcels.pwd[0].properties && this.$store.state.lastSearchMethod === 'geocode') {
       if (!this.$data.condoExpanded && this.geocode.data && this.$store.state.condoUnits.units && this.$store.state.parcels.pwd && this.$store.state.parcels.pwd[0].properties) {
       // if (this.geocode.data && this.$store.state.condoUnits.units && this.$store.state.parcels.pwd && this.$store.state.parcels.pwd[0].properties) {
-        const parentCondo = this.geocode.data;
+        const parentCondo = {...this.geocode.data};
         console.log('in geocodeItems, in if, parentCondo:', parentCondo);
         for (let i in parentCondo.properties) {
           parentCondo.properties[i] = "";
@@ -132,10 +132,28 @@ export default {
         if (this.$store.state.condoUnits.units[this.$store.state.parcels.pwd[0].properties.PARCELID]) {
           parentCondo.properties.opa_owners = [ "Condominium (" + this.$store.state.condoUnits.units[this.$store.state.parcels.pwd[0].properties.PARCELID].length + " Units)" ];
         }
-        parentCondo.properties.street_address = this.$store.state.parcels.pwd[0].properties.ADDRESS;
-        parentCondo.properties.opa_address = this.$store.state.parcels.pwd[0].properties.ADDRESS;
-        parentCondo.properties.pwd_parcel_id = this.$store.state.parcels.pwd[0].properties.PARCELID;
-        parentCondo._featureId = this.$store.state.parcels.pwd[0].properties.PARCELID;
+
+        if (this.$store.state.parcels.pwd[0].properties.ADDRESS === this.$store.state.geocode.data.properties.street_address) {
+          console.log('DataPanel in geocodeItems if');
+          parentCondo.properties.street_address = this.$store.state.parcels.pwd[0].properties.ADDRESS;
+          parentCondo.properties.opa_address = this.$store.state.parcels.pwd[0].properties.ADDRESS;
+          parentCondo.properties.pwd_parcel_id = this.$store.state.parcels.pwd[0].properties.PARCELID;
+          parentCondo._featureId = this.$store.state.parcels.pwd[0].properties.PARCELID;
+        } else {
+          console.log('DataPanel in geocodeItems else', this.$store.state.condoUnits.units[Object.keys(this.$store.state.condoUnits.units)[0]][0]);
+          let record = this.$store.state.condoUnits.units[Object.keys(this.$store.state.condoUnits.units)[0]][0];
+          let address = record.properties.address_low + " " + record.properties.street_full;
+          console.log('gc setFeatureProperties, no pwd parcels, showing feature:', record, record.properties, 'address:', address);
+          let parcelId = record.properties.dor_parcel_id;
+          parentCondo.properties.street_address = address;
+          parentCondo.properties.opa_address = address;
+          parentCondo.properties.dor_parcel_id = parcelId;
+          parentCondo._featureId = parcelId;
+        }
+        // parentCondo.properties.street_address = this.$store.state.parcels.pwd[0].properties.ADDRESS;
+        // parentCondo.properties.opa_address = this.$store.state.parcels.pwd[0].properties.ADDRESS;
+        // parentCondo.properties.pwd_parcel_id = this.$store.state.parcels.pwd[0].properties.PARCELID;
+        // parentCondo._featureId = this.$store.state.parcels.pwd[0].properties.PARCELID;
         // parentCondo.condo = true;
         data.push(parentCondo);
       } else {
@@ -659,7 +677,7 @@ export default {
              state.sources.opa_public.targets[this.activeOpaId(state, item)].data;
     },
     addCondoRecords(state, item) {
-      console.log('addCondoRecords is running, item:', item);
+      console.log('addCondoRecords is running, item:', item, 'wawa');
 
       this.$data.showTable = false;
       this.$data.condoExpanded = true;
@@ -678,6 +696,7 @@ export default {
       mapUnitIds = mapUnitIds.bind(this);
       // console.log('after mapUnitIds', item);
       let unitData;
+
       if (this.$store.state.lastSearchMethod === 'block search') {
           let result = this.$store.state.blockSearch.data.filter(
           row => row._featureId === item._featureId,
@@ -709,6 +728,7 @@ export default {
         const input = this.$store.state.parcels.pwd ?
                 this.$store.state.parcels.pwd[0].properties.ADDRESS :
                 this.$store.state.geocode.data.properties.opa_address;
+        console.log('addCondoUnits still running, lastSearchMethod is geocode, input:', input);
         this.$controller.dataManager.clients.condoSearch.fetch(input);
         unitData = mapUnitIds(item._featureId);
         // console.log('in addCondoRecords, lastSearchMethod = geocode');
