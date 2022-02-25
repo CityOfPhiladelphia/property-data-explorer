@@ -125,7 +125,8 @@ export default {
       if (!this.$data.condoExpanded && this.geocode.data && this.$store.state.condoUnits.units && this.$store.state.parcels.pwd && this.$store.state.parcels.pwd[0].properties) {
       // if (this.geocode.data && this.$store.state.condoUnits.units && this.$store.state.parcels.pwd && this.$store.state.parcels.pwd[0].properties) {
         const parentCondo = {...this.geocode.data};
-        console.log('in geocodeItems, in if, parentCondo:', parentCondo);
+        // const parentCondo = this.geocode.data;
+        console.log('in geocodeItems, in if 1, parentCondo:', parentCondo);
         for (let i in parentCondo.properties) {
           parentCondo.properties[i] = "";
         }
@@ -133,18 +134,24 @@ export default {
           parentCondo.properties.opa_owners = [ "Condominium (" + this.$store.state.condoUnits.units[this.$store.state.parcels.pwd[0].properties.PARCELID].length + " Units)" ];
         }
 
-        if (this.$store.state.parcels.pwd[0].properties.ADDRESS === this.$store.state.geocode.data.properties.street_address) {
-          console.log('DataPanel in geocodeItems if');
+        let firstCondoRecord = this.$store.state.condoUnits.units[Object.keys(this.$store.state.condoUnits.units)[0]][0];
+        let firstCondoAddress = firstCondoRecord.properties.address_low + " " + firstCondoRecord.properties.street_full;
+        // if (this.$store.state.parcels.pwd[0].properties.ADDRESS !== firstCondoAddress) {
+        // if (this.$store.state.parcels.pwd[0].properties.ADDRESS == this.$store.state.geocode.data.properties.street_address) {
+        if (this.$store.state.parcels.pwd[0].properties.ADDRESS) {
+          let address = this.$store.state.parcels.pwd[0].properties.ADDRESS;
+          let parcelId = this.$store.state.parcels.pwd[0].properties.PARCELID;
+          console.log('DataPanel in geocodeItems if 2, address:', address, 'parcelId:', parcelId, 'this.$store.state.geocode.data.properties.street_address:', this.$store.state.geocode.data.properties.street_address);
           parentCondo.properties.street_address = this.$store.state.parcels.pwd[0].properties.ADDRESS;
           parentCondo.properties.opa_address = this.$store.state.parcels.pwd[0].properties.ADDRESS;
           parentCondo.properties.pwd_parcel_id = this.$store.state.parcels.pwd[0].properties.PARCELID;
           parentCondo._featureId = this.$store.state.parcels.pwd[0].properties.PARCELID;
         } else {
-          console.log('DataPanel in geocodeItems else', this.$store.state.condoUnits.units[Object.keys(this.$store.state.condoUnits.units)[0]][0]);
+          // console.log('DataPanel in geocodeItems else 2', this.$store.state.condoUnits.units[Object.keys(this.$store.state.condoUnits.units)[0]][0]);
           let record = this.$store.state.condoUnits.units[Object.keys(this.$store.state.condoUnits.units)[0]][0];
           let address = record.properties.address_low + " " + record.properties.street_full;
-          console.log('gc setFeatureProperties, no pwd parcels, showing feature:', record, record.properties, 'address:', address);
           let parcelId = record.properties.dor_parcel_id;
+          console.log('DataPanel in geocodeItems else 2, showing record:', record, 'record.properties:', record.properties, 'address:', address, 'parcelId:', parcelId);
           parentCondo.properties.street_address = address;
           parentCondo.properties.opa_address = address;
           parentCondo.properties.dor_parcel_id = parcelId;
@@ -157,7 +164,7 @@ export default {
         // parentCondo.condo = true;
         data.push(parentCondo);
       } else {
-        console.log('in geocodeItems, in else, this.geocode.data:', this.geocode.data, 'this.geocode.related:', this.geocode.related);
+        console.log('in geocodeItems, in else 1, this.geocode.data:', this.geocode.data, 'this.geocode.related:', this.geocode.related);
         if (this.geocode.data) {
           data.push(this.geocode.data);
         }
@@ -682,7 +689,7 @@ export default {
       this.$data.showTable = false;
       this.$data.condoExpanded = true;
       let mapUnitIds = function(id) {
-        // console.log('running mapUnitIds, id:', id, this.$store.state.condoUnits.units[id]);
+        console.log('running mapUnitIds, id:', id, this.$store.state.condoUnits.units[id]);
         let unitsToAdd = this.$store.state.condoUnits.units[id];
         unitsToAdd.map(
           (item, index) => {
