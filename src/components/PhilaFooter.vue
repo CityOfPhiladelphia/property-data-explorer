@@ -10,11 +10,12 @@
                 :options="popoverLinkOptions"
                 :slots="popoverLinkSlots"
               />
-              <!-- :customStyle="this.customStyle" -->
-              <!-- <a
-                href=""
-                @click.prevent="$emit('howToUseLink')"
-              >How to use</a> -->
+            </li>
+            <li>
+              <popover-link
+                :options="popoverLinkOptions2"
+                :slots="popoverLinkSlots2"
+              />
             </li>
             <li>
               <a
@@ -30,11 +31,8 @@
 </template>
 <script>
 
-import ModalAbout from './ModalAbout.vue';
-
 export default {
   components: {
-    ModalAbout,
     PopoverLink: () => import(/* webpackChunkName: "lblb_pvc_PopoverLink" */'@phila/vue-comps/src/components/PopoverLink.vue'),
   },
   props: {
@@ -59,6 +57,23 @@ export default {
       return {
         shouldShowValue: false,
         value: 'How to use',
+      };
+    },
+    popoverLinkOptions2() {
+      return {
+        height: '92%',
+        customStyle: { 'color': 'white', 'border-bottom': '0px' },
+        components: [
+          {
+            type: 'modal-address',
+          },
+        ],
+      };
+    },
+    popoverLinkSlots2() {
+      return {
+        shouldShowValue: false,
+        value: 'Can\'t Find Your Address?',
       };
     },
   },

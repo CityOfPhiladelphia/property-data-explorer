@@ -8,9 +8,11 @@ import opa_public from './data-sources/opa-public';
 // import neighboringProperties from './data-sources/neighboring-properties';
 
 import modalAbout from './components/ModalAbout.vue';
+import modalAddress from './components/ModalAddress.vue';
 
 const customComps = {
   'modal-about': modalAbout,
+  'modal-address': modalAddress,
 };
 
 
