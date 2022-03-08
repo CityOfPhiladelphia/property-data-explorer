@@ -29,13 +29,10 @@
       :options="geocodeOptions"
     />
     <div
-      v-if="lastSearchMethod === 'geocode' && !Object.keys(this.opa.targets).length || lastSearchMethod === 'reverseGeocode' && !Object.keys(this.opa.targets).length"
+      v-if="lastSearchMethod === 'geocode' && geocode.status === 'success' && !Object.keys(this.opa.targets).length || lastSearchMethod === 'reverseGeocode' && geocode.status === 'success' && !Object.keys(this.opa.targets).length"
       class="no-opa-message"
     >
-      The address searched can't be found by this app.<br>
-      This is most likely because you have searched for a condo building using an address that is not in the Office of Property Assessment's (OPA) system.<br>
-      OPA probably has information about each condo in the building, which you can find in this app by searching by an individual condo's OPA number.<br>
-      If you do not know the OPA number, you can search the same address in <a target="_blank" href="https://atlas.phila.gov">atlas.phila.gov</a>, find the condo, and it will supply the OPA number.
+      This address could not be found using the information provided. Try using the property's OPA account number or try <a target="_blank" href="https://atlas.phila.gov">atlas.phila.gov</a>.
     </div>
     <horizontal-table
       v-show="!loadingData"
