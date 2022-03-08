@@ -34,7 +34,7 @@
     >
     <!-- v-if="lastSearchMethod === 'geocode' && !loadingData && geocode.status === 'success' && !Object.keys(this.opa.targets).length || lastSearchMethod === 'reverseGeocode' && !loadingData && geocode.status === 'success' && !Object.keys(this.opa.targets).length" -->
       This address could not be found using the information provided. Try using the property's OPA account number or try
-      <a target="_blank" :href="atlasUrl">{{ atlasUrl }}</a>.
+      <a target="_blank" href="https://atlas.phila.gov">atlas.phila.gov</a>.
     </div>
     <horizontal-table
       v-show="!loadingData"
@@ -105,9 +105,9 @@ export default {
     };
   },
   computed: {
-    atlasUrl() {
-      return 'https://atlas.phila.gov/' + encodeURIComponent(this.lastAddressQuery) + '/property';
-    },
+    // atlasUrl() {
+    //   return 'https://atlas.phila.gov/' + encodeURIComponent(this.lastAddressQuery) + '/property';
+    // },
     loadingData() {
       return this.$store.state.loadingData;
     },
