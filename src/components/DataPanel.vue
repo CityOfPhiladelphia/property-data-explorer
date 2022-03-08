@@ -17,7 +17,7 @@
     </div>
     <horizontal-table
       v-show="!loadingData"
-      v-if="lastSearchMethod === 'geocode' && Object.keys(this.opa.targets).length || lastSearchMethod === 'reverseGeocode' && Object.keys(this.opa.targets).length"
+      v-if="lastSearchMethod === 'geocode' && !loadingData && Object.keys(this.opa.targets).length || lastSearchMethod === 'reverseGeocode' && !loadingData && Object.keys(this.opa.targets).length"
       padding-top="0"
       :slots="{
         items: geocodeItems,
