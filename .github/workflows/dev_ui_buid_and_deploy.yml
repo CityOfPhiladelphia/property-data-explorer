@@ -3,7 +3,7 @@ name: Build, Check And Deploy to Dev
 on:
   push:
     branches:
-      - master
+      - add-condo-error
 
 jobs:
   build:
@@ -13,10 +13,10 @@ jobs:
     steps:
     - uses: actions/checkout@v1
 
-    - name: Use Node.js 8.x
+    - name: Use Node.js 14.x
       uses: actions/setup-node@v1
       with:
-        node-version: '8.x'
+        node-version: '14.x'
 
     - name: npm install, and build
       run: |
