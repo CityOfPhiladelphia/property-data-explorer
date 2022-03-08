@@ -17,7 +17,7 @@
     </div>
     <horizontal-table
       v-show="!loadingData"
-      v-if="lastSearchMethod === 'geocode' || lastSearchMethod === 'reverseGeocode'"
+      v-if="lastSearchMethod === 'geocode' && Object.keys(this.opa.targets).length || lastSearchMethod === 'reverseGeocode' && Object.keys(this.opa.targets).length"
       padding-top="0"
       :slots="{
         items: geocodeItems,
@@ -28,6 +28,15 @@
       }"
       :options="geocodeOptions"
     />
+    <div
+      v-if="lastSearchMethod === 'geocode' && !Object.keys(this.opa.targets).length || lastSearchMethod === 'reverseGeocode' && !Object.keys(this.opa.targets).length"
+      class="no-opa-message"
+    >
+      The address searched can't be found by this app.<br>
+      This is most likely because you have searched for a condo building using an address that is not in the Office of Property Assessment's (OPA) system.<br>
+      OPA probably has information about each condo in the building, which you can find in this app by searching by an individual condo's OPA number.<br>
+      If you do not know the OPA number, you can search the same address in <a target="_blank" href="https://atlas.phila.gov">atlas.phila.gov</a>, find the condo, and it will supply the OPA number.
+    </div>
     <horizontal-table
       v-show="!loadingData"
       v-if="lastSearchMethod === 'owner search'
@@ -1265,6 +1274,10 @@ export default {
 </script>
 
 <style lang="scss">
+
+.no-opa-message {
+  padding: 1rem;
+}
 
 .faux-link {
   cursor: pointer;
