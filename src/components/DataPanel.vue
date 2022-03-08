@@ -17,7 +17,7 @@
     </div>
     <horizontal-table
       v-show="!loadingData"
-      v-if="lastSearchMethod === 'geocode' && !loadingData && Object.keys(this.opa.targets).length || lastSearchMethod === 'reverseGeocode' && !loadingData && Object.keys(this.opa.targets).length"
+      v-if="lastSearchMethod === 'geocode' && Object.keys(this.opa.targets).length || lastSearchMethod === 'reverseGeocode' && Object.keys(this.opa.targets).length"
       padding-top="0"
       :slots="{
         items: geocodeItems,
@@ -29,7 +29,7 @@
       :options="geocodeOptions"
     />
     <div
-      v-if="lastSearchMethod === 'geocode' && geocode.status === 'success' && !Object.keys(this.opa.targets).length || lastSearchMethod === 'reverseGeocode' && geocode.status === 'success' && !Object.keys(this.opa.targets).length"
+      v-if="lastSearchMethod === 'geocode' && !loadingData && geocode.status === 'success' && !Object.keys(this.opa.targets).length || lastSearchMethod === 'reverseGeocode' && !loadingData && geocode.status === 'success' && !Object.keys(this.opa.targets).length"
       class="no-opa-message"
     >
       This address could not be found using the information provided. Try using the property's OPA account number or try <a target="_blank" href="https://atlas.phila.gov">atlas.phila.gov</a>.
