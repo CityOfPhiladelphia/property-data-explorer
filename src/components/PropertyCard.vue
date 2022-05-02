@@ -742,30 +742,6 @@ export default {
               return opaPublicData.homestead_exemption > 0 ? 'Yes' : 'No';
             },
           },
-          {
-            label: 'Political Divisions',
-            value: function(state) {
-              return "<a href='http://atlas.phila.gov/" + encodeURIComponent(this.activeAddress) + "/voting' target='_blank'>\
-                      Ward: "+nth(opaPublicData.political_ward)+" | Council District: "+ nth(opaPublicData.council_district_2016) +" \
-                      <i class='fa fa-external-link-alt'></i></a>";
-            }.bind(this),
-          },
-          {
-            label: 'School Catchment',
-            value: function() {
-              return "<a href='https://webapps1.philasd.org/school_finder/' target='_blank'>\
-                      Elementary: "+opaPublicData.elementary_school+" | Middle: "+opaPublicData.middle_school+" | HS: "+opaPublicData.high_school+" |\
-                      <i class='fa fa-external-link-alt'></i></a>";
-            }.bind(this),
-          },
-          {
-            label: 'Police District',
-            value: function() {
-              return "<a href='https://www.phillypolice.com/districts/" + nth(opaPublicData.police_district) + "/index.html' target='_blank'>\
-                      " + nth(opaPublicData.police_district) + " District\
-                      <i class='fa fa-external-link-alt'></i></a>";
-            }.bind(this),
-          },
         ],
       };
     },
