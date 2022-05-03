@@ -30,7 +30,7 @@
           <i class="fa fa-exclamation-triangle fa-5x"></i>
         </div>
         <div>
-          Important note to property owners: the Tax Year 2023 property values are not yet available online.
+          <b>Important note to property owners:</b> Tax Year 2023 property values are not yet available online.
           They are expected to be uploaded to the property search application by Monday, May 9, 2022.
         </div>
       </div>
@@ -164,7 +164,7 @@ export default {
 
 .intro-red {
   color: black;
-  font-weight: bold;
+  // font-weight: bold;
   background: #fed0d0;
   padding: 10px;
 }
