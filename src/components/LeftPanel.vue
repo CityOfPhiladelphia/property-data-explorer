@@ -175,7 +175,7 @@ export default {
 }
 
 .red {
-  color: red;
+  color: #cc3000;
   padding-top: 5px;
 }
 
