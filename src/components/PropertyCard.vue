@@ -459,26 +459,25 @@ export default {
         dataSources: [ 'opa_public' ],
         title: 'Property Details',
         subtitle:  '\
-          Property characteristics described below are included for convenience, but may not reflect the most recent conditions \
-          at the property.  Corrections to or questions about this property? <br>\
-          <a target="_blank" href="https://opainquiry.phila.gov/opa.apps/help/PropInq.aspx?acct_num='+ this.activeOpaId + ' ">\
-          <b>Submit an Official Inquiry</b>  </b><i class="fa fa-external-link-alt"></i></a></a>\
           <div class="intro-blue warning">\
           <div class="icon">\
             <i class="fa fa-exclamation-triangle fa-5x"></i>\
           </div>\
           <div>\
             <p>\
-              Please note that the OPA is currently upgrading its computer systems.  This implementation \
-              may cause delays in updating internal records and displaying current information in this section.  \
-              We apologize for any delays you may experience. \
+              OPA is currently updating its data files. The information below may not\
+              reflect the data used to calculate the tax year 2023 property value. For questions\
+              regarding the 2023 property value, call OPA at <a href="tel:+12156869200">(215) 686-9200</a>.\
             </p> \
             <p>\
-              You may contact the OPA at <a href="tel:+12156864334">215-686-4334</a> for information on a property, \
-              or submit an official inquiry above.\
+              For all other property questions,\
+              <a target="_blank" href="https://opainquiry.phila.gov/opa.apps/help/PropInq.aspx?acct_num='+ this.activeOpaId + ' ">\
+              <b>submit an official inquiry</b></a>.\
             </p>\
           </div>\
         </div>\
+        Property characteristics described below are included for convenience, but may not reflect the most recent conditions \
+        at the property.<br>\
         ',
         fields: [
           {
