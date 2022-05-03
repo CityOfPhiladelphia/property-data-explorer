@@ -25,10 +25,20 @@
       class="introduction"
     >
 
+      <div class="intro-red warning">
+        <div class="icon">
+          <i class="fa fa-exclamation-triangle fa-5x"></i>
+        </div>
+        <div>
+          <b>Important note to property owners:</b> Tax Year 2023 property values are not yet available online.
+          They are expected to be uploaded to the property search application by Monday, May 9, 2022.
+        </div>
+      </div>
+      <div class="spacer" />
       <div class="intro-blue">
-          <i>Use the Property App to get information about a property's ownership,
-          sales history, value, and physical characteristics. You can also generate address
-          listings near a property or within an area of interest.</i>
+        <i>Use the Property App to get information about a property's ownership,
+        sales history, value, and physical characteristics. You can also generate address
+        listings near a property or within an area of interest.</i>
       </div>
       <h2>To get started, you can: </h2>
       <div class="spacer" />
@@ -112,6 +122,10 @@ export default {
 
 <style lang="scss">
 
+.inline-block {
+  display: inline-block;
+}
+
 .warning {
   display: flex;
   div.icon {
@@ -147,6 +161,13 @@ export default {
 //   position: absolute;
 //   // height: calc(100% - 122px);
 // }
+
+.intro-red {
+  color: black;
+  // font-weight: bold;
+  background: #fed0d0;
+  padding: 10px;
+}
 
 .intro-blue {
   background: #daedfe;
