@@ -459,26 +459,25 @@ export default {
         dataSources: [ 'opa_public' ],
         title: 'Property Details',
         subtitle:  '\
-          Property characteristics described below are included for convenience, but may not reflect the most recent conditions \
-          at the property.  Corrections to or questions about this property? <br>\
-          <a target="_blank" href="https://opainquiry.phila.gov/opa.apps/help/PropInq.aspx?acct_num='+ this.activeOpaId + ' ">\
-          <b>Submit an Official Inquiry</b>  </b><i class="fa fa-external-link-alt"></i></a></a>\
           <div class="intro-blue warning">\
           <div class="icon">\
             <i class="fa fa-exclamation-triangle fa-5x"></i>\
           </div>\
           <div>\
             <p>\
-              Please note that the OPA is currently upgrading its computer systems.  This implementation \
-              may cause delays in updating internal records and displaying current information in this section.  \
-              We apologize for any delays you may experience. \
+              OPA is currently updating its data files. Some of the information below does not\
+              yet reflect the data used to calculate the tax year 2023 property value. For questions\
+              regarding the 2023 property value, call OPA at <a href="tel:+12156869200">(215) 686-9200</a>.\
             </p> \
             <p>\
-              You may contact the OPA at <a href="tel:+12156864334">215-686-4334</a> for information on a property, \
-              or submit an official inquiry above.\
+              For all other property questions,\
+              <a target="_blank" href="https://opainquiry.phila.gov/opa.apps/help/PropInq.aspx?acct_num='+ this.activeOpaId + ' ">\
+              <b>submit an official inquiry</b></a>.\
             </p>\
           </div>\
         </div>\
+        Property characteristics described below are included for convenience, but may not reflect the most recent conditions \
+        at the property.<br>\
         ',
         fields: [
           {
@@ -741,30 +740,6 @@ export default {
             value: function(state) {
               return opaPublicData.homestead_exemption > 0 ? 'Yes' : 'No';
             },
-          },
-          {
-            label: 'Political Divisions',
-            value: function(state) {
-              return "<a href='http://atlas.phila.gov/" + encodeURIComponent(this.activeAddress) + "/voting' target='_blank'>\
-                      Ward: "+nth(opaPublicData.political_ward)+" | Council District: "+ nth(opaPublicData.council_district_2016) +" \
-                      <i class='fa fa-external-link-alt'></i></a>";
-            }.bind(this),
-          },
-          {
-            label: 'School Catchment',
-            value: function() {
-              return "<a href='https://webapps1.philasd.org/school_finder/' target='_blank'>\
-                      Elementary: "+opaPublicData.elementary_school+" | Middle: "+opaPublicData.middle_school+" | HS: "+opaPublicData.high_school+" |\
-                      <i class='fa fa-external-link-alt'></i></a>";
-            }.bind(this),
-          },
-          {
-            label: 'Police District',
-            value: function() {
-              return "<a href='https://www.phillypolice.com/districts/" + nth(opaPublicData.police_district) + "/index.html' target='_blank'>\
-                      " + nth(opaPublicData.police_district) + " District\
-                      <i class='fa fa-external-link-alt'></i></a>";
-            }.bind(this),
           },
         ],
       };
