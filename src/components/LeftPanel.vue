@@ -165,7 +165,7 @@ export default {
 .intro-red {
   color: black;
   font-weight: bold;
-  background: #f14668;
+  background: #fed0d0;
   padding: 10px;
 }
 
