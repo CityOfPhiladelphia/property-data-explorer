@@ -143,3 +143,5 @@ fix: css changes to avoid using postition absolute bc it causes issues rendering
 ### 3-8-2022
 + merges condo error handling into prod - failed address shows in url, error message does not flash between searches, fixes buffer search
 + upgrade node version
+### 5-4-2022
++ Add slight change to the AIS and carto calls to sort the results by address to help when displaying a large number of results or when adding condo units to existing results. 
