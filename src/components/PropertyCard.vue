@@ -465,8 +465,7 @@ export default {
           </div>\
           <div>\
             <p>\
-              OPA is currently updating its data files. Some of the information below does not\
-              yet reflect the data used to calculate the tax year 2023 property value. For questions\
+              For questions\
               regarding the 2023 property value, call OPA at <a href="tel:+12156869200">(215) 686-9200</a>.\
             </p> \
             <p>\

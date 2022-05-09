@@ -24,17 +24,6 @@
       v-if="this.$store.state.activeModal.featureId === null"
       class="introduction"
     >
-
-      <div class="intro-red warning">
-        <div class="icon">
-          <i class="fa fa-exclamation-triangle fa-5x"></i>
-        </div>
-        <div>
-          <b>Important note to property owners:</b> Tax Year 2023 property values are not yet available online.
-          They are expected to be uploaded to the property search application by Monday, May 9, 2022.
-        </div>
-      </div>
-      <div class="spacer" />
       <div class="intro-blue">
         <i>Use the Property App to get information about a property's ownership,
         sales history, value, and physical characteristics. You can also generate address
