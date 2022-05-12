@@ -1105,6 +1105,25 @@ export default {
 
 }
 
+@media screen and (min-width: 1600px) {
+  .tax-calc-container {
+    flex-wrap: wrap;
+    display: flex;
+    div.tax-calc-element {
+      min-width: auto;
+    }
+  }
+}
+@media screen and (max-width: 1600px) {
+  .tax-calc-container {
+    flex-wrap: wrap;
+    display: flow-root;
+    div.tax-calc-element {
+      display: grid;
+      justify-content: center;
+    }
+  }
+}
 @media screen and (max-width: 1030px) {
   #plans-button {
     margin: 5px 0 5px 0;
@@ -1339,12 +1358,10 @@ export default {
 }
 .tax-calc-container {
   flex-wrap: wrap;
-  display: flex;
   background-color: white;
   height: auto;
 .tax-calc-element {
     flex-grow: 0;
-    min-width: auto;
     position: inherit;
     min-height: 60px;
     & label {
@@ -1353,6 +1370,7 @@ export default {
     }
     & select {
       margin-top: 3px;
+      margin-left: auto;
       width: 166px;
       height: 45px;
       border: 2px solid color(dark-ben-franklin);
@@ -1362,7 +1380,9 @@ export default {
       top: 50%;
       font-size: 18px;
       padding-top: 10px;
+      text-align: center;
     }
+  
 }
 }
 
