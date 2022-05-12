@@ -114,6 +114,46 @@
       </p>
 
       <!-- Tax Balance Link -->
+      <div class="tax-calc-section has-background-ben-franklin-blue-light hide-print">
+        <div>
+          <h3>
+          <font-awesome-icon
+            :icon="['fal', 'money-check-alt']"
+            class="fa-1x"
+          />
+            Real Estate Tax Calculator
+          </h3>
+          <p>You can estimate the 2023 Real Estate Tax of this property based on the proposed
+          Homestead Exemption amount and updated property assessment. These estimates are for
+          information only, and may not be the actual amount of Real Estate Tax for 2023.
+          </p>
+          <div class=tax-calc-container id="tax-calculator">
+            <div class=tax-calc-element>
+              <label for="taxable_value">Taxable Land + Improvement</label>
+              <span >{{ this.taxableCalc() }}</span>
+
+            </div>
+            <div class=tax-calc-element>
+              <label for="homestead_exemption">Homestead Exemption</label>
+                <select 
+                  name="homestead_exemption" 
+                  id="homestead_exemption"
+                  @change="handleHomesteadChange($event)"
+                >
+                  <option value="0">None Selected</option>
+                  <option value="45000">$45,000 </option>
+                  <option value="65000">$65,000</option>
+                </select>
+            </div>
+            <div :key="homestead" class=tax-calc-element>
+              <label for="estimated_2023_tax">Estimated 2023 Tax</label>
+               <span > {{ taxableValue() }} </span>    
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tax Balance Link -->
       <div class="has-background-bell-yellow-light hide-print">
         <font-awesome-icon
           :icon="['fal', 'money-check-alt']"
@@ -276,6 +316,10 @@ import helpers from '../util/helpers';
 import transforms from '../general/transforms';
 const titleCase = transforms.titleCase.transform;
 const nth = transforms.nth.transform;
+const dollarUSLocale = Intl.NumberFormat('en-US', {
+    style: "currency",
+    currency: "USD",
+});
 
 export default {
   name: 'PropertyCard',
@@ -287,6 +331,11 @@ export default {
     HorizontalTable: () => import(/* webpackChunkName: "pvc_pcm_HorizontalTable" */'@phila/vue-comps/src/components/HorizontalTable.vue'),
     VerticalTable: () => import(/* webpackChunkName: "pvc_pcm_VerticalTable" */'@phila/vue-comps/src/components/VerticalTable.vue'),
     VerticalTableLight: () => import(/* webpackChunkName: "pvc_pcm_VerticalTableLight" */'@phila/vue-comps/src/components/VerticalTableLight.vue'),
+  },
+    data() {
+    return {
+      homestead: 0,
+    };
   },
   props: {
     foundItemsLength: {
@@ -962,6 +1011,27 @@ export default {
     },
   },
   methods: {
+    handleHomesteadChange(e){
+      const target = e.target;
+      const slug = target.value;
+      this.$set(this, "homestead", slug)
+      // this.$forceUpdate();
+    },
+    taxableValue(){
+      console.log(this, "taxable value", this.homestead)
+      let market_value = this.$store.state.sources.opa_assessment.targets[this.activeOpaId].data.market_value;
+      let opa_public_record = this.$store.state.sources.opa_public.targets[this.activeOpaId].data
+      let exempt_land = opa_public_record.exempt_land ? opa_public_record.exempt_land : 0;
+      let exempt_improvement = opa_public_record.exempt_improvement ? opa_public_record.exempt_improvement : 0;
+      let homestead_val = this.homestead === '' ? 0 : this.homestead;
+      const price = market_value - exempt_land - exempt_improvement - homestead_val;
+      console.log(price)
+      return dollarUSLocale.format(price * .013998);
+    },
+    taxableCalc(){
+      let market_value = this.$store.state.sources.opa_assessment.targets[this.activeOpaId].data.market_value
+      return dollarUSLocale.format(market_value);
+    },
     buttonLinkLI(){
       window.open('https://li.phila.gov/property-history/search?address=' + this.activeOpaId, '_blank');
       return false;
@@ -1258,6 +1328,38 @@ export default {
     margin-bottom: 10px !important;
   } */
 
+}
+
+// End of print css
+.tax-calc-section{
+  & p {
+    padding: 10px;
+  }
+}
+.tax-calc-container {
+  flex-wrap: wrap;
+  display: flex;
+  background-color: white;
+.tax-calc-element {
+    flex-grow: 0;
+    min-width: auto;
+    position: relative;
+    & label {
+      color: color(dark-gray);
+      font-size: 16px;
+    }
+    & select {
+      margin-top: 3px;
+      width: 166px;
+      height: 45px;
+      border: 2px solid color(dark-ben-franklin);
+    }
+    & span {
+      position: absolute;
+      top: 50%;
+      font-size: 18px;
+    }
+}
 }
 
 .address-opa-right {
