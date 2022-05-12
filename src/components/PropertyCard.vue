@@ -1332,6 +1332,7 @@ export default {
 
 // End of print css
 .tax-calc-section{
+  height: auto;
   & p {
     padding: 10px;
   }
@@ -1340,10 +1341,12 @@ export default {
   flex-wrap: wrap;
   display: flex;
   background-color: white;
+  height: auto;
 .tax-calc-element {
     flex-grow: 0;
     min-width: auto;
-    position: relative;
+    position: inherit;
+    min-height: 60px;
     & label {
       color: color(dark-gray);
       font-size: 16px;
@@ -1355,9 +1358,10 @@ export default {
       border: 2px solid color(dark-ben-franklin);
     }
     & span {
-      position: absolute;
+      position: inherit;
       top: 50%;
       font-size: 18px;
+      padding-top: 10px;
     }
 }
 }
