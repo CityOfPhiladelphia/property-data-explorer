@@ -1039,7 +1039,10 @@ export default {
     activeOpaData(newData){
       // 2023 Property Tax Calc Added
       this.$set(this, 'homestead', '');
-      this.$refs['homestead_exemption'].options.selectedIndex = 0;
+      if(this.$refs['homestead_exemption']) {
+        this.$refs['homestead_exemption'].options.selectedIndex = 0;
+      }
+      this.taxableValue()
     },
 
   },
@@ -1061,13 +1064,14 @@ export default {
       return 'Your property currently does not have a homestead exemption.' 
     },
     taxableValue(){
-      if (this.activeOpaData.exempt_building) {
+      console.log(this.activeOpaData.exempt_building)
+      if (this.activeOpaData) {
         let selected_homestead_val = this.homestead === '' ? 0 : this.homestead;
         console.log("this.homestead", this.homestead, 'exempt_land: ', this.activeOpaData.exempt_land, 'exempt_improvement: ', this.activeOpaData.exempt_building, this.activeOpaData  )
         let price = this.activeOpaData.market_value + this.activeOpaData.homestead_exemption - this.activeOpaData.exempt_land - this.activeOpaData.exempt_building - selected_homestead_val;
         console.log(price)
         price = price < 0 ? 0 : price;
-        return dollarUSLocale.format(price * .013998);
+        return isNaN(price) ? '': dollarUSLocale.format(price * .013998);
       } else {
         return '';
       }
