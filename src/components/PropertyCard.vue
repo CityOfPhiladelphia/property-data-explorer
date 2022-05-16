@@ -128,7 +128,7 @@
           information only, and may not be the actual amount of Real Estate Tax for 2023.
           </p>
           <p>
-            ({{homesteadStatus()}})
+            {{homesteadStatus()}}
           </p>
           <div 
             class=tax-calc-container 
@@ -145,6 +145,7 @@
                 <select 
                   name="homestead_exemption" 
                   id="homestead_exemption"
+                  ref='homestead_exemption'
                   @change="handleHomesteadChange($event)"
                 >
                   <option value="0">$0</option>
@@ -1028,13 +1029,19 @@ export default {
   },
   watch: {
     activeAddress(nextActiveAddress) {
-      console.log('PropertyCard.vue watch activeAddress, nextActiveAddress:', nextActiveAddress);
       if (nextActiveAddress) {
         this.$store.commit('setActiveAddressKnown', true);
       } else {
         this.$store.commit('setActiveAddressKnown', false);
       }
     },
+    // Update for 2023 Property Tax Calculator
+    activeOpaData(newData){
+      // 2023 Property Tax Calc Added
+      this.$set(this, 'homestead', '');
+      this.$refs['homestead_exemption'].options.selectedIndex = 0;
+    },
+
   },
   methods: {
     // Update for 2023 Property Tax Calculator
@@ -1043,20 +1050,27 @@ export default {
       const slug = target.value;
       this.$set(this, "homestead", slug)
       // this.$forceUpdate();
+      console.log( 'input select event change value: ', this.$refs['homestead_exemption'].options);
     },
     homesteadStatus(){
       if (this.activeOpaData.homestead_exemption > 0) {
         return 'Your property currently has a homestead exemption of $45,000.' 
+      } else if( !this.activeOpaData.homestead_exemption) {
+        return ''
       }
       return 'Your property currently does not have a homestead exemption.' 
     },
     taxableValue(){
-      let selected_homestead_val = this.homestead === '' ? 0 : this.homestead;
-      console.log(this, "this.homestead", this.homestead, 'exempt_land: ', this.activeOpaData.exempt_land, 'exempt_improvement: ', this.activeOpaData.exempt_building, this.activeOpaData  )
-      let price = this.activeOpaData.market_value + this.activeOpaData.homestead_exemption - this.activeOpaData.exempt_land - this.activeOpaData.exempt_building - selected_homestead_val;
-      console.log(price)
-      price = price < 0 ? 0 : price;
-      return dollarUSLocale.format(price * .013998);
+      if (this.activeOpaData.exempt_building) {
+        let selected_homestead_val = this.homestead === '' ? 0 : this.homestead;
+        console.log("this.homestead", this.homestead, 'exempt_land: ', this.activeOpaData.exempt_land, 'exempt_improvement: ', this.activeOpaData.exempt_building, this.activeOpaData  )
+        let price = this.activeOpaData.market_value + this.activeOpaData.homestead_exemption - this.activeOpaData.exempt_land - this.activeOpaData.exempt_building - selected_homestead_val;
+        console.log(price)
+        price = price < 0 ? 0 : price;
+        return dollarUSLocale.format(price * .013998);
+      } else {
+        return '';
+      }
     },
     // taxableCalc(){
     //   let market_value = this.activeOpaData.market_value;
