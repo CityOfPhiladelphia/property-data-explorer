@@ -133,7 +133,7 @@
           <div 
             class=tax-calc-container 
             id="tax-calculator"
-            v-if="activeOpaData.taxable_land"
+            v-if="activeOpaData"
           >
             <!-- <div class=tax-calc-element>
               <label for="taxable_value">Taxable Land + Improvement</label>
@@ -158,7 +158,7 @@
             </div>
           </div>
           <div
-            v-if="!activeOpaData.taxable_land"
+            v-if="!activeOpaData"
             class="spinner-div small-12 cell"
           >
             <font-awesome-icon
@@ -168,6 +168,13 @@
             />
             <h3>Loading Property Value Details</h3>
           </div>
+          <h5>How this estimated is calculated from OPA data:</h5>
+          <p class="calc-text">
+            (Market Value + Current Homestead Value) <br>
+            - (Exempt Land & Building) <br>
+            - (Selected Homstead Value)<br>
+            x 1.3998%
+          </p>
         </div>
       </div>
        <!-- End of 2023 Property Tax Calculator -->
@@ -1046,8 +1053,9 @@ export default {
     taxableValue(){
       let selected_homestead_val = this.homestead === '' ? 0 : this.homestead;
       console.log(this, "this.homestead", this.homestead, 'exempt_land: ', this.activeOpaData.exempt_land, 'exempt_improvement: ', this.activeOpaData.exempt_building, this.activeOpaData  )
-      const price = this.activeOpaData.market_value + this.activeOpaData.homestead_exemption - this.activeOpaData.exempt_land - this.activeOpaData.exempt_building - selected_homestead_val;
+      let price = this.activeOpaData.market_value + this.activeOpaData.homestead_exemption - this.activeOpaData.exempt_land - this.activeOpaData.exempt_building - selected_homestead_val;
       console.log(price)
+      price = price < 0 ? 0 : price;
       return dollarUSLocale.format(price * .013998);
     },
     // taxableCalc(){
@@ -1384,6 +1392,9 @@ export default {
 // End of print css
 
 //  2023 Property Tax Calculator CSS
+p.calc-text {
+  text-align: end;
+}
 .tax-calc-section{
   height: auto;
   & p {
