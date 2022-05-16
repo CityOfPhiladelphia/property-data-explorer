@@ -117,11 +117,7 @@
       <div class="tax-calc-section has-background-ben-franklin-blue-light hide-print">
         <div>
           <h3>
-          <font-awesome-icon
-            :icon="['fal', 'money-check-alt']"
-            class="fa-1x"
-          />
-            Real Estate Tax Calculator
+            Real Estate Tax Estimator
           </h3>
           <p>You can estimate the 2023 Real Estate Tax of this property based on the proposed
           Homestead Exemption amount and updated property assessment. These estimates are for
@@ -131,7 +127,7 @@
             {{homesteadStatus()}}
           </p>
           <div 
-            class=tax-calc-container 
+            class="tax-calc-container"
             id="tax-calculator"
             v-if="activeOpaData"
           >
@@ -140,7 +136,7 @@
               <span >{{ this.taxableCalc() }}</span>
 
             </div> -->
-            <div class=tax-calc-element>
+            <div class="tax-calc-element">
               <label for="homestead_exemption">Homestead Exemption</label>
                 <select 
                   name="homestead_exemption" 
@@ -153,9 +149,12 @@
                   <option value="65000">$65,000</option>
                 </select>
             </div>
-            <div :key="homestead" class=tax-calc-element>
+            <div :key="homestead" class="tax-calc-element">
               <label for="estimated_2023_tax">Estimated 2023 Tax</label>
-               <span > {{ taxableValue() }} </span>    
+               <span id="estimate_total"> {{ taxableValue() }} </span>    
+            </div>
+            <div class="tax-calc-element">
+              To report issues or ask questions regarding your 2023 Real Estate Taxes, contact <a href="mailto:email@phila.gov">email@phila.gov</a>
             </div>
           </div>
           <div
@@ -169,12 +168,9 @@
             />
             <h3>Loading Property Value Details</h3>
           </div>
-          <h5>How this estimated is calculated from OPA data:</h5>
           <p class="calc-text">
-            (Market Value + Current Homestead Value) <br>
-            - (Exempt Land & Building) <br>
-            - (Selected Homstead Value)<br>
-            x 1.3998%
+            Using OPA data, the estimation is calculated using the following formula:<br>
+            (Market Value + Current Homstead Value) - (Exempt Land & Building Value) - (Selected Homestead Value) x 1.3998%
           </p>
         </div>
       </div>
@@ -1057,11 +1053,11 @@ export default {
     },
     homesteadStatus(){
       if (this.activeOpaData.homestead_exemption > 0) {
-        return 'Your property currently has a homestead exemption of $45,000.' 
+        return '(Your property currently has a homestead exemption of $45,000.)' 
       } else if( typeof this.activeOpaData.homestead_exemption !== 'number') {
-        return ''
+        return 'Loading homestead status...'
       }
-      return 'Your property currently does not have a homestead exemption.' 
+      return '(Your property currently does not have a homestead exemption.)' 
     },
     taxableValue(){
       console.log(this.activeOpaData.exempt_building)
@@ -1164,8 +1160,23 @@ export default {
     display: flex;
     div.tax-calc-element {
       min-width: auto;
-      margin-left: auto;
-      margin-right: auto;
+      padding-left: 0;
+      &:nth-child(1){
+        margin-left: 32px;
+        margin-right: 16px;
+      }
+      &:nth-child(2){
+        margin-right: 16px;
+        margin-left: 16px;
+      }
+      &:nth-child(3){
+        margin-right: 32px;
+        margin-left: 16px;
+        flex: 1;
+      }
+      select {
+        margin-left: auto;
+      }
     }
   }
 }
@@ -1175,7 +1186,7 @@ export default {
     display: flow-root;
     div.tax-calc-element {
       display: grid;
-      justify-content: center;
+      justify-content: left;
     }
   }
 }
@@ -1411,18 +1422,22 @@ export default {
 
 //  2023 Property Tax Calculator CSS
 p.calc-text {
-  text-align: end;
+  text-align: start;
+  font-size: 12px;
+  margin-left: 5px;
 }
-.tax-calc-section{
+div.tax-calc-section.has-background-ben-franklin-blue-light{
   height: auto;
-  & p {
-    padding: 10px;
+  div>h3 {
+    margin-bottom: 10px;
   }
 }
 .tax-calc-container {
   flex-wrap: wrap;
   background-color: white;
   height: auto;
+  padding-top: 16px;
+  padding-bottom: 16px;
 .tax-calc-element {
     flex-grow: 0;
     position: i;
@@ -1433,7 +1448,6 @@ p.calc-text {
     }
     & select {
       margin-top: 3px;
-      margin-left: auto;
       width: 166px;
       height: 45px;
       border: 2px solid color(dark-ben-franklin);
@@ -1441,13 +1455,17 @@ p.calc-text {
         text-align: center;
       }
     }
-    & span {
-      position: inherit;
-      top: 50%;
-      font-size: 18px;
-      margin-top: 10px;
-      text-align: center;
+     & #estimate_total {
       display: block;
+      font-weight: bold;
+      margin-top: 16px;
+      font-size: 1.4rem !important;
+    }
+    #homestead_exemption {
+      margin-top: 8px;
+    }
+    a {
+      display: contents;
     }
   }
 }
