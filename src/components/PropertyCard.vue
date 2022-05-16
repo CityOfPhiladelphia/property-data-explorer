@@ -113,7 +113,7 @@
         </a>
       </p>
 
-      <!-- Tax Balance Link -->
+      <!-- 2023 Property Tax Calculator -->
       <div class="tax-calc-section has-background-ben-franklin-blue-light hide-print">
         <div>
           <h3>
@@ -127,12 +127,19 @@
           Homestead Exemption amount and updated property assessment. These estimates are for
           information only, and may not be the actual amount of Real Estate Tax for 2023.
           </p>
-          <div class=tax-calc-container id="tax-calculator">
-            <div class=tax-calc-element>
+          <p>
+            ({{homesteadStatus()}})
+          </p>
+          <div 
+            class=tax-calc-container 
+            id="tax-calculator"
+            v-if="activeOpaData.taxable_land"
+          >
+            <!-- <div class=tax-calc-element>
               <label for="taxable_value">Taxable Land + Improvement</label>
               <span >{{ this.taxableCalc() }}</span>
 
-            </div>
+            </div> -->
             <div class=tax-calc-element>
               <label for="homestead_exemption">Homestead Exemption</label>
                 <select 
@@ -140,7 +147,7 @@
                   id="homestead_exemption"
                   @change="handleHomesteadChange($event)"
                 >
-                  <option value="0">None Selected</option>
+                  <option value="0">$0</option>
                   <option value="45000">$45,000 </option>
                   <option value="65000">$65,000</option>
                 </select>
@@ -150,8 +157,20 @@
                <span > {{ taxableValue() }} </span>    
             </div>
           </div>
+          <div
+            v-if="!activeOpaData.taxable_land"
+            class="spinner-div small-12 cell"
+          >
+            <font-awesome-icon
+              icon="spinner"
+              class="fa-4x"
+              aria-hidden="true"
+            />
+            <h3>Loading Property Value Details</h3>
+          </div>
         </div>
       </div>
+       <!-- End of 2023 Property Tax Calculator -->
 
       <!-- Tax Balance Link -->
       <div class="has-background-bell-yellow-light hide-print">
@@ -1011,27 +1030,33 @@ export default {
     },
   },
   methods: {
+    // Update for 2023 Property Tax Calculator
     handleHomesteadChange(e){
       const target = e.target;
       const slug = target.value;
       this.$set(this, "homestead", slug)
       // this.$forceUpdate();
     },
+    homesteadStatus(){
+      if (this.activeOpaData.homestead_exemption > 0) {
+        return 'Your property currently has a homestead exemption of $45,000.' 
+      }
+      return 'Your property currently does not have a homestead exemption.' 
+    },
     taxableValue(){
-      console.log(this, "taxable value", this.homestead)
-      let market_value = this.$store.state.sources.opa_assessment.targets[this.activeOpaId].data.market_value;
-      let opa_public_record = this.$store.state.sources.opa_public.targets[this.activeOpaId].data
-      let exempt_land = opa_public_record.exempt_land ? opa_public_record.exempt_land : 0;
-      let exempt_improvement = opa_public_record.exempt_improvement ? opa_public_record.exempt_improvement : 0;
-      let homestead_val = this.homestead === '' ? 0 : this.homestead;
-      const price = market_value - exempt_land - exempt_improvement - homestead_val;
+      let selected_homestead_val = this.homestead === '' ? 0 : this.homestead;
+      console.log(this, "this.homestead", this.homestead, 'exempt_land: ', this.activeOpaData.exempt_land, 'exempt_improvement: ', this.activeOpaData.exempt_building, this.activeOpaData  )
+      const price = this.activeOpaData.market_value + this.activeOpaData.homestead_exemption - this.activeOpaData.exempt_land - this.activeOpaData.exempt_building - selected_homestead_val;
       console.log(price)
       return dollarUSLocale.format(price * .013998);
     },
-    taxableCalc(){
-      let market_value = this.$store.state.sources.opa_assessment.targets[this.activeOpaId].data.market_value
-      return dollarUSLocale.format(market_value);
-    },
+    // taxableCalc(){
+    //   let market_value = this.activeOpaData.market_value;
+    //   // let current_homestead = this.activeOpaData.homestead_exemption;
+    //   return dollarUSLocale.format(market_value);
+    //   // return dollarUSLocale.format(market_value + current_homestead);
+    // },
+    // End - Update for 2023 Property Tax Calculator
     buttonLinkLI(){
       window.open('https://li.phila.gov/property-history/search?address=' + this.activeOpaId, '_blank');
       return false;
@@ -1105,16 +1130,20 @@ export default {
 
 }
 
-@media screen and (min-width: 1600px) {
+
+//  2023 Property Tax Calculator CSS
+@media screen and (min-width: 1160px) {
   .tax-calc-container {
     flex-wrap: wrap;
     display: flex;
     div.tax-calc-element {
       min-width: auto;
+      margin-left: auto;
+      margin-right: auto;
     }
   }
 }
-@media screen and (max-width: 1600px) {
+@media screen and (max-width: 1160px) {
   .tax-calc-container {
     flex-wrap: wrap;
     display: flow-root;
@@ -1124,6 +1153,9 @@ export default {
     }
   }
 }
+//  End - 2023 Property Tax Calculator CSS
+
+
 @media screen and (max-width: 1030px) {
   #plans-button {
     margin: 5px 0 5px 0;
@@ -1350,6 +1382,8 @@ export default {
 }
 
 // End of print css
+
+//  2023 Property Tax Calculator CSS
 .tax-calc-section{
   height: auto;
   & p {
@@ -1362,7 +1396,7 @@ export default {
   height: auto;
 .tax-calc-element {
     flex-grow: 0;
-    position: inherit;
+    position: i;
     min-height: 60px;
     & label {
       color: color(dark-gray);
@@ -1374,17 +1408,21 @@ export default {
       width: 166px;
       height: 45px;
       border: 2px solid color(dark-ben-franklin);
+      option {
+        text-align: center;
+      }
     }
     & span {
       position: inherit;
       top: 50%;
       font-size: 18px;
-      padding-top: 10px;
+      margin-top: 10px;
       text-align: center;
+      display: block;
     }
-  
+  }
 }
-}
+//  End - 2023 Property Tax Calculator CSS
 
 .address-opa-right {
   float: right;
