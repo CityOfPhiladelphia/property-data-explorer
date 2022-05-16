@@ -1055,7 +1055,7 @@ export default {
     homesteadStatus(){
       if (this.activeOpaData.homestead_exemption > 0) {
         return 'Your property currently has a homestead exemption of $45,000.' 
-      } else if( !this.activeOpaData.homestead_exemption) {
+      } else if( typeof this.activeOpaData.homestead_exemption !== 'number') {
         return ''
       }
       return 'Your property currently does not have a homestead exemption.' 
