@@ -123,9 +123,9 @@
             You can estimate the 2023 Real Estate Tax of this property based on the updated 
             property assessment and the proposed Homestead Exemption amount of $65,000. These 
             estimates are for information only and may not be the actual amount of your 2023 
-            Real Estate Tax bill. This estimate does not calculate the savings for participants 
-            of the Senior Citizen Tax Freeze and LOOP. Additionally, not all properties are eligible 
-            for the Homestead Exemption. 
+            Real Estate Tax bill. This estimate does not account for any additional savings or 
+            adjustments that may affect this property. Additionally, not all properties are 
+            eligible for the Homestead Exemption. 
             <a
               href="https://www.phila.gov/services/property-lots-housing/property-taxes/get-real-estate-tax-relief/get-the-homestead-exemption/"
               target="_blank"
