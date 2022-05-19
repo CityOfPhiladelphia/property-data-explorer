@@ -119,9 +119,19 @@
           <h3>
             Real Estate Tax Estimator
           </h3>
-          <p>You can estimate the 2023 Real Estate Tax of this property based on the proposed
-          Homestead Exemption amount and updated property assessment. These estimates are for
-          information only, and may not be the actual amount of Real Estate Tax for 2023.
+          <p>
+            You can estimate the 2023 Real Estate Tax of this property based on the updated 
+            property assessment and the proposed Homestead Exemption amount of $65,000. These 
+            estimates are for information only and may not be the actual amount of your 2023 
+            Real Estate Tax bill. This estimate does not calculate the savings for participants 
+            of the Senior Citizen Tax Freeze and LOOP. Additionally, not all properties are eligible 
+            for the Homestead Exemption. 
+            <a
+              href="https://www.phila.gov/services/property-lots-housing/property-taxes/get-real-estate-tax-relief/get-the-homestead-exemption/"
+              target="_blank"
+            >
+              Check the guidelines.
+            </a>
           </p>
           <p>
             {{homesteadStatus()}}
@@ -131,11 +141,6 @@
             id="tax-calculator"
             v-if="activeOpaData"
           >
-            <!-- <div class=tax-calc-element>
-              <label for="taxable_value">Taxable Land + Improvement</label>
-              <span >{{ this.taxableCalc() }}</span>
-
-            </div> -->
             <div class="tax-calc-element">
               <label for="homestead_exemption">Homestead Exemption</label>
                 <select 
@@ -154,7 +159,10 @@
                <span id="estimate_total"> {{ taxableValue() }} </span>    
             </div>
             <div class="tax-calc-element">
-              To report issues or ask questions regarding your 2023 Real Estate Taxes, contact <a href="mailto:email@phila.gov">email@phila.gov</a>
+              To report issues or ask questions regarding your 2023 property assessment, 
+              call <b>(215) 686-9200</b>
+              or visit <a href="https://www.phila.gov/opa" target="_blank">www.phila.gov/opa</a>
+            
             </div>
           </div>
           <div
@@ -170,7 +178,7 @@
           </div>
           <p class="calc-text">
             Using OPA data, the estimation is calculated using the following formula:<br>
-            (Market Value + Current Homstead Value) - (Exempt Land & Building Value) - (Selected Homestead Value) x 1.3998%
+            (Market Value + Current Homestead Value) - (Exempt Land & Building Value) - (Selected Homestead Value) x 1.3998%
           </p>
         </div>
       </div>
@@ -342,6 +350,7 @@ const nth = transforms.nth.transform;
 const dollarUSLocale = Intl.NumberFormat('en-US', {
     style: "currency",
     currency: "USD",
+    maximumFractionDigits: 0,
 });
 
 export default {
@@ -1053,11 +1062,11 @@ export default {
     },
     homesteadStatus(){
       if (this.activeOpaData.homestead_exemption > 0) {
-        return '(Your property currently has a homestead exemption of $45,000.)' 
+        return 'Your property currently has a homestead exemption of ' + dollarUSLocale.format(this.activeOpaData.homestead_exemption) + '.' 
       } else if( typeof this.activeOpaData.homestead_exemption !== 'number') {
         return 'Loading homestead status...'
       }
-      return '(Your property currently does not have a homestead exemption.)' 
+      return 'Your property currently does not have a homestead exemption.' 
     },
     taxableValue(){
       console.log(this.activeOpaData.exempt_building)
