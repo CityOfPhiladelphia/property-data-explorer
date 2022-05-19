@@ -1066,7 +1066,7 @@ export default {
       } else if( typeof this.activeOpaData.homestead_exemption !== 'number') {
         return 'Loading homestead status...'
       }
-      return 'Your property currently does not have a homestead exemption.' 
+      return 'This property currently does not have a Homestead Exemption.' 
     },
     taxableValue(){
       console.log(this.activeOpaData.exempt_building)
