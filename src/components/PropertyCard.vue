@@ -1062,9 +1062,9 @@ export default {
     },
     homesteadStatus(){
       if (this.activeOpaData.homestead_exemption > 0) {
-        return 'Your property currently has a homestead exemption of ' + dollarUSLocale.format(this.activeOpaData.homestead_exemption) + '.' 
+        return 'Your property currently has a Homestead Exemption of ' + dollarUSLocale.format(this.activeOpaData.homestead_exemption) + '.' 
       } else if( typeof this.activeOpaData.homestead_exemption !== 'number') {
-        return 'Loading homestead status...'
+        return 'Loading Homestead status...'
       }
       return 'This property currently does not have a Homestead Exemption.' 
     },
