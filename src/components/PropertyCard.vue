@@ -113,6 +113,77 @@
         </a>
       </p>
 
+      <!-- 2023 Property Tax Calculator -->
+      <div class="tax-calc-section has-background-ben-franklin-blue-light hide-print">
+        <div>
+          <h3>
+            Real Estate Tax Estimator
+          </h3>
+          <p>
+            You can estimate the 2023 Real Estate Tax of this property based on the updated 
+            property assessment and the proposed Homestead Exemption amount of $65,000. These 
+            estimates are for information only and may not be the actual amount of your 2023 
+            Real Estate Tax bill. This estimate does not account for any additional savings or 
+            adjustments that may affect this property. Additionally, not all properties are 
+            eligible for the Homestead Exemption. 
+            <a
+              href="https://www.phila.gov/services/property-lots-housing/property-taxes/get-real-estate-tax-relief/get-the-homestead-exemption/"
+              target="_blank"
+            >
+              Check the guidelines.
+            </a>
+          </p>
+          <p>
+            {{homesteadStatus()}}
+          </p>
+          <div 
+            class="tax-calc-container"
+            id="tax-calculator"
+            v-if="activeOpaData"
+          >
+            <div class="tax-calc-element">
+              <label for="homestead_exemption">Homestead Exemption</label>
+                <select 
+                  name="homestead_exemption" 
+                  id="homestead_exemption"
+                  ref='homestead_exemption'
+                  @change="handleHomesteadChange($event)"
+                >
+                  <option value="0">$0</option>
+                  <option value="45000">$45,000 </option>
+                  <option value="65000">$65,000</option>
+                </select>
+            </div>
+            <div :key="homestead" class="tax-calc-element">
+              <label for="estimated_2023_tax">Estimated 2023 Tax</label>
+               <span id="estimate_total"> {{ taxableValue() }} </span>    
+            </div>
+            <div class="tax-calc-element">
+              To report issues or ask questions regarding your 2023 property assessment, 
+              call <b>(215) 686-9200</b>
+              or visit <a href="https://www.phila.gov/opa" target="_blank">www.phila.gov/opa</a>
+            
+            </div>
+          </div>
+          <div
+            v-if="!activeOpaData"
+            class="spinner-div small-12 cell"
+          >
+            <font-awesome-icon
+              icon="spinner"
+              class="fa-4x"
+              aria-hidden="true"
+            />
+            <h3>Loading Property Value Details</h3>
+          </div>
+          <p class="calc-text">
+            Using OPA data, the estimation is calculated using the following formula:<br>
+            (Market Value + Current Homestead Value) - (Exempt Land & Building Value) - (Selected Homestead Value) x 1.3998%
+          </p>
+        </div>
+      </div>
+       <!-- End of 2023 Property Tax Calculator -->
+
       <!-- Tax Balance Link -->
       <div class="has-background-bell-yellow-light hide-print">
         <font-awesome-icon
@@ -276,6 +347,11 @@ import helpers from '../util/helpers';
 import transforms from '../general/transforms';
 const titleCase = transforms.titleCase.transform;
 const nth = transforms.nth.transform;
+const dollarUSLocale = Intl.NumberFormat('en-US', {
+    style: "currency",
+    currency: "USD",
+    maximumFractionDigits: 0,
+});
 
 export default {
   name: 'PropertyCard',
@@ -287,6 +363,11 @@ export default {
     HorizontalTable: () => import(/* webpackChunkName: "pvc_pcm_HorizontalTable" */'@phila/vue-comps/src/components/HorizontalTable.vue'),
     VerticalTable: () => import(/* webpackChunkName: "pvc_pcm_VerticalTable" */'@phila/vue-comps/src/components/VerticalTable.vue'),
     VerticalTableLight: () => import(/* webpackChunkName: "pvc_pcm_VerticalTableLight" */'@phila/vue-comps/src/components/VerticalTableLight.vue'),
+  },
+    data() {
+    return {
+      homestead: 0,
+    };
   },
   props: {
     foundItemsLength: {
@@ -465,7 +546,8 @@ export default {
           </div>\
           <div>\
             <p>\
-              For questions\
+              OPA is currently updating its data files. Some of the information below does not\
+              yet reflect the data used to calculate the tax year 2023 property value. For questions\
               regarding the 2023 property value, call OPA at <a href="tel:+12156869200">(215) 686-9200</a>.\
             </p> \
             <p>\
@@ -952,15 +1034,60 @@ export default {
   },
   watch: {
     activeAddress(nextActiveAddress) {
-      console.log('PropertyCard.vue watch activeAddress, nextActiveAddress:', nextActiveAddress);
       if (nextActiveAddress) {
         this.$store.commit('setActiveAddressKnown', true);
       } else {
         this.$store.commit('setActiveAddressKnown', false);
       }
     },
+    // Update for 2023 Property Tax Calculator
+    activeOpaData(newData){
+      // 2023 Property Tax Calc Added
+      this.$set(this, 'homestead', '');
+      if(this.$refs['homestead_exemption']) {
+        this.$refs['homestead_exemption'].options.selectedIndex = 0;
+      }
+      this.taxableValue()
+    },
+
   },
   methods: {
+    // Update for 2023 Property Tax Calculator
+    handleHomesteadChange(e){
+      const target = e.target;
+      const slug = target.value;
+      this.$set(this, "homestead", slug)
+      // this.$forceUpdate();
+      console.log( 'input select event change value: ', this.$refs['homestead_exemption'].options);
+    },
+    homesteadStatus(){
+      if (this.activeOpaData.homestead_exemption > 0) {
+        return 'Your property currently has a Homestead Exemption of ' + dollarUSLocale.format(this.activeOpaData.homestead_exemption) + '.' 
+      } else if( typeof this.activeOpaData.homestead_exemption !== 'number') {
+        return 'Loading Homestead status...'
+      }
+      return 'This property currently does not have a Homestead Exemption.' 
+    },
+    taxableValue(){
+      console.log(this.activeOpaData.exempt_building)
+      if (this.activeOpaData) {
+        let selected_homestead_val = this.homestead === '' ? 0 : this.homestead;
+        console.log("this.homestead", this.homestead, 'exempt_land: ', this.activeOpaData.exempt_land, 'exempt_improvement: ', this.activeOpaData.exempt_building, this.activeOpaData  )
+        let price = this.activeOpaData.market_value + this.activeOpaData.homestead_exemption - this.activeOpaData.exempt_land - this.activeOpaData.exempt_building - selected_homestead_val;
+        console.log(price)
+        price = price < 0 ? 0 : price;
+        return isNaN(price) ? '': dollarUSLocale.format(price * .013998);
+      } else {
+        return '';
+      }
+    },
+    // taxableCalc(){
+    //   let market_value = this.activeOpaData.market_value;
+    //   // let current_homestead = this.activeOpaData.homestead_exemption;
+    //   return dollarUSLocale.format(market_value);
+    //   // return dollarUSLocale.format(market_value + current_homestead);
+    // },
+    // End - Update for 2023 Property Tax Calculator
     buttonLinkLI(){
       window.open('https://li.phila.gov/property-history/search?address=' + this.activeOpaId, '_blank');
       return false;
@@ -1033,6 +1160,47 @@ export default {
   }
 
 }
+
+
+//  2023 Property Tax Calculator CSS
+@media screen and (min-width: 1160px) {
+  .tax-calc-container {
+    flex-wrap: wrap;
+    display: flex;
+    div.tax-calc-element {
+      min-width: auto;
+      padding-left: 0;
+      &:nth-child(1){
+        margin-left: 32px;
+        margin-right: 16px;
+      }
+      &:nth-child(2){
+        margin-right: 16px;
+        margin-left: 16px;
+      }
+      &:nth-child(3){
+        margin-right: 32px;
+        margin-left: 16px;
+        flex: 1;
+      }
+      select {
+        margin-left: auto;
+      }
+    }
+  }
+}
+@media screen and (max-width: 1160px) {
+  .tax-calc-container {
+    flex-wrap: wrap;
+    display: flow-root;
+    div.tax-calc-element {
+      display: grid;
+      justify-content: left;
+    }
+  }
+}
+//  End - 2023 Property Tax Calculator CSS
+
 
 @media screen and (max-width: 1030px) {
   #plans-button {
@@ -1258,6 +1426,59 @@ export default {
   } */
 
 }
+
+// End of print css
+
+//  2023 Property Tax Calculator CSS
+p.calc-text {
+  text-align: start;
+  font-size: 12px;
+  margin-left: 5px;
+}
+div.tax-calc-section.has-background-ben-franklin-blue-light{
+  height: auto;
+  div>h3 {
+    margin-bottom: 10px;
+  }
+}
+.tax-calc-container {
+  flex-wrap: wrap;
+  background-color: white;
+  height: auto;
+  padding-top: 16px;
+  padding-bottom: 16px;
+.tax-calc-element {
+    flex-grow: 0;
+    position: i;
+    min-height: 60px;
+    & label {
+      color: color(dark-gray);
+      font-size: 16px;
+    }
+    & select {
+      margin-top: 3px;
+      width: 166px;
+      height: 45px;
+      border: 2px solid color(dark-ben-franklin);
+      option {
+        text-align: center;
+      }
+    }
+     & #estimate_total {
+      display: block;
+      font-weight: bold;
+      margin-top: 16px;
+      font-size: 1.4rem !important;
+    }
+    #homestead_exemption {
+      margin-top: 8px;
+    }
+    a {
+      display: contents;
+    }
+  }
+}
+//  End - 2023 Property Tax Calculator CSS
 
 .address-opa-right {
   float: right;

@@ -40,7 +40,7 @@ export default {
   props: {
     feedbackLink: {
       type: String,
-      default: 'https://phila.formstack.com/forms/property_data_explorer_feedback',
+      default: 'https://phila.formstack.com/forms/property_feedback_form',
     },
   },
   computed: {
