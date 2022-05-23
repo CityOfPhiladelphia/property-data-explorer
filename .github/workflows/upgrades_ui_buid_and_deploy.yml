@@ -3,7 +3,7 @@ name: Build, Check And Deploy to Dev
 on:
   push:
     branches:
-      - language-updates
+      -  feature/property-tax-calculator
 
 jobs:
   build:
