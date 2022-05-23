@@ -347,6 +347,8 @@ import helpers from '../util/helpers';
 import transforms from '../general/transforms';
 const titleCase = transforms.titleCase.transform;
 const nth = transforms.nth.transform;
+
+// Dollar conversion for 2023 Property Tax Estimator
 const dollarUSLocale = Intl.NumberFormat('en-US', {
     style: "currency",
     currency: "USD",
