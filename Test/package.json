@@ -6,7 +6,7 @@
     "dotenv": "^8.0.0"
   },
   "devDependencies": {
-    "testcafe": "^1.17.1"
+    "testcafe": "^1.15.0"
   },
   "scripts": {
     "test-local": "testcafe"

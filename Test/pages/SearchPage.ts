@@ -23,11 +23,11 @@ export default class SearchPage {
   public verifySearchByCondoAddress = async (t: TestController) => {
     await t.typeText(this.searchMap, testSearchData.condoAddress1);
     await t.click(this.searchmapButton);
-    await t.wait(5000);
+    await t.wait(20000);
     const tableValues = await this.table.innerText;
     await t.expect(tableValues).contains(testSearchData.condoAddress1)
     await t.click(this.btnAddUnitresults);
-    await t.wait(8000);
+    await t.wait(20000);
     const tableRowcount = await this.tableRowCount.count;
     await t.expect(tableRowcount).eql(271);
     const tablerowValues = await this.table.innerText;
@@ -38,10 +38,10 @@ export default class SearchPage {
   public verifySearchByCondoAddress2 = async (t: TestController) => {
     await t.typeText(this.searchMap, testSearchData.condoAddress2);
     await t.click(this.searchmapButton);
-    await t.wait(5000);
+    await t.wait(20000);
     const tableValues = await this.table.innerText;
     await t.click(this.btnAddUnitresults.with({ visibilityCheck: true }));
-    await t.wait(6000);
+    await t.wait(20000);
     const tableRowcount = await this.tableRowCount.count;
     await t.expect(tableRowcount).eql(235);
     const tablerowValues = await this.table.innerText;
@@ -53,7 +53,7 @@ export default class SearchPage {
     await t.navigateTo(`${process.env.TEST_URL}`);
     await t.typeText(this.searchMap, testSearchData.blockSearch);
     await t.click(this.searchmapButton);
-    await t.wait(3000);
+    await t.wait(20000);
     const propCardAddress = await this.propCardAddress.innerText;
     await t.expect(propCardAddress).contains(testSearchData.blockSearchValue);
   }
@@ -61,7 +61,7 @@ export default class SearchPage {
     await t.navigateTo(`${process.env.TEST_URL}`);
     await t.typeText(this.searchMap, testSearchData.twoResultsSearch);
     await t.click(this.searchmapButton);
-    await t.wait(3000);
+    await t.wait(20000);
     const tableRowcount = await this.tableRowCount.count;
     await t.expect(tableRowcount).eql(2);
   }
@@ -69,9 +69,9 @@ export default class SearchPage {
   public verifySearchByBuffer = async (t: TestController) => {
     await t.navigateTo(`${process.env.TEST_URL}`);
     await t.click(this.btnBuffer.with({ visibilityCheck: true }));  
-    await t.wait(2000);
+    await t.wait(20000);
     await t.click('#map')
-    await t.wait(6000);
+    await t.wait(20000);
     const tableBuffervalues = await this.table.innerText;
     await t.expect(tableBuffervalues).contains(testSearchData.tablePolygontextVerify);
     await t.click(this.btnAddUnitresults);
@@ -79,24 +79,24 @@ export default class SearchPage {
   public verifySearchbyShapePlusBuffer = async (t: TestController) => {
     await t.navigateTo(`${process.env.TEST_URL}`);
     await t.click(this.polygonSearch);
-    await t.wait(3000);
+    await t.wait(20000);
     await t.expect(this.finishIcon.visible).ok();
     // await t.expect(this.deleteIcon.visible).ok();
     await t.expect(this.cancelIcon.visible).ok();
-    await t.wait(1000);
+    await t.wait(20000);
     await t.click('#map', { offsetX: 250, offsetY: 250 })
-    await t.wait(1000);
+    await t.wait(20000);
     await t.click('#map', { offsetX: 250, offsetY: 200 })
-    await t.wait(1000);
+    await t.wait(20000);
     await t.click('#map', { offsetX: 310, offsetY: 100 })
-    await t.wait(1000);
+    await t.wait(20000);
     await t.click('#map', { offsetX: 250, offsetY: 250 })
-    await t.wait(2000);
+    await t.wait(20000);
     const tablePolySearchValues = this.table.innerText
     await t.expect(tablePolySearchValues).contains(testSearchData.tablePolygontextVerify);
     await t.click(this.btnBuffer);
     await t.click('#map')
-    await t.wait(4000);
+    await t.wait(20000);
     const tableBufferSearchValues = this.table.innerText
     await t.expect(tableBufferSearchValues).contains(testSearchData.polyaddress);
 
@@ -106,13 +106,13 @@ export default class SearchPage {
     await t.selectText(this.searchMap).pressKey('delete');
     await t.typeText(this.searchMap, testSearchData.addressBuffer);
     await t.click(this.searchmapButton);
-    await t.wait(2000);
+    await t.wait(20000);
     const tableAddressValues = await this.table.innerText;
     await t.expect(tableAddressValues).contains(testSearchData.addressBuffer)
     await t.click(this.btnBuffer);
-    await t.wait(2000);
+    await t.wait(20000);
     await t.click('#map');
-    await t.wait(4000);
+    await t.wait(20000);
     const tableBufferValues = await this.table.innerText;
     await t.expect(tableBufferValues).contains(testSearchData.addressBuffer);
     await t.expect(tableBufferValues).contains(testSearchData.addressBufferVerify);
@@ -122,16 +122,16 @@ export default class SearchPage {
     await t.navigateTo(`${process.env.TEST_URL}`);
     await t.typeText(this.searchMap, testSearchData.opaAccountValue);
     await t.click(this.searchmapButton);
-    await t.wait(2000);
+    await t.wait(20000);
     const tableOPAValues = await this.table.innerText;
     await t.expect(tableOPAValues).contains(testSearchData.address)
-    await t.wait(2000)
+    await t.wait(20000)
     await t.click(this.btnBuffer);
     await t.click('#map')
-    await t.wait(2000);
+    await t.wait(20000);
     const tableBufferSearchValues = this.table.innerText
     await t.expect(tableBufferSearchValues).contains(testSearchData.address);
-    await t.wait(2000);
+    await t.wait(20000);
     await t.click(this.polygonSearch);
     await t.click('#map', { offsetX: 550, offsetY: 150 })
     await t.wait(1000);
