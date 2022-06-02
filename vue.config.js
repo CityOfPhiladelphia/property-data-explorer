@@ -25,6 +25,7 @@ module.exports = {
     '@phila/vue-mapping',
     '@phila/vue-datafetch',
     '@terraformer/arcgis',
+    'jspdf-autotable',
     // /other-dep/
   ],
 };

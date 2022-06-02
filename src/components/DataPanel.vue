@@ -17,7 +17,7 @@
     </div>
     <horizontal-table
       v-show="!loadingData"
-      v-if="lastSearchMethod === 'geocode' || lastSearchMethod === 'reverseGeocode'"
+      v-if="lastSearchMethod === 'geocode' && Object.keys(this.opa.targets).length || lastSearchMethod === 'reverseGeocode' && Object.keys(this.opa.targets).length"
       padding-top="0"
       :slots="{
         items: geocodeItems,
@@ -28,6 +28,14 @@
       }"
       :options="geocodeOptions"
     />
+    <div
+      v-if="lastSearchMethod === 'geocode' && !loadingData && geocode.status === 'success' && !Object.keys(this.opa.targets).length"
+      class="no-opa-message"
+    >
+    <!-- v-if="lastSearchMethod === 'geocode' && !loadingData && geocode.status === 'success' && !Object.keys(this.opa.targets).length || lastSearchMethod === 'reverseGeocode' && !loadingData && geocode.status === 'success' && !Object.keys(this.opa.targets).length" -->
+      This address could not be found using the information provided. Try using the property's OPA account number or try
+      <a target="_blank" href="https://atlas.phila.gov">atlas.phila.gov</a>.
+    </div>
     <horizontal-table
       v-show="!loadingData"
       v-if="lastSearchMethod === 'owner search'
@@ -93,9 +101,13 @@ export default {
       'showTable': false,
       // 'loadingData': false,
       'condoExpanded': false,
+      'lastAddressQuery': null,
     };
   },
   computed: {
+    // atlasUrl() {
+    //   return 'https://atlas.phila.gov/' + encodeURIComponent(this.lastAddressQuery) + '/property';
+    // },
     loadingData() {
       return this.$store.state.loadingData;
     },
@@ -115,6 +127,9 @@ export default {
     },
     geocode() {
       return this.$store.state.geocode;
+    },
+    geocodeInput() {
+      return this.$store.state.geocode.input;
     },
     geocodeStatus() {
       return this.$store.state.geocode.status;
@@ -620,6 +635,12 @@ export default {
     },
   },
   watch: {
+    geocodeInput(nextGeocodeInput) {
+      console.log('DataPanel.vue watch geocodeInput, nextGeocodeInput:', nextGeocodeInput);
+      if (nextGeocodeInput) {
+        this.lastAddressQuery = nextGeocodeInput;
+      }
+    },
     opaStatus(nextOpaStatus) {
       if (nextOpaStatus === 'success') {
         this.$data.showTable = true;
@@ -1265,6 +1286,10 @@ export default {
 </script>
 
 <style lang="scss">
+
+.no-opa-message {
+  padding: 1rem;
+}
 
 .faux-link {
   cursor: pointer;

@@ -24,11 +24,10 @@
       v-if="this.$store.state.activeModal.featureId === null"
       class="introduction"
     >
-
       <div class="intro-blue">
-          <i>Use the Property App to get information about a property's ownership,
-          sales history, value, and physical characteristics. You can also generate address
-          listings near a property or within an area of interest.</i>
+        <i>Use the Property App to get information about a property's ownership,
+        sales history, value, and physical characteristics. You can also generate address
+        listings near a property or within an area of interest.</i>
       </div>
       <h2>To get started, you can: </h2>
       <div class="spacer" />
@@ -112,6 +111,10 @@ export default {
 
 <style lang="scss">
 
+.inline-block {
+  display: inline-block;
+}
+
 .warning {
   display: flex;
   div.icon {
@@ -148,13 +151,20 @@ export default {
 //   // height: calc(100% - 122px);
 // }
 
+.intro-red {
+  color: black;
+  // font-weight: bold;
+  background: #fed0d0;
+  padding: 10px;
+}
+
 .intro-blue {
   background: #daedfe;
   padding: 10px;
 }
 
 .red {
-  color: red;
+  color: #cc3000;
   padding-top: 5px;
 }
 

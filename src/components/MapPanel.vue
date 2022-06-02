@@ -170,7 +170,7 @@
         />
 
         <buffer-control
-          v-show="isLarge"
+          v-show="isLarge && !this.fullScreenTopicsEnabled"
           :button-height="'45px'"
           :button-width="'100%'"
           :position="'top-left'"
@@ -181,6 +181,7 @@
         <!-- @bufferButtonClick="handleBufferButtonClick" -->
 
         <draw-control
+          v-show="!this.fullScreenTopicsEnabled"
           :control="true"
           :button-height="'45px'"
           :button-width="'100%'"
@@ -225,6 +226,11 @@
           @click="handleCyclomediaRecordingClick"
         />
 
+        <MglNavigationControl position="bottom-left" />
+        <MglGeolocateControl
+          position="bottom-left"
+          :position-options="geolocationPositionOptions"
+        />
 
       </MglMap>
 
@@ -344,6 +350,10 @@ export default {
   ],
   data() {
     const data = {
+      geolocationPositionOptions: {
+        enableHighAccuracy: true,
+        timeout: 6000,
+      },
       zoomToShape: {
         geojsonParcels: [],
         markersForAddress: [],
