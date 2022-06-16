@@ -151,7 +151,7 @@
                 >
                   <option value="0">$0</option>
                   <option value="45000">$45,000 </option>
-                  <option value="65000">$65,000</option>
+                  <option value="80000">$80,000</option>
                 </select>
             </div>
             <div :key="homestead" class="tax-calc-element">
