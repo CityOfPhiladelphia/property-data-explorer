@@ -121,7 +121,7 @@
           </h3>
           <p>
             You can estimate the 2023 Real Estate Tax of this property based on the updated 
-            property assessment and the proposed Homestead Exemption amount of $65,000. These 
+            property assessment and the proposed Homestead Exemption amount of $80,000. These 
             estimates are for information only and may not be the actual amount of your 2023 
             Real Estate Tax bill. This estimate does not account for any additional savings or 
             adjustments that may affect this property. Additionally, not all properties are 
