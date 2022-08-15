@@ -117,15 +117,19 @@
       <div class="tax-calc-section has-background-ben-franklin-blue-light hide-print">
         <div>
           <h3>
-            Real Estate Tax Estimator
+            Real Estate Homestead Exemption Estimator
           </h3>
           <p>
-            You can estimate the 2023 Real Estate Tax of this property based on the updated 
-            property assessment and the proposed Homestead Exemption amount of $80,000. These 
-            estimates are for information only and may not be the actual amount of your 2023 
-            Real Estate Tax bill. This estimate does not account for any additional savings or 
-            adjustments that may affect this property. Additionally, not all properties are 
-            eligible for the Homestead Exemption. 
+            Estimate the 2023 Real Estate Tax of residential properties based on the updated
+            property assessment and the new Homestead Exemption amount of $80,000. These
+            estimates are for information only and may not be the actual amount of your 2023
+            Real Estate Tax bill. You may also be eligible for other programs to help reduce your
+            taxes, like the
+            <a target="_blank" href="https://www.phila.gov/services/payments-assistance-taxes/senior-citizen-discounts/low-income-senior-citizen-real-estate-tax-freeze/">
+            Senior Citizen Tax Freeze</a> or
+            <a target="_blank" href="https://www.phila.gov/services/payments-assistance-taxes/income-based-assistance-programs/longtime-owner-occupants-program/">
+            Long-time Owner Occupant Program.</a>
+            Additionally, not all properties are eligible for the Homestead Exemption.
             <a
               href="https://www.phila.gov/services/property-lots-housing/property-taxes/get-real-estate-tax-relief/get-the-homestead-exemption/"
               target="_blank"
@@ -136,15 +140,15 @@
           <p>
             {{homesteadStatus()}}
           </p>
-          <div 
+          <div
             class="tax-calc-container"
             id="tax-calculator"
             v-if="activeOpaData"
           >
             <div class="tax-calc-element">
               <label for="homestead_exemption">Homestead Exemption</label>
-                <select 
-                  name="homestead_exemption" 
+                <select
+                  name="homestead_exemption"
                   id="homestead_exemption"
                   ref='homestead_exemption'
                   @change="handleHomesteadChange($event)"
@@ -156,13 +160,13 @@
             </div>
             <div :key="homestead" class="tax-calc-element">
               <label for="estimated_2023_tax">Estimated 2023 Tax</label>
-               <span id="estimate_total"> {{ taxableValue() }} </span>    
+               <span id="estimate_total"> {{ taxableValue() }} </span>
             </div>
             <div class="tax-calc-element">
-              To report issues or ask questions regarding your 2023 property assessment, 
+              To report issues or ask questions regarding your 2023 property assessment,
               call <b>(215) 686-9200</b>
               or visit <a href="https://www.phila.gov/opa" target="_blank">www.phila.gov/opa</a>
-            
+
             </div>
           </div>
           <div
@@ -1064,11 +1068,11 @@ export default {
     },
     homesteadStatus(){
       if (this.activeOpaData.homestead_exemption > 0) {
-        return 'Your property currently has a Homestead Exemption of ' + dollarUSLocale.format(this.activeOpaData.homestead_exemption) + '.' 
+        return 'This property will receive a Homestead Exemption of ' + dollarUSLocale.format(this.activeOpaData.homestead_exemption) + '.'
       } else if( typeof this.activeOpaData.homestead_exemption !== 'number') {
         return 'Loading Homestead status...'
       }
-      return 'This property currently does not have a Homestead Exemption.' 
+      return 'This property currently does not have a Homestead Exemption. If you qualify for the Homestead Exemption on your home, apply before December 1, 2022.'
     },
     taxableValue(){
       console.log(this.activeOpaData.exempt_building)
