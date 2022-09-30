@@ -581,7 +581,7 @@ export default {
           },
           {
             label: 'Building Condition',
-            value: findConditionCode(opaPublicData.exterior_condition),
+            value: findConditionCode(opaPublicData.interior_condition),
           },
           {
             label: 'Number of Stories',

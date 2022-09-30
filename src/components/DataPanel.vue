@@ -878,20 +878,22 @@ export default {
         {
           label: 'Building Condition',
           value: function(state, item) {
-            const cond_code = function(exterior) {
-              const condition = exterior  == 0 ? 'Not Applicable' :
-                exterior  == 2 ? 'Newer Construction / Rehabbed' :
-                  exterior  == 3 ? 'Above Average' :
-                    exterior  == 4 ? 'Average' :
-                      exterior  == 5 ? 'Below Average' :
-                        exterior  == 6 ? 'Vacant' :
-                          exterior  == 7 ? 'Sealed / Structurally Compromised, Open to the Weather' :
-                            'Not available';
+            const cond_code = function(interior) {
+              const condition = interior  == 0 ? 'Not Applicable' :
+                interior  == 1 ? 'Newer Construction' :
+                  interior  == 2 ? 'Rehabbed' :
+                    interior  == 3 ? 'Above Average' :
+                      interior  == 4 ? 'Average' :
+                        interior  == 5 ? 'Below Average' :
+                          interior  == 6 ? 'Poor' :
+                            interior  == 7 ? 'Sealed / Structurally Compromised' :
+                              interior  == 8 ? 'Sealed / Structurally Compromised' :
+                                'Not available';
               return condition;
             };
-            let exterior = opaPublicData(state, item).exterior_condition
-            if (typeof exterior != 'undefined' && exterior != "") {
-              return cond_code(exterior);
+            let interior = opaPublicData(state, item).interior_condition
+            if (typeof interior != 'undefined' && interior != "") {
+              return cond_code(interior);
             } return "";
           },
         },
