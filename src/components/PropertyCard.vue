@@ -1099,7 +1099,7 @@ export default {
       return false;
     },
     buttonLinkTaxBalance(){
-      window.open('https://www.phila.gov/revenue/realestatetax/#/' + this.activeOpaId, '_blank');
+      window.open('https://tax-services.phila.gov/TAP/EWebServices/realestate/search/' + this.activeOpaId, '_blank');
       return false;
     },
     closeModal(state) {
