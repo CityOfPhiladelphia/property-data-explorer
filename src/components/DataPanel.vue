@@ -900,10 +900,15 @@ export default {
         {
           label: 'Building Description',
           value: function(state, item) {
-            let description = opaPublicData(state, item).building_code_description
-            if (typeof description != 'undefined' && description != "") {
+            let descriptionNew = opaPublicData(state, item).building_code_description_new;
+            let description = opaPublicData(state, item).building_code_description;
+            if (typeof descriptionNew != 'undefined' && descriptionNew != "") {
+              return descriptionNew;
+            } else if (typeof description != 'undefined' && description != "") {
               return description;
-            } return "";
+            } else {
+              return "";
+            }
           },
         },
         {
