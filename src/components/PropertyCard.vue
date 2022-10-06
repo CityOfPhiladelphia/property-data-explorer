@@ -577,7 +577,15 @@ export default {
           },
           {
             label: 'Building Description',
-            value: opaPublicData.building_code_description,
+            value: function() {
+              let value;
+              if (opaPublicData.building_code_description_new) {
+                value = opaPublicData.building_code_description_new;
+              } else {
+                value = opaPublicData.building_code_description;
+              }
+              return value;
+            },
           },
           {
             label: 'Building Condition',
