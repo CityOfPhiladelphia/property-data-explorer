@@ -25,9 +25,9 @@ yarn run dev
 
 ## Deploying
 
--Open a PR to the master branch. This should trigger the various testing scripts and build test. Once those pass, and review is complete merge into master. 
-- Pushing/merging to the master branch should be picked up by GitHub actions and sends to a dev bucket in S3. 
-- Changes merged from master into the production branch will be picked up by GitHub actions and sent to the production bucket in S3.  
+-Open a PR to the main branch. This should trigger the various testing scripts and build test. Once those pass, and review is complete merge into main. 
+- Pushing/merging to the main branch should be picked up by GitHub actions and sends to a dev bucket in S3. 
+- Changes merged from main into the production branch will be picked up by GitHub actions and sent to the production bucket in S3.  
 
 ## Note:
 For internal City Of Philadelphia users, find more information at [Property](https://phila.city/display/appdev/Property+Data+Explorer) in phila.city.
@@ -98,9 +98,9 @@ fix: css changes to avoid using postition absolute bc it causes issues rendering
 ### 7-13-2021
 + Bug fixes: zoning data check before display, atlas link fix, remove owner search from testing
 + Updated datafetch version
-+ merging master to prod after cyclomedia and yarn changes -update pvm dependency version, add appName to store and fix for cyclomedia display
++ merging main to prod after cyclomedia and yarn changes -update pvm dependency version, add appName to store and fix for cyclomedia display
 ### 7-15-2021
-+ merges in master, which uses @phila/vue-mapping 2.2.12, fixing the imagery
++ merges in main, which uses @phila/vue-mapping 2.2.12, fixing the imagery
 ### 8-16-2021
 + Adjust keywords for block search
 + fix build error

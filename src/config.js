@@ -38,7 +38,7 @@ let config = {
     },
   },
   // baseConfig: BASE_CONFIG_URL,
-  // baseConfig: '//raw.githubusercontent.com/stevetotheizz0/atlas_base_config/master/config.js',
+  // baseConfig: '//raw.githubusercontent.com/stevetotheizz0/atlas_base_config/main/config.js',
   gatekeeperKey: process.env.VUE_APP_GATEKEEPER_KEY,
   router: {
     enabled: true,
