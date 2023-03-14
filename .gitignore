@@ -8,6 +8,7 @@ selenium-debug.log
 _bin/
 .npmrc
 .env
+.env.local
 
 
 ** Testing ignore***
