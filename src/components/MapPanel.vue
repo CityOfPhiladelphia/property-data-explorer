@@ -45,7 +45,7 @@
           :layerId="activeBasemap"
           :layer="basemapSource.layer"
           :source="basemapSource.source"
-          :before="basemapsBefore"
+          :before="basemapsAndLabelsBefore"
         />
 
         <MglRasterLayer
@@ -536,6 +536,11 @@ export default {
       }
       return value;
     },
+    basemapsAndLabelsBefore() {
+      let basemapsBefore = this.basemapsBefore;
+      basemapsBefore.push('imageryBasemapLabels');
+      return basemapsBefore;      
+    },
     basemapsBefore() {
       let value = [
         'gl-draw-line.hot',
@@ -968,7 +973,7 @@ export default {
   mounted() {
     // console.log('MapPanel mounted is running, DrawControl', DrawControl)
     const map = this.$store.state.map.map;
-    this.$store.commit('setImagery', 'imagery2020');
+    this.$store.commit('setImagery', 'imagery2022');
   },
   methods: {
     handleBufferButtonClick(e) {
