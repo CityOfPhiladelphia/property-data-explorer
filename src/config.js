@@ -38,7 +38,7 @@ let config = {
     },
   },
   // baseConfig: BASE_CONFIG_URL,
-  // baseConfig: '//raw.githubusercontent.com/stevetotheizz0/atlas_base_config/master/config.js',
+  // baseConfig: '//raw.githubusercontent.com/stevetotheizz0/atlas_base_config/main/config.js',
   gatekeeperKey: process.env.VUE_APP_GATEKEEPER_KEY,
   router: {
     enabled: true,
@@ -185,6 +185,19 @@ let config = {
       },
       layer: {
         id: 'pwd',
+        type: 'raster',
+      },
+    },
+    imagery2022: {
+      source: {
+        tiles: [
+          'https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2022_2in/MapServer/tile/{z}/{y}/{x}',
+        ],
+        type: 'raster',
+        tileSize: 256,
+      },
+      layer: {
+        id: 'imagery2022',
         type: 'raster',
       },
     },
