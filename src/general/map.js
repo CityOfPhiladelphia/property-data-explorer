@@ -56,7 +56,7 @@ export default {
       attribution: 'Parcels: Department of Records'
     },
     imagery2022: {
-      url: 'https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2022_2in/MapServer/tile/{z}/{y}/{x}',
+      url: 'https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2020_3in/MapServer/',
       label: '2022',
       tiledLayers: [
         'imageryBasemapLabels',

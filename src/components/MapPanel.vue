@@ -45,7 +45,7 @@
           :layerId="activeBasemap"
           :layer="basemapSource.layer"
           :source="basemapSource.source"
-          :before="basemapsBefore"
+          :before="basemapsAndLabelsBefore"
         />
 
         <MglRasterLayer
@@ -535,6 +535,11 @@ export default {
         value = false;
       }
       return value;
+    },
+    basemapsAndLabelsBefore() {
+      let basemapsBefore = this.basemapsBefore;
+      basemapsBefore.push('imageryBasemapLabels');
+      return basemapsBefore;      
     },
     basemapsBefore() {
       let value = [
