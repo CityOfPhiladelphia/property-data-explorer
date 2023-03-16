@@ -3,7 +3,7 @@ name: Build, Check And Deploy to Dev
 on:
   push:
     branches:
-      - 2022-imagery
+      - main
 
 jobs:
   build:
