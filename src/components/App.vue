@@ -919,6 +919,13 @@ button {
 
 }
 
+@media screen and (min-width: 46.875em) {
+
+  body {
+    overflow: hidden;
+  }
+
+}
 
 @media screen and (max-width: 750px) {
 
