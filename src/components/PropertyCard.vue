@@ -551,15 +551,11 @@ export default {
             <i class="fa fa-exclamation-triangle fa-5x"></i>\
           </div>\
           <div>\
+            <p></p>\
             <p>\
-              OPA is currently updating its data files. Some of the information below does not\
-              yet reflect the data used to calculate the tax year 2023 property value. For questions\
-              regarding the 2023 property value, call OPA at <a href="tel:+12156869200">(215) 686-9200</a>.\
-            </p> \
-            <p>\
-              For all other property questions,\
+              For all property questions,\
               <a target="_blank" href="https://opainquiry.phila.gov/opa.apps/help/PropInq.aspx?acct_num='+ this.activeOpaId + ' ">\
-              <b>submit an official inquiry</b></a>.\
+              <b>submit an official inquiry</b></a> or call OPA at <a href="tel:+12156869200">(215) 686-9200</a>.\
             </p>\
           </div>\
         </div>\
