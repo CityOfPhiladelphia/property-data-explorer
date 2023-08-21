@@ -127,7 +127,7 @@
             </a> of this year.
           </p>
           <p v-if="!homesteadStatus()">
-            The estimate below if for information only and may not be the actual amount of your {{ currentAssessmentYear }} Real
+            The estimate below is for information only and may not be the actual amount of your {{ currentAssessmentYear }} Real
             Estate Tax bill. You may also be eligible for other programs to help reduce your taxes, like the
             <a target="_blank" href="https://www.phila.gov/services/payments-assistance-taxes/senior-citizen-discounts/low-income-senior-citizen-real-estate-tax-freeze/">
             Senior Citizen Tax Freeze</a> or
@@ -178,7 +178,7 @@
             {{homesteadStatus()}}
           </p> -->
 
-          <p>
+          <p v-if="homesteadStatus()">
             The estimate below is for information only and may not be the actual amount of your {{ currentAssessmentYear }}
             Real Estate Tax bill.
           </p>
@@ -426,12 +426,16 @@ export default {
   computed: {
     currentAssessmentYear() {
       let years = [];
-      let values = this.$store.state.activeSearch.assessmentHistory.data;
-      for (let value of values) {
-        // years.push(parseInt(value.year));
-        years.push(value.year);
+      let year;
+      if (this.$store.state.activeSearch.assessmentHistory.data) {
+        let values = this.$store.state.activeSearch.assessmentHistory.data;
+        for (let value of values) {
+          // years.push(parseInt(value.year));
+          years.push(value.year);
+        }
+        year = Math.max(...years);
       }
-      return Math.max(...years);
+      return year;
     },
     containerClass() {
       return ['openmaps-about', 'openmaps-modal'];
@@ -597,21 +601,11 @@ export default {
         dataSources: [ 'opa_public' ],
         title: 'Property Details',
         subtitle:  '\
-          <div class="intro-blue warning">\
-          <div class="icon">\
-            <i class="fa fa-exclamation-triangle fa-5x"></i>\
-          </div>\
-          <div>\
-            <p></p>\
-            <p>\
-              For all property questions,\
-              <a target="_blank" href="https://opainquiry.phila.gov/opa.apps/help/PropInq.aspx?acct_num='+ this.activeOpaId + ' ">\
-              <b>submit an official inquiry</b></a> or call OPA at <a href="tel:+12156869200">(215) 686-9200</a>.\
-            </p>\
-          </div>\
-        </div>\
         Property characteristics described below are included for convenience, but may not reflect the most recent conditions \
-        at the property.<br>\
+        at the property.\
+        For all property questions,\
+        <a target="_blank" href="https://opainquiry.phila.gov/opa.apps/help/PropInq.aspx?acct_num='+ this.activeOpaId + ' ">\
+        <b>submit an official inquiry</b></a> or call OPA at <a href="tel:+12156869200">(215) 686-9200</a>.\
         ',
         fields: [
           {
@@ -1530,9 +1524,9 @@ div.tax-calc-section.has-background-ben-franklin-blue-light{
       width: 166px;
       height: 45px;
       border: 2px solid color(dark-ben-franklin);
-      option {
-        text-align: center;
-      }
+      // option {
+      //   text-align: center;
+      // }
     }
      & #estimate_total {
       display: block;
@@ -1543,6 +1537,7 @@ div.tax-calc-section.has-background-ben-franklin-blue-light{
     #homestead_exemption {
       margin-top: 8px;
       width: 220px;
+      text-align: left;
     }
     a {
       display: contents;
