@@ -133,7 +133,7 @@
             Senior Citizen Tax Freeze</a> or
             <a target="_blank" href="https://www.phila.gov/services/payments-assistance-taxes/income-based-assistance-programs/longtime-owner-occupants-program/">
             Long-time Owner Occupant Program.</a>
-            Additionally, not all properties are eligible for the the Homestread Exemption.
+            Additionally, not all properties are eligible for the the Homestead Exemption.
             <a
               href="https://www.phila.gov/services/property-lots-housing/property-taxes/get-real-estate-tax-relief/get-the-homestead-exemption/"
               target="_blank"
@@ -148,7 +148,7 @@
             Senior Citizen Tax Freeze</a> or
             <a target="_blank" href="https://www.phila.gov/services/payments-assistance-taxes/income-based-assistance-programs/longtime-owner-occupants-program/">
             Long-time Owner Occupant Program.</a>
-            Additionally, not all properties are eligible for the the Homestread Exemption.
+            Additionally, not all properties are eligible for the the Homestead Exemption.
             <a
               href="https://www.phila.gov/services/property-lots-housing/property-taxes/get-real-estate-tax-relief/get-the-homestead-exemption/"
               target="_blank"
@@ -177,6 +177,11 @@
           <!-- <p>
             {{homesteadStatus()}}
           </p> -->
+
+          <p>
+            The estimate below is for information only and may not be the actual amount of your 2023
+            Real Estate Tax bill.
+          </p>
           <div
             class="tax-calc-container"
             id="tax-calculator"
