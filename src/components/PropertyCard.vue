@@ -113,7 +113,7 @@
         </a>
       </p>
 
-      <!-- 2023 Property Tax Calculator -->
+      <!-- Property Tax Calculator -->
       <div class="tax-calc-section has-background-ben-franklin-blue-light hide-print">
         <div>
           <h3>
@@ -127,7 +127,7 @@
             </a> of this year.
           </p>
           <p v-if="!homesteadStatus()">
-            The estimate below if for information only and may not be the actual amount of your 2023 Real
+            The estimate below if for information only and may not be the actual amount of your {{ currentAssessmentYear }} Real
             Estate Tax bill. You may also be eligible for other programs to help reduce your taxes, like the
             <a target="_blank" href="https://www.phila.gov/services/payments-assistance-taxes/senior-citizen-discounts/low-income-senior-citizen-real-estate-tax-freeze/">
             Senior Citizen Tax Freeze</a> or
@@ -179,7 +179,7 @@
           </p> -->
 
           <p>
-            The estimate below is for information only and may not be the actual amount of your 2023
+            The estimate below is for information only and may not be the actual amount of your {{ currentAssessmentYear }}
             Real Estate Tax bill.
           </p>
           <div
@@ -201,15 +201,15 @@
                 </select>
             </div>
             <div :key="homestead" class="tax-calc-element">
-              <label for="estimated_2023_tax">Estimated 2023 Tax</label>
+              <label for="estimated_tax">Estimated {{ currentAssessmentYear }} Tax</label>
                <span id="estimate_total"> {{ taxableValue() }} </span>
             </div>
-            <!-- <div class="tax-calc-element">
-              To report issues or ask questions regarding your 2023 property assessment,
+            <div class="tax-calc-element">
+              To report issues or ask questions regarding your {{ currentAssessmentYear }} property assessment,
               call <b>(215) 686-9200</b>
               or visit <a href="https://www.phila.gov/opa" target="_blank">www.phila.gov/opa</a>
 
-            </div> -->
+            </div>
           </div>
           <!-- <div
             v-if="!activeOpaData"
@@ -424,6 +424,15 @@ export default {
     },
   },
   computed: {
+    currentAssessmentYear() {
+      let years = [];
+      let values = this.$store.state.activeSearch.assessmentHistory.data;
+      for (let value of values) {
+        // years.push(parseInt(value.year));
+        years.push(value.year);
+      }
+      return Math.max(...years);
+    },
     containerClass() {
       return ['openmaps-about', 'openmaps-modal'];
     },
@@ -1092,9 +1101,9 @@ export default {
         this.$store.commit('setActiveAddressKnown', false);
       }
     },
-    // Update for 2023 Property Tax Calculator
+    // Update for Property Tax Calculator
     activeOpaData(newData){
-      // 2023 Property Tax Calc Added
+      // Property Tax Calc Added
       this.$set(this, 'homestead', '');
       if(this.$refs['homestead_exemption']) {
         this.$refs['homestead_exemption'].options.selectedIndex = 0;
@@ -1104,7 +1113,7 @@ export default {
 
   },
   methods: {
-    // Update for 2023 Property Tax Calculator
+    // Update for Property Tax Calculator
     handleHomesteadChange(e){
       const target = e.target;
       const slug = target.value;
@@ -1148,7 +1157,7 @@ export default {
     //   return dollarUSLocale.format(market_value);
     //   // return dollarUSLocale.format(market_value + current_homestead);
     // },
-    // End - Update for 2023 Property Tax Calculator
+    // End - Update for Property Tax Calculator
     buttonLinkLI(){
       window.open('https://li.phila.gov/property-history/search?address=' + this.activeOpaId, '_blank');
       return false;
@@ -1223,7 +1232,7 @@ export default {
 }
 
 
-//  2023 Property Tax Calculator CSS
+//  Property Tax Calculator CSS
 @media screen and (min-width: 1160px) {
   .tax-calc-container {
     flex-wrap: wrap;
@@ -1260,7 +1269,7 @@ export default {
     }
   }
 }
-//  End - 2023 Property Tax Calculator CSS
+//  End - Property Tax Calculator CSS
 
 
 @media screen and (max-width: 1030px) {
@@ -1490,7 +1499,7 @@ export default {
 
 // End of print css
 
-//  2023 Property Tax Calculator CSS
+//  Property Tax Calculator CSS
 p.calc-text {
   text-align: start;
   font-size: 12px;
@@ -1540,7 +1549,7 @@ div.tax-calc-section.has-background-ben-franklin-blue-light{
     }
   }
 }
-//  End - 2023 Property Tax Calculator CSS
+//  End - Property Tax Calculator CSS
 
 .address-opa-right {
   float: right;
