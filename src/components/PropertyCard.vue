@@ -126,7 +126,7 @@
             apply before December 1
             </a> of this year.
           </p>
-          <p v-if="!homesteadStatus()">
+          <!-- <p v-if="!homesteadStatus()">
             The estimate below is for information only and may not be the actual amount of your {{ currentAssessmentYear }} Real
             Estate Tax bill. You may also be eligible for other programs to help reduce your taxes, like the
             <a target="_blank" href="https://www.phila.gov/services/payments-assistance-taxes/senior-citizen-discounts/low-income-senior-citizen-real-estate-tax-freeze/">
@@ -140,9 +140,10 @@
             >
               Check the guidelines.
             </a>
-          </p>
+          </p> -->
 
-          <p v-if="homesteadStatus()">
+          <!-- <p v-if="homesteadStatus()"> -->
+          <p>
             You may also be eligible for other programs to help reduce your taxes, like the
             <a target="_blank" href="https://www.phila.gov/services/payments-assistance-taxes/senior-citizen-discounts/low-income-senior-citizen-real-estate-tax-freeze/">
             Senior Citizen Tax Freeze</a> or
@@ -178,7 +179,7 @@
             {{homesteadStatus()}}
           </p> -->
 
-          <p v-if="homesteadStatus()">
+          <p>
             The estimate below is for information only and may not be the actual amount of your {{ currentAssessmentYear }}
             Real Estate Tax bill.
           </p>
@@ -1234,14 +1235,16 @@ export default {
     div.tax-calc-element {
       min-width: auto;
       padding-left: 0;
-      &:nth-child(1){
-        margin-left: 32px;
-        margin-right: 16px;
-      }
-      &:nth-child(2){
-        margin-right: 16px;
-        margin-left: 16px;
-      }
+      margin-right: 16px;
+      margin-left: 16px;
+      // &:nth-child(1){
+      //   margin-left: 32px;
+      //   margin-right: 16px;
+      // }
+      // &:nth-child(2){
+      //   margin-right: 16px;
+      //   margin-left: 16px;
+      // }
       &:nth-child(3){
         margin-right: 32px;
         margin-left: 16px;
