@@ -3,7 +3,7 @@ name: Build, Check And Deploy to Dev
 on:
   push:
     branches:
-      - main
+      - fix-tax-exemptions
 
 jobs:
   build:
