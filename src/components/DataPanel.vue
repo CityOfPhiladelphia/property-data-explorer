@@ -284,7 +284,7 @@ export default {
             },
             customKey: function(state, item) {
               if (item.properties.opa_account_num != "") {
-                if (typeof state.sources.opa_assessment.targets[item.properties.opa_account_num] != 'undefined') {
+                if (typeof state.sources.opa_assessment.targets[item.properties.opa_account_num] != 'undefined' && state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date != null) {
                   // console.log(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date);
                   return format(parseISO(state.sources.opa_assessment.targets[item.properties.opa_account_num].data.sale_date), 'yyyyMMdd');
                 }
