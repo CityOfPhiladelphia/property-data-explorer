@@ -378,15 +378,17 @@
 </template>
 
 <script>
+
 let findConditionCode = function(exterior) {
   const condition = exterior  == 0 ? 'Not Applicable' :
-    exterior  == 2 ? 'Newer Construction / Rehabbed' :
-      exterior  == 3 ? 'Above Average' :
-        exterior  == 4 ? 'Average' :
-          exterior  == 5 ? 'Below Average' :
-            exterior  == 6 ? 'Vacant' :
-              exterior  == 7 ? 'Sealed / Structurally Compromised, Open to the Weather' :
-                'Not available';
+    exterior  == 1 ? 'Newer Construction' :
+      exterior  == 2 ? 'Rehabbed' :
+        exterior  == 3 ? 'Above Average' :
+          exterior  == 4 ? 'Average' :
+            exterior  == 5 ? 'Below Average' :
+              exterior  == 6 ? 'Vacant' :
+                exterior  == 7 ? 'Sealed / Structurally Compromised, Open to the Weather' :
+                  'Not available';
   return condition;
 };
 
