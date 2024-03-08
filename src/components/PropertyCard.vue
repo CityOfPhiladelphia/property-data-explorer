@@ -379,15 +379,15 @@
 
 <script>
 
-let findConditionCode = function(exterior) {
-  const condition = exterior  == 0 ? 'Not Applicable' :
-    exterior  == 1 ? 'Newer Construction' :
-      exterior  == 2 ? 'Rehabbed' :
-        exterior  == 3 ? 'Above Average' :
-          exterior  == 4 ? 'Average' :
-            exterior  == 5 ? 'Below Average' :
-              exterior  == 6 ? 'Vacant' :
-                exterior  == 7 ? 'Sealed / Structurally Compromised, Open to the Weather' :
+let findConditionCode = function(conditionCode) {
+  const condition = conditionCode  == 0 ? 'Not Applicable' :
+    conditionCode  == 1 ? 'Newer Construction' :
+      conditionCode  == 2 ? 'Rehabbed' :
+        conditionCode  == 3 ? 'Above Average' :
+          conditionCode  == 4 ? 'Average' :
+            conditionCode  == 5 ? 'Below Average' :
+              conditionCode  == 6 ? 'Vacant' :
+                conditionCode  == 7 ? 'Sealed / Structurally Compromised, Open to the Weather' :
                   'Not available';
   return condition;
 };
@@ -633,7 +633,8 @@ export default {
           },
           {
             label: 'Building Condition',
-            value: findConditionCode(opaPublicData.interior_condition),
+            // 3/8/2024 - we set it to use exterior_condition instead of interior_condition
+            value: findConditionCode(opaPublicData.exterior_condition),
           },
           {
             label: 'Number of Stories',
