@@ -878,22 +878,23 @@ export default {
         {
           label: 'Building Condition',
           value: function(state, item) {
-            const cond_code = function(interior) {
-              const condition = interior  == 0 ? 'Not Applicable' :
-                interior  == 1 ? 'Newer Construction' :
-                  interior  == 2 ? 'Rehabbed' :
-                    interior  == 3 ? 'Above Average' :
-                      interior  == 4 ? 'Average' :
-                        interior  == 5 ? 'Below Average' :
-                          interior  == 6 ? 'Poor' :
-                            interior  == 7 ? 'Sealed / Structurally Compromised' :
-                              interior  == 8 ? 'Sealed / Structurally Compromised' :
+            const cond_code = function(conditionCode) {
+              const condition = conditionCode  == 0 ? 'Not Applicable' :
+                conditionCode  == 1 ? 'Newer Construction' :
+                  conditionCode  == 2 ? 'Rehabbed' :
+                    conditionCode  == 3 ? 'Above Average' :
+                      conditionCode  == 4 ? 'Average' :
+                        conditionCode  == 5 ? 'Below Average' :
+                          conditionCode  == 6 ? 'Poor' :
+                            conditionCode  == 7 ? 'Sealed / Structurally Compromised' :
+                              conditionCode  == 8 ? 'Sealed / Structurally Compromised' :
                                 'Not available';
               return condition;
             };
-            let interior = opaPublicData(state, item).interior_condition
-            if (typeof interior != 'undefined' && interior != "") {
-              return cond_code(interior);
+            // 3/8/2024 - we set it to use exterior_condition instead of interior_condition
+            let conditionCode = opaPublicData(state, item).exterior_condition
+            if (typeof conditionCode != 'undefined' && conditionCode != "") {
+              return cond_code(conditionCode);
             } return "";
           },
         },
