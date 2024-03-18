@@ -634,7 +634,8 @@ export default {
           {
             label: 'Building Condition',
             // 3/8/2024 - we set it to use exterior_condition instead of interior_condition
-            value: findConditionCode(opaPublicData.exterior_condition),
+            // 3/18/2024 - we set it back to useing interior_condition
+            value: findConditionCode(opaPublicData.interior_condition),
           },
           {
             label: 'Number of Stories',
