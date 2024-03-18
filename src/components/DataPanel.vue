@@ -892,7 +892,8 @@ export default {
               return condition;
             };
             // 3/8/2024 - we set it to use exterior_condition instead of interior_condition
-            let conditionCode = opaPublicData(state, item).exterior_condition
+            // 3/18/2024 - we set it back to useing interior_condition
+            let conditionCode = opaPublicData(state, item).interior_condition
             if (typeof conditionCode != 'undefined' && conditionCode != "") {
               return cond_code(conditionCode);
             } return "";
