@@ -188,6 +188,19 @@ let config = {
         type: 'raster',
       },
     },
+    imagery2023: {
+      source: {
+        tiles: [
+          'https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2023/MapServer/tile/{z}/{y}/{x}',
+        ],
+        type: 'raster',
+        tileSize: 256,
+      },
+      layer: {
+        id: 'imagery2023',
+        type: 'raster',
+      },
+    },
     imagery2022: {
       source: {
         tiles: [
