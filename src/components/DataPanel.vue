@@ -1224,7 +1224,7 @@ export default {
         {
           label: 'Council District',
           value: function(state, item) {
-            return opaPublicData(state, item).council_district_2016;
+            return opaPublicData(state, item).council_district_2024;
           },
         },
         {
