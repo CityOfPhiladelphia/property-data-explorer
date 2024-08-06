@@ -96,18 +96,18 @@ let config = {
       page: 1,
     },
   },
-  ownerSearch: {
-    url: function (input) {
-      var inputEncoded = encodeURIComponent(input);
-      return 'https://api.phila.gov/ais_ps/v1/owner/' + inputEncoded;
-    },
-    params: {
-      gatekeeperKey: process.env.VUE_APP_GATEKEEPER_KEY,
-      include_units: false,
-      opa_only: true,
-      page: 1,
-    },
-  },
+  // ownerSearch: {
+  //   url: function (input) {
+  //     var inputEncoded = encodeURIComponent(input);
+  //     return 'https://api.phila.gov/ais_ps/v1/owner/' + inputEncoded;
+  //   },
+  //   params: {
+  //     gatekeeperKey: process.env.VUE_APP_GATEKEEPER_KEY,
+  //     include_units: false,
+  //     opa_only: true,
+  //     page: 1,
+  //   },
+  // },
   activeSearch: {
     assessmentHistory: {
       type: 'http-get',
