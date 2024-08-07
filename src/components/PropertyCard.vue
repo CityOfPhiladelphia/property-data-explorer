@@ -198,7 +198,7 @@
                 >
                   <option value="0">No exemption</option>
                   <option value="100000">Homestead Exemption</option>
-                  <!-- <option value="80000">$100,000</option> -->
+                  <!-- <option value="100000">$100,000</option> -->
                 </select>
             </div>
             <div :key="homestead" class="tax-calc-element">
