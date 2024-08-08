@@ -4,8 +4,8 @@ Updated application for property.phila.gov
 
 ## Dev Setup
 Prerequisites:
-* Node 10 -- Recommended to use nvm to manage your node installations
-* Yarn 
+* Node 14 -- Recommended to use nvm to manage your node installations
+* Npm
 
 
 1. Update the fortawesome repository in your local .npmrc file: 
@@ -16,11 +16,11 @@ Prerequisites:
 * Ask another developer for the authtoken. 
 1. Install packages: 
 ```
-$ yarn install
+$ npm install
 ```
 1. Run the app in dev mode: 
 ```
-yarn run dev
+npm run serve
 ```
 
 ## Deploying
