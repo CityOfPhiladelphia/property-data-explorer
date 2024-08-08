@@ -124,7 +124,13 @@
             If you qualify for the Homestead Exemption on your home,
             <a href="https://www.phila.gov/services/property-lots-housing/property-taxes/get-real-estate-tax-relief/get-the-homestead-exemption/" target="_blank">
             apply before December 1
-            </a> of this year.
+            </a> of this year. Not all properties are eligible for the the Homestead Exemption.
+            <a
+              href="https://www.phila.gov/services/property-lots-housing/property-taxes/get-real-estate-tax-relief/get-the-homestead-exemption/"
+              target="_blank"
+            >
+              Check the guidelines.
+            </a>
           </p>
           <!-- <p v-if="!homesteadStatus()">
             The estimate below is for information only and may not be the actual amount of your {{ currentAssessmentYear }} Real
@@ -142,20 +148,22 @@
             </a>
           </p> -->
 
-          <!-- <p v-if="homesteadStatus()"> -->
-          <p>
-            You may also be eligible for other programs to help reduce your taxes, like the
+          <p v-if="homesteadStatus()">
+          <!-- <p> -->
+            You never have to reapply for the Homestead Exemption unless your deed changes, 
+            such as when refinancing a mortgage or adding a co-owner. 
+            If you’ve purchased your home within the last year, please contact the Hotline for 
+            information and assistance at (215) 686-9200. Homeowners may also be eligible for other programs 
+            to help reduce your taxes, like the 
             <a target="_blank" href="https://www.phila.gov/services/payments-assistance-taxes/senior-citizen-discounts/low-income-senior-citizen-real-estate-tax-freeze/">
-            Senior Citizen Tax Freeze</a> or
+              Senior Citizen Tax Freeze</a> or
             <a target="_blank" href="https://www.phila.gov/services/payments-assistance-taxes/income-based-assistance-programs/longtime-owner-occupants-program/">
             Long-time Owner Occupant Program.</a>
-            Additionally, not all properties are eligible for the the Homestead Exemption.
-            <a
-              href="https://www.phila.gov/services/property-lots-housing/property-taxes/get-real-estate-tax-relief/get-the-homestead-exemption/"
-              target="_blank"
-            >
-              Check the guidelines.
-            </a>
+
+          </p>
+          <p>
+            The City will launch a Low-Income Tax Freeze this year. Find more details at 
+            <a target="_blank" href="https://www.phila.gov/revenue">phila.gov/revenue</a>.
           </p>
           <!-- <p>
             Estimate the 2023 Real Estate Tax of residential properties based on the updated
