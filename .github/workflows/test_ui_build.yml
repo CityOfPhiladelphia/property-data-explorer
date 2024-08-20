@@ -3,7 +3,7 @@ name: UI Test
 on:
   pull_request:
     branches:
-      - main
+      - main_x
 
 jobs:
   build:
