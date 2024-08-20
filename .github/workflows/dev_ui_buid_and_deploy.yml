@@ -3,7 +3,7 @@ name: Build, Check And Deploy to Dev
 on:
   push:
     branches:
-      - dev/2023-imagery
+      - fix/block-export
 
 jobs:
   build:
