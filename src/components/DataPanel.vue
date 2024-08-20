@@ -667,7 +667,7 @@ export default {
       if(item.condo) {
         opaId = "";
         } else {
-          if (![ 'geocode', 'reverseGeocode', 'owner search' ].includes(this.lastSearchMethod)) {
+          if (![ 'geocode', 'reverseGeocode', 'owner search', 'block search' ].includes(this.lastSearchMethod)) {
             opaId = item.parcel_number;
           } else {
             opaId = item.properties.opa_account_num;
