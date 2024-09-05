@@ -117,10 +117,21 @@
       <div class="tax-calc-section has-background-ben-franklin-blue-light hide-print">
         <div>
           <h3>
-            {{ homesteadStatusSentence() }}
-            <!-- Real Estate Homestead Exemption Estimator -->
+            Real Estate Tax Estimator
           </h3>
-          <p v-if="!homesteadStatus()">
+          <div class="tax-year-container">
+            <label for="tax_year">Assessment Year</label>
+            <select
+              name="tax_year"
+              id="tax_year"
+              ref='tax_year'
+              v-model="selectedTaxYear"
+            >
+              <option value="2024">2024</option>
+              <option value="2025">2025</option>
+            </select>
+          </div>
+          <!-- <p v-if="!homesteadStatus()">
             If you qualify for the Homestead Exemption on your home,
             <a href="https://www.phila.gov/services/property-lots-housing/property-taxes/get-real-estate-tax-relief/get-the-homestead-exemption/" target="_blank">
             apply before December 1
@@ -131,25 +142,9 @@
             >
               Check the guidelines.
             </a>
-          </p>
-          <!-- <p v-if="!homesteadStatus()">
-            The estimate below is for information only and may not be the actual amount of your {{ currentAssessmentYear }} Real
-            Estate Tax bill. You may also be eligible for other programs to help reduce your taxes, like the
-            <a target="_blank" href="https://www.phila.gov/services/payments-assistance-taxes/senior-citizen-discounts/low-income-senior-citizen-real-estate-tax-freeze/">
-            Senior Citizen Tax Freeze</a> or
-            <a target="_blank" href="https://www.phila.gov/services/payments-assistance-taxes/income-based-assistance-programs/longtime-owner-occupants-program/">
-            Long-time Owner Occupant Program.</a>
-            Additionally, not all properties are eligible for the the Homestead Exemption.
-            <a
-              href="https://www.phila.gov/services/property-lots-housing/property-taxes/get-real-estate-tax-relief/get-the-homestead-exemption/"
-              target="_blank"
-            >
-              Check the guidelines.
-            </a>
           </p> -->
 
-          <p v-if="homesteadStatus()">
-          <!-- <p> -->
+          <!-- <p v-if="homesteadStatus()">
             You never have to reapply for the Homestead Exemption unless your deed changes, 
             such as when refinancing a mortgage or adding a co-owner. 
             If you’ve purchased your home within the last year, please contact the Hotline for 
@@ -160,36 +155,16 @@
             <a target="_blank" href="https://www.phila.gov/services/payments-assistance-taxes/income-based-assistance-programs/longtime-owner-occupants-program/">
             Long-time Owner Occupant Program.</a>
 
+          </p> -->
+          <p>
+            The estimate below is for information only and may not be the actual amount of your {{ selectedTaxYear }} Real Estate Tax bill.
+            You may be eligible for programs to help reduce your taxes, like <a target="_blank">Homestead Exemption</a>,
+            <a target="_blank">Senior Citizen Tax Freeze</a>, or <a target="_blank">Long-time Owner Occupant Program (LOOP)</a>,
+            or be eligible to <a target="_blank">defer</a> some of your bill.  Not all properties are eligible for these programs.
           </p>
           <p>
             The City will launch a Low-Income Tax Freeze this year. Find more details at 
             <a target="_blank" href="https://www.phila.gov/revenue">phila.gov/revenue</a>.
-          </p>
-          <!-- <p>
-            Estimate the 2023 Real Estate Tax of residential properties based on the updated
-            property assessment and the new Homestead Exemption amount of $80,000. These
-            estimates are for information only and may not be the actual amount of your 2023
-            Real Estate Tax bill. You may also be eligible for other programs to help reduce your
-            taxes, like the
-            <a target="_blank" href="https://www.phila.gov/services/payments-assistance-taxes/senior-citizen-discounts/low-income-senior-citizen-real-estate-tax-freeze/">
-            Senior Citizen Tax Freeze</a> or
-            <a target="_blank" href="https://www.phila.gov/services/payments-assistance-taxes/income-based-assistance-programs/longtime-owner-occupants-program/">
-            Long-time Owner Occupant Program.</a>
-            Additionally, not all properties are eligible for the Homestead Exemption.
-            <a
-              href="https://www.phila.gov/services/property-lots-housing/property-taxes/get-real-estate-tax-relief/get-the-homestead-exemption/"
-              target="_blank"
-            >
-              Check the guidelines.
-            </a>
-          </p> -->
-          <!-- <p>
-            {{homesteadStatus()}}
-          </p> -->
-
-          <p>
-            The estimate below is for information only and may not be the actual amount of your {{ currentAssessmentYear }}
-            Real Estate Tax bill.
           </p>
           <div
             class="tax-calc-container"
@@ -206,6 +181,7 @@
                 >
                   <option value="0">No exemption</option>
                   <option value="100000">Homestead Exemption</option>
+                  <!-- <option  -->
                   <!-- <option value="100000">$100,000</option> -->
                 </select>
             </div>
@@ -220,6 +196,9 @@
 
             </div>
           </div>
+          <p>{{ homesteadStatusSentence() }}</p>
+
+          
           <!-- <div
             v-if="!activeOpaData"
             class="spinner-div small-12 cell"
@@ -426,6 +405,7 @@ export default {
     data() {
     return {
       homestead: 0,
+      selectedTaxYear: '2025',
     };
   },
   props: {
@@ -1146,7 +1126,7 @@ export default {
       // return 'This property currently does not have a Homestead Exemption. If you qualify for the Homestead Exemption on your home, apply before December 1, 2022.'
     },
     taxableValue(){
-      console.log(this.activeOpaData.exempt_building)
+      console.log('taxableValue is running, this.activeOpaData.exempt_building:', this.activeOpaData.exempt_building);
       if (this.activeOpaData) {
         let selected_homestead_val = this.homestead === '' ? 0 : this.homestead;
         console.log("this.homestead", this.homestead, 'exempt_land: ', this.activeOpaData.exempt_land, 'exempt_improvement: ', this.activeOpaData.exempt_building, this.activeOpaData  )
@@ -1238,7 +1218,15 @@ export default {
 
 }
 
+#tax_year {
+  width: 100px !important;
+}
 
+.tax-year-container {
+  max-width: 100px !important;
+  padding-left: 0px !important;
+  margin: 0px !important;
+}
 //  Property Tax Calculator CSS
 @media screen and (min-width: 1160px) {
   .tax-calc-container {
