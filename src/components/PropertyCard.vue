@@ -117,7 +117,7 @@
       <div class="tax-calc-section has-background-ben-franklin-blue-light hide-print">
         <div>
           <h3>
-            Real Estate Tax Estimator
+            <b>Real Estate Tax Estimator</b>
           </h3>
           <div class="tax-year-container">
             <label for="tax_year">Assessment Year</label>
@@ -177,28 +177,69 @@
                   name="homestead_exemption"
                   id="homestead_exemption"
                   ref='homestead_exemption'
-                  @change="handleHomesteadChange($event)"
+                  v-model="selectedExemption"
                 >
-                  <option value="0">No exemption</option>
-                  <option value="100000">Homestead Exemption</option>
-                  <!-- <option  -->
-                  <!-- <option value="100000">$100,000</option> -->
+                  <option value="none">No exemption</option>
+                  <option value="homestead">Homestead Exemption</option>
+                  <option value="loop">Long-time Owner Occupant Program</option>
+                  <option value="senior">Senior Citizen Tax Freeze</option>
                 </select>
             </div>
             <div :key="homestead" class="tax-calc-element">
-              <label for="estimated_tax">Estimated {{ currentAssessmentYear }} Tax</label>
+              <label for="estimated_tax">Estimated {{ selectedTaxYear }} Tax</label>
                <span id="estimate_total"> {{ taxableValue() }} </span>
             </div>
             <div class="tax-calc-element">
-              To report issues or ask questions regarding your {{ currentAssessmentYear }} property assessment,
-              call <b>(215) 686-9200</b>
-              or visit <a href="https://www.phila.gov/opa" target="_blank">www.phila.gov/opa</a>
-
+              To report issues or ask questions regarding your {{ selectedTaxYear }}
+              property assessment, call <b>(215) 686-9200</b> or visit
+              <a href="https://www.phila.gov/opa" target="_blank">www.phila.gov/opa</a>
             </div>
           </div>
-          <p>{{ homesteadStatusSentence() }}</p>
 
-          
+          <div
+            v-if="selectedExemption == 'none'"
+            class="tax-calc-div"
+          >
+            <h4><b>{{ homesteadStatusSentence() }}</b></h4>
+            <p>If you qualify for the Homestead Exemption on your home,
+              <a href="https://www.phila.gov/services/property-lots-housing/property-taxes/get-real-estate-tax-relief/get-the-homestead-exemption/" target="_blank">
+              apply before December 1
+              </a> of this year.
+            </p>
+          </div>
+
+          <div
+            v-if="selectedExemption == 'homestead'"
+            class="tax-calc-div"
+          >
+            <h4><b>{{ homesteadStatusSentence() }}</b></h4>
+            <p>If you qualify for the Homestead Exemption on your home,
+              <a href="https://www.phila.gov/services/property-lots-housing/property-taxes/get-real-estate-tax-relief/get-the-homestead-exemption/" target="_blank">
+              apply before December 1
+              </a> of this year.
+            </p>
+
+            <p>
+              The Homestead Exemption is a discount on the amount of real estate tax you owe each year.
+              Your annual tax bill will change based on the property's assessed value. To learn more
+              about the program and how to apply, <a target="_blank">check the guidelines</a>. The deadline
+              to apply for the Homestead Exemption for {{ selectedTaxYear }} is <b>December 1,
+              {{ selectedTaxYear }}</b>. If you can, apply by <b>September 13</b> to be approved earlier.
+            </p>
+          </div>
+
+          <h4>
+            <b>This property {{ eligibleDeferral }} eligible to enroll in the Real Estate Tax Deferral program for {{ selectedTaxYear }}.</b>
+          </h4>
+          <p>
+            If your Real Estate Tax increases by more than 15% from the previous year, you may be able to pay the excess
+            amount at a later date (defer payment). Deferral is for the current year only. If your Real Estate Tax increases
+            by more than 15% year-to-year in the future, you may be able to apply for another deferral.
+            <a target="_blank">Check the guidelines</a> to see if you are eligible. The deadline to enroll in the
+            Real Estate Tax Deferral Program for {{ selectedTaxYear }} is <b>March 31, {{ parseInt(selectedTaxYear) + 1 }}.</b> 
+          </p>
+
+
           <!-- <div
             v-if="!activeOpaData"
             class="spinner-div small-12 cell"
@@ -404,8 +445,9 @@ export default {
   },
     data() {
     return {
-      homestead: 0,
+      homestead: 100000,
       selectedTaxYear: '2025',
+      selectedExemption: 'none'
     };
   },
   props: {
@@ -415,6 +457,15 @@ export default {
     },
   },
   computed: {
+    eligibleDeferral() {
+      let value;
+      if (this.selectedTaxYear == '2024') {
+        value = "may be";
+      } else {
+        value = 'is not';
+      }
+      return value;
+    },
     currentAssessmentYear() {
       let years = [];
       let year;
@@ -1227,6 +1278,12 @@ export default {
   padding-left: 0px !important;
   margin: 0px !important;
 }
+
+.tax-calc-div {
+  padding-left: 0px !important;
+  margin: 0px !important;
+}
+
 //  Property Tax Calculator CSS
 @media screen and (min-width: 1160px) {
   .tax-calc-container {
