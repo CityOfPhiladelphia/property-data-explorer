@@ -1,0 +1,409 @@
+<template>
+
+  <!-- Property Tax Calculator -->
+  <div class="tax-calc-section has-background-ben-franklin-blue-light hide-print">
+    <div>
+      <h3>
+        <b>Real Estate Tax Estimator</b>
+      </h3>
+      <div class="tax-year-container">
+        <label for="tax_year">Assessment Year</label>
+        <select
+          name="tax_year"
+          id="tax_year"
+          ref='tax_year'
+          v-model="selectedTaxYear"
+        >
+          <option value="2024">2024</option>
+          <option value="2025">2025</option>
+        </select>
+      </div>
+      <p>
+        The estimate below is for information only and may not be the actual amount of your {{ selectedTaxYear }} Real Estate Tax bill.
+        You may be eligible for programs to help reduce your taxes, like <a target="_blank">Homestead Exemption</a>,
+        <a target="_blank" href="https://www.phila.gov/services/payments-assistance-taxes/senior-citizen-discounts/low-income-senior-citizen-real-estate-tax-freeze/">
+        Senior Citizen Tax Freeze</a>, or
+        <a target="_blank" href="https://www.phila.gov/services/payments-assistance-taxes/income-based-assistance-programs/longtime-owner-occupants-program/">
+        Long-time Owner Occupant Program (LOOP)</a>, or be eligible to <a target="_blank">defer</a> some of your bill.  Not all properties are eligible for these programs.
+      </p>
+      <p>
+        The City will launch a Low-Income Tax Freeze this year. Find more details at 
+        <a target="_blank" href="https://www.phila.gov/revenue">phila.gov/revenue</a>.
+      </p>
+      <div
+        class="tax-calc-container"
+        id="tax-calculator"
+        v-if="activeOpaData"
+      >
+        <div class="tax-calc-element">
+          <label for="homestead_exemption">Select exemption</label>
+          <select
+            name="homestead_exemption"
+            id="homestead_exemption"
+            ref='homestead_exemption'
+            v-model="selectedExemption"
+          >
+            <option value="none">No exemption</option>
+            <option value="homestead">Homestead Exemption</option>
+            <option value="loop">Long-time Owner Occupant Program</option>
+            <option value="senior">Senior Citizen Tax Freeze</option>
+          </select>
+        </div>
+        <div
+          v-if="!seniorSelected"
+          :key="homestead"
+          class="tax-calc-element"
+        >
+          <label for="estimated_tax">Estimated {{ selectedTaxYear }} Tax</label>
+          <span id="estimate_total"> {{ taxableValue }} </span>
+          <p
+            v-if="loopSelected && loopEitherEligible"
+            class="tax-calc-div"
+          >
+            <label for="estimated_tax">Assessment Cap</label>
+            <span id="estimate_total"> {{ loopAssessmentCap }} </span>
+          </p>
+        </div>
+        <div
+          v-if="seniorSelected"
+          class="tax-calc-element"
+        >
+          <label for="homestead_exemption">Eligible year</label>
+          <select
+            name="homestead_exemption"
+            id="homestead_exemption"
+            ref='homestead_exemption'
+            v-model="selectedSeniorYear"
+          >
+            <option value="2024">2024</option>
+            <option value="2023">2023</option>
+            <option value="2022">2022</option>
+            <option value="2021">2021</option>
+            <option value="2020">2020</option>
+            <option value="2019">2019</option>
+            <option value="2018">2018</option>
+            <option value="2017">2017</option>
+          </select>
+        </div>
+
+        <div
+          v-if="!seniorSelected"
+          class="tax-calc-element"
+        >
+          To report issues or ask questions regarding your {{ selectedTaxYear }}
+          property assessment, call <b>(215) 686-9200</b> or visit
+          <a href="https://www.phila.gov/opa" target="_blank">www.phila.gov/opa</a>
+        </div>
+
+        <div
+          v-if="seniorSelected"
+          class="tax-calc-element"
+        >
+          <label for="estimated_tax">Estimated {{ selectedTaxYear }} Tax</label>
+          <span id="estimate_total"> {{ taxableValue }} </span>
+        </div>
+
+      </div>
+
+      <div
+        v-if="selectedExemption == 'none' || homesteadSelected"
+        class="tax-calc-div"
+      >
+        <div
+          v-if="hasHomestead"
+          class="tax-calc-div"
+        >
+          <h4><b>This property has the Homestead Exemption</b></h4>
+          <p>You never have to reapply for the Homestead Exemption unless your deed changes, such as when refinancing a mortgage or adding a co-owner.</p>
+        </div>
+        <div
+          v-else
+          class="tax-calc-div"
+        >
+          <h4><b>This property currently does not have a Homestead Exemption</b></h4>
+          <p>If you qualify for the Homestead Exemption on your home,
+            <a href="https://www.phila.gov/services/property-lots-housing/property-taxes/get-real-estate-tax-relief/get-the-homestead-exemption/" target="_blank">
+            apply before December 1
+            </a> of this year.
+          </p>
+        </div>
+      </div>
+
+      <div
+        v-if="homesteadSelected"
+        class="tax-calc-div"
+      >
+        <p>
+          The Homestead Exemption is a discount on the amount of real estate tax you owe each year.
+          Your annual tax bill will change based on the property's assessed value. To learn more
+          about the program and how to apply, <a target="_blank">check the guidelines</a>. The deadline
+          to apply for the Homestead Exemption for {{ selectedTaxYear }} is <b>December 1,
+          {{ selectedTaxYear }}</b>. If you can, apply by <b>September 13</b> to be approved earlier.
+        </p>
+      </div>
+
+      <div
+        v-if="loopSelected && !loopEitherEligible"
+        class="tax-calc-div"
+      >
+        <h4><b>This property is not eligible to apply for LOOP for {{ selectedTaxYear }}</b></h4>
+      </div>
+      <div
+        v-if="loopSelected && loopEitherEligible"
+        class="tax-calc-div"
+      >
+        <h4><b>This property may be eligible to apply for LOOP for {{ selectedTaxYear }}</b></h4>
+      </div>
+
+      <div
+        v-if="loopSelected"
+        class="tax-calc-div"
+      >
+        <p>
+          The <b>Long-time Owner Occupant Program (LOOP)</b> caps your property's assessed value each year
+          so that the amount of real estate tax you owe will not increase as your property assessment changes
+          for as long as you remain in the program. If the tax rate changes, or you are no longer eligible
+          for the program, your tax payment may increase. To learn more about the program and how to apply,
+          <b>check the guidelines</b>. The deadline to apply for LOOP for {{ selectedTaxYear }} is
+          <b>September 30, {{ selectedTaxYear }}</b>.
+        </p>
+      </div>
+
+      <div
+        v-if="seniorSelected"
+        class="tax-calc-div"
+      >
+        <p>
+          The Senior Citizen Tax Freeze caps the amount of real estate tax you owe each year so that
+          the amount will not increase, even if your property assessment or the tax rate changes. If
+          you meet the age, income, and residency qualifications in any year from 2018 to 2023, your
+          application will apply for the first year you were eligible. Use the drop down above to
+          estimate your tax payment depending on which year you are eligible. To learn more about the
+          program and how to apply, <b>check the guidelines</b>. The deadline to apply for the Senior
+          Citizen Tax Freeze for 2023 is <b>September 30, 2023</b>.
+        </p>
+      </div>
+
+      <h4>
+        <b>This property {{ eligibleDeferral }} eligible to enroll in the Real Estate Tax Deferral program for {{ selectedTaxYear }}.</b>
+      </h4>
+      <p>
+        If your Real Estate Tax increases by more than 15% from the previous year, you may be able to pay the excess
+        amount at a later date (defer payment). Deferral is for the current year only. If your Real Estate Tax increases
+        by more than 15% year-to-year in the future, you may be able to apply for another deferral.
+        <a target="_blank">Check the guidelines</a> to see if you are eligible. The deadline to enroll in the
+        Real Estate Tax Deferral Program for {{ selectedTaxYear }} is <b>March 31, {{ parseInt(selectedTaxYear) + 1 }}.</b> 
+      </p>
+
+      <!-- <p class="calc-text">
+        Using OPA data, the estimation is calculated using the following formula:<br>
+        (Market Value + Current Homestead Value) - (Exempt Land & Building Value) - (Selected Homestead Value) x 1.3998%
+      </p> -->
+    </div>
+  </div>
+  <!-- End of 2023 Property Tax Calculator -->
+
+</template>
+
+<script>
+
+// Dollar conversion for 2023 Property Tax Estimator
+const dollarUSLocale = Intl.NumberFormat('en-US', {
+    style: "currency",
+    currency: "USD",
+    maximumFractionDigits: 0,
+});
+
+export default {
+  name: 'TaxCalculator',
+  data() {
+    return {
+      homestead: 100000,
+      selectedTaxYear: '2024',
+      selectedExemption: 'none',
+      currentTaxRate: 0.013998,
+      selectedSeniorYear: 2024,
+    };
+  },
+  computed: {
+    hasHomestead() {
+      return this.activeOpaData.homestead_exemption > 0;
+    },
+    noneSelected() {
+      return this.selectedExemption == 'none';
+    },
+    homesteadSelected() {
+      return this.selectedExemption == 'homestead';
+    },
+    loopSelected() {
+      return this.selectedExemption == 'loop';
+    },
+    seniorSelected() {
+      return this.selectedExemption == 'senior';
+    },
+    assessmentValuesByYear() {
+      let values = {};
+      for (let item of this.assessmentHistory) {
+        values[item.year] = item.market_value;
+      }
+      console.log('assessmentValuesByYear, values:', values);
+      return values;
+    },
+    allValuesPreviousFiveYears() {
+      let selectedYear = parseInt(this.selectedTaxYear);
+      let values = [];
+      for (let i=selectedYear-1; i>=selectedYear-5; i--) {
+        values.push(this.assessmentValuesByYear[i]);
+      }
+      return values;
+    },
+    lowestValuePreviousFiveYears() {
+      return Math.min(...this.allValuesPreviousFiveYears);
+    },
+    selectedYearValue() {
+      return this.assessmentHistory.filter(item => item.year == parseInt(this.selectedTaxYear))[0].market_value;
+    },
+    previousYearValue() {
+      return this.assessmentHistory.filter(item => item.year == parseInt(this.selectedTaxYear) - 1)[0].market_value;
+    },
+    loopOneFiveValue() {      
+      return this.selectedYearValue/this.previousYearValue;
+    },
+    loopOneFiveEligible() {
+      return this.loopOneFiveValue >= 1.5;
+    },
+    loopOneSevenFiveValue() {
+      const currentYearData = this.assessmentHistory.filter(item => item.year == parseInt(this.selectedTaxYear))[0];
+      return currentYearData.market_value/this.lowestValuePreviousFiveYears;
+    },
+    loopOneSevenFiveEligible() {
+      return this.loopOneSevenFiveValue >= 1.75;
+    },
+    loopEitherEligible() {
+      return this.loopOneFiveEligible || this.loopOneSevenFiveEligible; 
+    },
+    loopBothEligible() {
+      return this.loopOneFiveEligible && this.loopOneSevenFiveEligible;
+    },
+    loopBase() {
+      if (this.loopBothEligible && this.loopOneFiveValue <= this.loopOneSevenFiveValue) {
+        return this.previousYearValue;
+      } else if (this.loopBothEligible && this.loopOneFiveValue < this.loopOneSevenFiveValue) {
+        return this.lowestValuePreviousFiveYears;
+      } else if (!this.loopBothEligible && this.loopOneSevenFiveEligible) {
+        return this.lowestValuePreviousFiveYears;
+      } else if (!this.loopBothEligible && this.loopOneFiveEligible) {
+        return this.previousYearValue;
+      } else {
+        return this.selectedYearValue;
+      }
+    },
+    loopEligibilityUsed() {
+      if (this.loopBothEligible && this.loopOneFiveValue <= this.loopOneSevenFiveValue) {
+        return 'oneFive';
+      } else if (this.loopBothEligible && this.loopOneFiveValue < this.loopOneSevenFiveValue) {
+        return 'oneSevenFive';
+      } else if (!this.loopBothEligible && this.loopOneSevenFiveEligible) {
+        return 'oneSevenFive';
+      } else if (!this.loopBothEligible && this.loopOneFiveEligible) {
+        return 'oneFive';
+      } else {
+        return 'none';
+      }
+    },
+    rawPayment() {
+      this.selectedYearValue * this.currentTaxRate;
+    },
+    loopCurrentYearPayment() {
+      if (this.loopEligibilityUsed == 'oneFive') {
+        return this.loopBase * 1.5 * this.currentTaxRate;
+      } else if (this.loopEligibilityUsed == 'oneSevenFive') {
+        return this.loopBase * 1.75 * this.currentTaxRate;
+      } else {
+        return this.rawPayment;
+      }
+    },
+    loopAssessmentCap() {
+      if (this.loopEligibilityUsed == 'oneFive' || this.loopEligibilityUsed == 'oneSevenFive') {
+        return this.loopBase
+      } else {
+        return null;
+      }
+    },
+    loopOverride() {
+      if (this.loopBase < this.selectedYearValue) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    taxableValue() {
+      let value = '';
+      let marketValueUsed;
+      if (this.activeOpaData) {
+        if (this.noneSelected || this.homesteadSelected) {
+          marketValueUsed = this.activeOpaData.market_value
+            - this.activeOpaData.exempt_land
+            - this.activeOpaData.exempt_building
+            + this.activeOpaData.homestead_exemption
+          if (this.homesteadSelected) {
+            marketValueUsed = marketValueUsed - 100000;
+          }
+          console.log('taxableValue is running, marketValueUsed:', marketValueUsed, 'this.homestead:', this.homestead, 'exempt_land: ', this.activeOpaData.exempt_land, 'exempt_improvement: ', this.activeOpaData.exempt_building, this.activeOpaData);
+        } else if (this.loopSelected) {
+          if (this.loopBothEligible) {
+            if (loopOverride) {
+              value = this.rawPayment;
+            } else {
+              value = this.loopCurrentYearPayment;
+            }
+          } else {
+            value = 'Not eligible';
+          }
+        } else if (this.seniorSelected) {
+          marketValueUsed = this.assessmentValuesByYear[this.selectedSeniorYear];
+        }
+      }
+      marketValueUsed = marketValueUsed < 0 ? 0 : marketValueUsed;
+      value = isNaN(marketValueUsed) ? value : dollarUSLocale.format(marketValueUsed * this.currentTaxRate);
+      return value;
+    },
+    eligibleDeferral() {
+      let value;
+      if (this.selectedTaxYear == '2024') {
+        value = "may be";
+      } else {
+        value = 'is not';
+      }
+      return value;
+    },
+    assessmentHistory() {
+      return this.$store.state.activeSearch.assessmentHistory.data;
+    },
+    activeOpaData() {
+      let value = [];
+      if (this.$store.state.sources.opa_public.targets[this.activeOpaId] && this.$store.state.sources.opa_public.targets[this.activeOpaId].data) {
+        value = this.$store.state.sources.opa_public.targets[this.activeOpaId].data;
+      }
+      return value;
+    },
+    lastSearchMethod() {
+      return this.$store.state.lastSearchMethod;
+    },
+    activeModalFeature() {
+      return this.$store.state.activeModalFeature;
+    },
+    activeOpaId() {
+      let feature = this.activeModalFeature;
+      let opaId;
+      if (feature && ![ 'geocode', 'reverseGeocode', 'owner search', 'block search' ].includes(this.lastSearchMethod)) {
+        opaId = feature.parcel_number;
+      } else if (feature) {
+        opaId = feature.properties.opa_account_num;
+      }
+      return opaId;
+    },
+  },
+}
+
+</script>
