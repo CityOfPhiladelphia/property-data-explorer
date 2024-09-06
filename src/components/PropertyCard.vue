@@ -131,36 +131,13 @@
               <option value="2025">2025</option>
             </select>
           </div>
-          <!-- <p v-if="!homesteadStatus()">
-            If you qualify for the Homestead Exemption on your home,
-            <a href="https://www.phila.gov/services/property-lots-housing/property-taxes/get-real-estate-tax-relief/get-the-homestead-exemption/" target="_blank">
-            apply before December 1
-            </a> of this year. Not all properties are eligible for the the Homestead Exemption.
-            <a
-              href="https://www.phila.gov/services/property-lots-housing/property-taxes/get-real-estate-tax-relief/get-the-homestead-exemption/"
-              target="_blank"
-            >
-              Check the guidelines.
-            </a>
-          </p> -->
-
-          <!-- <p v-if="homesteadStatus()">
-            You never have to reapply for the Homestead Exemption unless your deed changes, 
-            such as when refinancing a mortgage or adding a co-owner. 
-            If you’ve purchased your home within the last year, please contact the Hotline for 
-            information and assistance at (215) 686-9200. Homeowners may also be eligible for other programs 
-            to help reduce your taxes, like the 
-            <a target="_blank" href="https://www.phila.gov/services/payments-assistance-taxes/senior-citizen-discounts/low-income-senior-citizen-real-estate-tax-freeze/">
-              Senior Citizen Tax Freeze</a> or
-            <a target="_blank" href="https://www.phila.gov/services/payments-assistance-taxes/income-based-assistance-programs/longtime-owner-occupants-program/">
-            Long-time Owner Occupant Program.</a>
-
-          </p> -->
           <p>
             The estimate below is for information only and may not be the actual amount of your {{ selectedTaxYear }} Real Estate Tax bill.
             You may be eligible for programs to help reduce your taxes, like <a target="_blank">Homestead Exemption</a>,
-            <a target="_blank">Senior Citizen Tax Freeze</a>, or <a target="_blank">Long-time Owner Occupant Program (LOOP)</a>,
-            or be eligible to <a target="_blank">defer</a> some of your bill.  Not all properties are eligible for these programs.
+            <a target="_blank" href="https://www.phila.gov/services/payments-assistance-taxes/senior-citizen-discounts/low-income-senior-citizen-real-estate-tax-freeze/">
+            Senior Citizen Tax Freeze</a>, or
+            <a target="_blank" href="https://www.phila.gov/services/payments-assistance-taxes/income-based-assistance-programs/longtime-owner-occupants-program/">
+            Long-time Owner Occupant Program (LOOP)</a>, or be eligible to <a target="_blank">defer</a> some of your bill.  Not all properties are eligible for these programs.
           </p>
           <p>
             The City will launch a Low-Income Tax Freeze this year. Find more details at 
@@ -187,7 +164,7 @@
             </div>
             <div :key="homestead" class="tax-calc-element">
               <label for="estimated_tax">Estimated {{ selectedTaxYear }} Tax</label>
-               <span id="estimate_total"> {{ taxableValue() }} </span>
+               <span id="estimate_total"> {{ taxableValue }} </span>
             </div>
             <div class="tax-calc-element">
               To report issues or ask questions regarding your {{ selectedTaxYear }}
@@ -197,34 +174,66 @@
           </div>
 
           <div
-            v-if="selectedExemption == 'none'"
+            v-if="selectedExemption == 'none' || homesteadSelected"
             class="tax-calc-div"
           >
-            <h4><b>{{ homesteadStatusSentence() }}</b></h4>
-            <p>If you qualify for the Homestead Exemption on your home,
-              <a href="https://www.phila.gov/services/property-lots-housing/property-taxes/get-real-estate-tax-relief/get-the-homestead-exemption/" target="_blank">
-              apply before December 1
-              </a> of this year.
-            </p>
+            <div
+              v-if="hasHomestead"
+              class="tax-calc-div"
+            >
+              <h4><b>This property has the Homestead Exemption</b></h4>
+              <p>You never have to reapply for the Homestead Exemption unless your deed changes, such as when refinancing a mortgage or adding a co-owner.</p>
+            </div>
+            <div
+              v-else
+              class="tax-calc-div"
+            >
+              <h4><b>This property currently does not have a Homestead Exemption</b></h4>
+              <p>If you qualify for the Homestead Exemption on your home,
+                <a href="https://www.phila.gov/services/property-lots-housing/property-taxes/get-real-estate-tax-relief/get-the-homestead-exemption/" target="_blank">
+                apply before December 1
+                </a> of this year.
+              </p>
+            </div>
           </div>
 
           <div
-            v-if="selectedExemption == 'homestead'"
+            v-if="homesteadSelected"
             class="tax-calc-div"
           >
-            <h4><b>{{ homesteadStatusSentence() }}</b></h4>
-            <p>If you qualify for the Homestead Exemption on your home,
-              <a href="https://www.phila.gov/services/property-lots-housing/property-taxes/get-real-estate-tax-relief/get-the-homestead-exemption/" target="_blank">
-              apply before December 1
-              </a> of this year.
-            </p>
-
             <p>
               The Homestead Exemption is a discount on the amount of real estate tax you owe each year.
               Your annual tax bill will change based on the property's assessed value. To learn more
               about the program and how to apply, <a target="_blank">check the guidelines</a>. The deadline
               to apply for the Homestead Exemption for {{ selectedTaxYear }} is <b>December 1,
               {{ selectedTaxYear }}</b>. If you can, apply by <b>September 13</b> to be approved earlier.
+            </p>
+          </div>
+
+          <div
+            v-if="loopSelected && !loopEligible"
+            class="tax-calc-div"
+          >
+            <h4><b>This property is not eligible to apply for LOOP for {{ selectedTaxYear }}</b></h4>
+          </div>
+          <div
+            v-if="loopSelected && loopEligible"
+            class="tax-calc-div"
+          >
+            <h4><b>This property may be eligible to apply for LOOP for {{ selectedTaxYear }}</b></h4>
+          </div>
+
+          <div
+            v-if="loopSelected"
+            class="tax-calc-div"
+          >
+            <p>
+              The <b>Long-time Owner Occupant Program (LOOP)</b> caps your property's assessed value each year
+              so that the amount of real estate tax you owe will not increase as your property assessment changes
+              for as long as you remain in the program. If the tax rate changes, or you are no longer eligible
+              for the program, your tax payment may increase. To learn more about the program and how to apply,
+              <b>check the guidelines</b>. The deadline to apply for LOOP for {{ selectedTaxYear }} is
+              <b>September 30, {{ selectedTaxYear }}</b>.
             </p>
           </div>
 
@@ -446,7 +455,7 @@ export default {
     data() {
     return {
       homestead: 100000,
-      selectedTaxYear: '2025',
+      selectedTaxYear: '2024',
       selectedExemption: 'none'
     };
   },
@@ -457,6 +466,38 @@ export default {
     },
   },
   computed: {
+    hasHomestead() {
+      return this.activeOpaData.homestead_exemption > 0;
+    },
+    noneSelected() {
+      return this.selectedExemption == 'none';
+    },
+    homesteadSelected() {
+      return this.selectedExemption == 'homestead';
+    },
+    loopSelected() {
+      return this.selectedExemption == 'loop';
+    },
+    taxableValue() {
+      let value = '';
+      if (this.activeOpaData) {
+        if (this.noneSelected || this.homesteadSelected) {
+          let price = this.activeOpaData.market_value
+            - this.activeOpaData.exempt_land
+            - this.activeOpaData.exempt_building
+            + this.activeOpaData.homestead_exemption
+          if (this.homesteadSelected) {
+            price = price - 100000;
+          }
+          console.log('taxableValue is running, price:', price, 'this.homestead:', this.homestead, 'exempt_land: ', this.activeOpaData.exempt_land, 'exempt_improvement: ', this.activeOpaData.exempt_building, this.activeOpaData);
+          price = price < 0 ? 0 : price;
+          value = isNaN(price) ? '': dollarUSLocale.format(price * .013998);
+        } else if (this.loopSelected) {
+          value = 'Not eligible';
+        }
+      }
+      return value;
+    },
     eligibleDeferral() {
       let value;
       if (this.selectedTaxYear == '2024') {
@@ -1140,61 +1181,17 @@ export default {
       }
     },
     // Update for Property Tax Calculator
-    activeOpaData(newData){
-      // Property Tax Calc Added
-      this.$set(this, 'homestead', '');
-      if(this.$refs['homestead_exemption']) {
-        this.$refs['homestead_exemption'].options.selectedIndex = 0;
-      }
-      this.taxableValue()
-    },
+    // activeOpaData(newData){
+    //   // Property Tax Calc Added
+    //   this.$set(this, 'homestead', '');
+    //   if(this.$refs['homestead_exemption']) {
+    //     this.$refs['homestead_exemption'].options.selectedIndex = 0;
+    //   }
+    //   this.taxableValue()
+    // },
 
   },
   methods: {
-    // Update for Property Tax Calculator
-    handleHomesteadChange(e){
-      const target = e.target;
-      const slug = target.value;
-      this.$set(this, "homestead", slug)
-      // this.$forceUpdate();
-      console.log( 'input select event change value: ', this.$refs['homestead_exemption'].options);
-    },
-    homesteadStatus() {
-      if (this.activeOpaData.homestead_exemption > 0) {
-        return true;
-      } else {
-        return false;
-      }
-    },
-    homesteadStatusSentence(){
-      if (this.activeOpaData.homestead_exemption > 0) {
-        // return 'This property will receive a Homestead Exemption of ' + dollarUSLocale.format(this.activeOpaData.homestead_exemption) + '.'
-        return 'This property has the Homestead Exemption';
-      } else if( typeof this.activeOpaData.homestead_exemption !== 'number') {
-        return 'Loading Homestead status...'
-      }
-      return 'This property currently does not have a Homestead Exemption';
-      // return 'This property currently does not have a Homestead Exemption. If you qualify for the Homestead Exemption on your home, apply before December 1, 2022.'
-    },
-    taxableValue(){
-      console.log('taxableValue is running, this.activeOpaData.exempt_building:', this.activeOpaData.exempt_building);
-      if (this.activeOpaData) {
-        let selected_homestead_val = this.homestead === '' ? 0 : this.homestead;
-        console.log("this.homestead", this.homestead, 'exempt_land: ', this.activeOpaData.exempt_land, 'exempt_improvement: ', this.activeOpaData.exempt_building, this.activeOpaData  )
-        let price = this.activeOpaData.market_value + this.activeOpaData.homestead_exemption - this.activeOpaData.exempt_land - this.activeOpaData.exempt_building - selected_homestead_val;
-        console.log(price)
-        price = price < 0 ? 0 : price;
-        return isNaN(price) ? '': dollarUSLocale.format(price * .013998);
-      } else {
-        return '';
-      }
-    },
-    // taxableCalc(){
-    //   let market_value = this.activeOpaData.market_value;
-    //   // let current_homestead = this.activeOpaData.homestead_exemption;
-    //   return dollarUSLocale.format(market_value);
-    //   // return dollarUSLocale.format(market_value + current_homestead);
-    // },
     // End - Update for Property Tax Calculator
     buttonLinkLI(){
       window.open('https://li.phila.gov/property-history/search?address=' + this.activeOpaId, '_blank');
