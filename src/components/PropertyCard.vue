@@ -150,31 +150,72 @@
           >
             <div class="tax-calc-element">
               <label for="homestead_exemption">Select exemption</label>
-                <select
-                  name="homestead_exemption"
-                  id="homestead_exemption"
-                  ref='homestead_exemption'
-                  v-model="selectedExemption"
-                >
-                  <option value="none">No exemption</option>
-                  <option value="homestead">Homestead Exemption</option>
-                  <option value="loop">Long-time Owner Occupant Program</option>
-                  <option value="senior">Senior Citizen Tax Freeze</option>
-                </select>
+              <select
+                name="homestead_exemption"
+                id="homestead_exemption"
+                ref='homestead_exemption'
+                v-model="selectedExemption"
+              >
+                <option value="none">No exemption</option>
+                <option value="homestead">Homestead Exemption</option>
+                <option value="loop">Long-time Owner Occupant Program</option>
+                <option value="senior">Senior Citizen Tax Freeze</option>
+              </select>
             </div>
-            <div :key="homestead" class="tax-calc-element">
+            <div
+              v-if="!seniorSelected"
+              :key="homestead"
+              class="tax-calc-element"
+            >
               <label for="estimated_tax">Estimated {{ selectedTaxYear }} Tax</label>
               <span id="estimate_total"> {{ taxableValue }} </span>
-              <p class="tax-calc-div">
-                <label for="estimated_tax">Estimated {{ selectedTaxYear }} Tax</label>
-                <span id="estimate_total"> {{ taxableValue }} </span>
+              <p
+                v-if="loopSelected && loopEitherEligible"
+                class="tax-calc-div"
+              >
+                <label for="estimated_tax">Assessment Cap</label>
+                <span id="estimate_total"> {{ loopAssessmentCap }} </span>
               </p>
             </div>
-            <div class="tax-calc-element">
+            <div
+              v-if="seniorSelected"
+              class="tax-calc-element"
+            >
+              <label for="homestead_exemption">Eligible year</label>
+              <select
+                name="homestead_exemption"
+                id="homestead_exemption"
+                ref='homestead_exemption'
+                v-model="selectedSeniorYear"
+              >
+                <option value="2024">2024</option>
+                <option value="2023">2023</option>
+                <option value="2022">2022</option>
+                <option value="2021">2021</option>
+                <option value="2020">2020</option>
+                <option value="2019">2019</option>
+                <option value="2018">2018</option>
+                <option value="2017">2017</option>
+              </select>
+            </div>
+
+            <div
+              v-if="!seniorSelected"
+              class="tax-calc-element"
+            >
               To report issues or ask questions regarding your {{ selectedTaxYear }}
               property assessment, call <b>(215) 686-9200</b> or visit
               <a href="https://www.phila.gov/opa" target="_blank">www.phila.gov/opa</a>
             </div>
+
+            <div
+              v-if="seniorSelected"
+              class="tax-calc-element"
+            >
+              <label for="estimated_tax">Estimated {{ selectedTaxYear }} Tax</label>
+              <span id="estimate_total"> {{ taxableValue }} </span>
+            </div>
+
           </div>
 
           <div
@@ -241,6 +282,21 @@
             </p>
           </div>
 
+          <div
+            v-if="seniorSelected"
+            class="tax-calc-div"
+          >
+            <p>
+              The Senior Citizen Tax Freeze caps the amount of real estate tax you owe each year so that
+              the amount will not increase, even if your property assessment or the tax rate changes. If
+              you meet the age, income, and residency qualifications in any year from 2018 to 2023, your
+              application will apply for the first year you were eligible. Use the drop down above to
+              estimate your tax payment depending on which year you are eligible. To learn more about the
+              program and how to apply, <b>check the guidelines</b>. The deadline to apply for the Senior
+              Citizen Tax Freeze for 2023 is <b>September 30, 2023</b>.
+            </p>
+          </div>
+
           <h4>
             <b>This property {{ eligibleDeferral }} eligible to enroll in the Real Estate Tax Deferral program for {{ selectedTaxYear }}.</b>
           </h4>
@@ -252,18 +308,6 @@
             Real Estate Tax Deferral Program for {{ selectedTaxYear }} is <b>March 31, {{ parseInt(selectedTaxYear) + 1 }}.</b> 
           </p>
 
-
-          <!-- <div
-            v-if="!activeOpaData"
-            class="spinner-div small-12 cell"
-          >
-            <font-awesome-icon
-              icon="spinner"
-              class="fa-4x"
-              aria-hidden="true"
-            />
-            <h3>Loading Property Value Details</h3>
-          </div> -->
           <!-- <p class="calc-text">
             Using OPA data, the estimation is calculated using the following formula:<br>
             (Market Value + Current Homestead Value) - (Exempt Land & Building Value) - (Selected Homestead Value) x 1.3998%
@@ -462,6 +506,7 @@ export default {
       selectedTaxYear: '2024',
       selectedExemption: 'none',
       currentTaxRate: 0.013998,
+      selectedSeniorYear: 2024,
     };
   },
   props: {
@@ -482,6 +527,9 @@ export default {
     },
     loopSelected() {
       return this.selectedExemption == 'loop';
+    },
+    seniorSelected() {
+      return this.selectedExemption == 'senior';
     },
     assessmentValuesByYear() {
       let values = {};
@@ -504,11 +552,9 @@ export default {
     },
     selectedYearValue() {
       return this.assessmentHistory.filter(item => item.year == parseInt(this.selectedTaxYear))[0].market_value;
-      // return this.assessmentHistory.filter(item => item.year == this.currentAssessmentYear)[0].market_value;
     },
     previousYearValue() {
       return this.assessmentHistory.filter(item => item.year == parseInt(this.selectedTaxYear) - 1)[0].market_value;
-      // return this.assessmentHistory.filter(item => item.year == this.currentAssessmentYear - 1)[0].market_value;
     },
     loopOneFiveValue() {      
       return this.selectedYearValue/this.previousYearValue;
@@ -518,7 +564,6 @@ export default {
     },
     loopOneSevenFiveValue() {
       const currentYearData = this.assessmentHistory.filter(item => item.year == parseInt(this.selectedTaxYear))[0];
-      // const currentYearData = this.assessmentHistory.filter(item => item.year == this.currentAssessmentYear)[0];
       return currentYearData.market_value/this.lowestValuePreviousFiveYears;
     },
     loopOneSevenFiveEligible() {
@@ -584,17 +629,17 @@ export default {
     },
     taxableValue() {
       let value = '';
-      let price;
+      let marketValueUsed;
       if (this.activeOpaData) {
         if (this.noneSelected || this.homesteadSelected) {
-          price = this.activeOpaData.market_value
+          marketValueUsed = this.activeOpaData.market_value
             - this.activeOpaData.exempt_land
             - this.activeOpaData.exempt_building
             + this.activeOpaData.homestead_exemption
           if (this.homesteadSelected) {
-            price = price - 100000;
+            marketValueUsed = marketValueUsed - 100000;
           }
-          console.log('taxableValue is running, price:', price, 'this.homestead:', this.homestead, 'exempt_land: ', this.activeOpaData.exempt_land, 'exempt_improvement: ', this.activeOpaData.exempt_building, this.activeOpaData);
+          console.log('taxableValue is running, marketValueUsed:', marketValueUsed, 'this.homestead:', this.homestead, 'exempt_land: ', this.activeOpaData.exempt_land, 'exempt_improvement: ', this.activeOpaData.exempt_building, this.activeOpaData);
         } else if (this.loopSelected) {
           if (this.loopBothEligible) {
             if (loopOverride) {
@@ -605,10 +650,12 @@ export default {
           } else {
             value = 'Not eligible';
           }
+        } else if (this.seniorSelected) {
+          marketValueUsed = this.assessmentValuesByYear[this.selectedSeniorYear];
         }
       }
-      price = price < 0 ? 0 : price;
-      value = isNaN(price) ? value : dollarUSLocale.format(price * this.currentTaxRate);
+      marketValueUsed = marketValueUsed < 0 ? 0 : marketValueUsed;
+      value = isNaN(marketValueUsed) ? value : dollarUSLocale.format(marketValueUsed * this.currentTaxRate);
       return value;
     },
     eligibleDeferral() {
