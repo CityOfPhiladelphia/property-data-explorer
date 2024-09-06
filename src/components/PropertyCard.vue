@@ -488,32 +488,27 @@ export default {
       for (let item of this.assessmentHistory) {
         values[item.year] = item.market_value;
       }
+      console.log('assessmentValuesByYear, values:', values);
       return values;
     },
-    // allValuesPreviousFiveYears() {
-    //   let selectedYear = parseInt(this.selectedTaxYear);
-    //   let values = [];
-    //   for (let i=selectedYear-1; i=selectedYear-5; i--) {
-    //     values.push(this.assessmentValuesByYear[i]);
-    //   }
-    //   return values;
-    //   // return Math.min(...values);
-    // },
-    lowestValuePreviousFiveYears() {
+    allValuesPreviousFiveYears() {
       let selectedYear = parseInt(this.selectedTaxYear);
       let values = [];
-      for (let i=selectedYear-1; i=selectedYear-5; i--) {
+      for (let i=selectedYear-1; i>=selectedYear-5; i--) {
         values.push(this.assessmentValuesByYear[i]);
       }
+      return values;
+    },
+    lowestValuePreviousFiveYears() {
       return Math.min(...this.allValuesPreviousFiveYears);
     },
     selectedYearValue() {
-      // return this.assessmentHistory.filter(item => item.year == parseInt(this.selectedTaxYear))[0].market_value;
-      return this.assessmentHistory.filter(item => item.year == this.currentAssessmentYear)[0].market_value;
+      return this.assessmentHistory.filter(item => item.year == parseInt(this.selectedTaxYear))[0].market_value;
+      // return this.assessmentHistory.filter(item => item.year == this.currentAssessmentYear)[0].market_value;
     },
     previousYearValue() {
-      // return this.assessmentHistory.filter(item => item.year == parseInt(this.selectedTaxYear) - 1)[0].market_value;
-      return this.assessmentHistory.filter(item => item.year == this.currentAssessmentYear - 1)[0].market_value;
+      return this.assessmentHistory.filter(item => item.year == parseInt(this.selectedTaxYear) - 1)[0].market_value;
+      // return this.assessmentHistory.filter(item => item.year == this.currentAssessmentYear - 1)[0].market_value;
     },
     loopOneFiveValue() {      
       return this.selectedYearValue/this.previousYearValue;
@@ -522,7 +517,8 @@ export default {
       return this.loopOneFiveValue >= 1.5;
     },
     loopOneSevenFiveValue() {
-      const currentYearData = this.assessmentHistory.filter(item => item.year == this.currentAssessmentYear)[0];
+      const currentYearData = this.assessmentHistory.filter(item => item.year == parseInt(this.selectedTaxYear))[0];
+      // const currentYearData = this.assessmentHistory.filter(item => item.year == this.currentAssessmentYear)[0];
       return currentYearData.market_value/this.lowestValuePreviousFiveYears;
     },
     loopOneSevenFiveEligible() {
