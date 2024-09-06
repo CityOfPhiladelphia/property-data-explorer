@@ -164,7 +164,11 @@
             </div>
             <div :key="homestead" class="tax-calc-element">
               <label for="estimated_tax">Estimated {{ selectedTaxYear }} Tax</label>
-               <span id="estimate_total"> {{ taxableValue }} </span>
+              <span id="estimate_total"> {{ taxableValue }} </span>
+              <p class="tax-calc-div">
+                <label for="estimated_tax">Estimated {{ selectedTaxYear }} Tax</label>
+                <span id="estimate_total"> {{ taxableValue }} </span>
+              </p>
             </div>
             <div class="tax-calc-element">
               To report issues or ask questions regarding your {{ selectedTaxYear }}
@@ -211,13 +215,13 @@
           </div>
 
           <div
-            v-if="loopSelected && !loopEligible"
+            v-if="loopSelected && !loopEitherEligible"
             class="tax-calc-div"
           >
             <h4><b>This property is not eligible to apply for LOOP for {{ selectedTaxYear }}</b></h4>
           </div>
           <div
-            v-if="loopSelected && loopEligible"
+            v-if="loopSelected && loopEitherEligible"
             class="tax-calc-div"
           >
             <h4><b>This property may be eligible to apply for LOOP for {{ selectedTaxYear }}</b></h4>
@@ -288,7 +292,7 @@
 
       <!-- valuation history horizontal table -->
       <div
-        v-if="!this.$store.state.activeSearch.assessmentHistory.data"
+        v-if="!assessmentHistory"
         class="spinner-div small-12 cell"
       >
         <font-awesome-icon
@@ -299,7 +303,7 @@
         <h3>Loading Valuation History</h3>
       </div>
       <horizontal-table
-        v-if="this.$store.state.activeSearch.assessmentHistory.data"
+        v-if="assessmentHistory"
         class='valuation-history'
         :slots="{
           title: 'Valuation History',
@@ -311,7 +315,7 @@
                      the value of an improved parcel is separated into the \
                      portion of value attributed to the improvement and the \
                      portion of value attributed to the land.)',
-          items: this.$store.state.activeSearch.assessmentHistory.data
+          items: this.assessmentHistory
         }"
         :options="valuationHistoryHorizontalTableOptions"
       />
@@ -456,7 +460,8 @@ export default {
     return {
       homestead: 100000,
       selectedTaxYear: '2024',
-      selectedExemption: 'none'
+      selectedExemption: 'none',
+      currentTaxRate: 0.013998,
     };
   },
   props: {
@@ -478,11 +483,115 @@ export default {
     loopSelected() {
       return this.selectedExemption == 'loop';
     },
+    assessmentValuesByYear() {
+      let values = {};
+      for (let item of this.assessmentHistory) {
+        values[item.year] = item.market_value;
+      }
+      return values;
+    },
+    // allValuesPreviousFiveYears() {
+    //   let selectedYear = parseInt(this.selectedTaxYear);
+    //   let values = [];
+    //   for (let i=selectedYear-1; i=selectedYear-5; i--) {
+    //     values.push(this.assessmentValuesByYear[i]);
+    //   }
+    //   return values;
+    //   // return Math.min(...values);
+    // },
+    lowestValuePreviousFiveYears() {
+      let selectedYear = parseInt(this.selectedTaxYear);
+      let values = [];
+      for (let i=selectedYear-1; i=selectedYear-5; i--) {
+        values.push(this.assessmentValuesByYear[i]);
+      }
+      return Math.min(...this.allValuesPreviousFiveYears);
+    },
+    selectedYearValue() {
+      // return this.assessmentHistory.filter(item => item.year == parseInt(this.selectedTaxYear))[0].market_value;
+      return this.assessmentHistory.filter(item => item.year == this.currentAssessmentYear)[0].market_value;
+    },
+    previousYearValue() {
+      // return this.assessmentHistory.filter(item => item.year == parseInt(this.selectedTaxYear) - 1)[0].market_value;
+      return this.assessmentHistory.filter(item => item.year == this.currentAssessmentYear - 1)[0].market_value;
+    },
+    loopOneFiveValue() {      
+      return this.selectedYearValue/this.previousYearValue;
+    },
+    loopOneFiveEligible() {
+      return this.loopOneFiveValue >= 1.5;
+    },
+    loopOneSevenFiveValue() {
+      const currentYearData = this.assessmentHistory.filter(item => item.year == this.currentAssessmentYear)[0];
+      return currentYearData.market_value/this.lowestValuePreviousFiveYears;
+    },
+    loopOneSevenFiveEligible() {
+      return this.loopOneSevenFiveValue >= 1.75;
+    },
+    loopEitherEligible() {
+      return this.loopOneFiveEligible || this.loopOneSevenFiveEligible; 
+    },
+    loopBothEligible() {
+      return this.loopOneFiveEligible && this.loopOneSevenFiveEligible;
+    },
+    loopBase() {
+      if (this.loopBothEligible && this.loopOneFiveValue <= this.loopOneSevenFiveValue) {
+        return this.previousYearValue;
+      } else if (this.loopBothEligible && this.loopOneFiveValue < this.loopOneSevenFiveValue) {
+        return this.lowestValuePreviousFiveYears;
+      } else if (!this.loopBothEligible && this.loopOneSevenFiveEligible) {
+        return this.lowestValuePreviousFiveYears;
+      } else if (!this.loopBothEligible && this.loopOneFiveEligible) {
+        return this.previousYearValue;
+      } else {
+        return this.selectedYearValue;
+      }
+    },
+    loopEligibilityUsed() {
+      if (this.loopBothEligible && this.loopOneFiveValue <= this.loopOneSevenFiveValue) {
+        return 'oneFive';
+      } else if (this.loopBothEligible && this.loopOneFiveValue < this.loopOneSevenFiveValue) {
+        return 'oneSevenFive';
+      } else if (!this.loopBothEligible && this.loopOneSevenFiveEligible) {
+        return 'oneSevenFive';
+      } else if (!this.loopBothEligible && this.loopOneFiveEligible) {
+        return 'oneFive';
+      } else {
+        return 'none';
+      }
+    },
+    rawPayment() {
+      this.selectedYearValue * this.currentTaxRate;
+    },
+    loopCurrentYearPayment() {
+      if (this.loopEligibilityUsed == 'oneFive') {
+        return this.loopBase * 1.5 * this.currentTaxRate;
+      } else if (this.loopEligibilityUsed == 'oneSevenFive') {
+        return this.loopBase * 1.75 * this.currentTaxRate;
+      } else {
+        return this.rawPayment;
+      }
+    },
+    loopAssessmentCap() {
+      if (this.loopEligibilityUsed == 'oneFive' || this.loopEligibilityUsed == 'oneSevenFive') {
+        return this.loopBase
+      } else {
+        return null;
+      }
+    },
+    loopOverride() {
+      if (this.loopBase < this.selectedYearValue) {
+        return true;
+      } else {
+        return false;
+      }
+    },
     taxableValue() {
       let value = '';
+      let price;
       if (this.activeOpaData) {
         if (this.noneSelected || this.homesteadSelected) {
-          let price = this.activeOpaData.market_value
+          price = this.activeOpaData.market_value
             - this.activeOpaData.exempt_land
             - this.activeOpaData.exempt_building
             + this.activeOpaData.homestead_exemption
@@ -490,12 +599,20 @@ export default {
             price = price - 100000;
           }
           console.log('taxableValue is running, price:', price, 'this.homestead:', this.homestead, 'exempt_land: ', this.activeOpaData.exempt_land, 'exempt_improvement: ', this.activeOpaData.exempt_building, this.activeOpaData);
-          price = price < 0 ? 0 : price;
-          value = isNaN(price) ? '': dollarUSLocale.format(price * .013998);
         } else if (this.loopSelected) {
-          value = 'Not eligible';
+          if (this.loopBothEligible) {
+            if (loopOverride) {
+              value = this.rawPayment;
+            } else {
+              value = this.loopCurrentYearPayment;
+            }
+          } else {
+            value = 'Not eligible';
+          }
         }
       }
+      price = price < 0 ? 0 : price;
+      value = isNaN(price) ? value : dollarUSLocale.format(price * this.currentTaxRate);
       return value;
     },
     eligibleDeferral() {
@@ -507,13 +624,15 @@ export default {
       }
       return value;
     },
+    assessmentHistory() {
+      return this.$store.state.activeSearch.assessmentHistory.data;
+    },
     currentAssessmentYear() {
       let years = [];
       let year;
-      if (this.$store.state.activeSearch.assessmentHistory.data) {
-        let values = this.$store.state.activeSearch.assessmentHistory.data;
+      if (this.assessmentHistory) {
+        let values = this.assessmentHistory;
         for (let value of values) {
-          // years.push(parseInt(value.year));
           years.push(value.year);
         }
         year = Math.max(...years);
