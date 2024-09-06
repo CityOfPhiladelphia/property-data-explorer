@@ -1393,7 +1393,8 @@ div.tax-calc-section.has-background-ben-franklin-blue-light{
      & #estimate_total {
       display: block;
       font-weight: bold;
-      margin-top: 16px;
+      // margin-top: 16px;
+      margin-bottom: 10px;
       font-size: 1.4rem !important;
     }
     #homestead_exemption {
