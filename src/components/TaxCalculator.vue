@@ -80,9 +80,6 @@
             <option value="2022">2022</option>
             <option value="2021">2021</option>
             <option value="2020">2020</option>
-            <option value="2019">2019</option>
-            <option value="2018">2018</option>
-            <option value="2017">2017</option>
           </select>
         </div>
 
@@ -184,7 +181,7 @@
         </p>
       </div>
 
-      <h4>
+      <!-- <h4>
         <b>This property {{ eligibleDeferral }} eligible to enroll in the Real Estate Tax Deferral program for {{ selectedTaxYear }}.</b>
       </h4>
       <p>
@@ -193,7 +190,7 @@
         by more than 15% year-to-year in the future, you may be able to apply for another deferral.
         <a target="_blank">Check the guidelines</a> to see if you are eligible. The deadline to enroll in the
         Real Estate Tax Deferral Program for {{ selectedTaxYear }} is <b>March 31, {{ parseInt(selectedTaxYear) + 1 }}.</b> 
-      </p>
+      </p> -->
 
       <!-- <p class="calc-text">
         Using OPA data, the estimation is calculated using the following formula:<br>
@@ -312,7 +309,7 @@ export default {
       }
     },
     rawPayment() {
-      this.selectedYearValue * this.currentTaxRate;
+      return this.selectedYearValue * this.currentTaxRate;
     },
     loopCurrentYearPayment() {
       if (this.loopEligibilityUsed == 'oneFive') {
@@ -325,7 +322,7 @@ export default {
     },
     loopAssessmentCap() {
       if (this.loopEligibilityUsed == 'oneFive' || this.loopEligibilityUsed == 'oneSevenFive') {
-        return this.loopBase
+        return dollarUSLocale.format(this.loopBase);
       } else {
         return null;
       }
@@ -351,21 +348,21 @@ export default {
           }
           console.log('taxableValue is running, marketValueUsed:', marketValueUsed, 'this.homestead:', this.homestead, 'exempt_land: ', this.activeOpaData.exempt_land, 'exempt_improvement: ', this.activeOpaData.exempt_building, this.activeOpaData);
         } else if (this.loopSelected) {
-          if (this.loopBothEligible) {
-            if (loopOverride) {
-              value = this.rawPayment;
+          if (this.loopEitherEligible) {
+            if (this.loopOverride) {
+              marketValueUsed = this.rawPayment;
             } else {
-              value = this.loopCurrentYearPayment;
+              marketValueUsed = this.loopCurrentYearPayment;
             }
           } else {
-            value = 'Not eligible';
+            marketValueUsed = 'Not eligible';
           }
         } else if (this.seniorSelected) {
           marketValueUsed = this.assessmentValuesByYear[this.selectedSeniorYear];
         }
       }
       marketValueUsed = marketValueUsed < 0 ? 0 : marketValueUsed;
-      value = isNaN(marketValueUsed) ? value : dollarUSLocale.format(marketValueUsed * this.currentTaxRate);
+      value = isNaN(marketValueUsed) ? marketValueUsed : dollarUSLocale.format(marketValueUsed * this.currentTaxRate);
       return value;
     },
     eligibleDeferral() {
