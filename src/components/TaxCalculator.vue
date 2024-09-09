@@ -19,16 +19,21 @@
         </select>
       </div>
       <p>
-        The estimate below is for information only and may not be the actual amount of your {{ selectedTaxYear }} Real Estate Tax bill.
-        You may be eligible for programs to help reduce your taxes, like <a target="_blank">Homestead Exemption</a>,
+        If you’ve purchased your home within the last year, please contact the Hotline for information and assistance at (215) 686-9200.
+        Homeowners may be eligible for programs to help reduce your taxes, like the
+        <a target="_blank" href="https://www.phila.gov/services/payments-assistance-taxes/payment-plans-and-assistance-programs/other-payment-plans-and-programs/get-the-homestead-exemption/">Homestead Exemption</a>,
         <a target="_blank" href="https://www.phila.gov/services/payments-assistance-taxes/senior-citizen-discounts/low-income-senior-citizen-real-estate-tax-freeze/">
         Senior Citizen Tax Freeze</a>, or
         <a target="_blank" href="https://www.phila.gov/services/payments-assistance-taxes/income-based-assistance-programs/longtime-owner-occupants-program/">
-        Long-time Owner Occupant Program (LOOP)</a>, or be eligible to <a target="_blank">defer</a> some of your bill.  Not all properties are eligible for these programs.
+        Long-time Owner Occupant Program (LOOP).</a>
+        <!-- or be eligible to <a target="_blank">defer</a> some of your bill.  Not all properties are eligible for these programs. -->
       </p>
       <p>
         The City will launch a Low-Income Tax Freeze this year. Find more details at 
         <a target="_blank" href="https://www.phila.gov/revenue">phila.gov/revenue</a>.
+      </p>
+      <p>
+        The estimate below is for information only and may not be the actual amount of your {{ selectedTaxYear }} Real Estate Tax bill.
       </p>
       <div
         class="tax-calc-container"
@@ -201,7 +206,7 @@ export default {
   data() {
     return {
       homestead: 100000,
-      selectedTaxYear: '2024',
+      selectedTaxYear: '2025',
       selectedExemption: 'none',
       currentTaxRate: 0.013998,
       selectedSeniorYear: 2024,
