@@ -181,21 +181,6 @@
         </p>
       </div>
 
-      <!-- <h4>
-        <b>This property {{ eligibleDeferral }} eligible to enroll in the Real Estate Tax Deferral program for {{ selectedTaxYear }}.</b>
-      </h4>
-      <p>
-        If your Real Estate Tax increases by more than 15% from the previous year, you may be able to pay the excess
-        amount at a later date (defer payment). Deferral is for the current year only. If your Real Estate Tax increases
-        by more than 15% year-to-year in the future, you may be able to apply for another deferral.
-        <a target="_blank">Check the guidelines</a> to see if you are eligible. The deadline to enroll in the
-        Real Estate Tax Deferral Program for {{ selectedTaxYear }} is <b>March 31, {{ parseInt(selectedTaxYear) + 1 }}.</b> 
-      </p> -->
-
-      <!-- <p class="calc-text">
-        Using OPA data, the estimation is calculated using the following formula:<br>
-        (Market Value + Current Homestead Value) - (Exempt Land & Building Value) - (Selected Homestead Value) x 1.3998%
-      </p> -->
     </div>
   </div>
   <!-- End of 2023 Property Tax Calculator -->
