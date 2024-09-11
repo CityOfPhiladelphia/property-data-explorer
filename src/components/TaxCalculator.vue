@@ -320,7 +320,7 @@ export default {
       }
     },
     loopOverride() {
-      if (this.loopBase < this.selectedYearValue) {
+      if (this.loopBase > this.selectedYearValue) {
         return true;
       } else {
         return false;
