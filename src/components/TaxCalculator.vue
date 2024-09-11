@@ -311,8 +311,10 @@ export default {
       }
     },
     loopAssessmentCap() {
-      if (this.loopEligibilityUsed == 'oneFive' || this.loopEligibilityUsed == 'oneSevenFive') {
-        return dollarUSLocale.format(this.loopBase);
+      if (this.loopEligibilityUsed == 'oneFive') {
+        return dollarUSLocale.format(this.loopBase * 1.5);
+      } else if (this.loopEligibilityUsed == 'oneSevenFive') {
+        return dollarUSLocale.format(this.loopBase * 1.75);
       } else {
         return null;
       }
@@ -352,7 +354,11 @@ export default {
         }
       }
       marketValueUsed = marketValueUsed < 0 ? 0 : marketValueUsed;
-      value = isNaN(marketValueUsed) ? marketValueUsed : dollarUSLocale.format(marketValueUsed * this.currentTaxRate);
+      if (!this.loopSelected) {
+        value = isNaN(marketValueUsed) ? marketValueUsed : dollarUSLocale.format(marketValueUsed * this.currentTaxRate);
+      } else {
+        value = isNaN(marketValueUsed) ? marketValueUsed : dollarUSLocale.format(marketValueUsed);
+      }
       return value;
     },
     eligibleDeferral() {
