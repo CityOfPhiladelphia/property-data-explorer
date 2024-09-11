@@ -80,11 +80,11 @@
             ref='homestead_exemption'
             v-model="selectedSeniorYear"
           >
-            <option value="2024">2024</option>
-            <option value="2023">2023</option>
-            <option value="2022">2022</option>
-            <option value="2021">2021</option>
-            <option value="2020">2020</option>
+            <option :value="selectedTaxYear">{{ selectedTaxYear }}</option>
+            <option :value="selectedTaxYear - 1">{{ selectedTaxYear - 1 }}</option>
+            <option :value="selectedTaxYear - 2">{{ selectedTaxYear - 2 }}</option>
+            <option :value="selectedTaxYear - 3">{{ selectedTaxYear - 3 }}</option>
+            <option :value="selectedTaxYear - 4">{{ selectedTaxYear - 4 }}</option>
           </select>
         </div>
 
@@ -209,7 +209,7 @@ export default {
       selectedTaxYear: '2025',
       selectedExemption: 'none',
       currentTaxRate: 0.013998,
-      selectedSeniorYear: 2024,
+      selectedSeniorYear: '2025',
     };
   },
   computed: {
@@ -395,6 +395,14 @@ export default {
         opaId = feature.properties.opa_account_num;
       }
       return opaId;
+    },
+  },
+  watch: {
+    selectedTaxYear(newYear, oldYear) {
+      // console.log('oldYear:', oldYear, 'newYear:', newYear, 'this.selectedSeniorYear:', this.selectedSeniorYear);
+      if (this.selectedSeniorYear > newYear) {
+        this.selectedSeniorYear = newYear;
+      }
     },
   },
 }
