@@ -47,6 +47,7 @@
             ref='homestead_exemption'
             v-model="selectedExemption"
           >
+            <option value="current">Current bill</option>
             <option value="none">No exemption</option>
             <option value="homestead">Homestead Exemption</option>
             <option value="loop">Long-time Owner Occupant Program</option>
@@ -212,7 +213,7 @@ export default {
     return {
       homestead: 100000,
       selectedTaxYear: '2025',
-      selectedExemption: 'none',
+      selectedExemption: 'current',
       currentTaxRate: 0.013998,
       selectedSeniorYear: '2025',
     };
@@ -220,6 +221,9 @@ export default {
   computed: {
     hasHomestead() {
       return this.activeOpaData.homestead_exemption > 0;
+    },
+    currentSelected() {
+      return this.selectedExemption == 'current';
     },
     noneSelected() {
       return this.selectedExemption == 'none';
@@ -335,15 +339,15 @@ export default {
       let value = '';
       let marketValueUsed;
       if (this.activeOpaData) {
-        if (this.noneSelected || this.homesteadSelected) {
+        if (this.currentSelected) {
           marketValueUsed = this.activeOpaData.market_value
             - this.activeOpaData.exempt_land
             - this.activeOpaData.exempt_building
-            + this.activeOpaData.homestead_exemption
-          if (this.homesteadSelected) {
-            marketValueUsed = marketValueUsed - 100000;
-          }
-          console.log('taxableValue is running, marketValueUsed:', marketValueUsed, 'this.homestead:', this.homestead, 'exempt_land: ', this.activeOpaData.exempt_land, 'exempt_improvement: ', this.activeOpaData.exempt_building, this.activeOpaData);
+        } else if (this.noneSelected) {
+          marketValueUsed = this.activeOpaData.market_value;
+        } else if (this.homesteadSelected) {
+          marketValueUsed = this.activeOpaData.market_value - this.homestead;
+          // console.log('taxableValue is running, marketValueUsed:', marketValueUsed, 'this.homestead:', this.homestead, 'exempt_land: ', this.activeOpaData.exempt_land, 'exempt_improvement: ', this.activeOpaData.exempt_building, this.activeOpaData);
         } else if (this.loopSelected) {
           if (this.loopEitherEligible) {
             if (this.loopOverride) {
