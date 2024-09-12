@@ -135,7 +135,7 @@
         class="tax-calc-div"
       >
         <p>
-          The Homestead Exemption is a discount on the amount of real estate tax you owe each year.
+          The <b>Homestead Exemption</b> is a discount on the amount of real estate tax you owe each year.
           Your annual tax bill will change based on the property's assessed value. To learn more
           about the program and how to apply, <a target="_blank" href="https://www.phila.gov/services/payments-assistance-taxes/payment-plans-and-assistance-programs/other-payment-plans-and-programs/get-the-homestead-exemption/">
           check the guidelines</a>. The deadline
@@ -156,7 +156,7 @@
         class="tax-calc-div"
       >
         <h4><b>This property may be eligible to apply for LOOP for {{ selectedTaxYear }}</b></h4>
-        <h5>Households must meet other eligibility requirements including income and residency to qualify</h5>
+        <h5>Households must meet other eligibility requirements including income and at least ten years of residency to qualify</h5>
       </div>
 
       <div
@@ -178,7 +178,7 @@
         v-if="seniorSelected"
         class="tax-calc-div"
       >
-        <h5>Households must meet other eligibility requirements including income and residency to qualify</h5>
+        <h5>Households must meet other eligibility requirements including age, income, and residency to qualify</h5>
         <p>
           The <b>Senior Citizen Tax Freeze</b> caps the amount of real estate tax you owe each year so that
           the amount will not increase, even if your property assessment or the tax rate changes. If
@@ -187,7 +187,7 @@
           estimate your tax payment depending on which year you are eligible. To learn more about the
           program and how to apply, <a target="_blank" href="https://www.phila.gov/services/payments-assistance-taxes/payment-plans-and-assistance-programs/senior-citizen-programs/apply-for-the-low-income-senior-citizen-real-estate-tax-freeze/">
           check the guidelines</a>. The deadline to apply for the Senior
-          Citizen Tax Freeze for 2023 is <b>September 30, 2023</b>.
+          Citizen Tax Freeze for {{ selectedTaxYear }} is <b>September 30, {{ selectedTaxYear }}</b>.
         </p>
       </div>
 
