@@ -56,9 +56,9 @@
         </div>
         <div
           v-if="!seniorSelected"
-          :key="homestead"
           class="tax-calc-element"
         >
+        <!-- :key="homestead" -->
           <label for="estimated_tax">Estimated {{ selectedTaxYear }} Tax</label>
           <span id="estimate_total"> {{ taxableValue }} </span>
           <p
