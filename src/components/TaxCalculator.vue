@@ -338,15 +338,16 @@ export default {
     taxableValue() {
       let value = '';
       let marketValueUsed;
+      let assessmentData = this.assessmentHistory.filter(item => item.year == parseInt(this.selectedTaxYear))[0];
       if (this.activeOpaData) {
         if (this.currentSelected) {
-          marketValueUsed = this.activeOpaData.market_value
-            - this.activeOpaData.exempt_land
-            - this.activeOpaData.exempt_building
+          marketValueUsed = assessmentData.market_value
+            - assessmentData.exempt_land
+            - assessmentData.exempt_building
         } else if (this.noneSelected) {
-          marketValueUsed = this.activeOpaData.market_value;
+          marketValueUsed = assessmentData.market_value;
         } else if (this.homesteadSelected) {
-          marketValueUsed = this.activeOpaData.market_value - this.homestead;
+          marketValueUsed = assessmentData.market_value - this.homestead;
           // console.log('taxableValue is running, marketValueUsed:', marketValueUsed, 'this.homestead:', this.homestead, 'exempt_land: ', this.activeOpaData.exempt_land, 'exempt_improvement: ', this.activeOpaData.exempt_building, this.activeOpaData);
         } else if (this.loopSelected) {
           if (this.loopEitherEligible) {
