@@ -47,7 +47,7 @@
             ref='homestead_exemption'
             v-model="selectedExemption"
           >
-            <option value="current">Current bill</option>
+            <!-- <option value="current">Current bill</option> -->
             <option value="none">No exemption</option>
             <option value="homestead">Homestead Exemption</option>
             <option value="loop">Long-time Owner Occupant Program</option>
@@ -108,9 +108,10 @@
       </div>
 
       <div
-        v-if="selectedExemption == 'none' || homesteadSelected"
+        v-if="currentSelected || noneSelected || homesteadSelected"
         class="tax-calc-div"
-      >
+        >
+        <!-- v-if="currentSelected || noneSelected || homesteadSelected" -->
         <div
           v-if="hasHomestead"
           class="tax-calc-div"
@@ -211,9 +212,12 @@ export default {
   name: 'TaxCalculator',
   data() {
     return {
-      homestead: 100000,
+      homesteadDeduction: {
+        2024: 80000,
+        2025: 100000,
+      },
       selectedTaxYear: '2025',
-      selectedExemption: 'current',
+      selectedExemption: 'none',
       currentTaxRate: 0.013998,
       selectedSeniorYear: '2025',
     };
@@ -338,8 +342,8 @@ export default {
     taxableValue() {
       let value = '';
       let marketValueUsed;
-      let assessmentData = this.assessmentHistory.filter(item => item.year == parseInt(this.selectedTaxYear))[0];
-      if (this.activeOpaData) {
+      if (this.assessmentHistory && this.assessmentHistory.length > 0) {
+        let assessmentData = this.assessmentHistory.filter(item => item.year == parseInt(this.selectedTaxYear))[0];
         if (this.currentSelected) {
           marketValueUsed = assessmentData.market_value
             - assessmentData.exempt_land
@@ -347,7 +351,7 @@ export default {
         } else if (this.noneSelected) {
           marketValueUsed = assessmentData.market_value;
         } else if (this.homesteadSelected) {
-          marketValueUsed = assessmentData.market_value - this.homestead;
+          marketValueUsed = assessmentData.market_value - this.homesteadDeduction[this.selectedTaxYear];
           // console.log('taxableValue is running, marketValueUsed:', marketValueUsed, 'this.homestead:', this.homestead, 'exempt_land: ', this.activeOpaData.exempt_land, 'exempt_improvement: ', this.activeOpaData.exempt_building, this.activeOpaData);
         } else if (this.loopSelected) {
           if (this.loopEitherEligible) {
