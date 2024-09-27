@@ -89,15 +89,6 @@
         </div>
 
         <div
-          v-if="!seniorSelected"
-          class="tax-calc-element"
-        >
-          To report issues or ask questions regarding your {{ selectedTaxYear }}
-          property assessment, call <b>(215) 686-9200</b> or visit
-          <a href="https://www.phila.gov/opa" target="_blank">www.phila.gov/opa</a>
-        </div>
-
-        <div
           v-if="seniorSelected"
           class="tax-calc-element"
         >
@@ -191,6 +182,15 @@
           check the guidelines</a>. The deadline to apply for the Senior
           Citizen Tax Freeze for {{ selectedTaxYear }} is <b>September 30, {{ selectedTaxYear }}</b>.
         </p>
+      </div>
+
+      <div
+        v-if="!seniorSelected"
+        class="tax-calc-div"
+      >
+        To report issues or ask questions regarding your {{ selectedTaxYear }}
+        property assessment, call <a href="tel:215686920">(215) 686-9200</a> or visit
+        <a href="https://www.phila.gov/opa" target="_blank">www.phila.gov/opa</a>
       </div>
 
     </div>
