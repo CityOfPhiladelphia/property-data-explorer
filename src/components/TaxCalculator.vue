@@ -52,8 +52,10 @@
             <option value="homestead">Homestead Exemption</option>
             <option value="loop">Long-time Owner Occupant Program</option>
             <option value="senior">Senior Citizen Tax Freeze</option>
+            <option value="lowIncome">Low-Income Tax Freeze</option>
           </select>
         </div>
+
         <div
           v-if="!seniorSelected"
           class="tax-calc-element"
@@ -382,8 +384,10 @@ export default {
           } else {
             marketValueUsed = 'Not eligible';
           }
+        } else if (this.lowIncomeSelected) {
+          marketValueUsed = this.assessmentValuesByYear[2025] - this.homesteadDeduction[this.selectedTaxYear];
         } else if (this.seniorSelected) {
-          marketValueUsed = this.assessmentValuesByYear[this.selectedSeniorYear];
+          marketValueUsed = this.assessmentValuesByYear[this.selectedSeniorYear] - this.homesteadDeduction[this.selectedTaxYear];
         }
       }
       marketValueUsed = marketValueUsed < 0 ? 0 : marketValueUsed;
