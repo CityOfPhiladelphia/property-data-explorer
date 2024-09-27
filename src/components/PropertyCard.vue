@@ -146,21 +146,25 @@
         />
         <h3>Loading Valuation History</h3>
       </div>
+
+      <div class="pvc-horizontal-table-body table-title-div">
+        <h4 class="table-title">Valuation History</h4>
+
+        <div>
+          Taxable and exempt land values can represent the contributory value of land in relation to the total
+          market value, or were no structure is present, the value of vacant land. (Consistent with International
+          Association of Assessing Officers (IAAO) standards, the value of an improved parcel is separated into the
+          portion of value attributed to the improvement and the portion of value attributed to the land.)
+          <br><br>
+          To report issues or ask questions regarding your {{ currentAssessmentYear }} property assessment, call <a href="tel:215686920">(215) 686-9200</a> or visit
+          <a href="https://www.phila.gov/opa" target="_blank">www.phila.gov/opa</a>.
+        </div>
+      </div>
+
       <horizontal-table
         v-if="assessmentHistory"
         class='valuation-history'
-        :slots="{
-          title: 'Valuation History',
-          subtitle: 'Taxable and exempt land values can represent the \
-                     contributory value of land in relation to the total \
-                     market value, or were no structure is present, the \
-                     value of vacant land. (Consistent with International \
-                     Association of Assessing Officers (IAAO) standards, \
-                     the value of an improved parcel is separated into the \
-                     portion of value attributed to the improvement and the \
-                     portion of value attributed to the land.)',
-          items: this.assessmentHistory
-        }"
+        :slots="{ items: this.assessmentHistory }"
         :options="valuationHistoryHorizontalTableOptions"
       />
 
@@ -1708,6 +1712,10 @@ header {
   height: 40px;
   width: 73px;
   color: blue;
+}
+
+.table-title-div {
+  margin-bottom: 14px;
 }
 
 </style>

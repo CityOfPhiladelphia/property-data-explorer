@@ -188,13 +188,6 @@
           Citizen Tax Freeze for {{ selectedTaxYear }} is <b>September 30, {{ selectedTaxYear }}</b>.
         </p>
       </div>
-
-      <div class="tax-calc-div">
-        To report issues or ask questions regarding your {{ selectedTaxYear }}
-        property assessment, call <a href="tel:215686920">(215) 686-9200</a> or visit
-        <a href="https://www.phila.gov/opa" target="_blank">www.phila.gov/opa</a>
-      </div>
-
     </div>
   </div>
   <!-- End of 2023 Property Tax Calculator -->
