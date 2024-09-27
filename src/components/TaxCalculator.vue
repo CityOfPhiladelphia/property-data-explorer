@@ -79,11 +79,16 @@
             ref='homestead_exemption'
             v-model="selectedSeniorYear"
           >
-            <option :value="selectedTaxYear">{{ selectedTaxYear }}</option>
-            <option :value="selectedTaxYear - 1">{{ selectedTaxYear - 1 }}</option>
+            <option
+              v-for="year in seniorYears"
+              :value="year"
+            >
+              {{ year }}
+            </option>
+            <!-- <option :value="selectedTaxYear - 1">{{ selectedTaxYear - 1 }}</option>
             <option :value="selectedTaxYear - 2">{{ selectedTaxYear - 2 }}</option>
             <option :value="selectedTaxYear - 3">{{ selectedTaxYear - 3 }}</option>
-            <option :value="selectedTaxYear - 4">{{ selectedTaxYear - 4 }}</option>
+            <option :value="selectedTaxYear - 4">{{ selectedTaxYear - 4 }}</option> -->
           </select>
         </div>
 
@@ -244,6 +249,16 @@ export default {
     },
     seniorSelected() {
       return this.selectedExemption == 'senior';
+    },
+    seniorYears() {
+      let years = [];
+      for (let i=nextYear; i>=2018; i--) {
+        years.push(i);
+      }
+      return years;
+    },
+    lowIncomeSelected() {
+      return this.selectedExemption == 'lowIncome';
     },
     assessmentValuesByYear() {
       let values = {};
