@@ -58,7 +58,6 @@
           v-if="!seniorSelected"
           class="tax-calc-element"
         >
-        <!-- :key="homestead" -->
           <label for="estimated_tax">Estimated {{ selectedTaxYear }} Tax</label>
           <span id="estimate_total"> {{ taxableValue }} </span>
           <p
@@ -101,8 +100,7 @@
       <div
         v-if="currentSelected || noneSelected || homesteadSelected"
         class="tax-calc-div"
-        >
-        <!-- v-if="currentSelected || noneSelected || homesteadSelected" -->
+      >
         <div
           v-if="hasHomestead"
           class="tax-calc-div"
@@ -220,14 +218,12 @@ export default {
         2024: 80000,
         2025: 100000,
       },
-      // selectedTaxYear: '2025',
       currentYear: currentYear,
       nextYear: nextYear,
       selectedTaxYear: nextYear,
       selectedExemption: 'none',
       currentTaxRate: 0.013998,
       selectedSeniorYear: nextYear,
-      // selectedSeniorYear: '2025',
     };
   },
   computed: {
