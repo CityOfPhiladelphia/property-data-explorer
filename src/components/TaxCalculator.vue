@@ -23,13 +23,17 @@
         Homeowners may be eligible for programs to help reduce your taxes, like the
         <a target="_blank" href="https://www.phila.gov/services/payments-assistance-taxes/payment-plans-and-assistance-programs/other-payment-plans-and-programs/get-the-homestead-exemption/">Homestead Exemption</a>,
         <a target="_blank" href="https://www.phila.gov/services/payments-assistance-taxes/income-based-assistance-programs/longtime-owner-occupants-program/">
-        Long-time Owner Occupant Program (LOOP)</a>, or
+        Long-time Owner Occupant Program (LOOP)</a>,
         <a target="_blank" href="https://www.phila.gov/services/payments-assistance-taxes/senior-citizen-discounts/low-income-senior-citizen-real-estate-tax-freeze/">
-        Senior Citizen Tax Freeze</a>.
+        Senior Citizen Tax Freeze</a>, or
+        <a target="_blank" href="https://www.phila.gov/services/payments-assistance-taxes/taxes/property-and-real-estate-taxes/get-real-estate-tax-relief/tax-freeze/apply-for-the-low-income-real-estate-tax-freeze/">
+        Low-Income Tax Freeze</a>.
       </p>
       <p>
-        The City will launch a Low-Income Tax Freeze this year. Find more details at 
-        <a target="_blank" href="https://www.phila.gov/revenue">phila.gov/revenue</a>.
+        In 2024, the City expanded the assistance program and created a <a target="_blank" href="https://www.phila.gov/services/payments-assistance-taxes/taxes/property-and-real-estate-taxes/get-real-estate-tax-relief/tax-freeze/apply-for-the-low-income-real-estate-tax-freeze/">
+        Low-Income Tax Freeze</a>. Apply by January 31 and pay the same bill amount every year. Find more details at <a target="_blank" href="phila.gov/tax-freeze">phila.gov/tax-freeze</a>.
+        <!-- The City will launch a Low-Income Tax Freeze this year. Find more details at 
+        <a target="_blank" href="https://www.phila.gov/revenue">phila.gov/revenue</a>. -->
       </p>
       <p>
         The estimate below is for information only and may not be the actual amount of your {{ selectedTaxYear }} Real Estate Tax bill.
@@ -134,7 +138,7 @@
           about the program and how to apply, <a target="_blank" href="https://www.phila.gov/services/payments-assistance-taxes/payment-plans-and-assistance-programs/other-payment-plans-and-programs/get-the-homestead-exemption/">
           check the guidelines</a>. The deadline
           to apply for the Homestead Exemption for {{ selectedTaxYear }} is <b>December 1,
-          {{ selectedTaxYear - 1 }}</b>. If you can, apply by <b>September 13</b> to be approved earlier.
+          {{ selectedTaxYear - 1 }}</b>. If you can, apply by <b>October 1</b> for early enrollment.
         </p>
       </div>
 
@@ -150,7 +154,7 @@
         class="tax-calc-div"
       >
         <h4><b>This property may be eligible to apply for LOOP for {{ selectedTaxYear }}</b></h4>
-        <h5>Households must meet other eligibility requirements including income and at least ten years of residency to qualify</h5>
+        <h5>Households must meet other eligibility requirements including income limits and have been living on the property for least ten years</h5>
       </div>
 
       <div
@@ -159,7 +163,7 @@
       >
         <p>
           The <b>Long-time Owner Occupant Program (LOOP)</b> caps your property's assessed value each year
-          so that the amount of real estate tax you owe will not increase as your property assessment changes
+          so that the amount of Real Estate Tax you owe will not increase as your property assessment changes
           for as long as you remain in the program. If the tax rate changes, or you are no longer eligible
           for the program, your tax payment may increase. To learn more about the program and how to apply,
           <a target="_blank" href="https://www.phila.gov/services/payments-assistance-taxes/payment-plans-and-assistance-programs/income-based-programs-for-residents/apply-for-the-longtime-owner-occupants-program-loop/">
@@ -174,10 +178,10 @@
       >
         <h5>Households must meet other eligibility requirements including age, income, and residency to qualify</h5>
         <p>
-          The <b>Senior Citizen Tax Freeze</b> caps the amount of real estate tax you owe each year so that
-          the amount will not increase, even if your property assessment or the tax rate changes. If
-          you meet the age, income, and residency qualifications in any of the past five years, your
-          application will apply for the first year you were eligible. Use the drop down above to
+          The <b>Senior Citizen Tax Freeze</b> locks in your Real Estate Tax bill so you pay the same amount
+          every year, even if your property assessment or the tax rate changes. If
+          you became eligible by age, income, and residency qualifications between 2018 and the current year, your
+          bill will be frozen at the earliest year you meet all criteria. Use the drop down above to
           estimate your tax payment depending on which year you are eligible. To learn more about the
           program and how to apply, <a target="_blank" href="https://www.phila.gov/services/payments-assistance-taxes/payment-plans-and-assistance-programs/senior-citizen-programs/apply-for-the-low-income-senior-citizen-real-estate-tax-freeze/">
           check the guidelines</a>. The deadline to apply for the Senior
@@ -185,10 +189,7 @@
         </p>
       </div>
 
-      <div
-        v-if="!seniorSelected"
-        class="tax-calc-div"
-      >
+      <div class="tax-calc-div">
         To report issues or ask questions regarding your {{ selectedTaxYear }}
         property assessment, call <a href="tel:215686920">(215) 686-9200</a> or visit
         <a href="https://www.phila.gov/opa" target="_blank">www.phila.gov/opa</a>
