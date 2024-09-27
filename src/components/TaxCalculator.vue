@@ -87,10 +87,6 @@
             >
               {{ year }}
             </option>
-            <!-- <option :value="selectedTaxYear - 1">{{ selectedTaxYear - 1 }}</option>
-            <option :value="selectedTaxYear - 2">{{ selectedTaxYear - 2 }}</option>
-            <option :value="selectedTaxYear - 3">{{ selectedTaxYear - 3 }}</option>
-            <option :value="selectedTaxYear - 4">{{ selectedTaxYear - 4 }}</option> -->
           </select>
         </div>
 
@@ -398,15 +394,15 @@ export default {
       }
       return value;
     },
-    eligibleDeferral() {
-      let value;
-      if (this.selectedTaxYear == '2024') {
-        value = "may be";
-      } else {
-        value = 'is not';
-      }
-      return value;
-    },
+    // eligibleDeferral() {
+    //   let value;
+    //   if (this.selectedTaxYear == '2024') {
+    //     value = "may be";
+    //   } else {
+    //     value = 'is not';
+    //   }
+    //   return value;
+    // },
     assessmentHistory() {
       return this.$store.state.activeSearch.assessmentHistory.data;
     },
