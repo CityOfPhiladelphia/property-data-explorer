@@ -136,7 +136,7 @@
           about the program and how to apply, <a target="_blank" href="https://www.phila.gov/services/payments-assistance-taxes/payment-plans-and-assistance-programs/other-payment-plans-and-programs/get-the-homestead-exemption/">
           check the guidelines</a>. The deadline
           to apply for the Homestead Exemption for {{ selectedTaxYear }} is <b>December 1,
-          {{ selectedTaxYear }}</b>. If you can, apply by <b>September 13</b> to be approved earlier.
+          {{ selectedTaxYear - 1 }}</b>. If you can, apply by <b>September 13</b> to be approved earlier.
         </p>
       </div>
 
