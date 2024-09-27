@@ -320,7 +320,7 @@ export default {
     loopEligibilityUsed() {
       if (this.loopBothEligible && this.loopOneFiveValue <= this.loopOneSevenFiveValue) {
         return 'oneFive';
-      } else if (this.loopBothEligible && this.loopOneFiveValue < this.loopOneSevenFiveValue) {
+      } else if (this.loopBothEligible && this.loopOneFiveValue > this.loopOneSevenFiveValue) {
         return 'oneSevenFive';
       } else if (!this.loopBothEligible && this.loopOneSevenFiveEligible) {
         return 'oneSevenFive';
