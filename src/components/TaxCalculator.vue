@@ -14,8 +14,8 @@
           ref='tax_year'
           v-model="selectedTaxYear"
         >
-          <option value="2024">2024</option>
-          <option value="2025">2025</option>
+          <option :value="currentYear">{{ currentYear }}</option>
+          <option :value="nextYear">{{ nextYear }}</option>
         </select>
       </div>
       <p>
@@ -208,6 +208,10 @@ const dollarUSLocale = Intl.NumberFormat('en-US', {
     maximumFractionDigits: 0,
 });
 
+let currentYear = new Date().getFullYear();
+console.log('currentYear:', currentYear);
+let nextYear = currentYear + 1;
+
 export default {
   name: 'TaxCalculator',
   data() {
@@ -216,10 +220,14 @@ export default {
         2024: 80000,
         2025: 100000,
       },
-      selectedTaxYear: '2025',
+      // selectedTaxYear: '2025',
+      currentYear: currentYear,
+      nextYear: nextYear,
+      selectedTaxYear: nextYear,
       selectedExemption: 'none',
       currentTaxRate: 0.013998,
-      selectedSeniorYear: '2025',
+      selectedSeniorYear: nextYear,
+      // selectedSeniorYear: '2025',
     };
   },
   computed: {
