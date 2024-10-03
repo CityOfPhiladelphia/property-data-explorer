@@ -55,8 +55,8 @@
             <option value="none">No exemption</option>
             <option value="homestead">Homestead Exemption</option>
             <option value="loop">Long-time Owner Occupant Program</option>
-            <option value="senior">Senior Citizen Tax Freeze</option>
             <option value="lowIncome">Low-Income Tax Freeze</option>
+            <option value="senior">Senior Citizen Tax Freeze</option>
           </select>
         </div>
 
@@ -66,14 +66,16 @@
         >
           <label for="estimated_tax">Estimated {{ selectedTaxYear }} Tax</label>
           <span id="estimate_total"> {{ taxableValue }} </span>
-          <p
-            v-if="loopSelected && loopEitherEligible"
-            class="tax-calc-div"
-          >
-            <label for="estimated_tax">Assessment Cap</label>
-            <span id="estimate_total"> {{ loopAssessmentCap }} </span>
-          </p>
         </div>
+
+        <div
+          v-if="loopSelected && loopEitherEligible"
+          class="tax-calc-element"
+        >
+          <label for="estimated_tax">Assessment Cap</label>
+          <span id="estimate_total"> {{ loopAssessmentCap }} </span>
+        </div>
+
         <div
           v-if="seniorSelected"
           class="tax-calc-element"
@@ -244,7 +246,7 @@ export default {
     },
     seniorYears() {
       let years = [];
-      for (let i=nextYear; i>=2018; i--) {
+      for (let i=this.selectedTaxYear; i>=2018; i--) {
         years.push(i);
       }
       return years;
@@ -375,7 +377,7 @@ export default {
             marketValueUsed = 'Not eligible';
           }
         } else if (this.lowIncomeSelected) {
-          marketValueUsed = this.assessmentValuesByYear[2025] - this.homesteadDeduction[this.selectedTaxYear];
+          marketValueUsed = this.assessmentValuesByYear[this.selectedTaxYear] - this.homesteadDeduction[this.selectedTaxYear];
         } else if (this.seniorSelected) {
           marketValueUsed = this.assessmentValuesByYear[this.selectedSeniorYear] - this.homesteadDeduction[this.selectedTaxYear];
         }
