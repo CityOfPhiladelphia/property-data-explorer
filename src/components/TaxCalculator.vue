@@ -175,6 +175,22 @@
       </div>
 
       <div
+        v-if="lowIncomeSelected"
+        class="tax-calc-div"
+      >
+        <h5>Households must meet other eligibility requirements including income and residency to qualify</h5>
+        <p>
+          The <b>Low-Income Tax Freeze</b> locks in your Real Estate Tax bill so you pay the same amount every year,
+          even if your property assessment or the tax rate changes. If your tax liability decreases due to a
+          lower property assessment or a tax rate decrease, we will update your benefit, lower your bill, and
+          freeze it at the new amount. To learn more about the program and how to apply,
+          <a target="_blank" href="https://www.phila.gov/services/payments-assistance-taxes/taxes/property-and-real-estate-taxes/get-real-estate-tax-relief/tax-freeze/apply-for-the-low-income-real-estate-tax-freeze/">
+          check the guidelines</a>. The deadline to apply for the Low Income Tax Freeze
+          for {{ selectedTaxYear }} is <b>January 31, {{ selectedTaxYear }}</b>.
+        </p>
+      </div>
+
+      <div
         v-if="seniorSelected"
         class="tax-calc-div"
       >
