@@ -405,15 +405,11 @@ export default {
             marketValueUsed = 'Not eligible';
           }
         } else if (this.lowIncomeSelected) {
-          if (this.selectedTaxYear == '2024') {
-            marketValueUsed = this.assessmentValuesByYear[this.selectedTaxYear] - this.homesteadDeduction[this.selectedTaxYear];
-          } else if (this.selectedTaxYear == '2025') {
-            let lastYear = this.assessmentValuesByYear[this.selectedTaxYear-1] - this.homesteadDeduction[this.selectedTaxYear-1];
-            let thisYear = this.assessmentValuesByYear[this.selectedTaxYear] - this.homesteadDeduction[this.selectedTaxYear];
-            marketValueUsed = thisYear > lastYear ? lastYear : thisYear;
-          }
+          let lastYear = this.assessmentValuesByYear[this.selectedTaxYear-1] - this.homesteadDeduction[this.selectedTaxYear-1];
+          let thisYear = this.assessmentValuesByYear[this.selectedTaxYear] - this.homesteadDeduction[this.selectedTaxYear];
+          marketValueUsed = thisYear > lastYear ? lastYear : thisYear;
         } else if (this.seniorSelected) {
-          marketValueUsed = this.assessmentValuesByYear[this.selectedSeniorYear] - this.homesteadDeduction[this.selectedTaxYear];
+          marketValueUsed = this.assessmentValuesByYear[this.selectedSeniorYear] - this.homesteadDeduction[this.selectedSeniorYear];
         }
       }
       marketValueUsed = marketValueUsed < 0 ? 0 : marketValueUsed;
