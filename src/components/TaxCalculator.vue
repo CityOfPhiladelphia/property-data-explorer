@@ -65,7 +65,13 @@
           class="tax-calc-element"
         >
           <label for="estimated_tax">Estimated {{ selectedTaxYear }} Tax</label>
-          <span id="estimate_total"> {{ taxableValue }} </span>
+
+          <span 
+            v-if="!(lowIncomeSelected && selectedTaxYear == '2024')"
+            id="estimate_total"
+          > {{ taxableValue }} </span>
+
+          <div v-else class="exception-note">The Low-Income Tax Freeze is not available for the {{ selectedTaxYear }} assessment year.</div>
         </div>
 
         <div
@@ -465,3 +471,14 @@ export default {
 }
 
 </script>
+
+<style>
+
+.exception-note {
+  font-weight: bold;
+  max-width: 260px;
+  padding: 0px !important;
+  margin-left: 0px !important;
+}
+
+</style>
