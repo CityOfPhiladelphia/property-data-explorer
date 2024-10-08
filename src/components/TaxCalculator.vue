@@ -229,16 +229,22 @@ export default {
   name: 'TaxCalculator',
   data() {
     return {
-      homesteadDeduction: {
-        2024: 80000,
-        2025: 100000,
-      },
       currentYear: currentYear,
       nextYear: nextYear,
       selectedTaxYear: nextYear,
       selectedExemption: 'none',
       currentTaxRate: 0.013998,
       selectedSeniorYear: nextYear,
+      homesteadDeduction: {
+        2025: 100000,
+        2024: 80000,
+        2023: 80000,
+        2022: 45000,
+        2021: 45000,
+        2020: 45000,
+        2019: 40000,
+        2018: 30000,
+      },
     };
   },
   computed: {
@@ -393,7 +399,13 @@ export default {
             marketValueUsed = 'Not eligible';
           }
         } else if (this.lowIncomeSelected) {
-          marketValueUsed = this.assessmentValuesByYear[this.selectedTaxYear] - this.homesteadDeduction[this.selectedTaxYear];
+          if (this.selectedTaxYear == '2024') {
+            marketValueUsed = this.assessmentValuesByYear[this.selectedTaxYear] - this.homesteadDeduction[this.selectedTaxYear];
+          } else if (this.selectedTaxYear == '2025') {
+            let lastYear = this.assessmentValuesByYear[this.selectedTaxYear-1] - this.homesteadDeduction[this.selectedTaxYear-1];
+            let thisYear = this.assessmentValuesByYear[this.selectedTaxYear] - this.homesteadDeduction[this.selectedTaxYear];
+            marketValueUsed = thisYear > lastYear ? lastYear : thisYear;
+          }
         } else if (this.seniorSelected) {
           marketValueUsed = this.assessmentValuesByYear[this.selectedSeniorYear] - this.homesteadDeduction[this.selectedTaxYear];
         }
