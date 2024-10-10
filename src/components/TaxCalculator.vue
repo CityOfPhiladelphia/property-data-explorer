@@ -36,7 +36,10 @@
         <a target="_blank" href="https://www.phila.gov/revenue">phila.gov/revenue</a>. -->
       </p>
       <p>
-        The estimate below is for information only and may not be the actual amount of your {{ selectedTaxYear }} Real Estate Tax bill.
+        The calculator below compares what your Real Estate Tax bill would be if you enroll in one of these exemption programs for the
+        {{ selectedTaxYear }} Assessment Year.  These estimates are for information only and may not reflect your bill if you are already
+        enrolled in the program.  If you are currently enrolled, you never have to reapply unless your deed changes.  View your current
+        tax bill at the <a target="_blank" href="https://tax-services.phila.gov/_/">Philadelphia Tax Center</a>.
       </p>
       <div
         class="tax-calc-container"
