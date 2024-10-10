@@ -19,7 +19,7 @@
         </select>
       </div>
       <p>
-        If you’ve purchased your home within the last year, please contact the Hotline for information and assistance at (215) 686-9200.
+        <!-- If you’ve purchased your home within the last year, please contact the Hotline for information and assistance at (215) 686-9200. -->
         Homeowners may be eligible for programs to help reduce your taxes, like the
         <a target="_blank" href="https://www.phila.gov/services/payments-assistance-taxes/payment-plans-and-assistance-programs/other-payment-plans-and-programs/get-the-homestead-exemption/">Homestead Exemption</a>,
         <a target="_blank" href="https://www.phila.gov/services/payments-assistance-taxes/income-based-assistance-programs/longtime-owner-occupants-program/">
@@ -28,6 +28,7 @@
         Senior Citizen Tax Freeze</a>, or
         <a target="_blank" href="https://www.phila.gov/services/payments-assistance-taxes/taxes/property-and-real-estate-taxes/get-real-estate-tax-relief/tax-freeze/apply-for-the-low-income-real-estate-tax-freeze/">
         Low-Income Tax Freeze</a>.
+        For information and assistance, contact the OPA Hotline at (215) 686-9200 or the Dept of Revenue at (215) 686-6442.
       </p>
       <p>
         In 2024, the City expanded the assistance program and created a <a target="_blank" href="https://www.phila.gov/services/payments-assistance-taxes/taxes/property-and-real-estate-taxes/get-real-estate-tax-relief/tax-freeze/apply-for-the-low-income-real-estate-tax-freeze/">
