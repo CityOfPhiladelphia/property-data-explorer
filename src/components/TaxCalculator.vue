@@ -187,7 +187,7 @@
         v-if="lowIncomeSelected"
         class="tax-calc-div"
       >
-        <h5>Households must meet other eligibility requirements including income and residency to qualify</h5>
+        <h5>Households must meet other eligibility requirements including income limits and residency to qualify</h5>
         <p>
           The <b>Low-Income Tax Freeze</b> locks in your Real Estate Tax bill so you pay the same amount every year,
           even if your property assessment or the tax rate changes. If your tax liability decreases due to a
@@ -203,7 +203,7 @@
         v-if="seniorSelected"
         class="tax-calc-div"
       >
-        <h5>Households must meet other eligibility requirements including age, income, and residency to qualify</h5>
+        <h5>Households must meet other eligibility requirements including age, income limits, and residency to qualify</h5>
         <p>
           The <b>Senior Citizen Tax Freeze</b> locks in your Real Estate Tax bill so you pay the same amount
           every year, even if your property assessment or the tax rate changes. If
