@@ -30,12 +30,10 @@
         Low-Income Tax Freeze</a>.
         For information and assistance, contact the OPA Hotline at (215) 686-9200 or the Dept of Revenue at (215) 686-6442.
       </p>
-      <p>
+      <!-- <p>
         In 2024, the City expanded the assistance program and created a <a target="_blank" href="https://www.phila.gov/services/payments-assistance-taxes/taxes/property-and-real-estate-taxes/get-real-estate-tax-relief/tax-freeze/apply-for-the-low-income-real-estate-tax-freeze/">
         Low-Income Tax Freeze</a>. Apply by January 31 and pay the same bill amount every year. Find more details at <a target="_blank" href="phila.gov/tax-freeze">phila.gov/tax-freeze</a>.
-        <!-- The City will launch a Low-Income Tax Freeze this year. Find more details at 
-        <a target="_blank" href="https://www.phila.gov/revenue">phila.gov/revenue</a>. -->
-      </p>
+      </p> -->
       <p>
         The calculator below compares what your Real Estate Tax bill would be if you enroll in one of these exemption programs for the
         {{ selectedTaxYear }} Assessment Year.  These estimates are for information only and may not reflect your bill if you are already
