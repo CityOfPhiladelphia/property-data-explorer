@@ -28,7 +28,7 @@
         Senior Citizen Tax Freeze</a>, or
         <a target="_blank" href="https://www.phila.gov/services/payments-assistance-taxes/taxes/property-and-real-estate-taxes/get-real-estate-tax-relief/tax-freeze/apply-for-the-low-income-real-estate-tax-freeze/">
         Low-Income Tax Freeze</a>.
-        For information and assistance, contact the OPA Hotline at (215) 686-9200 or the Dept of Revenue at (215) 686-6442.
+        For information and assistance, contact (215) 686-9200 for questions about Homestead, LOOP, or the Office of Property Assessment (OPA). For other Real Estate Tax questions, contact the Dept of Revenue at (215) 686-6442.
       </p>
       <!-- <p>
         In 2024, the City expanded the assistance program and created a <a target="_blank" href="https://www.phila.gov/services/payments-assistance-taxes/taxes/property-and-real-estate-taxes/get-real-estate-tax-relief/tax-freeze/apply-for-the-low-income-real-estate-tax-freeze/">
@@ -143,8 +143,7 @@
         class="tax-calc-div"
       >
         <p>
-          The <b>Homestead Exemption</b> is a discount on the amount of real estate tax you owe each year.
-          Your annual tax bill will change based on the property's assessed value. To learn more
+          The <b>Homestead Exemption</b> reduces your property’s assessed value by up to $100,000, saving you up to $1,399 on your Real Estate Tax bill each year. To learn more
           about the program and how to apply, <a target="_blank" href="https://www.phila.gov/services/payments-assistance-taxes/payment-plans-and-assistance-programs/other-payment-plans-and-programs/get-the-homestead-exemption/">
           check the guidelines</a>. The deadline
           to apply for the Homestead Exemption for {{ selectedTaxYear }} is <b>December 1,
