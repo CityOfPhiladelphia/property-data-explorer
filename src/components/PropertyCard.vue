@@ -113,131 +113,7 @@
         </a>
       </p>
 
-      <!-- Property Tax Calculator -->
-      <div class="tax-calc-section has-background-ben-franklin-blue-light hide-print">
-        <div>
-          <h3>
-            {{ homesteadStatusSentence() }}
-            <!-- Real Estate Homestead Exemption Estimator -->
-          </h3>
-          <p v-if="!homesteadStatus()">
-            If you qualify for the Homestead Exemption on your home,
-            <a href="https://www.phila.gov/services/property-lots-housing/property-taxes/get-real-estate-tax-relief/get-the-homestead-exemption/" target="_blank">
-            apply before December 1
-            </a> of this year. Not all properties are eligible for the the Homestead Exemption.
-            <a
-              href="https://www.phila.gov/services/property-lots-housing/property-taxes/get-real-estate-tax-relief/get-the-homestead-exemption/"
-              target="_blank"
-            >
-              Check the guidelines.
-            </a>
-          </p>
-          <!-- <p v-if="!homesteadStatus()">
-            The estimate below is for information only and may not be the actual amount of your {{ currentAssessmentYear }} Real
-            Estate Tax bill. You may also be eligible for other programs to help reduce your taxes, like the
-            <a target="_blank" href="https://www.phila.gov/services/payments-assistance-taxes/senior-citizen-discounts/low-income-senior-citizen-real-estate-tax-freeze/">
-            Senior Citizen Tax Freeze</a> or
-            <a target="_blank" href="https://www.phila.gov/services/payments-assistance-taxes/income-based-assistance-programs/longtime-owner-occupants-program/">
-            Long-time Owner Occupant Program.</a>
-            Additionally, not all properties are eligible for the the Homestead Exemption.
-            <a
-              href="https://www.phila.gov/services/property-lots-housing/property-taxes/get-real-estate-tax-relief/get-the-homestead-exemption/"
-              target="_blank"
-            >
-              Check the guidelines.
-            </a>
-          </p> -->
-
-          <p v-if="homesteadStatus()">
-          <!-- <p> -->
-            You never have to reapply for the Homestead Exemption unless your deed changes, 
-            such as when refinancing a mortgage or adding a co-owner. 
-            If you’ve purchased your home within the last year, please contact the Hotline for 
-            information and assistance at (215) 686-9200. Homeowners may also be eligible for other programs 
-            to help reduce your taxes, like the 
-            <a target="_blank" href="https://www.phila.gov/services/payments-assistance-taxes/senior-citizen-discounts/low-income-senior-citizen-real-estate-tax-freeze/">
-              Senior Citizen Tax Freeze</a> or
-            <a target="_blank" href="https://www.phila.gov/services/payments-assistance-taxes/income-based-assistance-programs/longtime-owner-occupants-program/">
-            Long-time Owner Occupant Program.</a>
-
-          </p>
-          <p>
-            The City will launch a Low-Income Tax Freeze this year. Find more details at 
-            <a target="_blank" href="https://www.phila.gov/revenue">phila.gov/revenue</a>.
-          </p>
-          <!-- <p>
-            Estimate the 2023 Real Estate Tax of residential properties based on the updated
-            property assessment and the new Homestead Exemption amount of $80,000. These
-            estimates are for information only and may not be the actual amount of your 2023
-            Real Estate Tax bill. You may also be eligible for other programs to help reduce your
-            taxes, like the
-            <a target="_blank" href="https://www.phila.gov/services/payments-assistance-taxes/senior-citizen-discounts/low-income-senior-citizen-real-estate-tax-freeze/">
-            Senior Citizen Tax Freeze</a> or
-            <a target="_blank" href="https://www.phila.gov/services/payments-assistance-taxes/income-based-assistance-programs/longtime-owner-occupants-program/">
-            Long-time Owner Occupant Program.</a>
-            Additionally, not all properties are eligible for the Homestead Exemption.
-            <a
-              href="https://www.phila.gov/services/property-lots-housing/property-taxes/get-real-estate-tax-relief/get-the-homestead-exemption/"
-              target="_blank"
-            >
-              Check the guidelines.
-            </a>
-          </p> -->
-          <!-- <p>
-            {{homesteadStatus()}}
-          </p> -->
-
-          <p>
-            The estimate below is for information only and may not be the actual amount of your {{ currentAssessmentYear }}
-            Real Estate Tax bill.
-          </p>
-          <div
-            class="tax-calc-container"
-            id="tax-calculator"
-            v-if="activeOpaData"
-          >
-            <div class="tax-calc-element">
-              <label for="homestead_exemption">Select exemption</label>
-                <select
-                  name="homestead_exemption"
-                  id="homestead_exemption"
-                  ref='homestead_exemption'
-                  @change="handleHomesteadChange($event)"
-                >
-                  <option value="0">No exemption</option>
-                  <option value="100000">Homestead Exemption</option>
-                  <!-- <option value="100000">$100,000</option> -->
-                </select>
-            </div>
-            <div :key="homestead" class="tax-calc-element">
-              <label for="estimated_tax">Estimated {{ currentAssessmentYear }} Tax</label>
-               <span id="estimate_total"> {{ taxableValue() }} </span>
-            </div>
-            <div class="tax-calc-element">
-              To report issues or ask questions regarding your {{ currentAssessmentYear }} property assessment,
-              call <b>(215) 686-9200</b>
-              or visit <a href="https://www.phila.gov/opa" target="_blank">www.phila.gov/opa</a>
-
-            </div>
-          </div>
-          <!-- <div
-            v-if="!activeOpaData"
-            class="spinner-div small-12 cell"
-          >
-            <font-awesome-icon
-              icon="spinner"
-              class="fa-4x"
-              aria-hidden="true"
-            />
-            <h3>Loading Property Value Details</h3>
-          </div> -->
-          <!-- <p class="calc-text">
-            Using OPA data, the estimation is calculated using the following formula:<br>
-            (Market Value + Current Homestead Value) - (Exempt Land & Building Value) - (Selected Homestead Value) x 1.3998%
-          </p> -->
-        </div>
-      </div>
-       <!-- End of 2023 Property Tax Calculator -->
+      <TaxCalculator></TaxCalculator>
 
       <!-- Tax Balance Link -->
       <div class="has-background-bell-yellow-light hide-print">
@@ -259,31 +135,36 @@
 
       <!-- valuation history horizontal table -->
       <div
-        v-if="!this.$store.state.activeSearch.assessmentHistory.data"
+        v-if="!assessmentHistory"
         class="spinner-div small-12 cell"
       >
         <font-awesome-icon
           icon="spinner"
           class="fa-4x"
           aria-hidden="true"
+          spin
         />
         <h3>Loading Valuation History</h3>
       </div>
+
+      <div class="pvc-horizontal-table-body table-title-div">
+        <h4 class="table-title">Valuation History</h4>
+
+        <div>
+          Taxable and exempt land values can represent the contributory value of land in relation to the total
+          market value, or were no structure is present, the value of vacant land. (Consistent with International
+          Association of Assessing Officers (IAAO) standards, the value of an improved parcel is separated into the
+          portion of value attributed to the improvement and the portion of value attributed to the land.)
+          <br><br>
+          To report issues or ask questions regarding your {{ currentAssessmentYear }} property assessment, call <a href="tel:215686920">(215) 686-9200</a> or visit
+          <a href="https://www.phila.gov/opa" target="_blank">www.phila.gov/opa</a>.
+        </div>
+      </div>
+
       <horizontal-table
-        v-if="this.$store.state.activeSearch.assessmentHistory.data"
+        v-if="assessmentHistory"
         class='valuation-history'
-        :slots="{
-          title: 'Valuation History',
-          subtitle: 'Taxable and exempt land values can represent the \
-                     contributory value of land in relation to the total \
-                     market value, or were no structure is present, the \
-                     value of vacant land. (Consistent with International \
-                     Association of Assessing Officers (IAAO) standards, \
-                     the value of an improved parcel is separated into the \
-                     portion of value attributed to the improvement and the \
-                     portion of value attributed to the land.)',
-          items: this.$store.state.activeSearch.assessmentHistory.data
-        }"
+        :slots="{ items: this.assessmentHistory }"
         :options="valuationHistoryHorizontalTableOptions"
       />
 
@@ -412,6 +293,8 @@ const dollarUSLocale = Intl.NumberFormat('en-US', {
     maximumFractionDigits: 0,
 });
 
+import TaxCalculator from './TaxCalculator.vue';
+
 export default {
   name: 'PropertyCard',
   components: {
@@ -422,11 +305,7 @@ export default {
     HorizontalTable: () => import(/* webpackChunkName: "pvc_pcm_HorizontalTable" */'@phila/vue-comps/src/components/HorizontalTable.vue'),
     VerticalTable: () => import(/* webpackChunkName: "pvc_pcm_VerticalTable" */'@phila/vue-comps/src/components/VerticalTable.vue'),
     VerticalTableLight: () => import(/* webpackChunkName: "pvc_pcm_VerticalTableLight" */'@phila/vue-comps/src/components/VerticalTableLight.vue'),
-  },
-    data() {
-    return {
-      homestead: 0,
-    };
+    TaxCalculator,
   },
   props: {
     foundItemsLength: {
@@ -435,13 +314,15 @@ export default {
     },
   },
   computed: {
+    assessmentHistory() {
+      return this.$store.state.activeSearch.assessmentHistory.data;
+    },
     currentAssessmentYear() {
       let years = [];
       let year;
-      if (this.$store.state.activeSearch.assessmentHistory.data) {
-        let values = this.$store.state.activeSearch.assessmentHistory.data;
+      if (this.assessmentHistory) {
+        let values = this.assessmentHistory;
         for (let value of values) {
-          // years.push(parseInt(value.year));
           years.push(value.year);
         }
         year = Math.max(...years);
@@ -1111,61 +992,17 @@ export default {
       }
     },
     // Update for Property Tax Calculator
-    activeOpaData(newData){
-      // Property Tax Calc Added
-      this.$set(this, 'homestead', '');
-      if(this.$refs['homestead_exemption']) {
-        this.$refs['homestead_exemption'].options.selectedIndex = 0;
-      }
-      this.taxableValue()
-    },
+    // activeOpaData(newData){
+    //   // Property Tax Calc Added
+    //   this.$set(this, 'homestead', '');
+    //   if(this.$refs['homestead_exemption']) {
+    //     this.$refs['homestead_exemption'].options.selectedIndex = 0;
+    //   }
+    //   this.taxableValue()
+    // },
 
   },
   methods: {
-    // Update for Property Tax Calculator
-    handleHomesteadChange(e){
-      const target = e.target;
-      const slug = target.value;
-      this.$set(this, "homestead", slug)
-      // this.$forceUpdate();
-      console.log( 'input select event change value: ', this.$refs['homestead_exemption'].options);
-    },
-    homesteadStatus() {
-      if (this.activeOpaData.homestead_exemption > 0) {
-        return true;
-      } else {
-        return false;
-      }
-    },
-    homesteadStatusSentence(){
-      if (this.activeOpaData.homestead_exemption > 0) {
-        // return 'This property will receive a Homestead Exemption of ' + dollarUSLocale.format(this.activeOpaData.homestead_exemption) + '.'
-        return 'This property has the Homestead Exemption';
-      } else if( typeof this.activeOpaData.homestead_exemption !== 'number') {
-        return 'Loading Homestead status...'
-      }
-      return 'This property currently does not have a Homestead Exemption';
-      // return 'This property currently does not have a Homestead Exemption. If you qualify for the Homestead Exemption on your home, apply before December 1, 2022.'
-    },
-    taxableValue(){
-      console.log(this.activeOpaData.exempt_building)
-      if (this.activeOpaData) {
-        let selected_homestead_val = this.homestead === '' ? 0 : this.homestead;
-        console.log("this.homestead", this.homestead, 'exempt_land: ', this.activeOpaData.exempt_land, 'exempt_improvement: ', this.activeOpaData.exempt_building, this.activeOpaData  )
-        let price = this.activeOpaData.market_value + this.activeOpaData.homestead_exemption - this.activeOpaData.exempt_land - this.activeOpaData.exempt_building - selected_homestead_val;
-        console.log(price)
-        price = price < 0 ? 0 : price;
-        return isNaN(price) ? '': dollarUSLocale.format(price * .013998);
-      } else {
-        return '';
-      }
-    },
-    // taxableCalc(){
-    //   let market_value = this.activeOpaData.market_value;
-    //   // let current_homestead = this.activeOpaData.homestead_exemption;
-    //   return dollarUSLocale.format(market_value);
-    //   // return dollarUSLocale.format(market_value + current_homestead);
-    // },
     // End - Update for Property Tax Calculator
     buttonLinkLI(){
       window.open('https://li.phila.gov/property-history/search?address=' + this.activeOpaId, '_blank');
@@ -1240,6 +1077,20 @@ export default {
 
 }
 
+#tax_year {
+  width: 100px !important;
+}
+
+.tax-year-container {
+  max-width: 100px !important;
+  padding-left: 0px !important;
+  margin: 0px !important;
+}
+
+.tax-calc-div {
+  padding-left: 0px !important;
+  margin: 0px !important;
+}
 
 //  Property Tax Calculator CSS
 @media screen and (min-width: 1160px) {
@@ -1548,7 +1399,8 @@ div.tax-calc-section.has-background-ben-franklin-blue-light{
      & #estimate_total {
       display: block;
       font-weight: bold;
-      margin-top: 16px;
+      // margin-top: 16px;
+      margin-bottom: 10px;
       font-size: 1.4rem !important;
     }
     #homestead_exemption {
@@ -1862,6 +1714,10 @@ header {
   height: 40px;
   width: 73px;
   color: blue;
+}
+
+.table-title-div {
+  margin-bottom: 14px;
 }
 
 </style>

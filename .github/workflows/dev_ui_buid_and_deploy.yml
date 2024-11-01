@@ -3,7 +3,7 @@ name: Build, Check And Deploy to Dev
 on:
   push:
     branches:
-      - fix/block-export
+      - feature/loop-calculator
 
 jobs:
   build:
