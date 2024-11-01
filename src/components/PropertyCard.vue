@@ -530,6 +530,8 @@ export default {
         switch (trashDay) {
           case 'MON' : day = 'Monday';
             break;
+          case 'TUE' : day = 'Tuesday';
+          break;
           case 'TUES' : day = 'Tuesday';
             break;
           case 'WED' : day = 'Wednesday';
