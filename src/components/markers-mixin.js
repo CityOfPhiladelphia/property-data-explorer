@@ -4,7 +4,7 @@ export default {
 
   watch: {
     activeFeature(nextActiveFeature, prevActiveFeature) {
-      console.log('WATCH active feature', prevActiveFeature, '=>', nextActiveFeature);
+      // console.log('WATCH active feature', prevActiveFeature, '=>', nextActiveFeature);
 
       if (prevActiveFeature && prevActiveFeature.featureId) {
         this.geojsonActiveParcelSources = [];
@@ -22,7 +22,7 @@ export default {
         if (parseFeatureNext && parseFeatureNext.length) {
           numberFeatureNext = parseFloat(parseFeatureNext[0]);
         }
-        console.log('watch active feature, parseFeatureNext:', parseFeatureNext);
+        // console.log('watch active feature, parseFeatureNext:', parseFeatureNext);
 
         let currentShape;
         let shapes = [];

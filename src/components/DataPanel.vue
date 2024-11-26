@@ -685,7 +685,11 @@ export default {
       this.$data.showTable = false;
       this.$data.condoExpanded = true;
       let mapUnitIds = function(id) {
-        // console.log('running mapUnitIds, id:', id, this.$store.state.condoUnits.units[id]);
+
+        // if (id.includes('|')) {
+        //   id = id.split('|')[0];
+        // }
+        console.log('running mapUnitIds, id:', id, this.$store.state.condoUnits.units[id]);
         let unitsToAdd = this.$store.state.condoUnits.units[id];
         unitsToAdd.map(
           (item, index) => {
@@ -697,31 +701,31 @@ export default {
         return unitsToAdd;
       };
       mapUnitIds = mapUnitIds.bind(this);
-      // console.log('after mapUnitIds', item);
+      console.log('after mapUnitIds', item);
       let unitData;
       if (this.$store.state.lastSearchMethod === 'block search') {
           let result = this.$store.state.blockSearch.data.filter(
           row => row._featureId === item._featureId,
         );
-      // console.log("block button: ", item, "result: ", result);
+        // console.log("block button: ", item, "result: ", result);
 
-      function arrayObjectIndexOf(myArray, searchTerm, property) {
-          for(let i = 0, len = myArray.length; i < len; i++) {
-            if (myArray[i][property] === searchTerm) {
-              return i;
+        function arrayObjectIndexOf(myArray, searchTerm, property) {
+            for(let i = 0, len = myArray.length; i < len; i++) {
+              if (myArray[i][property] === searchTerm) {
+                return i;
+              }
             }
-          }
-          return -1;
-      }
+            return -1;
+        }
+        console.log('middle of function, result:', result);
+        let units = mapUnitIds(result[0].properties.pwd_parcel_id);
+        // console.log("arrayObjectIndexOf: ", this.$store.state.blockSearch.data, item._featureId );
+        units.objIndex = arrayObjectIndexOf(this.$store.state.blockSearch.data, item._featureId, "_featureId" );
 
-      let units = mapUnitIds(result[0].properties.pwd_parcel_id);
-      // console.log("arrayObjectIndexOf: ", this.$store.state.blockSearch.data, item._featureId );
-      units.objIndex = arrayObjectIndexOf(this.$store.state.blockSearch.data, item._featureId, "_featureId" );
-
-      // console.log("mapped unit id's: ", units);
-      this.$store.commit('setBlockSearchDataPush', units);
-      this.$controller.dataManager.resetData();
-      this.$controller.dataManager.fetchData();
+        // console.log("mapped unit id's: ", units);
+        this.$store.commit('setBlockSearchDataPush', units);
+        this.$controller.dataManager.resetData();
+        this.$controller.dataManager.fetchData();
 
 
       } else if (this.$store.state.lastSearchMethod === 'geocode') {
@@ -732,7 +736,7 @@ export default {
                 this.$store.state.geocode.data.properties.opa_address;
         this.$controller.dataManager.clients.condoSearch.fetch(input);
         unitData = mapUnitIds(item._featureId);
-        // console.log('in addCondoRecords, lastSearchMethod = geocode');
+        console.log('in addCondoRecords, lastSearchMethod = geocode');
         this.$store.commit('setGeocodeRelated', unitData);
         this.$controller.dataManager.fetchData();
       } else if (this.$store.state.lastSearchMethod === 'reverseGeocode' ) {
