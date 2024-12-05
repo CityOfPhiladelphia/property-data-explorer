@@ -428,6 +428,30 @@ export default {
         }
         return day;
       };
+      let secondaryTrashDay = function(state) {
+        let prop = state.activeModalFeature.properties ? state.activeModalFeature.properties : state.activeModalFeature
+        let secondaryTrashDay = prop.secondary_rubbish_day ? prop.secondary_rubbish_day : 'Unavailable';
+        let day = null;
+        switch (secondaryTrashDay) {
+          case 'MON' : day = 'Monday';
+            break;
+          case 'TUE' : day = 'Tuesday';
+          break;
+          case 'TUES' : day = 'Tuesday';
+            break;
+          case 'WED' : day = 'Wednesday';
+            break;
+          case 'THU' : day = 'Thursday';
+            break;
+          case 'FRI' : day = 'Friday';
+            break;
+          case 'SAT' : day = 'Saturday';
+            break;
+          case 'SUN' : day = 'Sunday';
+            break;
+        }
+        return day;
+      };
 
       return {
         id: 'localDetailsTable',
@@ -460,6 +484,32 @@ export default {
           },
           {
             label: 'Trash Day',
+            value: function() {
+              // TODO Clean up this link and add function for the day of week, check other search types for mapping prop
+              let value = '';
+              console.log('secondaryTrashDay(state): ', secondaryTrashDay(state));
+              if (!secondaryTrashDay(state)) {
+                value = trashDay(state);
+              } else {
+                let days = [ 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday' ];
+                let i = 0;
+                for (let day of days)
+                 if (day === trashDay(state) || day === secondaryTrashDay(state)) {
+                  i += 1;
+                  value += day;
+                  if (i < 2) {
+                    value += ' and ';
+                  }
+                 }
+              }
+              return "<a href='https://www.phila.gov/services/trash-recycling-city-upkeep/residential-trash-and-recycling/find-your-trash-and-recycling-collection-day/#/' target='_blank'>"
+                      // + trashDay(state) + ' and ' + secondaryTrashDay(state) +
+                      + value +
+                      " <i class='fa fa-external-link-alt'></i></a>";
+            }.bind(this),
+          },
+          {
+            label: 'Recycling Day',
             value: function() {
               // TODO Clean up this link and add function for the day of week, check other search types for mapping prop
               return "<a href='https://www.phila.gov/services/trash-recycling-city-upkeep/residential-trash-and-recycling/find-your-trash-and-recycling-collection-day/#/' target='_blank'>"
