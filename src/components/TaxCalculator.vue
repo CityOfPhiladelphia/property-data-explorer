@@ -15,7 +15,7 @@
           v-model="selectedTaxYear"
         >
           <option :value="currentYear">{{ currentYear }}</option>
-          <option :value="nextYear">{{ nextYear }}</option>
+          <option v-if="this.nextYear" :value="this.nextYear">{{ this.nextYear }}</option>
         </select>
       </div>
       <p>
@@ -69,7 +69,7 @@
         >
           <label for="estimated_tax">Estimated {{ selectedTaxYear }} Tax</label>
 
-          <span 
+          <span
             v-if="!(lowIncomeSelected && selectedTaxYear == '2024')"
             id="estimate_total"
           > {{ taxableValue }} </span>
@@ -229,20 +229,20 @@ const dollarUSLocale = Intl.NumberFormat('en-US', {
     maximumFractionDigits: 0,
 });
 
-let currentYear = new Date().getFullYear();
-console.log('currentYear:', currentYear);
-let nextYear = currentYear + 1;
+// let currentYear = new Date().getFullYear();
+// console.log('currentYear:', currentYear);
+// let nextYear = currentYear + 1;
 
 export default {
   name: 'TaxCalculator',
   data() {
     return {
-      currentYear: currentYear,
-      nextYear: nextYear,
-      selectedTaxYear: nextYear,
+      // currentYear: currentYear,
+      // nextYear: nextYear,
+      selectedTaxYear: new Date().getFullYear(),
       selectedExemption: 'none',
       currentTaxRate: 0.013998,
-      selectedSeniorYear: nextYear,
+      selectedSeniorYear: new Date().getFullYear(),
       homesteadDeduction: {
         2025: 100000,
         2024: 80000,
@@ -255,7 +255,35 @@ export default {
       },
     };
   },
+  mounted() {
+    console.log('TaxCalculator.vue mounted, this.nextYear:', this.nextYear, 'this.currentYear:', this.currentYear);
+    if (this.nextYear) {
+      this.selectedTaxYear = this.nextYear;
+      this.selectedSeniorYear = this.nextYear;
+    } else {
+      this.selectedTaxYear = this.currentYear;
+      this.selectedSeniorYear = this.currentYear;
+    }
+  },
   computed: {
+    currentYear() {
+      return new Date().getFullYear();
+    },
+    assessmentHistory() {
+      return this.$store.state.activeSearch.assessmentHistory.data;
+    },
+    lastAssessmentYear() {
+      if (this.$store.state.activeSearch.assessmentHistory.data) {
+        return lastAssessmentYear = this.assessmentHistory[0].year;
+      }
+    },
+    nextYear() {
+      let value = null;
+      if (this.lastAssessmentYear && this.currentYear < this.lastAssessmentYear) {
+        value = this.currentYear + 1;
+      }
+      return value;
+    },
     hasHomestead() {
       return this.activeOpaData.homestead_exemption > 0;
     },
@@ -431,9 +459,6 @@ export default {
     //   }
     //   return value;
     // },
-    assessmentHistory() {
-      return this.$store.state.activeSearch.assessmentHistory.data;
-    },
     activeOpaData() {
       let value = [];
       if (this.$store.state.sources.opa_public.targets[this.activeOpaId] && this.$store.state.sources.opa_public.targets[this.activeOpaId].data) {
