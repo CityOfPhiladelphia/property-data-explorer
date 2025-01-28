@@ -14,6 +14,7 @@
           ref='tax_year'
           v-model="selectedTaxYear"
         >
+          <option v-if="!this.nextYear" :value="this.lastYear">{{ this.lastYear }}</option>
           <option :value="currentYear">{{ currentYear }}</option>
           <option v-if="this.nextYear" :value="this.nextYear">{{ this.nextYear }}</option>
         </select>
@@ -283,6 +284,9 @@ export default {
         value = this.currentYear + 1;
       }
       return value;
+    },
+    lastYear() {
+      return this.currentYear - 1;
     },
     hasHomestead() {
       return this.activeOpaData.homestead_exemption > 0;
