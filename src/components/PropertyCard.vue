@@ -249,7 +249,7 @@
 
         <div>
           <h3>Not finding the information you're looking for?</h3>
-          For more information specific to this property, try <a href="https://atlas.phila.gov" target="_blank">atlas.phila.gov</a>
+          For more information specific to this property, try <a :href="'https://atlas.phila.gov/'+activeOpaId+'/property'" target="_blank">atlas.phila.gov</a>
         </div>
       </div>
 
