@@ -229,7 +229,7 @@ const dollarUSLocale = Intl.NumberFormat('en-US', {
     maximumFractionDigits: 0,
 });
 
-// let currentYear = new Date().getFullYear();
+let thisYear = new Date().getFullYear();
 // console.log('currentYear:', currentYear);
 // let nextYear = currentYear + 1;
 
@@ -239,10 +239,10 @@ export default {
     return {
       // currentYear: currentYear,
       // nextYear: nextYear,
-      selectedTaxYear: new Date().getFullYear(),
+      selectedTaxYear: thisYear,
       selectedExemption: 'none',
       currentTaxRate: 0.013998,
-      selectedSeniorYear: new Date().getFullYear(),
+      selectedSeniorYear: thisYear,
       homesteadDeduction: {
         2025: 100000,
         2024: 80000,
@@ -274,7 +274,7 @@ export default {
     },
     lastAssessmentYear() {
       if (this.$store.state.activeSearch.assessmentHistory.data) {
-        return lastAssessmentYear = this.assessmentHistory[0].year;
+        return this.$store.state.activeSearch.assessmentHistory.data[0].year;
       }
     },
     nextYear() {
