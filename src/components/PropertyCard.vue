@@ -477,7 +477,7 @@ export default {
           {
             label: 'Police District',
             value: function() {
-              return "<a href='https://districts.phillypolice.com/districts/" + nth(opaPublicData.police_district) + "/' target='_blank'>\
+              return "<a href='https://phillypolice.com/" + nth(opaPublicData.police_district) + "-district/' target='_blank'>\
                       " + nth(opaPublicData.police_district) + " District\
                       <i class='fa fa-external-link-alt'></i></a>";
             }.bind(this),
