@@ -973,7 +973,7 @@ export default {
   mounted() {
     // console.log('MapPanel mounted is running, DrawControl', DrawControl)
     const map = this.$store.state.map.map;
-    this.$store.commit('setImagery', 'imagery2023');
+    this.$store.commit('setImagery', 'imagery2024');
   },
   methods: {
     handleBufferButtonClick(e) {
