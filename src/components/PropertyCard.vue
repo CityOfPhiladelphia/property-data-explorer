@@ -44,6 +44,7 @@
             <font-awesome-icon
               icon="spinner"
               aria-hidden="true"
+              spin
             />
           </div>
           <div v-if="activeAddress">
@@ -95,6 +96,7 @@
           icon="spinner"
           class="fa-4x"
           aria-hidden="true"
+          spin
         />
         <h3>Loading Sale Data</h3>
       </div>
@@ -177,6 +179,7 @@
           icon="spinner"
           class="fa-4x"
           aria-hidden="true"
+          spin
         />
         <h3>Loading Sales History</h3>
       </div>
@@ -219,6 +222,7 @@
           icon="spinner"
           class="fa-4x"
           aria-hidden="true"
+          spin
         />
         <h3>Loading Property Details</h3>
       </div>

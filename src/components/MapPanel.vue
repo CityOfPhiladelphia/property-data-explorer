@@ -32,7 +32,12 @@
           class="mb-map-loading-mask"
         >
           <div :class="loadingMaskLeft">
-            <i class="fa fa-spinner fa-4x spin" />
+            <font-awesome-icon
+              icon="spinner"
+              class="fa-4x"
+              aria-hidden="true"
+              spin
+            />
             <h1>Finding address...</h1>
           </div>
         </div>

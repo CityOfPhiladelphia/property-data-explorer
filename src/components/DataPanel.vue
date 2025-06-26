@@ -12,6 +12,7 @@
         icon="spinner"
         class="fa-4x"
         aria-hidden="true"
+        spin
       />
       <h3>Loading Data</h3>
     </div>
