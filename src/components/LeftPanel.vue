@@ -12,6 +12,7 @@
         icon="spinner"
         size="6x"
         aria-hidden="true"
+        spin
       />
     </div>
 
