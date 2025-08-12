@@ -1,62 +1,71 @@
 <!DOCTYPE html>
 <html class="no-js" lang="en">
-  <head>
-    <!-- Google Tag Manager -->
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-      'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-      })(window,document,'script','dataLayer','GTM-MC6CR2');
-    </script>
-    <!-- End Google Tag Manager -->
-    <!-- Microsoft Clarity [phila.gov] -->
-    <script type="text/javascript">
-      (function(c,l,a,r,i,t,y){
-          c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-          t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-          y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-      })(window, document, "clarity", "script", "4l8dhsl6kn");
-    </script>
-    <!-- End Microsoft Clarity [phila.gov] -->
-    <meta charset="UTF-8" />
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Property | phila.gov</title>
-    <link rel="canonical" href="">
-    <meta name="description" content="">
-    <link rel="shortcut icon" type="image/x-icon" href="https://standards.phila.gov/img/favicon.png">
 
-    <!--
+<head>
+  <!-- Google Tag Manager -->
+  <script>(function (w, d, s, l, i) {
+      w[l] = w[l] || []; w[l].push({
+        'gtm.start':
+          new Date().getTime(), event: 'gtm.js'
+      }); var f = d.getElementsByTagName(s)[0],
+        j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+          'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+    })(window, document, 'script', 'dataLayer', 'GTM-MC6CR2');
+  </script>
+  <!-- End Google Tag Manager -->
+  <!-- Microsoft Clarity [phila.gov] -->
+  <script type="text/javascript">
+    (function (c, l, a, r, i, t, y) {
+      c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments) };
+      t = l.createElement(r); t.async = 1; t.src = "https://www.clarity.ms/tag/" + i;
+      y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
+    })(window, document, "clarity", "script", "4l8dhsl6kn");
+  </script>
+  <script src="https://code.jquery.com/pep/0.4.3/pep.js"></script>
+  <!-- End Microsoft Clarity [phila.gov] -->
+  <meta charset="UTF-8" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Property | phila.gov</title>
+  <link rel="canonical" href="">
+  <meta name="description" content="">
+  <link rel="shortcut icon" type="image/x-icon" href="https://standards.phila.gov/img/favicon.png">
+
+  <!--
       open graph/twitter card. this makes links to property.phila.gov look nice on
       social media.
     -->
-    <meta name="twitter:card" content="summary">
-    <meta property="og:title" content="Property | phila.gov">
-    <meta property="og:type" content="website">
-    <meta property="og:image" content="images/screenshot.png">
-    <meta property="og:url" content="https://property.phila.gov/">
-    <meta property=og:description content="Get information about property ownership, value, and physical characteristics.">
-    <meta property="og:site_name" content="phila.gov">
+  <meta name="twitter:card" content="summary">
+  <meta property="og:title" content="Property | phila.gov">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="images/screenshot.png">
+  <meta property="og:url" content="https://property.phila.gov/">
+  <meta property=og:description
+    content="Get information about property ownership, value, and physical characteristics.">
+  <meta property="og:site_name" content="phila.gov">
 
-  </head>
+</head>
 
-  <body>
-    <!-- Google Tag Manager (noscript) -->
-    <noscript>
-      <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MC6CR2" height="0" width="0" style="display:none;visibility:hidden"></iframe>
-    </noscript>
-    <!-- End Google Tag Manager (noscript) -->
+<body>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript>
+    <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MC6CR2" height="0" width="0"
+      style="display:none;visibility:hidden"></iframe>
+  </noscript>
+  <!-- End Google Tag Manager (noscript) -->
 
-    <div class="grid-y medium-grid-frame" id="application">
-      <div id="vue-app"></div>
-    </div>
+  <div class="grid-y medium-grid-frame" id="application">
+    <div id="vue-app"></div>
+  </div>
 
-    <!-- JS: Cyclomedia -->
-    <script type="text/javascript" src="https://unpkg.com/react@16.14.0/umd/react.production.min.js"></script>
-    <script type="text/javascript" src="https://unpkg.com/react-dom@16.14.0/umd/react-dom.production.min.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@main/dist/en/v6.12.0/build/ol.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script>
-    <script type="text/javascript" src="https://streetsmart.cyclomedia.com/api/v23.2/StreetSmartApi.js"></script>
+  <!-- JS: Cyclomedia -->
+  <script type="text/javascript" src="https://unpkg.com/react@18.2.0/umd/react.production.min.js"></script>
+  <script type="text/javascript" src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
+  <script type="text/javascript"
+    src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@main/dist/en/v6.12.0/build/ol.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script>
+  <script type="text/javascript" src="https://streetsmart.cyclomedia.com/api/v24.5/StreetSmartApi.js"></script>
 
-  </body>
+</body>
+
 </html>
