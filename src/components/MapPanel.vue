@@ -544,7 +544,7 @@ export default {
     basemapsAndLabelsBefore() {
       let basemapsBefore = this.basemapsBefore;
       basemapsBefore.push('imageryBasemapLabels');
-      return basemapsBefore;      
+      return basemapsBefore;
     },
     basemapsBefore() {
       let value = [
