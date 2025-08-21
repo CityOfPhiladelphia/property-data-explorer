@@ -641,7 +641,7 @@ export default {
         if (['shape search', 'buffer search'].includes(this.lastSearchMethod)) {
           this.$store.commit('setActiveFeature', { featureId: 'feat-shape-0' });
           this.$store.commit('setActiveModal', { featureId: 'feat-shape-0' });
-          this.$controller.setRouteByOpaNumber(this.$store.state.parcels.pwd[0].properties.BRT_ID);
+          this.$controller.setRouteByOpaNumber(this.$store.state.parcels.pwd[0].properties.brt_id);
         } else if (['block search', 'blockSearch'].includes(this.lastSearchMethod)) {
           console.log('onDataChange else is running, type:', type, 'lastSearchMethod is block search');
           this.$store.commit('setActiveFeature', { featureId: 'feat-block-0' });

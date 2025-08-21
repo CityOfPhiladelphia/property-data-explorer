@@ -901,7 +901,7 @@ export default {
                   'coordinates': parcel.geometry.coordinates,
                 },
                 'properties': {
-                  'parcelId': parcel.properties.PARCELID,
+                  'parcelId': parcel.properties.parcelid,
                   'featureId': parcel.properties._featureId,
                 },
               },

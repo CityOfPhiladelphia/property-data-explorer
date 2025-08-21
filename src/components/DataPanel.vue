@@ -145,13 +145,13 @@ export default {
         for (let i in parentCondo.properties) {
           parentCondo.properties[i] = "";
         }
-        if (this.$store.state.condoUnits.units[this.$store.state.parcels.pwd[0].properties.PARCELID]) {
-          parentCondo.properties.opa_owners = [ "Condominium (" + this.$store.state.condoUnits.units[this.$store.state.parcels.pwd[0].properties.PARCELID].length + " Units)" ];
+        if (this.$store.state.condoUnits.units[this.$store.state.parcels.pwd[0].properties.parcelid]) {
+          parentCondo.properties.opa_owners = [ "Condominium (" + this.$store.state.condoUnits.units[this.$store.state.parcels.pwd[0].properties.parcelid].length + " Units)" ];
         }
-        parentCondo.properties.street_address = this.$store.state.parcels.pwd[0].properties.ADDRESS;
-        parentCondo.properties.opa_address = this.$store.state.parcels.pwd[0].properties.ADDRESS;
-        parentCondo.properties.pwd_parcel_id = this.$store.state.parcels.pwd[0].properties.PARCELID;
-        parentCondo._featureId = this.$store.state.parcels.pwd[0].properties.PARCELID;
+        parentCondo.properties.street_address = this.$store.state.parcels.pwd[0].properties.address;
+        parentCondo.properties.opa_address = this.$store.state.parcels.pwd[0].properties.address;
+        parentCondo.properties.pwd_parcel_id = this.$store.state.parcels.pwd[0].properties.parcelid;
+        parentCondo._featureId = this.$store.state.parcels.pwd[0].properties.parcelid;
         // parentCondo.condo = true;
         data.push(parentCondo);
       } else {
@@ -729,7 +729,7 @@ export default {
         this.$controller.dataManager.resetData();
         this.$data.condoExpanded = true;
         const input = this.$store.state.parcels.pwd ?
-                this.$store.state.parcels.pwd[0].properties.ADDRESS :
+                this.$store.state.parcels.pwd[0].properties.address :
                 this.$store.state.geocode.data.properties.opa_address;
         this.$controller.dataManager.clients.condoSearch.fetch(input);
         unitData = mapUnitIds(item._featureId);
@@ -742,7 +742,7 @@ export default {
 
         this.$controller.dataManager.resetData();
         this.$controller.dataManager.resetShape();
-        const input = this.$store.state.parcels.pwd[0].properties.ADDRESS;
+        const input = this.$store.state.parcels.pwd[0].properties.address;
         this.$controller.dataManager.clients.condoSearch.fetch(input);
 
         unitData = mapUnitIds(item._featureId);
