@@ -4,7 +4,7 @@ export default {
     geocodeFailAttemptParcel: null,
     clearStateOnError: false,
     wipeOutOtherParcelsOnReverseGeocodeOnly: true,
-    geocodeField: 'PARCELID',
+    geocodeField: 'parcelid',
     parcelIdInGeocoder: 'pwd_parcel_id',
     getByLatLngIfIdFails: false,
   },

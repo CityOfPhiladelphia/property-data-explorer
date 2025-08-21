@@ -254,7 +254,7 @@ export default {
         // console.log('handleMarkerMouseover actions are running, e.target.options:', e.target.options);
         // const { target } = e;
         console.log('handleMarkerMouseover, e:', e, 'e.mapboxEvent:', e.mapboxEvent, 'e.mapboxEvent.features[0].properties.parcelId:', e.mapboxEvent.features[0].properties.parcelId);
-        // const featureId  = this.identifyRow(target.options.data.PARCELID);
+        // const featureId  = this.identifyRow(target.options.data.parcelid);
         // let value = e.mapboxEvent.features[0].properties.parcelId;
         let featureId = e.mapboxEvent.features[0].properties.featureId;
         // const featureId  = this.identifyRow(e.layerId);
