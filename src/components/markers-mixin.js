@@ -32,7 +32,7 @@ export default {
           for (let shape of shapes) {
             if (shape._featureId === updateFeatureNext) {
               for (let parcel of pwdParcels) {
-                if (parcel.properties.PARCELID === shape.pwd_parcel_id || parcel.properties.PARCELID === numberFeatureNext) {
+                if (parcel.properties.parcelid === shape.pwd_parcel_id || parcel.properties.parcelid === numberFeatureNext) {
                   currentShape = parcel;
                   break;
                 }
@@ -46,8 +46,8 @@ export default {
           for (let shape of shapes) {
             if (shape._featureId == updateFeatureNext) {
               for (let parcel of pwdParcels) {
-                // console.log('activeFeature shape loop, inside if, shape._featureId:', shape._featureId, 'updateNeatureNext:', updateFeatureNext, 'parcel.properties.PARCELID:', parcel.properties.PARCELID, 'shape.properties.pwd_parcel_id:', shape.properties.pwd_parcel_id);
-                if (parcel.properties.PARCELID == shape.properties.pwd_parcel_id) {
+                // console.log('activeFeature shape loop, inside if, shape._featureId:', shape._featureId, 'updateNeatureNext:', updateFeatureNext, 'parcel.properties.parcelid:', parcel.properties.parcelid, 'shape.properties.pwd_parcel_id:', shape.properties.pwd_parcel_id);
+                if (parcel.properties.parcelid == shape.properties.pwd_parcel_id) {
                   currentShape = parcel;
                   break;
                 }
@@ -140,15 +140,15 @@ export default {
             // console.log('feature:', feature, 'shapes:', shapes);
             if (shapes.length) {
               for (let shape of shapes) {
-                if (shape.pwd_parcel_id === feature.properties.PARCELID) {
+                if (shape.pwd_parcel_id === feature.properties.parcelid) {
                   feature.properties._featureId = shape._featureId;
                   break;
                 }
               }
             } else if (blockShapes.length) {
               for (let shape of blockShapes) {
-                // console.log('blockShapes loop, shape.properties.pwd_parcel_id:', shape.properties.pwd_parcel_id, 'feature.properties.PARCELID:', feature.properties.PARCELID);
-                if (shape.properties.pwd_parcel_id == feature.properties.PARCELID) {
+                // console.log('blockShapes loop, shape.properties.pwd_parcel_id:', shape.properties.pwd_parcel_id, 'feature.properties.parcelid:', feature.properties.parcelid);
+                if (shape.properties.pwd_parcel_id == feature.properties.parcelid) {
                   feature.properties._featureId = shape._featureId;
                   break;
                 }
@@ -255,9 +255,10 @@ export default {
         // const { target } = e;
         console.log('handleMarkerMouseover, e:', e, 'e.mapboxEvent:', e.mapboxEvent, 'e.mapboxEvent.features[0].properties.parcelId:', e.mapboxEvent.features[0].properties.parcelId);
         // const featureId  = this.identifyRow(target.options.data.PARCELID);
-        let value = e.mapboxEvent.features[0].properties.parcelId;
+        // let value = e.mapboxEvent.features[0].properties.parcelId;
+        let featureId = e.mapboxEvent.features[0].properties.featureId;
         // const featureId  = this.identifyRow(e.layerId);
-        const featureId  = this.identifyRow(value);
+        // const featureId  = this.identifyRow(value);
         // console.log('featureId: ', featureId, "target: ", target);
         this.$store.commit('setActiveFeature', { featureId });
       }

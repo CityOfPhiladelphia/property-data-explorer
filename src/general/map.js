@@ -307,7 +307,7 @@ export default {
       url: 'https://services.arcgis.com/fLeGjb7u4uXqeF9q/ArcGIS/rest/services/DOR_Parcel/FeatureServer/0',
     },
     pwdParcels: {
-      url: 'https://services.arcgis.com/fLeGjb7u4uXqeF9q/ArcGIS/rest/services/PWD_PARCELS/FeatureServer/0',
+      url: 'https://services.arcgis.com/fLeGjb7u4uXqeF9q/ArcGIS/rest/services/PWD_PARCELS_TEST/FeatureServer/0',
       // url: 'https://gis.phila.gov/arcgis/rest/services/Water/pv_data_geodb2/MapServer/0',
     },
     streetTrees: {
