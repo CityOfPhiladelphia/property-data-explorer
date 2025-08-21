@@ -255,10 +255,9 @@ export default {
         // const { target } = e;
         console.log('handleMarkerMouseover, e:', e, 'e.mapboxEvent:', e.mapboxEvent, 'e.mapboxEvent.features[0].properties.parcelId:', e.mapboxEvent.features[0].properties.parcelId);
         // const featureId  = this.identifyRow(target.options.data.parcelid);
-        // let value = e.mapboxEvent.features[0].properties.parcelId;
-        let featureId = e.mapboxEvent.features[0].properties.featureId;
+        let value = e.mapboxEvent.features[0].properties.parcelId;
         // const featureId  = this.identifyRow(e.layerId);
-        // const featureId  = this.identifyRow(value);
+        const featureId  = this.identifyRow(value);
         // console.log('featureId: ', featureId, "target: ", target);
         this.$store.commit('setActiveFeature', { featureId });
       }
