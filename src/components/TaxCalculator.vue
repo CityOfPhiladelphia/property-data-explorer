@@ -276,7 +276,9 @@ export default {
     },
     lastAssessmentYear() {
       if (this.$store.state.activeSearch.assessmentHistory.data) {
-        return this.$store.state.activeSearch.assessmentHistory.data[0].year;
+        const years = this.$store.state.activeSearch.assessmentHistory.data.map(item => item.year);
+        return Math.max(...years);
+        // return this.$store.state.activeSearch.assessmentHistory.data[0].year;
       }
     },
     nextYear() {
