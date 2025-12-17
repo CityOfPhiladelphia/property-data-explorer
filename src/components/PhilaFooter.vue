@@ -20,7 +20,9 @@
               <a
                 :href="feedbackLink"
                 target="_blank"
-              >Feedback</a>
+              >
+                Feedback
+              </a>
             </li>
           </ul>
         </nav>
@@ -37,13 +39,19 @@ export default {
     ModalAbout,
     PopoverLink: () => import(/* webpackChunkName: "lblb_pvc_PopoverLink" */'@phila/vue-comps/src/components/PopoverLink.vue'),
   },
-  props: {
-    feedbackLink: {
-      type: String,
-      default: 'https://phila.formstack.com/forms/property_feedback_form',
-    },
-  },
   computed: {
+    feedbackLink() {
+      let aisAddress;
+      if (this.$store.state.geocode.data) {
+        aisAddress = this.$store.state.geocode.data.properties.street_address;
+      }
+      console.log('feedbackLink computed, aisAddress:', aisAddress);
+      if (aisAddress) {
+        return 'https://phila.formstack.com/forms/property_feedback_form?address=' + encodeURIComponent(aisAddress);
+      } else {
+        return 'https://phila.formstack.com/forms/property_feedback_form';
+      }
+    },
     popoverLinkOptions() {
       return {
         height: '92%',
