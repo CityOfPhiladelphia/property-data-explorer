@@ -15,3 +15,6 @@ _bin/
 Test/node_modules
 Test/screenshots/*
 Test/reports/*
+
+# Claude Code
+CLAUDE.md
