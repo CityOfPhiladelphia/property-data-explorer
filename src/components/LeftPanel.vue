@@ -37,8 +37,9 @@
         </ul>
           
       </div>
-      <h2>To get started, you can: </h2>
       <div class="spacer" />
+      <h2>To get started, you can: </h2>
+      <!-- <div class="spacer" /> -->
       <!-- <p>Here are some things you can do with Property:</p> -->
       <!-- <div class="callout"> -->
       <div>
