@@ -30,7 +30,7 @@
         sales history, value, and physical characteristics. You can also generate address
         listings near a property or within an area of interest.<br><br>
         <a target="_blank" href="https://opainquiry.phila.gov/opa.apps/help/PropInq.aspx">Submit an official inquiry</a> or call OPA at <a href="tel:+12156869200">(215) 686-9200</a> if you:
-        <ul>
+        <ul class="mb-0">
           <li>have a property question</li>
           <li>want to update property or contact information on file</li>
           <li>want to correct errors</li>
