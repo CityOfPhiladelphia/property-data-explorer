@@ -551,10 +551,14 @@ export default {
         title: 'Property Details',
         subtitle:  '\
         Property characteristics described below are included for convenience, but may not reflect the most recent conditions \
-        at the property.\
-        For all property questions,\
-        <a target="_blank" href="https://opainquiry.phila.gov/opa.apps/help/PropInq.aspx?acct_num='+ this.activeOpaId + ' ">\
-        <b>submit an official inquiry</b></a> or call OPA at <a href="tel:+12156869200">(215) 686-9200</a>.\
+        at the property.<br><br>\
+        <div class="intro-blue">\
+        <a target="_blank" href="https://opainquiry.phila.gov/opa.apps/help/PropInq.aspx">Submit an official inquiry</a> or call OPA at <a href="tel:+12156869200">(215) 686-9200</a> if you:\
+        <ul class="mb-0">\
+          <li>have a property question</li>\
+          <li>want to update property or contact information on file</li>\
+          <li>want to correct errors</li>\
+        </ul>\
         ',
         fields: [
           {
@@ -1096,6 +1100,10 @@ export default {
 
 
 <style lang="scss">
+
+.mb-0 {
+  margin-bottom: 0 !important;
+}
 
 @media screen {
   p.show-print-only {
