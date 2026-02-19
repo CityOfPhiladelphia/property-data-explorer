@@ -1,52 +1,31 @@
 {
-  "name": "property-data-explorer",
-  "version": "1.0.0",
-  "main": "",
-  "repository": "https://github.com/CityOfPhiladelphia/property-data-explorer.git",
-  "author": "stephen.skilton <stephenjskilton@gmail.com>",
-  "license": "MIT",
+  "name": "property-data-explorer-v3",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "dev-build": "vue-cli-service build --mode development"
+    "dev": "vite",
+    "build": "vue-tsc -b && vite build",
+    "preview": "vite preview"
   },
   "dependencies": {
-    "1.0.2": "^1.0.0",
-    "@fortawesome/free-solid-svg-icons": "^5.15.4",
-    "@fortawesome/pro-light-svg-icons": "^5.15.4",
-    "@fortawesome/pro-solid-svg-icons": "^5.15.4",
-    "@phila/vue-comps": "3.0.6",
-    "@phila/vue-datafetch": "2.2.23",
-    "@phila/vue-mapping": "3.1.14",
-    "accounting": "^0.4.1",
-    "core-js": "^3.25.1",
-    "leaflet": "1.7.1",
-    "leaflet-vector-icon": "git+https://github.com/CityOfPhiladelphia/leaflet-vector-icon.git#c37571e92c66ce0003f22058f2d246b31d3941a5",
-    "sorttable": "^1.0.2",
-    "vue": "^2.7.10",
-    "vue-router": "^3.6.5",
-    "vuex": "^3.1.2"
+    "vue": "^3.5.0",
+    "vue-router": "^4.5.0",
+    "pinia": "^2.3.0",
+    "@phila/phila-ui-map-core": "^0.0.3-beta.8",
+    "@phila/phila-ui-core": "latest",
+    "date-fns": "^4.0.0"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^4.5.19",
-    "@vue/cli-service": "^4.5.19",
-    "babel-runtime": "^6.26.0",
-    "sass": "^1.54.9",
-    "sass-loader": "^7.1.0",
-    "vue-template-compiler": "^2.7.10",
-    "webpack-visualizer-plugin": "^0.1.11"
+    "@vitejs/plugin-vue": "^5.0.0",
+    "typescript": "^5.8.0",
+    "vite": "^6.0.0",
+    "vue-tsc": "^2.0.0"
   },
-  "postcss": {
-    "plugins": {
-      "autoprefixer": {}
+  "pnpm": {
+    "overrides": {
+      "@phila/phila-ui-map-core": "link:../phila-ui-4/packages/map-core",
+      "@phila/phila-ui-core": "link:../phila-ui-4/packages/core"
     }
-  },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not ie <= 8"
-  ],
-  "engines": {
-    "yarn": "YARN NO LONGER USED - use npm instead."
   }
 }
