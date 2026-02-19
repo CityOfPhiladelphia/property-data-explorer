@@ -47,8 +47,32 @@ export async function geocodeAddress(input: string): Promise<{
     pwdParcelId: feature.properties.pwd_parcel_id,
   })
 
-  const main = toSearchResult(data.features[0], false)
-  const related = data.features.slice(1).map(f => toSearchResult(f, true))
+  // Find the building result (no unit number). If the building itself has
+  // no OPA record (common for condos), all results are units — synthesize
+  // a building row from the base address.
+  const buildingFeature = data.features.find(f => !f.properties.street_address.includes(' # '))
+
+  let main: SearchResult
+  let related: SearchResult[]
+
+  if (buildingFeature) {
+    main = toSearchResult(buildingFeature, false)
+    related = data.features
+      .filter(f => f !== buildingFeature)
+      .map(f => toSearchResult(f, true))
+  } else {
+    const baseAddress = data.features[0].properties.street_address.replace(/ #.*$/, '')
+    main = {
+      address: baseAddress,
+      opaNumber: `bldg-${data.features[0].properties.pwd_parcel_id}`,
+      lng: data.features[0].geometry.coordinates[0],
+      lat: data.features[0].geometry.coordinates[1],
+      isUnit: false,
+      hasCondoUnits: false,
+      pwdParcelId: data.features[0].properties.pwd_parcel_id,
+    }
+    related = data.features.map(f => toSearchResult(f, true))
+  }
 
   return { main, related }
 }
