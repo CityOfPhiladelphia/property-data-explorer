@@ -11,6 +11,8 @@
     <MapNavigationControl position="top-right" />
     <GeolocationButton position="top-right" />
     <BasemapToggle position="bottom-right" />
+    <CyclomediaButton position="top-right" />
+    <CyclomediaPanel />
     <DrawTool @draw="handleShapeDraw" />
 
     <FillLayer
@@ -48,6 +50,8 @@ import {
   FillLayer,
   CircleLayer,
   DrawTool,
+  CyclomediaButton,
+  CyclomediaPanel,
   fetchParcelGeometry,
 } from '@phila/phila-ui-map-core'
 import type { AisGeocodeResult } from '@phila/phila-ui-map-core'
