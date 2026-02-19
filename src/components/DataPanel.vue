@@ -61,7 +61,9 @@ function handleRowSelect(opaNumber: string) {
 }
 
 async function handleCondoExpand() {
-  // Condo expansion logic — Task 10
+  await search.expandCondoUnits()
+  const allOpas = search.searchResults.map(r => r.opaNumber)
+  await property.fetchProperties(allOpas)
 }
 
 function handleExportCsv() {

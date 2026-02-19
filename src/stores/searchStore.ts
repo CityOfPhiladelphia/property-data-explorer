@@ -46,6 +46,21 @@ export const useSearchStore = defineStore('search', () => {
     }
   }
 
+  async function expandCondoUnits() {
+    if (searchResults.value.length === 0) return
+
+    const mainResult = searchResults.value[0]
+    try {
+      const { main, related } = await geocodeAddress(mainResult.address)
+      const existingOpas = new Set(searchResults.value.map(r => r.opaNumber))
+      const newUnits = related.filter(r => !existingOpas.has(r.opaNumber))
+      searchResults.value = [...searchResults.value, ...newUnits]
+      hasCondoUnits.value = false
+    } catch (e) {
+      console.error('Condo expansion failed:', e)
+    }
+  }
+
   function reset() {
     searchType.value = 'address'
     searchInput.value = ''
@@ -64,6 +79,7 @@ export const useSearchStore = defineStore('search', () => {
     hasCondoUnits,
     doAddressSearch,
     doBlockSearch,
+    expandCondoUnits,
     reset,
   }
 })
