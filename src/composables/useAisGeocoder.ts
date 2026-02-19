@@ -2,6 +2,17 @@ import type { SearchResult } from '../types'
 
 const AIS_BASE = 'https://api.phila.gov/ais-pde/v1'
 
+// Unit designators used by AIS in Philadelphia addresses
+const UNIT_PATTERN = / (APT|UNIT|STE|FL|#)\s*.+$/i
+
+function isUnitAddress(address: string): boolean {
+  return UNIT_PATTERN.test(address)
+}
+
+function stripUnit(address: string): string {
+  return address.replace(UNIT_PATTERN, '')
+}
+
 interface AisFeature {
   properties: {
     street_address: string
@@ -17,6 +28,7 @@ interface AisFeature {
 
 interface AisResponse {
   features: AisFeature[]
+  total_size: number
 }
 
 export async function geocodeAddress(input: string): Promise<{
@@ -44,13 +56,14 @@ export async function geocodeAddress(input: string): Promise<{
     lat: feature.geometry.coordinates[1],
     isUnit,
     hasCondoUnits: false,
+    condoUnitCount: 0,
     pwdParcelId: feature.properties.pwd_parcel_id,
   })
 
-  // Find the building result (no unit number). If the building itself has
-  // no OPA record (common for condos), all results are units — synthesize
-  // a building row from the base address.
-  const buildingFeature = data.features.find(f => !f.properties.street_address.includes(' # '))
+  // Find the building result (no unit designator in address). If the building
+  // itself has no OPA record (common for condos), all results are units —
+  // synthesize a building row from the base address.
+  const buildingFeature = data.features.find(f => !isUnitAddress(f.properties.street_address))
 
   let main: SearchResult
   let related: SearchResult[]
@@ -61,7 +74,7 @@ export async function geocodeAddress(input: string): Promise<{
       .filter(f => f !== buildingFeature)
       .map(f => toSearchResult(f, true))
   } else {
-    const baseAddress = data.features[0].properties.street_address.replace(/ #.*$/, '')
+    const baseAddress = stripUnit(data.features[0].properties.street_address)
     main = {
       address: baseAddress,
       opaNumber: `bldg-${data.features[0].properties.pwd_parcel_id}`,
@@ -69,9 +82,15 @@ export async function geocodeAddress(input: string): Promise<{
       lat: data.features[0].geometry.coordinates[1],
       isUnit: false,
       hasCondoUnits: false,
+      condoUnitCount: data.total_size,
       pwdParcelId: data.features[0].properties.pwd_parcel_id,
     }
     related = data.features.map(f => toSearchResult(f, true))
+  }
+
+  // If there are related units, set the count on the main result
+  if (related.length > 0) {
+    main.condoUnitCount = data.total_size
   }
 
   return { main, related }
@@ -100,6 +119,7 @@ export async function searchBlock(input: string): Promise<SearchResult[]> {
     lat: f.geometry.coordinates[1],
     isUnit: false,
     hasCondoUnits: false,
+    condoUnitCount: 0,
     pwdParcelId: f.properties.pwd_parcel_id,
   }))
 }

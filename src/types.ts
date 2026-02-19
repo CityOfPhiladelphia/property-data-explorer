@@ -91,6 +91,7 @@ export interface SearchResult {
   lat: number
   isUnit: boolean
   hasCondoUnits: boolean
+  condoUnitCount: number
   pwdParcelId: string | null
 }
 

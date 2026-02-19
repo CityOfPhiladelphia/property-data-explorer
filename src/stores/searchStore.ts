@@ -98,6 +98,7 @@ export const useSearchStore = defineStore('search', () => {
         lat: 0,
         isUnit: false,
         hasCondoUnits: false,
+        condoUnitCount: 0,
         pwdParcelId: r.pwd_parcel_id,
       }))
       searchStatus.value = 'success'
@@ -139,6 +140,7 @@ export const useSearchStore = defineStore('search', () => {
         lat: 0,
         isUnit: false,
         hasCondoUnits: false,
+        condoUnitCount: 0,
         pwdParcelId: r.pwd_parcel_id,
       }))
       searchStatus.value = 'success'

@@ -33,11 +33,28 @@ const router = useRouter()
 const tableRows = computed(() => {
   return search.searchResults.map(result => {
     const prop = property.properties.get(result.opaNumber)
+    // Condo building rows: no assessment data, show unit count as owner
+    if (result.hasCondoUnits) {
+      const unitLabel = result.condoUnitCount > 0
+        ? `Condominium (${result.condoUnitCount} Units)`
+        : 'Condominium'
+      return {
+        opaNumber: result.opaNumber,
+        address: result.address,
+        isUnit: result.isUnit,
+        hasCondoUnits: true,
+        marketValue: '',
+        saleDate: '',
+        salePrice: '',
+        owner: unitLabel,
+      }
+    }
+
     return {
       opaNumber: result.opaNumber,
       address: result.address,
       isUnit: result.isUnit,
-      hasCondoUnits: result.hasCondoUnits,
+      hasCondoUnits: false,
       marketValue: prop?.assessment
         ? formatCurrency(prop.assessment.market_value)
         : '...',
