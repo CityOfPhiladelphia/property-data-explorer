@@ -93,27 +93,34 @@ watch(() => ui.activeOpaNumber, (opaNumber) => {
 <style scoped>
 .property-card {
   position: relative;
+  font-size: 0.9375rem;
 }
 .close-button {
   position: absolute;
-  top: var(--spacing-xs);
-  right: var(--spacing-xs);
+  top: 0;
+  right: 0;
   background: none;
   border: none;
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   cursor: pointer;
-  padding: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-s);
   line-height: 1;
+  color: var(--Schemes-On-Surface-Variant);
+}
+.close-button:hover {
+  color: var(--Schemes-On-Surface);
 }
 .loading-state,
 .no-data-state {
-  padding: var(--spacing-m);
+  padding: var(--spacing-m) 0;
+  color: var(--Schemes-On-Surface-Variant);
 }
 .card-section {
-  margin: var(--spacing-m) 0;
+  margin: var(--spacing-l) 0;
 }
 .card-section h3 {
   margin-bottom: var(--spacing-s);
+  font-size: 1rem;
 }
 .card-section table {
   width: 100%;
@@ -123,16 +130,20 @@ watch(() => ui.activeOpaNumber, (opaNumber) => {
   padding: var(--spacing-xs) var(--spacing-s);
   text-align: left;
   border-bottom: 1px solid var(--Schemes-Outline);
+  font-size: 0.875rem;
+  line-height: 1.4;
 }
 .card-section th {
   font-weight: 600;
   width: 40%;
+  color: var(--Schemes-On-Surface-Variant);
 }
 .external-links {
-  margin: var(--spacing-m) 0;
+  margin: var(--spacing-l) 0;
 }
 .external-links h3 {
   margin-bottom: var(--spacing-s);
+  font-size: 1rem;
 }
 .external-links ul {
   list-style: none;
@@ -140,12 +151,5 @@ watch(() => ui.activeOpaNumber, (opaNumber) => {
 }
 .external-links li {
   padding: var(--spacing-xs) 0;
-}
-.external-links a {
-  color: var(--Schemes-Primary);
-  text-decoration: none;
-}
-.external-links a:hover {
-  text-decoration: underline;
 }
 </style>

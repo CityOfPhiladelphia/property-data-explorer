@@ -82,55 +82,60 @@ async function doOwnerSearch() {
 
 <style scoped>
 .search-mode-selector {
-  margin-bottom: var(--spacing-m);
+  margin-bottom: var(--spacing-l);
 }
 .mode-tabs {
   display: flex;
-  gap: 0;
   border-bottom: 2px solid var(--Schemes-Outline);
-  margin-bottom: var(--spacing-s);
+  margin-bottom: var(--spacing-m);
 }
 .mode-tab {
-  padding: var(--spacing-xs) var(--spacing-s);
+  padding: var(--spacing-xs) var(--spacing-m);
   border: none;
   background: none;
   cursor: pointer;
   font-size: 0.875rem;
-  font-weight: 500;
+  font-weight: 600;
+  font-family: 'Montserrat', sans-serif;
   color: var(--Schemes-On-Surface-Variant);
-  border-bottom: 2px solid transparent;
+  border-bottom: 3px solid transparent;
   margin-bottom: -2px;
+  transition: color 0.15s, border-color 0.15s;
 }
 .mode-tab:hover {
   color: var(--Schemes-On-Surface);
 }
 .mode-tab.is-active {
-  color: var(--Schemes-Primary);
-  border-bottom-color: var(--Schemes-Primary);
+  color: var(--colors-Dark-Ben-Franklin-Blue);
+  border-bottom-color: var(--colors-Dark-Ben-Franklin-Blue);
 }
 .search-input-row {
   display: flex;
-  gap: 8px;
+  gap: var(--spacing-xs);
 }
 .search-input {
   flex: 1;
-  padding: 8px 12px;
+  padding: var(--spacing-xs) var(--spacing-s);
   border: 1px solid var(--Schemes-Outline);
-  border-radius: 4px;
+  border-radius: var(--border-radius-s);
   font-size: 0.875rem;
+  font-family: 'Montserrat', sans-serif;
 }
 .search-input:focus {
   outline: none;
-  border-color: var(--Schemes-Primary);
+  border-color: var(--colors-Dark-Ben-Franklin-Blue);
+  box-shadow: 0 0 0 1px var(--colors-Dark-Ben-Franklin-Blue);
 }
 .search-btn {
-  padding: 8px 16px;
-  background: var(--Schemes-Primary);
-  color: var(--Schemes-On-Primary);
+  padding: var(--spacing-xs) var(--spacing-m);
+  background: var(--colors-Dark-Ben-Franklin-Blue);
+  color: #fff;
   border: none;
-  border-radius: 4px;
+  border-radius: var(--border-radius-s);
   cursor: pointer;
   font-size: 0.875rem;
+  font-weight: 600;
+  font-family: 'Montserrat', sans-serif;
 }
 .search-btn:hover {
   opacity: 0.9;

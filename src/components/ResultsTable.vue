@@ -56,7 +56,8 @@ defineEmits<{
 .results-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
+  font-family: 'Montserrat', sans-serif;
 }
 .results-table th,
 .results-table td {
@@ -66,18 +67,22 @@ defineEmits<{
   border-bottom: 1px solid var(--Schemes-Outline);
 }
 .results-table th {
-  font-weight: 600;
-  background: var(--Schemes-Surface);
+  font-weight: 700;
+  background: var(--Schemes-Surface-Container-Low);
   position: sticky;
   top: 0;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.03em;
+  color: var(--Schemes-On-Surface-Variant);
 }
-.results-table tr {
+.results-table tbody tr {
   cursor: pointer;
 }
-.results-table tr:hover {
+.results-table tbody tr:hover {
   background: var(--Schemes-Surface-Container);
 }
-.results-table tr.is-selected {
+.results-table tbody tr.is-selected {
   background: var(--Schemes-Primary-Container);
 }
 </style>

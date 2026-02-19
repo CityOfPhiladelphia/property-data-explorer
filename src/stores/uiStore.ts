@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 
-const LARGE_BREAKPOINT = 1024
+const LARGE_BREAKPOINT = 750
 
 export const useUiStore = defineStore('ui', () => {
   const activeOpaNumber = ref<string | null>(null)

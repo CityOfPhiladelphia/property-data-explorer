@@ -1,11 +1,13 @@
 <template>
   <div class="main-layout" :class="{ 'is-fullscreen': ui.fullScreen }">
-    <LeftPanel v-if="ui.isLarge || ui.leftPanelOpen" class="left-panel" />
-    <div class="map-area">
-      <slot name="map" />
+    <div class="top-row">
+      <LeftPanel v-if="ui.isLarge || ui.leftPanelOpen" class="left-panel" />
+      <div class="map-area">
+        <slot name="map" />
+      </div>
     </div>
     <div
-      v-if="search.searchStatus === 'success'"
+      v-if="search.searchStatus === 'success' && !ui.activeOpaNumber"
       class="data-panel"
       :class="{ 'is-expanded': ui.dataPanelExpanded }"
     >
@@ -25,50 +27,54 @@ const search = useSearchStore()
 
 <style scoped>
 .main-layout {
-  display: grid;
-  grid-template-columns: 350px 1fr;
-  grid-template-rows: 1fr auto;
-  height: calc(100vh - 60px);
+  display: flex;
+  flex-direction: column;
+  flex: 1;
   overflow: hidden;
 }
 
-.left-panel {
-  grid-row: 1 / -1;
-  overflow-y: auto;
-  border-right: 1px solid var(--Schemes-Outline);
-}
-
-.map-area {
-  grid-column: 2;
-  grid-row: 1;
+.top-row {
+  display: flex;
+  flex: 1;
   min-height: 0;
 }
 
+.left-panel {
+  width: 50%;
+  flex-shrink: 0;
+  overflow-y: auto;
+  border-right: 1px solid var(--Schemes-Outline);
+  background: var(--Schemes-Background);
+}
+
+.map-area {
+  flex: 1;
+  min-height: 0;
+  position: relative;
+  overflow: hidden;
+}
+
 .data-panel {
-  grid-column: 2;
-  grid-row: 2;
   max-height: 250px;
   overflow-y: auto;
-  border-top: 1px solid var(--Schemes-Outline);
+  border-top: 2px solid var(--colors-Dark-Ben-Franklin-Blue);
+  background: var(--Schemes-Background);
 }
 
 .data-panel.is-expanded {
   max-height: 50vh;
 }
 
-@media (max-width: 1023px) {
-  .main-layout {
-    grid-template-columns: 1fr;
+@media (max-width: 749px) {
+  .top-row {
+    flex-direction: column;
   }
   .left-panel {
-    position: fixed;
-    top: 60px;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 100;
-    background: var(--Schemes-Surface);
+    width: 100%;
     border-right: none;
+  }
+  .map-area {
+    min-height: 400px;
   }
 }
 </style>

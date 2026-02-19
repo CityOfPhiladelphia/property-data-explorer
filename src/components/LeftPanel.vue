@@ -21,6 +21,11 @@ const ui = useUiStore()
 
 <style scoped>
 .left-panel-content {
-  padding: var(--spacing-m);
+  padding: var(--spacing-l) var(--spacing-xl);
+}
+@media (max-width: 1023px) {
+  .left-panel-content {
+    padding: var(--spacing-m);
+  }
 }
 </style>

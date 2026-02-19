@@ -1,4 +1,5 @@
 <template>
+  <div class="app-shell">
   <header class="app-header">
     <div class="header-branding">
       <a href="https://www.phila.gov" class="city-link" target="_blank" rel="noopener">
@@ -6,12 +7,8 @@
       </a>
     </div>
     <div class="header-title">Property Data Explorer</div>
-    <div class="header-actions">
-      <a href="https://form.jotform.com/73aborsi/pde-feedback" target="_blank" rel="noopener" class="feedback-link">
-        Feedback
-      </a>
-    </div>
   </header>
+  <div class="header-stripe" />
   <MainLayout>
     <template #map>
       <MapContainer />
@@ -20,6 +17,19 @@
       <DataPanel />
     </template>
   </MainLayout>
+  <footer class="app-footer">
+    <nav>
+      <ul class="footer-nav">
+        <li><a href="https://www.phila.gov" target="_blank" rel="noopener">City of Philadelphia</a></li>
+        <li>
+          <a href="https://form.jotform.com/73aborsi/pde-feedback" target="_blank" rel="noopener">
+            Feedback
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </footer>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -64,35 +74,64 @@ onMounted(async () => {
 </script>
 
 <style scoped>
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
 .app-header {
-  height: 60px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 var(--spacing-m);
-  background: var(--Schemes-Primary);
-  color: var(--Schemes-On-Primary);
-  font-weight: 600;
+  padding: var(--spacing-s) var(--spacing-m);
+  background: var(--colors-Dark-Ben-Franklin-Blue);
+  color: #fff;
+  font-family: 'Montserrat', sans-serif;
 }
 .header-branding .city-link {
-  color: var(--Schemes-On-Primary);
+  color: #fff;
   text-decoration: none;
   font-size: 0.875rem;
-  opacity: 0.8;
 }
 .header-branding .city-link:hover {
-  opacity: 1;
+  opacity: 0.7;
 }
 .header-title {
-  font-size: 1.125rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
 }
-.header-actions .feedback-link {
-  color: var(--Schemes-On-Primary);
+.header-stripe {
+  height: 4px;
+  background: rgb(37, 206, 247);
+}
+.app-footer {
+  background: var(--colors-Dark-Ben-Franklin-Blue);
+  text-align: center;
+  padding: var(--spacing-xs) 0;
+  font-family: 'Montserrat', sans-serif;
+}
+.footer-nav {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+}
+.footer-nav li {
+  display: inline-block;
+  padding: 0 var(--spacing-m);
+  border-right: 1px solid #fff;
+}
+.footer-nav li:last-child {
+  border-right: none;
+}
+.footer-nav a {
+  color: #fff;
   text-decoration: none;
   font-size: 0.875rem;
-  opacity: 0.8;
 }
-.header-actions .feedback-link:hover {
-  opacity: 1;
+.footer-nav a:hover {
+  color: rgb(37, 206, 247);
 }
 </style>
