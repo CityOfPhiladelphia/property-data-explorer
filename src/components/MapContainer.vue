@@ -2,6 +2,7 @@
   <PhilaMap
     :center="[-75.1635, 39.9526]"
     :zoom="12"
+    @click="handleMapClick"
   >
     <MapSearchControl
       position="top-left"
@@ -53,6 +54,7 @@ import {
   CyclomediaButton,
   CyclomediaPanel,
   fetchParcelGeometry,
+  queryParcelAtPoint,
 } from '@phila/phila-ui-map-core'
 import type { AisGeocodeResult } from '@phila/phila-ui-map-core'
 import { useSearchStore } from '../stores/searchStore'
@@ -102,6 +104,21 @@ async function handleShapeDraw(geojson: any) {
       await property.fetchProperties(opaNumbers)
     }
     router.push({ query: { shape: JSON.stringify(geojson) } })
+  }
+}
+
+async function handleMapClick(e: { lngLat: { lng: number; lat: number } }) {
+  const { lng, lat } = e.lngLat
+  const result = await queryParcelAtPoint(lng, lat)
+  if (result?.address) {
+    await search.doAddressSearch(result.address)
+    if (search.searchStatus === 'success' && search.searchResults.length > 0) {
+      const opaNumbers = search.searchResults.map(r => r.opaNumber)
+      await property.fetchProperties(opaNumbers)
+      ui.selectProperty(search.searchResults[0].opaNumber)
+      router.push({ query: { p: search.searchResults[0].opaNumber } })
+      await updateMapFeatures()
+    }
   }
 }
 
