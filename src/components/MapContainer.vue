@@ -84,9 +84,9 @@ async function handleSearchResult(result: AisGeocodeResult) {
   const address = result.properties.street_address
   await search.doAddressSearch(address)
   if (search.searchStatus === 'success' && search.searchResults.length > 0) {
+    ui.selectProperty(search.searchResults[0].opaNumber)
     const opaNumbers = search.searchResults.map(r => r.opaNumber)
     await property.fetchProperties(opaNumbers)
-    ui.selectProperty(search.searchResults[0].opaNumber)
     router.push({ query: { p: search.searchResults[0].opaNumber } })
     await updateMapFeatures()
   }
@@ -113,9 +113,9 @@ async function handleMapClick(e: { lngLat: { lng: number; lat: number } }) {
   if (result?.address) {
     await search.doAddressSearch(result.address)
     if (search.searchStatus === 'success' && search.searchResults.length > 0) {
+      ui.selectProperty(search.searchResults[0].opaNumber)
       const opaNumbers = search.searchResults.map(r => r.opaNumber)
       await property.fetchProperties(opaNumbers)
-      ui.selectProperty(search.searchResults[0].opaNumber)
       router.push({ query: { p: search.searchResults[0].opaNumber } })
       await updateMapFeatures()
     }

@@ -53,8 +53,10 @@ onMounted(async () => {
   const { p, block, owner, shape } = route.query
   if (p) {
     await search.doAddressSearch(p as string)
+    if (search.searchResults.length > 0) {
+      ui.selectProperty(search.searchResults[0].opaNumber)
+    }
     await property.fetchProperties(search.searchResults.map(r => r.opaNumber))
-    ui.selectProperty(p as string)
   } else if (block) {
     await search.doBlockSearch(block as string)
     await property.fetchProperties(search.searchResults.map(r => r.opaNumber))
