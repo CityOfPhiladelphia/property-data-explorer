@@ -1,7 +1,7 @@
 <template>
   <div class="main-layout" :class="{ 'is-fullscreen': ui.fullScreen }">
     <div class="top-row">
-      <LeftPanel v-if="ui.isLarge || ui.leftPanelOpen" class="left-panel" />
+      <LeftPanel v-if="showLeftPanel" class="left-panel" />
       <div class="map-area">
         <slot name="map" />
       </div>
@@ -17,12 +17,23 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import { useUiStore } from '../stores/uiStore'
 import { useSearchStore } from '../stores/searchStore'
 import LeftPanel from './LeftPanel.vue'
 
 const ui = useUiStore()
 const search = useSearchStore()
+
+const showLeftPanel = computed(() => {
+  const screenOk = ui.isLarge || ui.leftPanelOpen
+  // Show left panel when a property is selected (PropertyCard)
+  if (ui.activeOpaNumber) return screenOk
+  // Show left panel in initial state (before any search)
+  if (search.searchStatus === 'idle') return screenOk
+  // After search with no selection: hide left panel, map goes full width
+  return false
+})
 </script>
 
 <style scoped>
