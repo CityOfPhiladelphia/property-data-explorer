@@ -4,8 +4,7 @@
       <IntroContent />
     </div>
     <div v-else>
-      <!-- PropertyCard goes here in Task 8 -->
-      <p>Property: {{ ui.activeOpaNumber }}</p>
+      <PropertyCard />
     </div>
   </div>
 </template>
@@ -13,6 +12,7 @@
 <script setup lang="ts">
 import { useUiStore } from '../stores/uiStore'
 import IntroContent from './IntroContent.vue'
+import PropertyCard from './PropertyCard.vue'
 
 const ui = useUiStore()
 </script>
