@@ -66,14 +66,15 @@ const showLeftPanel = computed(() => {
 }
 
 .data-panel {
-  max-height: 250px;
+  height: 250px;
+  flex-shrink: 0;
   overflow-y: auto;
   border-top: 2px solid var(--colors-Dark-Ben-Franklin-Blue);
   background: var(--Schemes-Background);
 }
 
 .data-panel.is-expanded {
-  max-height: 50vh;
+  height: 50vh;
 }
 
 @media (max-width: 749px) {
