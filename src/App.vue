@@ -5,8 +5,7 @@
       <MapContainer />
     </template>
     <template #data-panel>
-      <!-- DataPanel goes here in Task 7 -->
-      <div>Data Panel</div>
+      <DataPanel />
     </template>
   </MainLayout>
 </template>
@@ -19,6 +18,7 @@ import { usePropertyStore } from './stores/propertyStore'
 import { useUiStore } from './stores/uiStore'
 import MainLayout from './components/MainLayout.vue'
 import MapContainer from './components/MapContainer.vue'
+import DataPanel from './components/DataPanel.vue'
 
 const route = useRoute()
 const router = useRouter()
