@@ -36,6 +36,7 @@ const tableRows = computed(() => {
     return {
       opaNumber: result.opaNumber,
       address: result.address,
+      isUnit: result.isUnit,
       hasCondoUnits: result.hasCondoUnits,
       marketValue: prop?.assessment
         ? formatCurrency(prop.assessment.market_value)

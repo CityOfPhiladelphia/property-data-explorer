@@ -14,11 +14,14 @@
         <tr
           v-for="row in rows"
           :key="row.opaNumber"
-          :class="{ 'is-selected': row.opaNumber === ui.activeOpaNumber }"
+          :class="{
+            'is-selected': row.opaNumber === ui.activeOpaNumber,
+            'is-unit': row.isUnit,
+          }"
           @click="$emit('select', row.opaNumber)"
         >
           <td>
-            {{ row.address }}
+            <span v-if="row.isUnit" class="unit-indent"></span>{{ row.address }}
             <button
               v-if="row.hasCondoUnits"
               class="condo-expand-btn"
@@ -46,6 +49,7 @@ defineProps<{
   rows: Array<{
     opaNumber: string
     address: string
+    isUnit: boolean
     marketValue: string
     saleDate: string
     salePrice: string
@@ -95,6 +99,13 @@ defineEmits<{
 }
 .results-table tbody tr.is-selected {
   background: var(--Schemes-Primary-Container);
+}
+.results-table tbody tr.is-unit {
+  color: var(--Schemes-On-Surface-Variant);
+}
+.unit-indent {
+  display: inline-block;
+  width: 1.5em;
 }
 .condo-expand-btn {
   margin-left: var(--spacing-s);
