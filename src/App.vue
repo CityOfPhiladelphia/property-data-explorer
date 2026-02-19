@@ -28,7 +28,7 @@ const ui = useUiStore()
 
 onMounted(async () => {
   ui.initResizeListener()
-  const { p, block, owner } = route.query
+  const { p, block, owner, shape } = route.query
   if (p) {
     await search.doAddressSearch(p as string)
     await property.fetchProperties(search.searchResults.map(r => r.opaNumber))
@@ -39,6 +39,14 @@ onMounted(async () => {
   } else if (owner) {
     await search.doOwnerSearch(owner as string)
     await property.fetchProperties(search.searchResults.map(r => r.opaNumber))
+  } else if (shape) {
+    try {
+      const geojson = JSON.parse(shape as string)
+      await search.doShapeSearch(geojson)
+      await property.fetchProperties(search.searchResults.map(r => r.opaNumber))
+    } catch (e) {
+      console.error('Failed to parse shape from URL:', e)
+    }
   }
 })
 </script>

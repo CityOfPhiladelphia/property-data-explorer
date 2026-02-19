@@ -2,7 +2,8 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import type { SearchResult, SearchType, OpaPublic } from '../types'
 import { geocodeAddress, searchBlock } from '../composables/useAisGeocoder'
-import { cartoQuery } from '../composables/useCartoQuery'
+import { cartoQuery, buildInClause } from '../composables/useCartoQuery'
+import { geojsonToWkt } from '../composables/useGeojsonToWkt'
 
 export const useSearchStore = defineStore('search', () => {
   const searchType = ref<SearchType>('address')
@@ -90,6 +91,47 @@ export const useSearchStore = defineStore('search', () => {
     }
   }
 
+  async function doShapeSearch(geojson: any) {
+    searchType.value = 'shape'
+    searchInput.value = JSON.stringify(geojson)
+    searchStatus.value = 'loading'
+    searchError.value = ''
+    searchResults.value = []
+
+    try {
+      const wkt = geojsonToWkt(geojson)
+      const parcelRows = await cartoQuery<{ pwd_parcel_id: string }>(
+        `SELECT pwd_parcel_id FROM pwd_parcels WHERE ST_Intersects(the_geom, ST_GeomFromText('${wkt}', 4326))`
+      )
+
+      if (parcelRows.length === 0) {
+        searchResults.value = []
+        searchStatus.value = 'success'
+        return
+      }
+
+      const parcelIds = parcelRows.map(r => r.pwd_parcel_id)
+      const inClause = buildInClause(parcelIds)
+      const opaRows = await cartoQuery<OpaPublic>(
+        `SELECT * FROM opa_properties_public_pde WHERE pwd_parcel_id IN (${inClause}) ORDER BY address_std ASC`
+      )
+
+      searchResults.value = opaRows.map(r => ({
+        address: r.address_std || r.street_address,
+        opaNumber: r.parcel_number,
+        lng: 0,
+        lat: 0,
+        isUnit: false,
+        pwdParcelId: r.pwd_parcel_id,
+      }))
+      hasCondoUnits.value = false
+      searchStatus.value = 'success'
+    } catch (e) {
+      searchError.value = e instanceof Error ? e.message : 'Shape search failed'
+      searchStatus.value = 'error'
+    }
+  }
+
   function reset() {
     searchType.value = 'address'
     searchInput.value = ''
@@ -109,6 +151,7 @@ export const useSearchStore = defineStore('search', () => {
     doAddressSearch,
     doBlockSearch,
     doOwnerSearch,
+    doShapeSearch,
     expandCondoUnits,
     reset,
   }

@@ -11,6 +11,7 @@
     <MapNavigationControl position="top-right" />
     <GeolocationButton position="top-right" />
     <BasemapToggle position="bottom-right" />
+    <DrawTool @draw="handleShapeDraw" />
 
     <FillLayer
       v-if="parcelGeojson"
@@ -46,6 +47,7 @@ import {
   BasemapToggle,
   FillLayer,
   CircleLayer,
+  DrawTool,
   fetchParcelGeometry,
 } from '@phila/phila-ui-map-core'
 import type { AisGeocodeResult } from '@phila/phila-ui-map-core'
@@ -86,6 +88,17 @@ async function handleSearchResult(result: AisGeocodeResult) {
 
 function handleSearchError(error: string) {
   console.error('Search error:', error)
+}
+
+async function handleShapeDraw(geojson: any) {
+  await search.doShapeSearch(geojson)
+  if (search.searchStatus === 'success') {
+    const opaNumbers = search.searchResults.map(r => r.opaNumber)
+    if (opaNumbers.length <= 200) {
+      await property.fetchProperties(opaNumbers)
+    }
+    router.push({ query: { shape: JSON.stringify(geojson) } })
+  }
 }
 
 async function updateMapFeatures() {
