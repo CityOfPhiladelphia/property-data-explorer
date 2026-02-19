@@ -41,6 +41,22 @@
       />
 
       <PropertyDetails :data="property.activeProperty.publicData" />
+
+      <div class="external-links">
+        <h3>Related Resources</h3>
+        <ul>
+          <li>
+            <a :href="'https://property.phila.gov/?' + ui.activeOpaNumber" target="_blank" rel="noopener">
+              Property Inquiry
+            </a>
+          </li>
+          <li>
+            <a :href="'https://atlas.phila.gov/' + encodeURIComponent(selectedAddress)" target="_blank" rel="noopener">
+              Atlas
+            </a>
+          </li>
+        </ul>
+      </div>
     </template>
 
     <div v-else class="no-data-state">
@@ -111,5 +127,25 @@ watch(() => ui.activeOpaNumber, (opaNumber) => {
 .card-section th {
   font-weight: 600;
   width: 40%;
+}
+.external-links {
+  margin: var(--spacing-m) 0;
+}
+.external-links h3 {
+  margin-bottom: var(--spacing-s);
+}
+.external-links ul {
+  list-style: none;
+  padding: 0;
+}
+.external-links li {
+  padding: var(--spacing-xs) 0;
+}
+.external-links a {
+  color: var(--Schemes-Primary);
+  text-decoration: none;
+}
+.external-links a:hover {
+  text-decoration: underline;
 }
 </style>

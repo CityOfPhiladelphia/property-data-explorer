@@ -1,6 +1,7 @@
 <template>
   <div class="owner-address">
     <h2>{{ address }}</h2>
+    <span v-if="data.condo" class="condo-badge">Condo</span>
     <p class="zip-line">PHILADELPHIA, PA {{ formattedZip }}</p>
     <table>
       <tbody>
@@ -63,5 +64,15 @@ th, td {
 th {
   font-weight: 600;
   width: 40%;
+}
+.condo-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: var(--Schemes-Primary-Container);
+  color: var(--Schemes-On-Primary-Container);
+  border-radius: 4px;
+  margin-bottom: var(--spacing-s);
 }
 </style>
