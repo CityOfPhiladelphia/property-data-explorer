@@ -29,8 +29,8 @@ const showLeftPanel = computed(() => {
   const screenOk = ui.isLarge || ui.leftPanelOpen
   // Show left panel when a property is selected (PropertyCard)
   if (ui.activeOpaNumber) return screenOk
-  // Show left panel in initial state (before any search)
-  if (search.searchStatus === 'idle') return screenOk
+  // Show left panel before search results arrive
+  if (search.searchStatus === 'idle' || search.searchStatus === 'loading') return screenOk
   // After search with no selection: hide left panel, map goes full width
   return false
 })
