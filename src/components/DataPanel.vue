@@ -2,15 +2,14 @@
   <div class="data-panel">
     <DataPanelToolbar
       :result-count="search.searchResults.length"
-      :show-condo-expand="search.hasCondoUnits"
       :expanded="ui.dataPanelExpanded"
-      @expand-condos="handleCondoExpand"
       @export-csv="handleExportCsv"
       @toggle-expand="ui.dataPanelExpanded = !ui.dataPanelExpanded"
     />
     <ResultsTable
       :rows="tableRows"
       @select="handleRowSelect"
+      @expand-condos="handleExpandCondos"
     />
   </div>
 </template>
@@ -37,6 +36,7 @@ const tableRows = computed(() => {
     return {
       opaNumber: result.opaNumber,
       address: result.address,
+      hasCondoUnits: result.hasCondoUnits,
       marketValue: prop?.assessment
         ? formatCurrency(prop.assessment.market_value)
         : '...',
@@ -61,10 +61,11 @@ function handleRowSelect(opaNumber: string) {
   router.push({ query: { p: opaNumber } })
 }
 
-async function handleCondoExpand() {
-  await search.expandCondoUnits()
-  const allOpas = search.searchResults.map(r => r.opaNumber)
-  await property.fetchProperties(allOpas)
+async function handleExpandCondos(opaNumber: string) {
+  const newOpas = await search.expandCondoUnits(opaNumber)
+  if (newOpas.length > 0) {
+    await property.fetchProperties(newOpas)
+  }
 }
 
 function handleExportCsv() {

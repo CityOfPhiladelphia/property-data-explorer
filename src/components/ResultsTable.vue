@@ -17,7 +17,16 @@
           :class="{ 'is-selected': row.opaNumber === ui.activeOpaNumber }"
           @click="$emit('select', row.opaNumber)"
         >
-          <td>{{ row.address }}</td>
+          <td>
+            {{ row.address }}
+            <button
+              v-if="row.hasCondoUnits"
+              class="condo-expand-btn"
+              @click.stop="$emit('expand-condos', row.opaNumber)"
+            >
+              + Units
+            </button>
+          </td>
           <td>{{ row.marketValue }}</td>
           <td>{{ row.saleDate }}</td>
           <td>{{ row.salePrice }}</td>
@@ -41,11 +50,13 @@ defineProps<{
     saleDate: string
     salePrice: string
     owner: string
+    hasCondoUnits: boolean
   }>
 }>()
 
 defineEmits<{
   select: [opaNumber: string]
+  'expand-condos': [opaNumber: string]
 }>()
 </script>
 
@@ -84,5 +95,21 @@ defineEmits<{
 }
 .results-table tbody tr.is-selected {
   background: var(--Schemes-Primary-Container);
+}
+.condo-expand-btn {
+  margin-left: var(--spacing-s);
+  padding: 1px var(--spacing-xs);
+  font-size: 0.6875rem;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  border: 1px solid var(--colors-Dark-Ben-Franklin-Blue);
+  border-radius: var(--border-radius-s);
+  background: var(--Schemes-Background);
+  color: var(--colors-Dark-Ben-Franklin-Blue);
+  cursor: pointer;
+}
+.condo-expand-btn:hover {
+  background: var(--colors-Dark-Ben-Franklin-Blue);
+  color: #fff;
 }
 </style>

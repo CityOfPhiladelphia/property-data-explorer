@@ -53,7 +53,7 @@ onMounted(async () => {
   const { p, block, owner, shape } = route.query
   if (p) {
     await search.doAddressSearch(p as string)
-    if (search.searchResults.length > 0) {
+    if (search.searchResults.length > 0 && !search.searchResults[0].hasCondoUnits) {
       ui.selectProperty(search.searchResults[0].opaNumber)
     }
     await property.fetchProperties(search.searchResults.map(r => r.opaNumber))

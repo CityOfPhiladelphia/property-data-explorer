@@ -2,13 +2,6 @@
   <div class="data-panel-toolbar">
     <div class="toolbar-left">
       <span class="result-count">{{ resultCount }} results</span>
-      <button
-        v-if="showCondoExpand"
-        class="condo-expand-btn"
-        @click="$emit('expand-condos')"
-      >
-        Show condo units
-      </button>
     </div>
     <div class="toolbar-right">
       <button class="toolbar-btn" @click="$emit('export-csv')">
@@ -24,12 +17,10 @@
 <script setup lang="ts">
 defineProps<{
   resultCount: number
-  showCondoExpand: boolean
   expanded: boolean
 }>()
 
 defineEmits<{
-  'expand-condos': []
   'export-csv': []
   'toggle-expand': []
 }>()
@@ -55,8 +46,7 @@ defineEmits<{
 .result-count {
   font-weight: 700;
 }
-.toolbar-btn,
-.condo-expand-btn {
+.toolbar-btn {
   padding: var(--spacing-2xs) var(--spacing-s);
   border: 1px solid var(--Schemes-Outline);
   border-radius: var(--border-radius-s);
@@ -65,8 +55,7 @@ defineEmits<{
   font-size: 0.8125rem;
   font-family: 'Montserrat', sans-serif;
 }
-.toolbar-btn:hover,
-.condo-expand-btn:hover {
+.toolbar-btn:hover {
   background: var(--Schemes-Surface-Container);
 }
 </style>

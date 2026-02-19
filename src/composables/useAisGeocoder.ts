@@ -43,6 +43,7 @@ export async function geocodeAddress(input: string): Promise<{
     lng: feature.geometry.coordinates[0],
     lat: feature.geometry.coordinates[1],
     isUnit,
+    hasCondoUnits: false,
     pwdParcelId: feature.properties.pwd_parcel_id,
   })
 
@@ -74,6 +75,7 @@ export async function searchBlock(input: string): Promise<SearchResult[]> {
     lng: f.geometry.coordinates[0],
     lat: f.geometry.coordinates[1],
     isUnit: false,
+    hasCondoUnits: false,
     pwdParcelId: f.properties.pwd_parcel_id,
   }))
 }

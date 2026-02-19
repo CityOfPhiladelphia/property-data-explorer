@@ -11,7 +11,7 @@ export const useSearchStore = defineStore('search', () => {
   const searchStatus = ref<'idle' | 'loading' | 'success' | 'error'>('idle')
   const searchError = ref('')
   const searchResults = ref<SearchResult[]>([])
-  const hasCondoUnits = ref(false)
+  const condoUnitsCache = ref<Map<string, SearchResult[]>>(new Map())
 
   async function doAddressSearch(input: string) {
     searchType.value = 'address'
@@ -22,8 +22,11 @@ export const useSearchStore = defineStore('search', () => {
 
     try {
       const { main, related } = await geocodeAddress(input)
-      searchResults.value = [main, ...related]
-      hasCondoUnits.value = related.length > 0
+      if (related.length > 0) {
+        main.hasCondoUnits = true
+        condoUnitsCache.value.set(main.opaNumber, related)
+      }
+      searchResults.value = [main]
       searchStatus.value = 'success'
     } catch (e) {
       searchError.value = e instanceof Error ? e.message : 'Search failed'
@@ -40,7 +43,6 @@ export const useSearchStore = defineStore('search', () => {
 
     try {
       searchResults.value = await searchBlock(input)
-      hasCondoUnits.value = false
       searchStatus.value = 'success'
     } catch (e) {
       searchError.value = e instanceof Error ? e.message : 'Block search failed'
@@ -48,19 +50,33 @@ export const useSearchStore = defineStore('search', () => {
     }
   }
 
-  async function expandCondoUnits() {
-    if (searchResults.value.length === 0) return
+  async function expandCondoUnits(opaNumber: string): Promise<string[]> {
+    const buildingIndex = searchResults.value.findIndex(r => r.opaNumber === opaNumber)
+    if (buildingIndex === -1) return []
 
-    const mainResult = searchResults.value[0]
-    try {
-      const { main, related } = await geocodeAddress(mainResult.address)
-      const existingOpas = new Set(searchResults.value.map(r => r.opaNumber))
-      const newUnits = related.filter(r => !existingOpas.has(r.opaNumber))
-      searchResults.value = [...searchResults.value, ...newUnits]
-      hasCondoUnits.value = false
-    } catch (e) {
-      console.error('Condo expansion failed:', e)
+    let units = condoUnitsCache.value.get(opaNumber)
+    if (!units) {
+      try {
+        const building = searchResults.value[buildingIndex]
+        const { related } = await geocodeAddress(building.address)
+        units = related
+      } catch (e) {
+        console.error('Condo expansion failed:', e)
+        return []
+      }
     }
+
+    const existingOpas = new Set(searchResults.value.map(r => r.opaNumber))
+    const newUnits = units.filter(r => !existingOpas.has(r.opaNumber))
+
+    // Insert units right after the building row
+    const updated = [...searchResults.value]
+    updated.splice(buildingIndex + 1, 0, ...newUnits)
+    updated[buildingIndex] = { ...updated[buildingIndex], hasCondoUnits: false }
+    searchResults.value = updated
+
+    condoUnitsCache.value.delete(opaNumber)
+    return newUnits.map(u => u.opaNumber)
   }
 
   async function doOwnerSearch(input: string) {
@@ -81,9 +97,9 @@ export const useSearchStore = defineStore('search', () => {
         lng: 0,
         lat: 0,
         isUnit: false,
+        hasCondoUnits: false,
         pwdParcelId: r.pwd_parcel_id,
       }))
-      hasCondoUnits.value = false
       searchStatus.value = 'success'
     } catch (e) {
       searchError.value = e instanceof Error ? e.message : 'Owner search failed'
@@ -122,9 +138,9 @@ export const useSearchStore = defineStore('search', () => {
         lng: 0,
         lat: 0,
         isUnit: false,
+        hasCondoUnits: false,
         pwdParcelId: r.pwd_parcel_id,
       }))
-      hasCondoUnits.value = false
       searchStatus.value = 'success'
     } catch (e) {
       searchError.value = e instanceof Error ? e.message : 'Shape search failed'
@@ -138,7 +154,7 @@ export const useSearchStore = defineStore('search', () => {
     searchStatus.value = 'idle'
     searchError.value = ''
     searchResults.value = []
-    hasCondoUnits.value = false
+    condoUnitsCache.value.clear()
   }
 
   return {
@@ -147,7 +163,7 @@ export const useSearchStore = defineStore('search', () => {
     searchStatus,
     searchError,
     searchResults,
-    hasCondoUnits,
+    condoUnitsCache,
     doAddressSearch,
     doBlockSearch,
     doOwnerSearch,
