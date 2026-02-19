@@ -22,6 +22,7 @@ import { usePropertyStore } from '../stores/propertyStore'
 import { useUiStore } from '../stores/uiStore'
 import { useRouter } from 'vue-router'
 import { formatCurrency, formatDate } from '../composables/useFormatters'
+import { exportToCsv } from '../composables/useCsvExport'
 import DataPanelToolbar from './DataPanelToolbar.vue'
 import ResultsTable from './ResultsTable.vue'
 
@@ -67,6 +68,6 @@ async function handleCondoExpand() {
 }
 
 function handleExportCsv() {
-  // CSV export logic — Task 14
+  exportToCsv(search.searchResults, property.properties)
 }
 </script>
