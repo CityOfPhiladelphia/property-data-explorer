@@ -28,13 +28,16 @@ const ui = useUiStore()
 
 onMounted(async () => {
   ui.initResizeListener()
-  const { p, block } = route.query
+  const { p, block, owner } = route.query
   if (p) {
     await search.doAddressSearch(p as string)
     await property.fetchProperties(search.searchResults.map(r => r.opaNumber))
     ui.selectProperty(p as string)
   } else if (block) {
     await search.doBlockSearch(block as string)
+    await property.fetchProperties(search.searchResults.map(r => r.opaNumber))
+  } else if (owner) {
+    await search.doOwnerSearch(owner as string)
     await property.fetchProperties(search.searchResults.map(r => r.opaNumber))
   }
 })

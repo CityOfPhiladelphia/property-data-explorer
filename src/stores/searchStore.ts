@@ -1,7 +1,8 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import type { SearchResult, SearchType } from '../types'
+import type { SearchResult, SearchType, OpaPublic } from '../types'
 import { geocodeAddress, searchBlock } from '../composables/useAisGeocoder'
+import { cartoQuery } from '../composables/useCartoQuery'
 
 export const useSearchStore = defineStore('search', () => {
   const searchType = ref<SearchType>('address')
@@ -61,6 +62,34 @@ export const useSearchStore = defineStore('search', () => {
     }
   }
 
+  async function doOwnerSearch(input: string) {
+    searchType.value = 'owner'
+    searchInput.value = input
+    searchStatus.value = 'loading'
+    searchError.value = ''
+    searchResults.value = []
+
+    try {
+      const escaped = input.replace(/'/g, "''")
+      const rows = await cartoQuery<OpaPublic>(
+        `SELECT * FROM opa_properties_public_pde WHERE owner_1 ILIKE '%${escaped}%' OR owner_2 ILIKE '%${escaped}%' ORDER BY street_address ASC LIMIT 200`
+      )
+      searchResults.value = rows.map(r => ({
+        address: r.street_address,
+        opaNumber: r.parcel_number,
+        lng: 0,
+        lat: 0,
+        isUnit: false,
+        pwdParcelId: r.pwd_parcel_id,
+      }))
+      hasCondoUnits.value = false
+      searchStatus.value = 'success'
+    } catch (e) {
+      searchError.value = e instanceof Error ? e.message : 'Owner search failed'
+      searchStatus.value = 'error'
+    }
+  }
+
   function reset() {
     searchType.value = 'address'
     searchInput.value = ''
@@ -79,6 +108,7 @@ export const useSearchStore = defineStore('search', () => {
     hasCondoUnits,
     doAddressSearch,
     doBlockSearch,
+    doOwnerSearch,
     expandCondoUnits,
     reset,
   }
