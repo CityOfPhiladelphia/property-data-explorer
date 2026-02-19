@@ -33,16 +33,17 @@ const router = useRouter()
 const tableRows = computed(() => {
   return search.searchResults.map(result => {
     const prop = property.properties.get(result.opaNumber)
+    const isBuilding = result.condoUnitCount > 0
+
     // Condo building rows: no assessment data, show unit count as owner
-    if (result.hasCondoUnits) {
-      const unitLabel = result.condoUnitCount > 0
-        ? `Condominium (${result.condoUnitCount} Units)`
-        : 'Condominium'
+    if (isBuilding) {
+      const unitLabel = `Condominium (${result.condoUnitCount} Units)`
       return {
         opaNumber: result.opaNumber,
         address: result.address,
         isUnit: result.isUnit,
-        hasCondoUnits: true,
+        isBuilding: true,
+        hasCondoUnits: result.hasCondoUnits,
         marketValue: '',
         saleDate: '',
         salePrice: '',
@@ -54,6 +55,7 @@ const tableRows = computed(() => {
       opaNumber: result.opaNumber,
       address: result.address,
       isUnit: result.isUnit,
+      isBuilding: false,
       hasCondoUnits: false,
       marketValue: prop?.assessment
         ? formatCurrency(prop.assessment.market_value)
@@ -64,16 +66,17 @@ const tableRows = computed(() => {
       salePrice: prop?.assessment
         ? formatCurrency(prop.assessment.sale_price)
         : '...',
-      owner: prop?.publicData?.opa_owners
-        ? Array.isArray(prop.publicData.opa_owners)
-          ? prop.publicData.opa_owners.join(', ')
-          : String(prop.publicData.opa_owners)
+      owner: prop?.publicData?.owner_1
+        ? [prop.publicData.owner_1, prop.publicData.owner_2].filter(Boolean).join(', ')
         : '...',
     }
   })
 })
 
 function handleRowSelect(opaNumber: string) {
+  // Condo building rows have no property data — ignore clicks
+  if (opaNumber.startsWith('bldg-')) return
+
   ui.selectProperty(opaNumber)
   property.fetchHistory(opaNumber)
   router.push({ query: { p: opaNumber } })

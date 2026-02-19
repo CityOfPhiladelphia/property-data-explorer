@@ -32,10 +32,7 @@ import type { OpaPublic } from '../../types'
 const props = defineProps<{ data: OpaPublic; address: string }>()
 
 const ownerDisplay = computed(() => {
-  if (Array.isArray(props.data.opa_owners)) {
-    return props.data.opa_owners.join(', ')
-  }
-  return String(props.data.opa_owners || 'N/A')
+  return [props.data.owner_1, props.data.owner_2].filter(Boolean).join(', ') || 'N/A'
 })
 
 const formattedZip = computed(() => {

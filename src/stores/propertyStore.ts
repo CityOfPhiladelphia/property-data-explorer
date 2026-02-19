@@ -23,9 +23,6 @@ export const usePropertyStore = defineStore('property', () => {
 
   async function fetchProperties(opaNumbers: string[]) {
     if (opaNumbers.length === 0) return
-    if (opaNumbers.length > MAX_BATCH_SIZE) {
-      throw new Error(`Too many properties to fetch (${opaNumbers.length}). Maximum is ${MAX_BATCH_SIZE}.`)
-    }
 
     // Skip already-loaded properties
     const toFetch = opaNumbers.filter(opa => {
@@ -45,32 +42,35 @@ export const usePropertyStore = defineStore('property', () => {
       })
     }
 
-    const inClause = buildInClause(toFetch)
+    // Batch into chunks to stay within Carto query limits
+    for (let i = 0; i < toFetch.length; i += MAX_BATCH_SIZE) {
+      const batch = toFetch.slice(i, i + MAX_BATCH_SIZE)
+      const inClause = buildInClause(batch)
 
-    try {
-      const [assessmentRows, publicRows] = await Promise.all([
-        cartoQuery<OpaAssessment>(
-          `SELECT parcel_number, market_value, sale_date, sale_price FROM opa_properties_public_pde WHERE parcel_number IN (${inClause})`
-        ),
-        cartoQuery<OpaPublic>(
-          `SELECT * FROM opa_properties_public_pde WHERE parcel_number IN (${inClause})`
-        ),
-      ])
+      try {
+        const [assessmentRows, publicRows] = await Promise.all([
+          cartoQuery<OpaAssessment>(
+            `SELECT parcel_number, market_value, sale_date, sale_price FROM opa_properties_public_pde WHERE parcel_number IN (${inClause})`
+          ),
+          cartoQuery<OpaPublic>(
+            `SELECT * FROM opa_properties_public_pde WHERE parcel_number IN (${inClause})`
+          ),
+        ])
 
-      // Index by parcel_number
-      const assessmentMap = new Map(assessmentRows.map(r => [r.parcel_number, r]))
-      const publicMap = new Map(publicRows.map(r => [r.parcel_number, r]))
+        const assessmentMap = new Map(assessmentRows.map(r => [r.parcel_number, r]))
+        const publicMap = new Map(publicRows.map(r => [r.parcel_number, r]))
 
-      for (const opa of toFetch) {
-        const existing = properties.value.get(opa)!
-        existing.assessment = assessmentMap.get(opa) ?? null
-        existing.publicData = publicMap.get(opa) ?? null
-        existing.status = 'success'
-      }
-    } catch (e) {
-      for (const opa of toFetch) {
-        const existing = properties.value.get(opa)!
-        existing.status = 'error'
+        for (const opa of batch) {
+          const existing = properties.value.get(opa)!
+          existing.assessment = assessmentMap.get(opa) ?? null
+          existing.publicData = publicMap.get(opa) ?? null
+          existing.status = 'success'
+        }
+      } catch (e) {
+        for (const opa of batch) {
+          const existing = properties.value.get(opa)!
+          existing.status = 'error'
+        }
       }
     }
   }

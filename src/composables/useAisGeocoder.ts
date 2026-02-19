@@ -31,22 +31,40 @@ interface AisResponse {
   total_size: number
 }
 
+async function fetchAisPage(encoded: string, page: number): Promise<AisResponse> {
+  const key = import.meta.env.VITE_GATEKEEPER_KEY
+  const url = `${AIS_BASE}/search/${encoded}?gatekeeperKey=${key}&include_units=true&opa_only=true&sort_field=street_address&page=${page}`
+  const response = await fetch(url)
+  if (!response.ok) {
+    throw new Error(`AIS geocode failed: ${response.status}`)
+  }
+  return response.json()
+}
+
+const AIS_PAGE_SIZE = 100
+
 export async function geocodeAddress(input: string): Promise<{
   main: SearchResult
   related: SearchResult[]
 }> {
   const encoded = encodeURIComponent(input)
-  const key = import.meta.env.VITE_GATEKEEPER_KEY
-  const url = `${AIS_BASE}/search/${encoded}?gatekeeperKey=${key}&include_units=true&opa_only=true&sort_field=street_address`
-
-  const response = await fetch(url)
-  if (!response.ok) {
-    throw new Error(`AIS geocode failed: ${response.status}`)
-  }
-  const data: AisResponse = await response.json()
+  const data = await fetchAisPage(encoded, 1)
 
   if (!data.features || data.features.length === 0) {
     throw new Error('No results found')
+  }
+
+  // Fetch remaining pages if results are paginated
+  if (data.total_size > data.features.length) {
+    const totalPages = Math.ceil(data.total_size / AIS_PAGE_SIZE)
+    const pagePromises = []
+    for (let page = 2; page <= totalPages; page++) {
+      pagePromises.push(fetchAisPage(encoded, page))
+    }
+    const pages = await Promise.all(pagePromises)
+    for (const page of pages) {
+      data.features.push(...page.features)
+    }
   }
 
   const toSearchResult = (feature: AisFeature, isUnit: boolean): SearchResult => ({
@@ -104,15 +122,31 @@ export async function searchBlock(input: string): Promise<SearchResult[]> {
     .trim()
   const encoded = encodeURIComponent(cleaned)
   const key = import.meta.env.VITE_GATEKEEPER_KEY
-  const url = `https://api.phila.gov/ais_ps/v1/block/${encoded}?gatekeeperKey=${key}&page=1`
+  const baseUrl = `https://api.phila.gov/ais_ps/v1/block/${encoded}?gatekeeperKey=${key}`
 
-  const response = await fetch(url)
+  const response = await fetch(`${baseUrl}&page=1`)
   if (!response.ok) {
     throw new Error(`Block search failed: ${response.status}`)
   }
   const data: AisResponse = await response.json()
+  if (!data.features || data.features.length === 0) return []
 
-  return (data.features || []).map(f => ({
+  // Fetch remaining pages if paginated
+  if (data.total_size > data.features.length) {
+    const totalPages = Math.ceil(data.total_size / AIS_PAGE_SIZE)
+    const pagePromises = []
+    for (let page = 2; page <= totalPages; page++) {
+      pagePromises.push(
+        fetch(`${baseUrl}&page=${page}`).then(r => r.json() as Promise<AisResponse>)
+      )
+    }
+    const pages = await Promise.all(pagePromises)
+    for (const page of pages) {
+      data.features.push(...page.features)
+    }
+  }
+
+  return data.features.map(f => ({
     address: f.properties.street_address,
     opaNumber: f.properties.opa_account_num,
     lng: f.geometry.coordinates[0],

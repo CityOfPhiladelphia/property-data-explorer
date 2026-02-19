@@ -1,6 +1,5 @@
 <template>
   <div class="left-panel-content">
-    <SearchModeSelector />
     <div v-if="!ui.activeOpaNumber">
       <IntroContent />
     </div>
@@ -12,7 +11,6 @@
 
 <script setup lang="ts">
 import { useUiStore } from '../stores/uiStore'
-import SearchModeSelector from './SearchModeSelector.vue'
 import IntroContent from './IntroContent.vue'
 import PropertyCard from './PropertyCard.vue'
 

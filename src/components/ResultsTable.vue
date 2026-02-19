@@ -17,6 +17,7 @@
           :class="{
             'is-selected': row.opaNumber === ui.activeOpaNumber,
             'is-unit': row.isUnit,
+            'is-building': row.isBuilding,
           }"
           @click="$emit('select', row.opaNumber)"
         >
@@ -50,6 +51,7 @@ defineProps<{
     opaNumber: string
     address: string
     isUnit: boolean
+    isBuilding: boolean
     marketValue: string
     saleDate: string
     salePrice: string
@@ -83,22 +85,31 @@ defineEmits<{
 }
 .results-table th {
   font-weight: 700;
-  background: var(--Schemes-Surface-Container-Low);
+  background: #444;
+  color: #fff;
   position: sticky;
   top: 0;
-  text-transform: uppercase;
   font-size: 0.75rem;
   letter-spacing: 0.03em;
-  color: var(--Schemes-On-Surface-Variant);
+  border-bottom: none;
 }
 .results-table tbody tr {
   cursor: pointer;
+}
+.results-table tbody tr:nth-child(even) {
+  background: var(--Schemes-Surface-Container-Low);
 }
 .results-table tbody tr:hover {
   background: var(--Schemes-Surface-Container);
 }
 .results-table tbody tr.is-selected {
   background: var(--Schemes-Primary-Container);
+}
+.results-table tbody tr.is-building {
+  cursor: default;
+}
+.results-table tbody tr.is-building:hover {
+  background: inherit;
 }
 .results-table tbody tr.is-unit {
   color: var(--Schemes-On-Surface-Variant);

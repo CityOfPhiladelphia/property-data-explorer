@@ -1,6 +1,6 @@
 <template>
   <div class="property-card" v-if="property.activeProperty">
-    <button class="close-button" @click="ui.clearSelection()">&times;</button>
+    <a class="back-to-results" href="#" @click.prevent="ui.clearSelection()">Back to results</a>
 
     <div v-if="property.activeProperty.status === 'loading'" class="loading-state">
       Loading property data...
@@ -67,6 +67,7 @@
 
 <script setup lang="ts">
 import { computed, watch } from 'vue'
+import { useSearchStore } from '../stores/searchStore'
 import { usePropertyStore } from '../stores/propertyStore'
 import { useUiStore } from '../stores/uiStore'
 import { formatCurrency, formatDate } from '../composables/useFormatters'
@@ -75,12 +76,15 @@ import ValuationHistory from './property/ValuationHistory.vue'
 import SalesHistory from './property/SalesHistory.vue'
 import PropertyDetails from './property/PropertyDetails.vue'
 
+const search = useSearchStore()
 const property = usePropertyStore()
 const ui = useUiStore()
 
 const selectedAddress = computed(() => {
+  const result = search.searchResults.find(r => r.opaNumber === ui.activeOpaNumber)
+  if (result) return result.address
   const pub = property.activeProperty?.publicData
-  return pub?.street_address || pub?.opa_address || ''
+  return pub?.location || pub?.address_std || ''
 })
 
 watch(() => ui.activeOpaNumber, (opaNumber) => {
@@ -95,20 +99,16 @@ watch(() => ui.activeOpaNumber, (opaNumber) => {
   position: relative;
   font-size: 0.9375rem;
 }
-.close-button {
-  position: absolute;
-  top: 0;
-  right: 0;
-  background: none;
-  border: none;
-  font-size: 1.25rem;
-  cursor: pointer;
-  padding: var(--spacing-xs) var(--spacing-s);
-  line-height: 1;
-  color: var(--Schemes-On-Surface-Variant);
+.back-to-results {
+  display: block;
+  text-align: right;
+  margin-bottom: var(--spacing-s);
+  font-size: 0.875rem;
+  color: var(--colors-Dark-Ben-Franklin-Blue);
+  text-decoration: none;
 }
-.close-button:hover {
-  color: var(--Schemes-On-Surface);
+.back-to-results:hover {
+  text-decoration: underline;
 }
 .loading-state,
 .no-data-state {

@@ -6,8 +6,8 @@
   >
     <MapSearchControl
       position="top-left"
-      @result="handleSearchResult"
-      @error="handleSearchError"
+      :geocode="false"
+      @search="handleSearch"
     />
     <MapNavigationControl position="top-right" />
     <GeolocationButton position="top-right" />
@@ -15,6 +15,10 @@
     <CyclomediaButton position="top-right" />
     <CyclomediaPanel />
     <DrawTool @draw="handleShapeDraw" />
+    <MapLoadingOverlay
+      :visible="search.searchStatus === 'loading'"
+      text="Finding address..."
+    />
 
     <FillLayer
       v-if="parcelGeojson"
@@ -53,10 +57,10 @@ import {
   DrawTool,
   CyclomediaButton,
   CyclomediaPanel,
+  MapLoadingOverlay,
   fetchParcelGeometry,
   queryParcelAtPoint,
 } from '@phila/phila-ui-map-core'
-import type { AisGeocodeResult } from '@phila/phila-ui-map-core'
 import { useSearchStore } from '../stores/searchStore'
 import { usePropertyStore } from '../stores/propertyStore'
 import { useUiStore } from '../stores/uiStore'
@@ -80,9 +84,22 @@ const markerSource = computed(() => ({
   data: JSON.parse(JSON.stringify(toRaw(markerGeojson.value))),
 }))
 
-async function handleSearchResult(result: AisGeocodeResult) {
-  const address = result.properties.street_address
-  await search.doAddressSearch(address)
+const BLOCK_PREFIXES = ['block:', 'block ', 'blk ']
+
+function isBlockSearch(query: string): boolean {
+  const lower = query.trim().toLowerCase()
+  return BLOCK_PREFIXES.some(prefix => lower.startsWith(prefix))
+}
+
+async function handleSearch(query: string) {
+  if (!query) return
+
+  if (isBlockSearch(query)) {
+    await search.doBlockSearch(query)
+  } else {
+    await search.doAddressSearch(query)
+  }
+
   if (search.searchStatus === 'success' && search.searchResults.length > 0) {
     const firstResult = search.searchResults[0]
     if (!firstResult.hasCondoUnits) {
@@ -93,10 +110,6 @@ async function handleSearchResult(result: AisGeocodeResult) {
     router.push({ query: { p: firstResult.opaNumber } })
     await updateMapFeatures()
   }
-}
-
-function handleSearchError(error: string) {
-  console.error('Search error:', error)
 }
 
 async function handleShapeDraw(geojson: any) {
