@@ -94,20 +94,28 @@ function isBlockSearch(query: string): boolean {
 async function handleSearch(query: string) {
   if (!query) return
 
-  if (isBlockSearch(query)) {
+  const isBlock = isBlockSearch(query)
+
+  if (isBlock) {
     await search.doBlockSearch(query)
   } else {
     await search.doAddressSearch(query)
   }
 
   if (search.searchStatus === 'success' && search.searchResults.length > 0) {
-    const firstResult = search.searchResults[0]
-    if (!firstResult.hasCondoUnits) {
-      ui.selectProperty(firstResult.opaNumber)
-    }
     const opaNumbers = search.searchResults.map(r => r.opaNumber)
     await property.fetchProperties(opaNumbers)
-    router.push({ query: { p: firstResult.opaNumber } })
+
+    if (isBlock) {
+      router.push({ query: { block: query } })
+    } else {
+      const firstResult = search.searchResults[0]
+      if (!firstResult.hasCondoUnits) {
+        ui.selectProperty(firstResult.opaNumber)
+      }
+      router.push({ query: { p: firstResult.opaNumber } })
+    }
+
     await updateMapFeatures()
   }
 }

@@ -114,7 +114,10 @@ export async function geocodeAddress(input: string): Promise<{
   return { main, related }
 }
 
-export async function searchBlock(input: string): Promise<SearchResult[]> {
+export async function searchBlock(input: string): Promise<{
+  results: SearchResult[]
+  condoUnits: Map<string, SearchResult[]>
+}> {
   const cleaned = input
     .toLowerCase()
     .replace(/blk|block:/gi, '')
@@ -129,7 +132,9 @@ export async function searchBlock(input: string): Promise<SearchResult[]> {
     throw new Error(`Block search failed: ${response.status}`)
   }
   const data: AisResponse = await response.json()
-  if (!data.features || data.features.length === 0) return []
+  if (!data.features || data.features.length === 0) {
+    return { results: [], condoUnits: new Map() }
+  }
 
   // Fetch remaining pages if paginated
   if (data.total_size > data.features.length) {
@@ -146,14 +151,62 @@ export async function searchBlock(input: string): Promise<SearchResult[]> {
     }
   }
 
-  return data.features.map(f => ({
-    address: f.properties.street_address,
-    opaNumber: f.properties.opa_account_num,
-    lng: f.geometry.coordinates[0],
-    lat: f.geometry.coordinates[1],
-    isUnit: false,
+  const toSearchResult = (feature: AisFeature, isUnit: boolean): SearchResult => ({
+    address: feature.properties.street_address,
+    opaNumber: feature.properties.opa_account_num,
+    lng: feature.geometry.coordinates[0],
+    lat: feature.geometry.coordinates[1],
+    isUnit,
     hasCondoUnits: false,
     condoUnitCount: 0,
-    pwdParcelId: f.properties.pwd_parcel_id,
-  }))
+    pwdParcelId: feature.properties.pwd_parcel_id,
+  })
+
+  // Group by pwd_parcel_id to identify condos (multiple features = units)
+  const byParcel = new Map<string, AisFeature[]>()
+  for (const f of data.features) {
+    const pid = f.properties.pwd_parcel_id
+    if (!byParcel.has(pid)) byParcel.set(pid, [])
+    byParcel.get(pid)!.push(f)
+  }
+
+  const results: SearchResult[] = []
+  const condoUnits = new Map<string, SearchResult[]>()
+
+  for (const [, features] of byParcel) {
+    if (features.length === 1) {
+      // Single property — not a condo
+      results.push(toSearchResult(features[0], false))
+    } else {
+      // Multiple features on same parcel — condo building
+      const nonUnit = features.find(f => !isUnitAddress(f.properties.street_address))
+      let building: SearchResult
+
+      if (nonUnit) {
+        building = toSearchResult(nonUnit, false)
+      } else {
+        // All are units — synthesize a building row from base address
+        const baseAddress = stripUnit(features[0].properties.street_address)
+        building = {
+          address: baseAddress,
+          opaNumber: `bldg-${features[0].properties.pwd_parcel_id}`,
+          lng: features[0].geometry.coordinates[0],
+          lat: features[0].geometry.coordinates[1],
+          isUnit: false,
+          hasCondoUnits: false,
+          condoUnitCount: 0,
+          pwdParcelId: features[0].properties.pwd_parcel_id,
+        }
+      }
+
+      building.hasCondoUnits = true
+      building.condoUnitCount = features.length
+
+      const units = features.map(f => toSearchResult(f, true))
+      condoUnits.set(building.opaNumber, units)
+      results.push(building)
+    }
+  }
+
+  return { results, condoUnits }
 }

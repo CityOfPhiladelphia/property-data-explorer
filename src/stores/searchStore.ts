@@ -42,7 +42,11 @@ export const useSearchStore = defineStore('search', () => {
     searchResults.value = []
 
     try {
-      searchResults.value = await searchBlock(input)
+      const { results, condoUnits } = await searchBlock(input)
+      for (const [key, units] of condoUnits) {
+        condoUnitsCache.value.set(key, units)
+      }
+      searchResults.value = results
       searchStatus.value = 'success'
     } catch (e) {
       searchError.value = e instanceof Error ? e.message : 'Block search failed'
