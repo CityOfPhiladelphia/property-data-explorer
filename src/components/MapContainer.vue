@@ -2,6 +2,8 @@
   <PhilaMap
     :center="[-75.1635, 39.9526]"
     :zoom="12"
+    :enable-cyclomedia="true"
+    :cyclomedia-config="cyclomediaConfig"
     @click="handleMapClick"
   >
     <MapSearchControl
@@ -9,12 +11,10 @@
       :geocode="false"
       @search="handleSearch"
     />
-    <MapNavigationControl position="top-right" />
-    <GeolocationButton position="top-right" />
-    <BasemapToggle position="bottom-right" />
-    <CyclomediaButton position="top-right" />
-    <CyclomediaPanel />
-    <DrawTool @draw="handleShapeDraw" />
+    <BasemapToggle position="top-right" />
+    <DrawTool position="top-left" @draw="handleShapeDraw" />
+    <MapNavigationControl position="bottom-left" />
+    <GeolocationButton position="bottom-left" />
     <MapLoadingOverlay
       :visible="search.searchStatus === 'loading'"
       text="Finding address..."
@@ -55,12 +55,11 @@ import {
   FillLayer,
   CircleLayer,
   DrawTool,
-  CyclomediaButton,
-  CyclomediaPanel,
   MapLoadingOverlay,
   fetchParcelGeometry,
   queryParcelAtPoint,
 } from '@phila/phila-ui-map-core'
+import type { CyclomediaConfig } from '@phila/phila-ui-map-core'
 import { useSearchStore } from '../stores/searchStore'
 import { usePropertyStore } from '../stores/propertyStore'
 import { useUiStore } from '../stores/uiStore'
@@ -70,6 +69,14 @@ const search = useSearchStore()
 const property = usePropertyStore()
 const ui = useUiStore()
 const router = useRouter()
+
+const cyclomediaConfig: CyclomediaConfig = {
+  username: import.meta.env.VITE_CYCLOMEDIA_USERNAME || '',
+  password: import.meta.env.VITE_CYCLOMEDIA_PASSWORD || '',
+  apiKey: import.meta.env.VITE_CYCLOMEDIA_API_KEY || '',
+  srs: 'EPSG:4326',
+  locale: 'en-US',
+}
 
 const parcelGeojson = ref<any>(null)
 const markerGeojson = ref<any>(null)
@@ -104,7 +111,7 @@ async function handleSearch(query: string) {
 
   if (search.searchStatus === 'success' && search.searchResults.length > 0) {
     const opaNumbers = search.searchResults.map(r => r.opaNumber)
-    await property.fetchProperties(opaNumbers)
+    const fetchPromise = property.fetchProperties(opaNumbers)
 
     if (isBlock) {
       router.push({ query: { block: query } })
@@ -116,6 +123,7 @@ async function handleSearch(query: string) {
       router.push({ query: { p: firstResult.opaNumber } })
     }
 
+    await fetchPromise
     await updateMapFeatures()
   }
 }
@@ -137,13 +145,14 @@ async function handleMapClick(e: { lngLat: { lng: number; lat: number } }) {
   if (result?.address) {
     await search.doAddressSearch(result.address)
     if (search.searchStatus === 'success' && search.searchResults.length > 0) {
+      const opaNumbers = search.searchResults.map(r => r.opaNumber)
+      const fetchPromise = property.fetchProperties(opaNumbers)
       const firstResult = search.searchResults[0]
       if (!firstResult.hasCondoUnits) {
         ui.selectProperty(firstResult.opaNumber)
       }
-      const opaNumbers = search.searchResults.map(r => r.opaNumber)
-      await property.fetchProperties(opaNumbers)
       router.push({ query: { p: firstResult.opaNumber } })
+      await fetchPromise
       await updateMapFeatures()
     }
   }

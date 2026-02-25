@@ -1,15 +1,16 @@
 <template>
   <div class="app-shell">
   <header class="app-header">
-    <div class="header-branding">
-      <a href="https://www.phila.gov" class="city-link" target="_blank" rel="noopener">
-        City of Philadelphia
-      </a>
-    </div>
-    <div class="header-title">Property Data Explorer</div>
+    <a href="https://www.phila.gov/" class="header-logo">
+      <img
+        src="https://standards.phila.gov/img/logo/city-of-philadelphia-yellow-white.png"
+        alt="City of Philadelphia"
+      />
+    </a>
+    <span class="header-divider" aria-hidden="true"></span>
+    <div class="header-title">Property</div>
   </header>
-  <div class="header-stripe" />
-  <MainLayout>
+<MainLayout>
     <template #map>
       <MapContainer />
     </template>
@@ -84,28 +85,33 @@ onMounted(async () => {
 .app-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 16px;
   padding: var(--spacing-s) var(--spacing-m);
   background: var(--colors-Dark-Ben-Franklin-Blue);
   color: #fff;
   font-family: 'Montserrat', sans-serif;
 }
-.header-branding .city-link {
-  color: #fff;
-  text-decoration: none;
-  font-size: 0.875rem;
+.header-logo {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
 }
-.header-branding .city-link:hover {
-  opacity: 0.7;
+.header-logo:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+.header-logo img {
+  height: 50px;
+  width: auto;
+}
+.header-divider {
+  width: 1px;
+  height: 40px;
+  background-color: white;
 }
 .header-title {
-  font-size: 1.25rem;
-  font-weight: 700;
-  letter-spacing: 0.01em;
-}
-.header-stripe {
-  height: 4px;
-  background: rgb(37, 206, 247);
+  font-size: 26px;
+  font-weight: 600;
 }
 .app-footer {
   background: var(--colors-Dark-Ben-Franklin-Blue);
