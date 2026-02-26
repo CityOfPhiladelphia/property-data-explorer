@@ -29,7 +29,7 @@
         Senior Citizen Tax Freeze</a>, or
         <a target="_blank" href="https://www.phila.gov/services/payments-assistance-taxes/taxes/property-and-real-estate-taxes/get-real-estate-tax-relief/tax-freeze/apply-for-the-low-income-real-estate-tax-freeze/">
         Low-Income Tax Freeze</a>.
-        For information and assistance, contact (215) 686-9200 for questions about Homestead, LOOP, or the Office of Property Assessment (OPA). For other Real Estate Tax questions, contact the Dept of Revenue at (215) 686-6442.
+        For information and assistance, contact <a href="tel:2156869200">(215) 686-9200</a> for questions about Homestead, LOOP, or the Office of Property Assessment (OPA). For other Real Estate Tax questions, contact the Dept of Revenue at <a href="tel:2156866442">(215) 686-6442</a>.
       </p>
       <!-- <p>
         In 2024, the City expanded the assistance program and created a <a target="_blank" href="https://www.phila.gov/services/payments-assistance-taxes/taxes/property-and-real-estate-taxes/get-real-estate-tax-relief/tax-freeze/apply-for-the-low-income-real-estate-tax-freeze/">
