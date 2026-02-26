@@ -34,8 +34,8 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { onMounted, watch } from 'vue'
+import { useRoute } from 'vue-router'
 import { useSearchStore } from './stores/searchStore'
 import { usePropertyStore } from './stores/propertyStore'
 import { useUiStore } from './stores/uiStore'
@@ -44,24 +44,36 @@ import MapContainer from './components/MapContainer.vue'
 import DataPanel from './components/DataPanel.vue'
 
 const route = useRoute()
-const router = useRouter()
 const search = useSearchStore()
 const property = usePropertyStore()
 const ui = useUiStore()
 
-onMounted(async () => {
-  ui.initResizeListener()
-  const { p, block, owner, shape } = route.query
+async function loadFromQuery(query: Record<string, any>) {
+  const { p, block, owner, shape } = query
+
+  if (!p && !block && !owner && !shape) {
+    ui.clearSelection()
+    search.reset()
+    return
+  }
+
   if (p) {
+    if (ui.activeOpaNumber === p) return
     await search.doAddressSearch(p as string)
-    if (search.searchResults.length > 0 && !search.searchResults[0].hasCondoUnits) {
-      ui.selectProperty(search.searchResults[0].opaNumber)
+    if (search.searchResults.length > 0) {
+      const opaNumbers = search.searchResults.map(r => r.opaNumber)
+      const fetchPromise = property.fetchProperties(opaNumbers)
+      if (!search.searchResults[0].hasCondoUnits) {
+        ui.selectProperty(search.searchResults[0].opaNumber)
+      }
+      await fetchPromise
     }
-    await property.fetchProperties(search.searchResults.map(r => r.opaNumber))
   } else if (block) {
+    if (search.searchInput === block && search.searchType === 'block') return
     await search.doBlockSearch(block as string)
     await property.fetchProperties(search.searchResults.map(r => r.opaNumber))
   } else if (owner) {
+    if (search.searchInput === owner && search.searchType === 'owner') return
     await search.doOwnerSearch(owner as string)
     await property.fetchProperties(search.searchResults.map(r => r.opaNumber))
   } else if (shape) {
@@ -73,7 +85,15 @@ onMounted(async () => {
       console.error('Failed to parse shape from URL:', e)
     }
   }
+}
+
+onMounted(() => {
+  ui.initResizeListener()
 })
+
+watch(() => route.query, (query) => {
+  loadFromQuery(query)
+}, { immediate: true })
 </script>
 
 <style scoped>

@@ -4,8 +4,7 @@ const router = createRouter({
   history: createWebHistory(),
   routes: [
     {
-      path: '/:catchAll(.*)',
-      name: 'home',
+      path: '/',
       component: { template: '<div />' },
     },
   ],

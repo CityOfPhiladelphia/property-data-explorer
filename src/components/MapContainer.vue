@@ -98,6 +98,16 @@ function isBlockSearch(query: string): boolean {
   return BLOCK_PREFIXES.some(prefix => lower.startsWith(prefix))
 }
 
+function stripBlockPrefix(query: string): string {
+  const lower = query.trim().toLowerCase()
+  for (const prefix of BLOCK_PREFIXES) {
+    if (lower.startsWith(prefix)) {
+      return query.trim().slice(prefix.length).trim()
+    }
+  }
+  return query.trim()
+}
+
 async function handleSearch(query: string) {
   if (!query) return
 
@@ -114,7 +124,7 @@ async function handleSearch(query: string) {
     const fetchPromise = property.fetchProperties(opaNumbers)
 
     if (isBlock) {
-      router.push({ query: { block: query } })
+      router.push({ query: { block: stripBlockPrefix(query) } })
     } else {
       const firstResult = search.searchResults[0]
       if (!firstResult.hasCondoUnits) {
