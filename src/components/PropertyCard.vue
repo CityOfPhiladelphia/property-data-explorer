@@ -158,7 +158,7 @@
           Association of Assessing Officers (IAAO) standards, the value of an improved parcel is separated into the
           portion of value attributed to the improvement and the portion of value attributed to the land.)
           <br><br>
-          To report issues or ask questions regarding your {{ currentAssessmentYear }} property assessment, call <a href="tel:215686920">(215) 686-9200</a> or visit
+          To report issues or ask questions regarding your {{ currentAssessmentYear }} property assessment, call <a href="tel:2156869200">(215) 686-9200</a> or visit
           <a href="https://www.phila.gov/opa" target="_blank">www.phila.gov/opa</a>.
         </div>
       </div>
@@ -553,7 +553,7 @@ export default {
         Property characteristics described below are included for convenience, but may not reflect the most recent conditions \
         at the property.<br><br>\
         <div class="intro-blue">\
-        <a target="_blank" href="https://opainquiry.phila.gov/opa.apps/help/PropInq.aspx?acct_num=${this.activeOpaId}">Submit an official inquiry</a> or call OPA at <a href="tel:+12156869200">(215) 686-9200</a> if you:\
+        <a target="_blank" href="https://opainquiry.phila.gov/opa.apps/help/PropInq.aspx?acct_num=${this.activeOpaId}">Submit an official inquiry</a> or call OPA at <a href="tel:+12156864334">(215) 686-4334</a> if you:\
         <ul class="mb-0">\
           <li>have a property question</li>\
           <li>want to update property or contact information on file</li>\
