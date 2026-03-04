@@ -11,7 +11,7 @@ export default {
     enabled: true,
   },
   drawControl: true,
-  initialImagery: 'imagery2024',
+  initialImagery: 'imagery2025',
   containerClass: 'map-container',
   containerClassWCyclo: 'map-container',
   scales: {
@@ -54,6 +54,17 @@ export default {
       ],
       type: 'featuremap',
       attribution: 'Parcels: Department of Records'
+    },
+    imagery2025: {
+      url: 'https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2025_3in/MapServer/',
+      label: '2025',
+      tiledLayers: [
+        'imageryBasemapLabels',
+        'parcels'
+      ],
+      type: 'imagery',
+      year: 2025,
+      attribution: 'Imagery 2025'
     },
     imagery2024: {
       url: 'https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2024_1in/MapServer/',
