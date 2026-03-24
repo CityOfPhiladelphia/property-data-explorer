@@ -1,5 +1,5 @@
 <template>
-  <div class="results-table-container">
+  <div ref="containerRef" class="results-table-container">
     <table class="results-table">
       <thead>
         <tr>
@@ -14,6 +14,7 @@
         <tr
           v-for="row in rows"
           :key="row.opaNumber"
+          :data-opa="row.opaNumber"
           :class="{
             'is-selected': row.opaNumber === ui.activeOpaNumber,
             'is-hovered': row.opaNumber === ui.hoveredOpaNumber,
@@ -21,8 +22,8 @@
             'is-building': row.isBuilding,
           }"
           @click="$emit('select', row.opaNumber)"
-          @mouseenter="ui.hoveredOpaNumber = row.opaNumber"
-          @mouseleave="ui.hoveredOpaNumber = null"
+          @mouseenter="ui.hoveredOpaNumber = row.opaNumber; ui.hoverSource = 'table'"
+          @mouseleave="ui.hoveredOpaNumber = null; ui.hoverSource = null"
         >
           <td>
             <span v-if="row.isUnit" class="unit-indent"></span>{{ row.address }}
@@ -52,9 +53,19 @@
 </template>
 
 <script setup lang="ts">
+import { ref, watch } from 'vue'
 import { useUiStore } from '../stores/uiStore'
 
 const ui = useUiStore()
+const containerRef = ref<HTMLElement | null>(null)
+
+watch(() => ui.hoveredOpaNumber, (opa) => {
+  if (!opa || ui.hoverSource !== 'map' || !containerRef.value) return
+  const row = containerRef.value.querySelector(`tr[data-opa="${opa}"]`) as HTMLElement | null
+  if (row) {
+    row.scrollIntoView({ block: 'nearest' })
+  }
+})
 
 defineProps<{
   rows: Array<{

@@ -113,6 +113,64 @@ function getHoveredParcelIds(): Set<string> {
   return ids
 }
 
+function findOpaByParcelId(parcelId: string): string | null {
+  for (const r of search.searchResults) {
+    if (r.pwdParcelId === parcelId) return r.opaNumber
+  }
+  return null
+}
+
+let parcelHoverInstalled = false
+
+function onParcelMouseMove(e: any) {
+  if (!e.features?.length) return
+  const parcelId = String(e.features[0].properties.parcelid)
+  const opa = findOpaByParcelId(parcelId)
+  if (opa && opa !== ui.hoveredOpaNumber) {
+    ui.hoveredOpaNumber = opa
+    ui.hoverSource = 'map'
+  }
+  const map = mapRef.value?.map
+  if (map) map.getCanvas().style.cursor = 'pointer'
+}
+
+function onParcelMouseLeave() {
+  if (ui.hoverSource === 'map') {
+    ui.hoveredOpaNumber = null
+    ui.hoverSource = null
+  }
+  const map = mapRef.value?.map
+  if (map) map.getCanvas().style.cursor = ''
+}
+
+function setupParcelHover() {
+  const map = mapRef.value?.map
+  if (!map || parcelHoverInstalled) return
+  map.on('mousemove', 'parcel-fill', onParcelMouseMove)
+  map.on('mouseleave', 'parcel-fill', onParcelMouseLeave)
+  parcelHoverInstalled = true
+}
+
+watch(() => parcelGeojson.value, (val, oldVal) => {
+  // Layer removed — handlers are gone
+  if (!oldVal && !val) return
+  if (!val) {
+    parcelHoverInstalled = false
+    return
+  }
+  if (parcelHoverInstalled) return
+  const map = mapRef.value?.map
+  if (!map) return
+  const check = () => {
+    if (map.getLayer('parcel-fill')) {
+      setupParcelHover()
+    } else {
+      map.once('idle', check)
+    }
+  }
+  check()
+})
+
 watch(() => ui.hoveredOpaNumber, () => {
   const map = mapRef.value?.map
   if (!map || !parcelGeojson.value) return
