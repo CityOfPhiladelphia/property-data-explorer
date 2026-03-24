@@ -102,6 +102,35 @@ const markerSource = computed(() => ({
   data: JSON.parse(JSON.stringify(toRaw(markerGeojson.value))),
 }))
 
+function getHoveredParcelIds(): Set<string> {
+  if (!ui.hoveredOpaNumber) return new Set()
+  const ids = new Set<string>()
+  for (const r of search.searchResults) {
+    if (r.opaNumber === ui.hoveredOpaNumber && r.pwdParcelId) {
+      ids.add(r.pwdParcelId)
+    }
+  }
+  return ids
+}
+
+watch(() => ui.hoveredOpaNumber, () => {
+  const map = mapRef.value?.map
+  if (!map || !parcelGeojson.value) return
+  if (!map.getLayer('parcel-fill')) return
+
+  const hovered = getHoveredParcelIds()
+  if (hovered.size === 0) {
+    map.setPaintProperty('parcel-fill', 'fill-color', '#2176d2')
+    map.setPaintProperty('parcel-fill', 'fill-opacity', 0.15)
+    map.setPaintProperty('parcel-outline', 'line-color', '#2176d2')
+  } else {
+    const ids = Array.from(hovered)
+    map.setPaintProperty('parcel-fill', 'fill-color', ['match', ['get', 'parcelid'], ...ids.flatMap(id => [id, '#fff9c4']), '#2176d2'])
+    map.setPaintProperty('parcel-fill', 'fill-opacity', ['match', ['get', 'parcelid'], ...ids.flatMap(id => [id, 0.6]), 0.15])
+    map.setPaintProperty('parcel-outline', 'line-color', ['match', ['get', 'parcelid'], ...ids.flatMap(id => [id, '#f9a825']), '#2176d2'])
+  }
+})
+
 const BLOCK_PREFIXES = ['block:', 'block ', 'blk ']
 
 function isBlockSearch(query: string): boolean {
@@ -131,7 +160,6 @@ async function handleSearch(query: string) {
   }
 
   if (search.searchStatus === 'success' && search.searchResults.length > 0) {
-    zoomToResults(isBlock)
     const opaNumbers = search.searchResults.map(r => r.opaNumber)
     const fetchPromise = property.fetchProperties(opaNumbers)
 
@@ -228,10 +256,13 @@ async function fetchParcelGeometries(parcelIds: string[]): Promise<any> {
     return response.json()
   }))
 
-  return {
-    type: 'FeatureCollection',
-    features: results.flatMap(r => r.features || []),
+  const features = results.flatMap(r => r.features || [])
+  for (const f of features) {
+    if (f.properties?.parcelid != null) {
+      f.properties.parcelid = String(f.properties.parcelid)
+    }
   }
+  return { type: 'FeatureCollection', features }
 }
 
 async function updateMapFeatures() {
@@ -268,5 +299,10 @@ async function updateMapFeatures() {
   }
 }
 
-watch(() => search.searchResults, updateMapFeatures)
+watch(() => search.searchResults, () => {
+  updateMapFeatures()
+  if (search.searchStatus === 'success' && search.searchResults.length > 0) {
+    zoomToResults(search.searchType === 'block')
+  }
+})
 </script>

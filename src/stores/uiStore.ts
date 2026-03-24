@@ -5,6 +5,7 @@ const LARGE_BREAKPOINT = 750
 
 export const useUiStore = defineStore('ui', () => {
   const activeOpaNumber = ref<string | null>(null)
+  const hoveredOpaNumber = ref<string | null>(null)
   const leftPanelOpen = ref(false)
   const dataPanelExpanded = ref(false)
   const fullScreen = ref(false)
@@ -30,6 +31,7 @@ export const useUiStore = defineStore('ui', () => {
 
   return {
     activeOpaNumber,
+    hoveredOpaNumber,
     leftPanelOpen,
     dataPanelExpanded,
     fullScreen,

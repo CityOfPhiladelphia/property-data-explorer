@@ -16,10 +16,13 @@
           :key="row.opaNumber"
           :class="{
             'is-selected': row.opaNumber === ui.activeOpaNumber,
+            'is-hovered': row.opaNumber === ui.hoveredOpaNumber,
             'is-unit': row.isUnit,
             'is-building': row.isBuilding,
           }"
           @click="$emit('select', row.opaNumber)"
+          @mouseenter="ui.hoveredOpaNumber = row.opaNumber"
+          @mouseleave="ui.hoveredOpaNumber = null"
         >
           <td>
             <span v-if="row.isUnit" class="unit-indent"></span>{{ row.address }}
@@ -31,10 +34,17 @@
               + Units
             </button>
           </td>
-          <td>{{ row.marketValue }}</td>
-          <td>{{ row.saleDate }}</td>
-          <td>{{ row.salePrice }}</td>
-          <td>{{ row.owner }}</td>
+          <template v-if="row.marketValue === '...'">
+            <td colspan="4" class="loading-cell">
+              <span class="spinner"></span> Loading data...
+            </td>
+          </template>
+          <template v-else>
+            <td>{{ row.marketValue }}</td>
+            <td>{{ row.saleDate }}</td>
+            <td>{{ row.salePrice }}</td>
+            <td>{{ row.owner }}</td>
+          </template>
         </tr>
       </tbody>
     </table>
@@ -99,8 +109,9 @@ defineEmits<{
 .results-table tbody tr:nth-child(even) {
   background: var(--Schemes-Surface-Container-Low);
 }
-.results-table tbody tr:hover {
-  background: var(--Schemes-Surface-Container);
+.results-table tbody tr:hover,
+.results-table tbody tr.is-hovered {
+  background: #fff9c4;
 }
 .results-table tbody tr.is-selected {
   background: var(--Schemes-Primary-Container);
@@ -133,5 +144,23 @@ defineEmits<{
 .condo-expand-btn:hover {
   background: var(--colors-Dark-Ben-Franklin-Blue);
   color: #fff;
+}
+.loading-cell {
+  color: var(--Schemes-On-Surface-Variant);
+  font-style: italic;
+}
+.spinner {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border: 2px solid var(--Schemes-Outline);
+  border-top-color: var(--colors-Dark-Ben-Franklin-Blue);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  vertical-align: middle;
+  margin-right: 6px;
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
 </style>
