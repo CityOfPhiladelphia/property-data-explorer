@@ -37,6 +37,7 @@ jobs:
         VITE_CYCLOMEDIA_API_KEY: ${{ secrets.VITE_CYCLOMEDIA_API_KEY }}
         VITE_CYCLOMEDIA_PASSWORD: ${{ secrets.VITE_CYCLOMEDIA_PASSWORD }}
         VITE_CYCLOMEDIA_USERNAME: ${{ secrets.VITE_CYCLOMEDIA_USERNAME }}
+        VITE_GATEKEEPER_KEY: ${{ secrets.VITE_GATEKEEPER_KEY }}
 
     - name: Deploy to Dev S3 and Invalidate CloudFront
       env:
