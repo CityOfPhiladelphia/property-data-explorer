@@ -2,9 +2,8 @@
   <div class="data-panel">
     <DataPanelToolbar
       :result-count="search.searchResults.length"
-      :expanded="ui.dataPanelExpanded"
+      @mailing-labels="handleMailingLabels"
       @export-csv="handleExportCsv"
-      @toggle-expand="ui.dataPanelExpanded = !ui.dataPanelExpanded"
     />
     <ResultsTable
       :rows="tableRows"
@@ -87,6 +86,10 @@ async function handleExpandCondos(opaNumber: string) {
   if (newOpas.length > 0) {
     await property.fetchProperties(newOpas)
   }
+}
+
+function handleMailingLabels() {
+  // TODO: implement mailing labels
 }
 
 function handleExportCsv() {

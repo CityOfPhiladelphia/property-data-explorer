@@ -4,11 +4,11 @@
       <span class="result-count">{{ resultCount }} results</span>
     </div>
     <div class="toolbar-right">
-      <button class="toolbar-btn" @click="$emit('export-csv')">
-        Export CSV
+      <button class="toolbar-btn" @click="$emit('mailing-labels')">
+        Mailing Labels
       </button>
-      <button class="toolbar-btn" @click="$emit('toggle-expand')">
-        {{ expanded ? 'Collapse' : 'Expand' }}
+      <button class="toolbar-btn" @click="$emit('export-csv')">
+        Download CSV
       </button>
     </div>
   </div>
@@ -17,12 +17,11 @@
 <script setup lang="ts">
 defineProps<{
   resultCount: number
-  expanded: boolean
 }>()
 
 defineEmits<{
+  'mailing-labels': []
   'export-csv': []
-  'toggle-expand': []
 }>()
 </script>
 
