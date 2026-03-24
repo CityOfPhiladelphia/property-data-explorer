@@ -1,4 +1,4 @@
-import type { SearchResult } from '../types'
+import type { SearchResult, AisProperties } from '../types'
 
 const AIS_BASE = 'https://api.phila.gov/ais-pde/v1'
 
@@ -14,13 +14,7 @@ function stripUnit(address: string): string {
 }
 
 interface AisFeature {
-  properties: {
-    street_address: string
-    opa_account_num: string
-    pwd_parcel_id: string
-    opa_owners: string[]
-    dor_parcel_id: string
-  }
+  properties: AisProperties
   geometry: {
     coordinates: [number, number]
   }
@@ -76,6 +70,7 @@ export async function geocodeAddress(input: string): Promise<{
     hasCondoUnits: false,
     condoUnitCount: 0,
     pwdParcelId: feature.properties.pwd_parcel_id,
+    aisProperties: feature.properties,
   })
 
   // Find the building result (no unit designator in address). If the building
@@ -102,6 +97,7 @@ export async function geocodeAddress(input: string): Promise<{
       hasCondoUnits: false,
       condoUnitCount: data.total_size,
       pwdParcelId: data.features[0].properties.pwd_parcel_id,
+      aisProperties: data.features[0].properties,
     }
     related = data.features.map(f => toSearchResult(f, true))
   }
@@ -160,6 +156,7 @@ export async function searchBlock(input: string): Promise<{
     hasCondoUnits: false,
     condoUnitCount: 0,
     pwdParcelId: feature.properties.pwd_parcel_id,
+    aisProperties: feature.properties,
   })
 
   // Group by pwd_parcel_id to identify condos (multiple features = units)
@@ -196,6 +193,7 @@ export async function searchBlock(input: string): Promise<{
           hasCondoUnits: false,
           condoUnitCount: 0,
           pwdParcelId: features[0].properties.pwd_parcel_id,
+          aisProperties: features[0].properties,
         }
       }
 

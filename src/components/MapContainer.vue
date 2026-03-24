@@ -26,8 +26,16 @@
       :source="parcelSource"
       :paint="{
         'fill-color': '#2176d2',
-        'fill-opacity': 0.3,
-        'fill-outline-color': '#2176d2',
+        'fill-opacity': 0.15,
+      }"
+    />
+    <LineLayer
+      v-if="parcelGeojson"
+      id="parcel-outline"
+      :source="parcelSource"
+      :paint="{
+        'line-color': '#2176d2',
+        'line-width': 2,
       }"
     />
     <CircleLayer
@@ -53,6 +61,7 @@ import {
   GeolocationButton,
   BasemapToggle,
   FillLayer,
+  LineLayer,
   CircleLayer,
   DrawTool,
   MapLoadingOverlay,
@@ -168,6 +177,36 @@ async function handleMapClick(e: { lngLat: { lng: number; lat: number } }) {
   }
 }
 
+const PARCEL_BATCH_SIZE = 50
+
+async function fetchParcelGeometries(parcelIds: string[]): Promise<any> {
+  const unique = [...new Set(parcelIds)]
+  const batches: string[][] = []
+  for (let i = 0; i < unique.length; i += PARCEL_BATCH_SIZE) {
+    batches.push(unique.slice(i, i + PARCEL_BATCH_SIZE))
+  }
+
+  const results = await Promise.all(batches.map(async (batch) => {
+    const whereClause = batch.map(id => `parcelid = ${id}`).join(' OR ')
+    const params = new URLSearchParams({
+      where: whereClause,
+      outFields: 'parcelid',
+      returnGeometry: 'true',
+      outSR: '4326',
+      f: 'geojson',
+    })
+    const response = await fetch(
+      `https://services.arcgis.com/fLeGjb7u4uXqeF9q/ArcGIS/rest/services/PWD_PARCELS/FeatureServer/0/query?${params}`,
+    )
+    return response.json()
+  }))
+
+  return {
+    type: 'FeatureCollection',
+    features: results.flatMap(r => r.features || []),
+  }
+}
+
 async function updateMapFeatures() {
   if (search.searchResults.length === 0) {
     parcelGeojson.value = null
@@ -175,21 +214,29 @@ async function updateMapFeatures() {
     return
   }
 
-  markerGeojson.value = {
-    type: 'FeatureCollection',
-    features: search.searchResults.map(r => ({
-      type: 'Feature',
-      geometry: { type: 'Point', coordinates: [r.lng, r.lat] },
-      properties: { opaNumber: r.opaNumber, address: r.address },
-    })),
-  }
+  const parcelIds = search.searchResults
+    .map(r => r.pwdParcelId)
+    .filter((id): id is string => !!id)
 
-  const firstResult = search.searchResults[0]
-  if (firstResult.pwdParcelId) {
+  const showPolygons = parcelIds.length > 0
+
+  // For multi-result searches with parcel IDs, show polygons instead of dots
+  if (showPolygons) {
+    markerGeojson.value = null
     try {
-      parcelGeojson.value = await fetchParcelGeometry(firstResult.pwdParcelId)
+      parcelGeojson.value = await fetchParcelGeometries(parcelIds)
     } catch (e) {
-      console.error('Failed to fetch parcel geometry:', e)
+      console.error('Failed to fetch parcel geometries:', e)
+    }
+  } else {
+    parcelGeojson.value = null
+    markerGeojson.value = {
+      type: 'FeatureCollection',
+      features: search.searchResults.map(r => ({
+        type: 'Feature',
+        geometry: { type: 'Point', coordinates: [r.lng, r.lat] },
+        properties: { opaNumber: r.opaNumber, address: r.address },
+      })),
     }
   }
 }

@@ -10,6 +10,7 @@
       <OwnerAddressTable
         :data="property.activeProperty.publicData"
         :address="selectedAddress"
+        :ais-properties="selectedAisProperties"
       />
 
       <div class="card-section">
@@ -80,11 +81,18 @@ const search = useSearchStore()
 const property = usePropertyStore()
 const ui = useUiStore()
 
+const selectedResult = computed(() => {
+  return search.searchResults.find(r => r.opaNumber === ui.activeOpaNumber) || null
+})
+
 const selectedAddress = computed(() => {
-  const result = search.searchResults.find(r => r.opaNumber === ui.activeOpaNumber)
-  if (result) return result.address
+  if (selectedResult.value) return selectedResult.value.address
   const pub = property.activeProperty?.publicData
   return pub?.location || pub?.address_std || ''
+})
+
+const selectedAisProperties = computed(() => {
+  return selectedResult.value?.aisProperties || null
 })
 
 watch(() => ui.activeOpaNumber, (opaNumber) => {
@@ -102,7 +110,7 @@ watch(() => ui.activeOpaNumber, (opaNumber) => {
 .back-to-results {
   display: block;
   text-align: right;
-  margin-bottom: var(--spacing-s);
+  margin-bottom: var(--spacing-xs);
   font-size: 0.875rem;
   color: var(--colors-Dark-Ben-Franklin-Blue);
   text-decoration: none;

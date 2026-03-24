@@ -104,6 +104,7 @@ export const useSearchStore = defineStore('search', () => {
         hasCondoUnits: false,
         condoUnitCount: 0,
         pwdParcelId: r.pwd_parcel_id,
+        aisProperties: null,
       }))
       searchStatus.value = 'success'
     } catch (e) {
@@ -146,6 +147,7 @@ export const useSearchStore = defineStore('search', () => {
         hasCondoUnits: false,
         condoUnitCount: 0,
         pwdParcelId: r.pwd_parcel_id,
+        aisProperties: null,
       }))
       searchStatus.value = 'success'
     } catch (e) {

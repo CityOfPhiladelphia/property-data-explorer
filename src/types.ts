@@ -84,6 +84,30 @@ export interface SalesHistoryRecord {
   document_id: string
 }
 
+export interface AisProperties {
+  street_address: string
+  opa_account_num: string
+  pwd_parcel_id: string
+  dor_parcel_id: string
+  opa_owners: string[]
+  opa_address: string
+  zip_code: string
+  zip_4: string
+  li_address_key: string
+  bin: string
+  census_tract_2020: string
+  census_block_group_2020: string
+  census_block_2020: string
+  council_district_2024: string
+  political_ward: string
+  political_division: string
+  election_precinct: string
+  zoning_document_ids: string[]
+  seg_id: number
+  street_code: number
+  [key: string]: unknown
+}
+
 export interface SearchResult {
   address: string
   opaNumber: string
@@ -93,6 +117,7 @@ export interface SearchResult {
   hasCondoUnits: boolean
   condoUnitCount: number
   pwdParcelId: string | null
+  aisProperties: AisProperties | null
 }
 
 export interface PropertyRecord {
