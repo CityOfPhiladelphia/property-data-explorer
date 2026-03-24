@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@phila/phila-ui-core": "latest",
-    "@phila/phila-ui-map-core": "^0.0.3-beta.8",
+    "@phila/phila-ui-map-core": "^1.0.0",
     "date-fns": "^4.0.0",
     "pinia": "^2.3.0",
     "vue": "^3.5.0",
@@ -22,11 +22,5 @@
     "vite": "^6.0.0",
     "vite-plugin-vue-devtools": "^8.1.1",
     "vue-tsc": "^2.0.0"
-  },
-  "pnpm": {
-    "overrides": {
-      "@phila/phila-ui-map-core": "link:../phila-ui-4/packages/map-core",
-      "@phila/phila-ui-core": "link:../phila-ui-4/packages/core"
-    }
   }
 }
