@@ -1,5 +1,6 @@
 <template>
   <PhilaMap
+    ref="mapRef"
     :center="[-75.1635, 39.9526]"
     :zoom="12"
     :enable-cyclomedia="true"
@@ -78,6 +79,7 @@ const search = useSearchStore()
 const property = usePropertyStore()
 const ui = useUiStore()
 const router = useRouter()
+const mapRef = ref<any>(null)
 
 const cyclomediaConfig: CyclomediaConfig = {
   username: import.meta.env.VITE_CYCLOMEDIA_USERNAME || '',
@@ -129,6 +131,7 @@ async function handleSearch(query: string) {
   }
 
   if (search.searchStatus === 'success' && search.searchResults.length > 0) {
+    zoomToResults(isBlock)
     const opaNumbers = search.searchResults.map(r => r.opaNumber)
     const fetchPromise = property.fetchProperties(opaNumbers)
 
@@ -174,6 +177,30 @@ async function handleMapClick(e: { lngLat: { lng: number; lat: number } }) {
       await fetchPromise
       await updateMapFeatures()
     }
+  }
+}
+
+function zoomToResults(isBlock: boolean) {
+  const map = mapRef.value?.map
+  if (!map || search.searchResults.length === 0) return
+
+  if (isBlock) {
+    const coords = search.searchResults
+      .filter(r => r.lng && r.lat)
+      .map(r => [r.lng, r.lat] as [number, number])
+    if (coords.length === 0) return
+
+    const lngs = coords.map(c => c[0])
+    const lats = coords.map(c => c[1])
+    const bounds: [[number, number], [number, number]] = [
+      [Math.min(...lngs), Math.min(...lats)],
+      [Math.max(...lngs), Math.max(...lats)],
+    ]
+    map.fitBounds(bounds, { padding: 80, maxZoom: 18, animate: false })
+  } else {
+    const result = search.searchResults[0]
+    if (!result.lng || !result.lat) return
+    map.jumpTo({ center: [result.lng, result.lat], zoom: 17 })
   }
 }
 
