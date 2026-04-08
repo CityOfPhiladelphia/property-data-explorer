@@ -30,10 +30,9 @@
       :options="geocodeOptions"
     />
     <div
-      v-if="lastSearchMethod === 'geocode' && !loadingData && geocode.status === 'success' && !Object.keys(this.opa.targets).length"
+      v-if="lastSearchMethod === 'geocode' && !loadingData && (geocode.status === 'error' || geocode.status === 'success' && !Object.keys(this.opa.targets).length)"
       class="no-opa-message"
     >
-    <!-- v-if="lastSearchMethod === 'geocode' && !loadingData && geocode.status === 'success' && !Object.keys(this.opa.targets).length || lastSearchMethod === 'reverseGeocode' && !loadingData && geocode.status === 'success' && !Object.keys(this.opa.targets).length" -->
       This address could not be found using the information provided. Try using the property's OPA account number or try
       <a target="_blank" href="https://atlas.phila.gov">atlas.phila.gov</a>.
     </div>
