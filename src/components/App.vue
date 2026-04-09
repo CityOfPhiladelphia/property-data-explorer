@@ -434,6 +434,12 @@ export default {
       } else if (nextGeocodeStatus === 'error' && this.lastSearchMethod === 'reverseGeocode') {
         console.log('App.vue watch geocodeStatus is error, this.lastSearchMethod:', this.lastSearchMethod);
         this.onDataChange();
+      } else if (nextGeocodeStatus === 'error') {
+        this.$store.commit('setLastSearchMethod', 'geocode');
+        this.$store.commit('setLoadingData', false);
+        this.$store.commit('setFullScreenMapEnabled', false);
+        this.$store.commit('setFullScreenTopicsEnabled', false);
+        this.$store.commit('setLeftPanel', false);
       }
     },
     blockSearchStatus(nextBlockSearchStatus) {
