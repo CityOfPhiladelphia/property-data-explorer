@@ -106,8 +106,8 @@ async function doOwnerSearch() {
   color: var(--Schemes-On-Surface);
 }
 .mode-tab.is-active {
-  color: var(--colors-Dark-Ben-Franklin-Blue);
-  border-bottom-color: var(--colors-Dark-Ben-Franklin-Blue);
+  color: #0f4d90;
+  border-bottom-color: #0f4d90;
 }
 .search-input-row {
   display: flex;
@@ -123,12 +123,12 @@ async function doOwnerSearch() {
 }
 .search-input:focus {
   outline: none;
-  border-color: var(--colors-Dark-Ben-Franklin-Blue);
-  box-shadow: 0 0 0 1px var(--colors-Dark-Ben-Franklin-Blue);
+  border-color: #0f4d90;
+  box-shadow: 0 0 0 1px #0f4d90;
 }
 .search-btn {
   padding: var(--spacing-xs) var(--spacing-m);
-  background: var(--colors-Dark-Ben-Franklin-Blue);
+  background: #0f4d90;
   color: #fff;
   border: none;
   border-radius: var(--border-radius-s);

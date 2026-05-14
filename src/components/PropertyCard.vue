@@ -112,7 +112,7 @@ watch(() => ui.activeOpaNumber, (opaNumber) => {
   text-align: right;
   margin-bottom: var(--spacing-xs);
   font-size: 0.875rem;
-  color: var(--colors-Dark-Ben-Franklin-Blue);
+  color: #0f4d90;
   text-decoration: none;
 }
 .back-to-results:hover {

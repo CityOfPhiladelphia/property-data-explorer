@@ -69,7 +69,7 @@ const showLeftPanel = computed(() => {
   height: 250px;
   flex-shrink: 0;
   overflow-y: auto;
-  border-top: 2px solid var(--colors-Dark-Ben-Franklin-Blue);
+  border-top: 2px solid #0f4d90;
   background: var(--Schemes-Background);
 }
 

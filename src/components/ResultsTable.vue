@@ -146,14 +146,14 @@ defineEmits<{
   font-size: 0.6875rem;
   font-family: 'Montserrat', sans-serif;
   font-weight: 600;
-  border: 1px solid var(--colors-Dark-Ben-Franklin-Blue);
+  border: 1px solid #0f4d90;
   border-radius: var(--border-radius-s);
   background: var(--Schemes-Background);
-  color: var(--colors-Dark-Ben-Franklin-Blue);
+  color: #0f4d90;
   cursor: pointer;
 }
 .condo-expand-btn:hover {
-  background: var(--colors-Dark-Ben-Franklin-Blue);
+  background: #0f4d90;
   color: #fff;
 }
 .loading-cell {
@@ -165,7 +165,7 @@ defineEmits<{
   width: 12px;
   height: 12px;
   border: 2px solid var(--Schemes-Outline);
-  border-top-color: var(--colors-Dark-Ben-Franklin-Blue);
+  border-top-color: #0f4d90;
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
   vertical-align: middle;

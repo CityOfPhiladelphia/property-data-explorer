@@ -107,7 +107,7 @@ watch(() => route.query, (query) => {
   align-items: center;
   gap: 16px;
   padding: var(--spacing-s) var(--spacing-m);
-  background: var(--colors-Dark-Ben-Franklin-Blue);
+  background: #0f4d90;
   color: #fff;
   font-family: 'Montserrat', sans-serif;
 }
@@ -134,7 +134,7 @@ watch(() => route.query, (query) => {
   font-weight: 600;
 }
 .app-footer {
-  background: var(--colors-Dark-Ben-Franklin-Blue);
+  background: #0f4d90;
   text-align: center;
   padding: var(--spacing-xs) 0;
   font-family: 'Montserrat', sans-serif;
