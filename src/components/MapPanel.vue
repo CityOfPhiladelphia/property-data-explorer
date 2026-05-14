@@ -345,7 +345,7 @@ export default {
     MglGeojsonLayer: () => import(/* webpackChunkName: "pvm_MglGeojsonLayer" */'@phila/vue-mapping/src/mapbox/layer/GeojsonLayer'),
     MglPopup: () => import(/* webpackChunkName: "pvm_MglPopup" */'@phila/vue-mapping/src/mapbox/UI/Popup'),
     OverlayLegend: () => import(/* webpackChunkName: "pvm_OverlayLegend" */'@phila/vue-mapping/src/mapbox/OverlayLegend'),
-    MapboxAddressInput: () => import(/* webpackChunkName: "pvm_MapboxAddressInput" */'@phila/vue-mapping/src/mapbox/MapboxAddressInput'),
+    MapboxAddressInput: () => import(/* webpackChunkName: "pde_AddressSearchAutocomplete" */'@/components/AddressSearchAutocomplete.vue'),
     MapboxBasemapSelectControl: () => import(/* webpackChunkName: "pvm_MapboxBasemapSelectControl" */'@phila/vue-mapping/src/mapbox/UI/controls/BasemapSelectControl'),
     MglFontAwesomeMarker: () => import(/* webpackChunkName: "pvm_MglFontAwesomeMarker" */'@phila/vue-mapping/src/mapbox/UI/FontAwesomeMarker.vue'),
   },
