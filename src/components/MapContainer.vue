@@ -10,6 +10,7 @@
     <MapSearchControl
       position="top-left"
       :geocode="false"
+      :autocomplete="true"
       @search="handleSearch"
     />
     <BasemapToggle position="top-right" />
