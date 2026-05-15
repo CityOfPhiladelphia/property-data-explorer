@@ -32,6 +32,11 @@ beads.left.meta.json
 beads.right.jsonl
 beads.right.meta.json
 
+# Atomic-write temp files (e.g. beads.left.meta.json.<PID>.tmp). On Windows
+# bd's rename-over-target can fail if VS Code's watcher holds the target,
+# leaving these orphans behind.
+*.tmp
+
 # Sync state (local-only, per-machine)
 # These files are machine-specific and should not be shared across clones
 .sync.lock
