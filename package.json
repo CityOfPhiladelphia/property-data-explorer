@@ -10,8 +10,8 @@
   },
   "dependencies": {
     "@phila/phila-ui-core": "2.4.0-beta.2",
-    "@phila/phila-ui-map-core": "1.1.0-beta.13",
-    "@phila/phila-ui-search": "1.2.0-beta.4",
+    "@phila/phila-ui-map-core": "1.1.0-beta.14",
+    "@phila/phila-ui-search": "1.2.0-beta.5",
     "@phila/phila-ui-text-field": "1.1.3-beta.4",
     "date-fns": "^4.0.0",
     "pinia": "^2.3.0",
