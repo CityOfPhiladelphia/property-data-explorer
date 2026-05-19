@@ -42,7 +42,7 @@ h6, .h6 {
 @each $size, $headers in $header-styles {
   @media screen and ($size) {
     @each $header, $font-size in $headers {
-      .#{$header} {
+      #{$header}, .#{$header} {
         font-size: map-values($font-size) + px;
       }
     }
