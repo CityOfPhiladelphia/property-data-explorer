@@ -28,43 +28,51 @@
       <div class="intro-blue">
         Use the Property App to get information about a property's ownership,
         sales history, value, and physical characteristics. You can also generate address
-        listings near a property or within an area of interest.<br><br>
-        <a target="_blank" href="https://opainquiry.phila.gov/opa.apps/help/PropInq.aspx">Submit an official inquiry</a> or call OPA at <a href="tel:+12156864334">(215) 686-4334</a> if you:
-        <ul class="mb-0">
-          <li>have a property question</li>
-          <li>want to update property or contact information on file</li>
-          <li>want to correct errors</li>
-        </ul>
-          
+        listings near a property or within a selected area.
       </div>
       <div class="spacer" />
       <h2>To get started, you can: </h2>
-      <!-- <div class="spacer" /> -->
-      <!-- <p>Here are some things you can do with Property:</p> -->
-      <!-- <div class="callout"> -->
       <div>
         <ul class="padded-list fa-ul">
-          <li> <span class="fa-li"><i class="far fa-hand-rock"></i></span>
-            <h4>Select a location on the map</h4>
-            Click or tap on a specific property to view details about it.
-          </li>
           <li> <span class="fa-li"><i class="fas fa-search"></i></span>
-            <h4>Search on property information</h4>
-            Type an address, property account number, or
-            Department of Records registry map number into the search box.
-            Enter "block:" before the address to find all properties on the block.
-            <p class="red">*Property Search is no longer allowing Search By Owner due to privacy concerns.</p>
+            <h3>Search by using property information</h3>
+            <ul>
+              <li>Type an address, property account number, or Department of Records registry map number in the search box.</li>
+              <li>For inquiries about the specific property, scroll down to the Property Details section and click on &ldquo;submit an official inquiry&rdquo;.</li>
+              <li>To find all properties on a block, type &ldquo;block:&rdquo; before the address.</li>
+            </ul>
+            <p class="red">*Property Search no longer allows searches by owner name due to privacy concerns.</p>
+          </li>
+          <li> <span class="fa-li"><i class="far fa-hand-rock"></i></span>
+            <h3>Select a location on the map</h3>
+            <ul>
+              <li>Click or tap on a specific property to view details about it.</li>
+            </ul>
           </li>
           <li> <span class="fa-li"><i class="fas fa-circle"></i></span>
-            <h4>View properties within a selected radius</h4>
-            Use this tool to select a point on the map and view details about all
-            properties within a 250-foot radius.
+            <h3>View properties within a selected radius</h3>
+            <ul>
+              <li>Use this tool to select a point on the map and view details about all properties within a 250-foot radius.</li>
+            </ul>
           </li>
-          <li>
-            <h4>View properties within drawn boundaries</h4>
-            Use this tool to draw a shape on the map and view details about all
-            properties within its boundaries.
+          <li> <span class="fa-li"><i class="fas fa-hexagon"></i></span>
+            <h3>View properties within drawn boundaries</h3>
+            <ul>
+              <li>Use this tool to draw a shape on the map and view details about all properties within its boundaries.</li>
+            </ul>
           </li>
+        </ul>
+      </div>
+      <div class="spacer" />
+      <div class="intro-blue">
+        <h2 class="mt-0">Need Additional Help?</h2>
+        If the address or property account number does not appear in your search, you can still
+        submit an <a target="_blank" href="https://opainquiry.phila.gov/opa.apps/help/PropInq.aspx">official inquiry</a>
+        or call OPA at <a href="tel:+12156864334">(215) 686-4334</a> if you:
+        <ul class="mb-0">
+          <li>Have a property question</li>
+          <li>Need to update property or contact information</li>
+          <li>Need to correct an error on a property record</li>
         </ul>
       </div>
     </div>
@@ -179,6 +187,27 @@ export default {
 
 .spacer {
   height: 15px;
+}
+
+.introduction {
+  a {
+    text-decoration: underline;
+  }
+  h2 {
+    font-size: 22px;
+    margin-bottom: 0.75rem;
+  }
+  h3 {
+    font-size: 17px;
+    margin-bottom: 0.25rem;
+  }
+  .padded-list > li {
+    margin-bottom: 1.25rem;
+    > .fa-li {
+      font-size: 17px;
+      line-height: 1.4;
+    }
+  }
 }
 
 // .padded-list {
