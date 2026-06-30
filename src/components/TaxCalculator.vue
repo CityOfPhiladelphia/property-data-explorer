@@ -245,6 +245,7 @@ export default {
       currentTaxRate: 0.013998,
       selectedSeniorYear: thisYear,
       homesteadDeduction: {
+        2027: 100000,
         2026: 100000,
         2025: 100000,
         2024: 80000,
