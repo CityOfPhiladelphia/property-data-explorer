@@ -258,16 +258,6 @@ export default {
       },
     };
   },
-  mounted() {
-    console.log('TaxCalculator.vue mounted, this.nextYear:', this.nextYear, 'this.currentYear:', this.currentYear);
-    if (this.nextYear) {
-      this.selectedTaxYear = this.nextYear;
-      this.selectedSeniorYear = this.nextYear;
-    } else {
-      this.selectedTaxYear = this.currentYear;
-      this.selectedSeniorYear = this.currentYear;
-    }
-  },
   computed: {
     currentYear() {
       return new Date().getFullYear();
@@ -492,6 +482,14 @@ export default {
     },
   },
   watch: {
+    nextYear: {
+      immediate: true,
+      handler(newNextYear) {
+        const maxYear = newNextYear || this.currentYear;
+        this.selectedTaxYear = maxYear;
+        this.selectedSeniorYear = maxYear;
+      },
+    },
     selectedTaxYear(newYear, oldYear) {
       // console.log('oldYear:', oldYear, 'newYear:', newYear, 'this.selectedSeniorYear:', this.selectedSeniorYear);
       if (this.selectedSeniorYear > newYear) {
