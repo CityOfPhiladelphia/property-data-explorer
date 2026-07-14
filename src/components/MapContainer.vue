@@ -14,7 +14,8 @@
       @search="handleSearch"
     />
     <BasemapToggle position="top-right" />
-    <DrawTool position="top-left" @draw="handleShapeDraw" />
+    <RadiusSelect position="top-left" @select="handleShapeSelect" @clear="handleShapeClear" />
+    <BoundaryDraw position="top-left" @select="handleShapeSelect" @clear="handleShapeClear" />
     <MapNavigationControl position="bottom-left" />
     <GeolocationButton position="bottom-left" />
     <MapLoadingOverlay
@@ -65,7 +66,8 @@ import {
   FillLayer,
   LineLayer,
   CircleLayer,
-  DrawTool,
+  RadiusSelect,
+  BoundaryDraw,
   MapLoadingOverlay,
   fetchParcelGeometry,
   queryParcelAtPoint,
@@ -237,15 +239,12 @@ async function handleSearch(query: string) {
   }
 }
 
-async function handleShapeDraw(geojson: any) {
-  await search.doShapeSearch(geojson)
-  if (search.searchStatus === 'success') {
-    const opaNumbers = search.searchResults.map(r => r.opaNumber)
-    if (opaNumbers.length <= 200) {
-      await property.fetchProperties(opaNumbers)
-    }
-    router.push({ query: { shape: JSON.stringify(geojson) } })
-  }
+async function handleShapeSelect(feature: { geometry: unknown }) {
+  await search.doShapeSearch(feature)
+}
+
+function handleShapeClear() {
+  search.reset()
 }
 
 async function handleMapClick(e: { lngLat: { lng: number; lat: number } }) {
