@@ -241,10 +241,18 @@ async function handleSearch(query: string) {
 
 async function handleShapeSelect(feature: { geometry: unknown }) {
   await search.doShapeSearch(feature)
+  if (search.searchStatus === 'success') {
+    const opaNumbers = search.searchResults.map(r => r.opaNumber)
+    if (opaNumbers.length <= 200) {
+      await property.fetchProperties(opaNumbers)
+    }
+    router.push({ query: { shape: JSON.stringify(feature) } })
+  }
 }
 
 function handleShapeClear() {
   search.reset()
+  router.push({ query: {} })
 }
 
 async function handleMapClick(e: { lngLat: { lng: number; lat: number } }) {
