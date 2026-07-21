@@ -72,7 +72,11 @@
 import generateUniqueId from '@phila/vue-mapping/src/util/unique-id';
 
 const AIS_AUTOCOMPLETE_URL =
-  'https://ais-autocomplete.citygeo.phila.city/autocomplete';
+  'https://haydr3k097.execute-api.us-east-1.amazonaws.com/queryAis/autocomplete';
+// the proxy identifies callers by origin, which localhost is not registered as
+const CLIENT_ID_PARAM = process.env.VUE_APP_AIS_CLIENTID_PROPERTY
+  ? '&client_id=' + process.env.VUE_APP_AIS_CLIENTID_PROPERTY
+  : '';
 const DEBOUNCE_MS = 250;
 const MIN_QUERY_LENGTH = 3;
 
@@ -154,17 +158,22 @@ export default {
         return;
       }
       try {
-        const url = AIS_AUTOCOMPLETE_URL + '?q=' + encodeURIComponent(query);
+        const url = AIS_AUTOCOMPLETE_URL + '?q=' + encodeURIComponent(query) +
+          '&simple=true' + CLIENT_ID_PARAM;
         const res = await fetch(url);
-        const data = await res.json();
-        if (!data || !data.count) {
+        if (!res.ok) {
+          console.warn('AIS autocomplete error:', res.status, res.statusText);
           this.candidates = [];
           this.shouldShowCandidates = false;
           return;
         }
-        this.candidates = data.results.addresses
-          .slice(0, this.autocompleteMax)
-          .map((a) => a.address);
+        const data = await res.json();
+        if (!Array.isArray(data) || !data.length) {
+          this.candidates = [];
+          this.shouldShowCandidates = false;
+          return;
+        }
+        this.candidates = data.slice(0, this.autocompleteMax);
         this.shouldShowCandidates = this.candidates.length > 0;
       } catch (err) {
         console.warn('AIS autocomplete error:', err);
