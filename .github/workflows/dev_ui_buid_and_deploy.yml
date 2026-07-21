@@ -3,7 +3,7 @@ name: Build, Check And Deploy to Dev
 on:
   push:
     branches:
-      - feat/ais-autocomplete
+      - fix/autocomplete-proxy
 
 jobs:
   build:
