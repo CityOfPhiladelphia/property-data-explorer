@@ -29,7 +29,7 @@
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.5.19",
-    "@vue/cli-service": "^4.5.19",
+    "@vue/cli-service": "^5.0.9",
     "babel-runtime": "^6.26.0",
     "sass": "^1.54.9",
     "sass-loader": "^7.1.0",
