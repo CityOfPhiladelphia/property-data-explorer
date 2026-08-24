@@ -23,7 +23,7 @@
     "leaflet": "1.7.1",
     "leaflet-vector-icon": "git+https://github.com/CityOfPhiladelphia/leaflet-vector-icon.git#c37571e92c66ce0003f22058f2d246b31d3941a5",
     "sorttable": "^1.0.2",
-    "vue": "^2.7.10",
+    "vue": "^3.0.0",
     "vue-router": "^3.6.5",
     "vuex": "^3.1.2"
   },
