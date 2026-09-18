@@ -21,6 +21,11 @@ let config = {
   carto: {
     baseurl: 'https://phl.carto.com/api/v2/sql',
   },
+  // read by @phila/vue-datafetch for its databridge paths (the buffer search)
+  databridge: {
+    url: DATABRIDGE_URL,
+    clientId: GATEWAY_CLIENT_ID,
+  },
   defaultAddressTextPlaceholder: {
     text: 'Address',
   },
@@ -76,13 +81,14 @@ let config = {
     apiKey: process.env.VUE_APP_CYCLOMEDIA_API_KEY,
   },
   shapeSearch: {
-    url: 'https://phl.carto.com/api/v2/sql',
+    url: DATABRIDGE_URL,
     options: {
       params: {
-        q: function(input){
+        sql: function(input){
           var inputEncoded = Object.keys(input).map(k => "'" + input[k] + "'").join(",");
           return "select * from opa_properties_public_pde where pwd_parcel_id IN("+ inputEncoded +") ORDER BY address_std ASC";
         },
+        client_id: GATEWAY_CLIENT_ID,
       },
     },
   },
