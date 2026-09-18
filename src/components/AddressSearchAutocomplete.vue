@@ -70,13 +70,10 @@
 
 <script>
 import generateUniqueId from '@phila/vue-mapping/src/util/unique-id';
+import { GATEWAY_CLIENT_ID } from '../util/databridge';
 
 const AIS_AUTOCOMPLETE_URL =
-  'https://haydr3k097.execute-api.us-east-1.amazonaws.com/queryAis/autocomplete';
-// the proxy identifies callers by origin, which localhost is not registered as
-const CLIENT_ID_PARAM = process.env.VUE_APP_AIS_CLIENTID_PROPERTY
-  ? '&client_id=' + process.env.VUE_APP_AIS_CLIENTID_PROPERTY
-  : '';
+  'https://api-prod.phila.gov/ais-autocomplete/v1/autocomplete';
 const DEBOUNCE_MS = 250;
 const MIN_QUERY_LENGTH = 3;
 
@@ -159,7 +156,7 @@ export default {
       }
       try {
         const url = AIS_AUTOCOMPLETE_URL + '?q=' + encodeURIComponent(query) +
-          '&simple=true' + CLIENT_ID_PARAM;
+          '&client_id=' + GATEWAY_CLIENT_ID;
         const res = await fetch(url);
         if (!res.ok) {
           console.warn('AIS autocomplete error:', res.status, res.statusText);
@@ -168,12 +165,16 @@ export default {
           return;
         }
         const data = await res.json();
-        if (!Array.isArray(data) || !data.length) {
+        // the envelope is { count, results: { addresses: [{ address, ... }] } }
+        const addresses = data && data.count && data.results
+          ? data.results.addresses.map(a => a.address)
+          : [];
+        if (!addresses.length) {
           this.candidates = [];
           this.shouldShowCandidates = false;
           return;
         }
-        this.candidates = data.slice(0, this.autocompleteMax);
+        this.candidates = addresses.slice(0, this.autocompleteMax);
         this.shouldShowCandidates = this.candidates.length > 0;
       } catch (err) {
         console.warn('AIS autocomplete error:', err);

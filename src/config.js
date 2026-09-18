@@ -1,6 +1,7 @@
 import transforms from './general/transforms';
 import helpers from './util/helpers';
 import map from './general/map';
+import { DATABRIDGE_URL, GATEWAY_CLIENT_ID, databridgeRows } from './util/databridge';
 
 // data-sources
 import opa_assessment from './data-sources/opa-assessment';
@@ -20,6 +21,11 @@ let config = {
   carto: {
     baseurl: 'https://phl.carto.com/api/v2/sql',
   },
+  // read by @phila/vue-datafetch for its databridge paths (the buffer search)
+  databridge: {
+    url: DATABRIDGE_URL,
+    clientId: GATEWAY_CLIENT_ID,
+  },
   defaultAddressTextPlaceholder: {
     text: 'Address',
   },
@@ -31,7 +37,7 @@ let config = {
       return '//api.phila.gov/ais-pde/v1/search/' + inputEncoded;
     },
     params: {
-      gatekeeperKey: process.env.VUE_APP_GATEKEEPER_KEY,
+      client_id: GATEWAY_CLIENT_ID,
       include_units: true,
       opa_only: true,
       sort_field: 'street_address',
@@ -39,7 +45,6 @@ let config = {
   },
   // baseConfig: BASE_CONFIG_URL,
   // baseConfig: '//raw.githubusercontent.com/stevetotheizz0/atlas_base_config/main/config.js',
-  gatekeeperKey: process.env.VUE_APP_GATEKEEPER_KEY,
   router: {
     enabled: true,
     type: 'vue',
@@ -76,13 +81,14 @@ let config = {
     apiKey: process.env.VUE_APP_CYCLOMEDIA_API_KEY,
   },
   shapeSearch: {
-    url: 'https://phl.carto.com/api/v2/sql',
+    url: DATABRIDGE_URL,
     options: {
       params: {
-        q: function(input){
+        sql: function(input){
           var inputEncoded = Object.keys(input).map(k => "'" + input[k] + "'").join(",");
           return "select * from opa_properties_public_pde where pwd_parcel_id IN("+ inputEncoded +") ORDER BY address_std ASC";
         },
+        client_id: GATEWAY_CLIENT_ID,
       },
     },
   },
@@ -93,6 +99,7 @@ let config = {
       return 'https://api.phila.gov/ais_ps/v1/block/' + inputEncoded;
     },
     params: {
+      client_id: GATEWAY_CLIENT_ID,
       page: 1,
     },
   },
@@ -111,41 +118,45 @@ let config = {
   activeSearch: {
     assessmentHistory: {
       type: 'http-get',
-      url: 'https://phl.carto.com/api/v2/sql',
+      url: DATABRIDGE_URL,
       options: {
         params: {
-          q: function(input){
+          table: 'assessments',
+          where: function(input){
             if (input) {
               if (typeof input === 'string') {
-                return "select * from assessments where parcel_number IN('"+ input +"')";
+                return "parcel_number IN('"+ input +"')";
               }
               var inputEncoded = "'" + input.join("','") + "'";
-              return "select * from assessments where parcel_number IN("+ inputEncoded +")";
+              return "parcel_number IN("+ inputEncoded +")";
             }
           },
+          client_id: GATEWAY_CLIENT_ID,
         },
         success: function(data) {
-          return data.rows;
+          return databridgeRows(data);
         },
       },
     },
     salesHistory: {
       type: 'http-get',
-      url: 'https://phl.carto.com/api/v2/sql',
+      url: DATABRIDGE_URL,
       options: {
         params: {
-          q: function(input){
+          table: 'rtt_summary',
+          where: function(input){
             if (input) {
               if (typeof input === 'string') {
-                return "select * from RTT_SUMMARY where opa_account_num = '"+ input +"' AND document_type = 'DEED'";
+                return "opa_account_num = '"+ input +"' AND document_type = 'DEED'";
               }
               var inputEncoded = "'" + input.join("','") + "'";
-              return "select * from RTT_SUMMARY where opa_account_num IN("+ inputEncoded +") AND document_type = 'DEED'";
+              return "opa_account_num IN("+ inputEncoded +") AND document_type = 'DEED'";
             }
           },
+          client_id: GATEWAY_CLIENT_ID,
         },
         success: function(data) {
-          return data.rows;
+          return databridgeRows(data);
         },
       },
     },

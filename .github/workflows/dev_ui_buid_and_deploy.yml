@@ -34,7 +34,7 @@ jobs:
         VUE_APP_CYCLOMEDIA_API_KEY: ${{ secrets.VUE_APP_CYCLOMEDIA_API_KEY }}
         VUE_APP_CYCLOMEDIA_PASSWORD: ${{ secrets.VUE_APP_CYCLOMEDIA_PASSWORD }}
         VUE_APP_CYCLOMEDIA_USERNAME: ${{ secrets.VUE_APP_CYCLOMEDIA_USERNAME }}
-        VUE_APP_GATEKEEPER_KEY: ${{ secrets.VUE_APP_GATEKEEPER_KEY }}
+        VUE_APP_GATEWAY_CLIENT_ID: ${{ secrets.VUE_APP_GATEWAY_CLIENT_ID }}
 
     - name: Deploy to Dev s3, Set index headers, and Invalidate Cloudfront
       env:
