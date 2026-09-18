@@ -1,7 +1,9 @@
+import { DATABRIDGE_URL, GATEWAY_CLIENT_ID, databridgeRows } from '../util/databridge';
+
 export default {
   id: 'opa-public',
   type: 'http-get',
-  url: 'https://phl.carto.com/api/v2/sql',
+  url: DATABRIDGE_URL,
   targets: {
     runOnce: true,
     get: function(state) {
@@ -52,14 +54,18 @@ export default {
   },
   options: {
     params: {
-      q: function(input){
+      // stays sql= (not table=): opa_properties_public_pde has no objectid, so
+      // table-style silently reroutes to the ArcGIS Online copy (epoch timestamps,
+      // staleness risk); sql= stays on the postgres backends
+      sql: function(input){
         // console.log('opa-public.js, input:', input);
         return "select * from opa_properties_public_pde where parcel_number IN("+ input +")";
       },
+      client_id: GATEWAY_CLIENT_ID,
       // var inputEncoded = Object.keys(input).map(k => "'" + input[k] + "'").join(",");
     },
     success: function(data) {
-      return data.rows;
+      return databridgeRows(data);
     },
   },
 };
