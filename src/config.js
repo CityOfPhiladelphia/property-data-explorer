@@ -122,15 +122,18 @@ let config = {
       options: {
         params: {
           table: 'assessments',
+          // the gateway's where parser needs a space before the IN list; IN( times out
           where: function(input){
             if (input) {
               if (typeof input === 'string') {
-                return "parcel_number IN('"+ input +"')";
+                return "parcel_number IN ('"+ input +"')";
               }
               var inputEncoded = "'" + input.join("','") + "'";
-              return "parcel_number IN("+ inputEncoded +")";
+              return "parcel_number IN ("+ inputEncoded +")";
             }
           },
+          // the gateway caps a reply near 1,000 rows anyway; saying so skips a slow count
+          limit: 999,
           client_id: GATEWAY_CLIENT_ID,
         },
         success: function(data) {
@@ -150,9 +153,10 @@ let config = {
                 return "opa_account_num = '"+ input +"' AND document_type = 'DEED'";
               }
               var inputEncoded = "'" + input.join("','") + "'";
-              return "opa_account_num IN("+ inputEncoded +") AND document_type = 'DEED'";
+              return "opa_account_num IN ("+ inputEncoded +") AND document_type = 'DEED'";
             }
           },
+          limit: 999,
           client_id: GATEWAY_CLIENT_ID,
         },
         success: function(data) {
