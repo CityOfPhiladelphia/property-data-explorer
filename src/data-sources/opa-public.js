@@ -54,13 +54,14 @@ export default {
   },
   options: {
     params: {
-      // stays sql= (not table=): opa_properties_public_pde has no objectid, so
-      // table-style silently reroutes to the ArcGIS Online copy (epoch timestamps,
-      // staleness risk); sql= stays on the postgres backends
-      sql: function(input){
+      table: 'opa_properties_public_pde',
+      // the gateway's where parser needs a space before the IN list; IN( times out
+      where: function(input){
         // console.log('opa-public.js, input:', input);
-        return "select * from opa_properties_public_pde where parcel_number IN("+ input +")";
+        return "parcel_number IN ("+ input +")";
       },
+      // the gateway caps a reply near 1,000 rows anyway; saying so skips a slow count
+      limit: 999,
       client_id: GATEWAY_CLIENT_ID,
       // var inputEncoded = Object.keys(input).map(k => "'" + input[k] + "'").join(",");
     },

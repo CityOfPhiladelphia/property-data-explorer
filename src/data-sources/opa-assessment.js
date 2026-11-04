@@ -43,12 +43,12 @@ export default {
   },
   options: {
     params: {
-      // stays sql= (not table=): opa_properties_public_pde has no objectid, so
-      // table-style silently reroutes to the ArcGIS Online copy (epoch timestamps,
-      // staleness risk); sql= stays on the postgres backends
-      sql: function(feature) {
-        return "SELECT parcel_number, market_value, sale_date, sale_price FROM opa_properties_public_pde WHERE parcel_number IN (" + feature + ")";
+      table: 'opa_properties_public_pde',
+      fields: 'parcel_number,market_value,sale_date,sale_price',
+      where: function(feature) {
+        return "parcel_number IN (" + feature + ")";
       },
+      limit: 999,
       client_id: GATEWAY_CLIENT_ID,
     },
     success: function(data) {
