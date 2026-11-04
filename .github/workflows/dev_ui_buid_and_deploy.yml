@@ -3,7 +3,7 @@ name: Build, Check And Deploy to Dev
 on:
   push:
     branches:
-      - fix/autocomplete-proxy
+      - wip/databridge-api-migration
 
 jobs:
   build:
