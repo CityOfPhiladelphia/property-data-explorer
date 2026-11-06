@@ -156,7 +156,7 @@ export default {
       }
       try {
         const url = AIS_AUTOCOMPLETE_URL + '?q=' + encodeURIComponent(query) +
-          '&client_id=' + GATEWAY_CLIENT_ID;
+          (GATEWAY_CLIENT_ID ? '&client_id=' + GATEWAY_CLIENT_ID : '');
         const res = await fetch(url);
         if (!res.ok) {
           console.warn('AIS autocomplete error:', res.status, res.statusText);
