@@ -31,7 +31,7 @@ let config = {
   geocoder: {
     url: function (input) {
       var inputEncoded = encodeURIComponent(input);
-      return '//api.phila.gov/ais-pde/v1/search/' + inputEncoded;
+      return 'https://api-prod.phila.gov/ais/v1/search/' + inputEncoded;
     },
     params: {
       client_id: GATEWAY_CLIENT_ID,
@@ -91,9 +91,13 @@ let config = {
   },
   blockSearch: {
     url: function (input) {
-      let inputWithoutBlockKeyword = input.trim().toLowerCase().replace("blk" , "").replace("block:", "").replace("block", "");
-      var inputEncoded = encodeURIComponent(inputWithoutBlockKeyword);
-      return 'https://api.phila.gov/ais_ps/v1/block/' + inputEncoded;
+      // the search box takes the keyword first ("block 1200 market st"); the gateway's AIS
+      // has no /block/ endpoint and instead runs a block search when the keyword follows
+      // the house number ("1200 block market st")
+      let inputWithoutBlockKeyword = input.trim().toLowerCase().replace("blk" , "").replace("block:", "").replace("block", "").trim();
+      let blockQuery = inputWithoutBlockKeyword.replace(/^(\S+)\s+/, '$1 block ');
+      var inputEncoded = encodeURIComponent(blockQuery);
+      return 'https://api-prod.phila.gov/ais/v1/search/' + inputEncoded;
     },
     params: {
       client_id: GATEWAY_CLIENT_ID,
