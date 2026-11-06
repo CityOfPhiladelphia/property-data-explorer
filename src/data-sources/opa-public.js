@@ -1,7 +1,9 @@
+import { DATABRIDGE_URL, GATEWAY_CLIENT_ID, databridgeRows } from '../util/databridge';
+
 export default {
   id: 'opa-public',
   type: 'http-get',
-  url: 'https://phl.carto.com/api/v2/sql',
+  url: DATABRIDGE_URL,
   targets: {
     runOnce: true,
     get: function(state) {
@@ -52,14 +54,17 @@ export default {
   },
   options: {
     params: {
-      q: function(input){
+      table: 'opa_properties_public_pde',
+      where: function(input){
         // console.log('opa-public.js, input:', input);
-        return "select * from opa_properties_public_pde where parcel_number IN("+ input +")";
+        return "parcel_number IN ("+ input +")";
       },
+      limit: 999,
+      client_id: GATEWAY_CLIENT_ID,
       // var inputEncoded = Object.keys(input).map(k => "'" + input[k] + "'").join(",");
     },
     success: function(data) {
-      return data.rows;
+      return databridgeRows(data);
     },
   },
 };

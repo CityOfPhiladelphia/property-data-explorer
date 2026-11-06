@@ -6,6 +6,11 @@ module.exports = {
     plugins: [
       new Visualizer({ filename: './statistics.html' }),
     ],
+    resolve: {
+      // keep symlinked packages (the @phila/vue-datafetch junction for local dev)
+      // resolving their imports from this app's node_modules
+      symlinks: false,
+    },
   },
   chainWebpack: (config) => {
     config.plugins.delete('prefetch');

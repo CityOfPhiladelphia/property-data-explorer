@@ -348,15 +348,4 @@ export default {
       minZoom: 16
     }
   },
-  tools: {
-    buffer: {
-      url: 'https://gis-utils.databridge.phila.gov/arcgis/rest/services/Utilities/Geometry/GeometryServer/buffer'
-    },
-    distance: {
-      url: 'https://gis-utils.databridge.phila.gov/arcgis/rest/services/Utilities/Geometry/GeometryServer/distance'
-    },
-    geometryServer: {
-      url: 'https://gis-utils.databridge.phila.gov/arcgis/rest/services/Utilities/Geometry/GeometryServer/'
-    }
-  }
 };
