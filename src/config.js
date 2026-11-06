@@ -77,15 +77,18 @@ let config = {
     password: process.env.VUE_APP_CYCLOMEDIA_PASSWORD,
     apiKey: process.env.VUE_APP_CYCLOMEDIA_API_KEY,
   },
+  // on direct carto, not databridge-api: the gateway rejects any URL over ~2,100 characters
+  // with an empty 500, and a radius or drawn shape over ~150 parcels builds a longer IN list
+  // than that. Move back to DATABRIDGE_URL (param sql, plus client_id) once the gateway's
+  // URL limit is raised
   shapeSearch: {
-    url: DATABRIDGE_URL,
+    url: 'https://phl.carto.com/api/v2/sql',
     options: {
       params: {
-        sql: function(input){
+        q: function(input){
           var inputEncoded = Object.keys(input).map(k => "'" + input[k] + "'").join(",");
           return "select * from opa_properties_public_pde where pwd_parcel_id IN("+ inputEncoded +") ORDER BY address_std ASC";
         },
-        client_id: GATEWAY_CLIENT_ID,
       },
     },
   },
