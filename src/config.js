@@ -18,9 +18,6 @@ const customComps = {
 // var BASE_CONFIG_URL = 'https://cdn.jsdelivr.net/gh/cityofphiladelphia/pde_base_config@3cb644750f4db8619a5b41f5369d1e280678f7bb/config.js';
 
 let config = {
-  carto: {
-    baseurl: 'https://phl.carto.com/api/v2/sql',
-  },
   // read by @phila/vue-datafetch for its databridge paths (the buffer search)
   databridge: {
     url: DATABRIDGE_URL,
