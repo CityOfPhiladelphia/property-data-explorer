@@ -122,7 +122,6 @@ let config = {
       options: {
         params: {
           table: 'assessments',
-          // the gateway's where parser needs a space before the IN list; IN( times out
           where: function(input){
             if (input) {
               if (typeof input === 'string') {
@@ -132,7 +131,8 @@ let config = {
               return "parcel_number IN ("+ inputEncoded +")";
             }
           },
-          // the gateway caps a reply near 1,000 rows anyway; saying so skips a slow count
+          // the gateway caps a table reply at 1,000 rows whether or not a limit is sent;
+          // spelled out so the cap is visible here
           limit: 999,
           client_id: GATEWAY_CLIENT_ID,
         },
